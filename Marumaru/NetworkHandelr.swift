@@ -9,8 +9,8 @@ import UIKit
 
 class NetworkHandler{
     
-    private var loadedImages = [URL: UIImage]()
-    private var runningRequest = [UUID: URLSessionDataTask]()
+    var loadedImages = [URL: UIImage]()
+    var runningRequest = [UUID: URLSessionDataTask]()
     
     func getImage(_ url: URL, _ completion: @escaping (Result<UIImage, Error>) -> Void) -> UUID?{
         

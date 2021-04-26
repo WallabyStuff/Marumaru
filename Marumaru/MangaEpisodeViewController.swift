@@ -17,7 +17,6 @@ class MangaEpisodeViewController: UIViewController {
         var title: String
         var description: String
         var previewImageUrl: String?
-        var previewImage: UIImage?
         var link: String
     }
     
@@ -40,6 +39,7 @@ class MangaEpisodeViewController: UIViewController {
     @IBOutlet weak var infoDesc2Label: UILabel!
     @IBOutlet weak var mangaSizeLabel: UILabel!
     @IBOutlet weak var loadingView: UIView!
+    @IBOutlet weak var scrollToBottomButton: UIButton!
     
     @IBOutlet weak var mangaEpisodeTableView: UITableView!
     
@@ -51,11 +51,11 @@ class MangaEpisodeViewController: UIViewController {
         initInstance()
         
         getData()
+        setMangaInfo()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         setLottieAnims()
-        setMangaInfo()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle{
@@ -73,6 +73,13 @@ class MangaEpisodeViewController: UIViewController {
         infoPreviewImage.layer.cornerRadius = 10
         infoPreviewImage.layer.borderWidth = 1
         infoPreviewImage.layer.borderColor = UIColor(named: "PointColor")?.cgColor
+        
+        // scroll to bottom button
+        scrollToBottomButton.layer.cornerRadius = 10
+        scrollToBottomButton.layer.shadowColor = UIColor.gray.cgColor
+        scrollToBottomButton.layer.shadowRadius = 7
+        scrollToBottomButton.layer.shadowOpacity = 0.5
+        scrollToBottomButton.layer.shadowOffset = .zero
     }
     
     func initInstance(){
@@ -104,7 +111,6 @@ class MangaEpisodeViewController: UIViewController {
                     
                     print(completeUrl)
                     guard let url = URL(string: completeUrl) else {return}
-                    
                     let htmlContent = try String(contentsOf: url, encoding: .utf8)
                     let doc = try SwiftSoup.parse(htmlContent)
                     
@@ -135,7 +141,7 @@ class MangaEpisodeViewController: UIViewController {
                                 print("\(title)\n preview image url is \(previewImageUrl)")
                                 
                                 
-                                self.episodeArr.append(Episode(title: title, description: description, previewImageUrl: previewImageUrl, previewImage: nil, link: link))
+                                self.episodeArr.append(Episode(title: title, description: description, previewImageUrl: previewImageUrl, link: link))
                             }
                         }
                         
@@ -168,29 +174,37 @@ class MangaEpisodeViewController: UIViewController {
         infoDesc1Label.text = infoDesc1
         infoDesc2Label.text = infoDesc2
         
+        if infoDesc2.contains("미분류"){
+            infoDesc2Label.textColor = UIColor(named: "BasicSubTextColor")!
+        }else{
+            infoDesc2Label.textColor = UIColor(named: "SubPointColor")!
+        }
+        
         DispatchQueue.global(qos: .background).async {
             if self.infoPreviewImageUrl != ""{
-                do{
-                    let url = URL(string: self.infoPreviewImageUrl)
-                    let data = try Data(contentsOf: url!)
-                    
-                    DispatchQueue.main.async {
-                        self.infoPreviewImage.alpha = 0
-                        self.infoPreviewImage.image = UIImage(data: data)
-                        self.infoPreviewImage.contentMode = .scaleAspectFill
-                        
-                        UIView.animate(withDuration: 0.5) {
-                            self.infoPreviewImage.alpha = 1
+                if let url = URL(string: self.infoPreviewImageUrl){
+                    self.networkHandler.getImage(url){ result in
+                        do{
+                            let image = try result.get()
+                            
+                            DispatchQueue.main.async {
+                                self.infoPreviewImage.contentMode = .scaleAspectFill
+                                self.infoPreviewImage.image = image
+                                
+                                self.infoPreviewImage.alpha = 0
+                                UIView.animate(withDuration: 0.3) {
+                                    self.infoPreviewImage.alpha = 1
+                                }
+                            }
+                        }catch{
+                            DispatchQueue.main.async {
+                                self.infoPreviewImage.image = UIImage(named: "empty-image")!
+                                self.infoPreviewImage.contentMode = .scaleAspectFit
+                            }
+                            print(error.localizedDescription)
                         }
+                        
                     }
-                    
-                }catch{
-                    DispatchQueue.main.async {
-                        self.infoPreviewImage.image = UIImage(named: "empty-image")!
-                        self.infoPreviewImage.contentMode = .scaleAspectFit
-                    }
-                    
-                    print(error.localizedDescription)
                 }
             }else{
                 DispatchQueue.main.async {
@@ -200,42 +214,7 @@ class MangaEpisodeViewController: UIViewController {
             }
         }
     }
-    
-    func saveToMangaHistory(mangaTitle: String, mangaLink: String, mangaPreviewImageUrl: String?, mangaPreviewImage: UIImage?){
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let context = appDelegate.persistentContainer.viewContext
         
-        let entity = NSEntityDescription.entity(forEntityName: "MangaHistory", in: context)
-        
-        if let entity = entity{
-            let manga = NSManagedObject(entity: entity, insertInto: context)
-            
-            if mangaTitle.isEmpty || mangaLink.isEmpty{
-                return
-            }
-            
-            // save title & link
-            manga.setValue(mangaTitle, forKey: "title")
-            manga.setValue(mangaLink, forKey: "link")
-            
-            // save preview image url & data safely
-            if let mangaPreviewImageUrl = mangaPreviewImageUrl{
-                manga.setValue(mangaPreviewImageUrl, forKey: "preview_image_url")
-            }
-            if let mangaPreviewImage = mangaPreviewImage{
-                let jpegData = mangaPreviewImage.jpegData(compressionQuality: 1)
-                manga.setValue(jpegData, forKey: "preview_image")
-            }
-            
-            do{
-                try context.save()
-            }catch{
-                // fail to save manga history
-                print(error.localizedDescription)
-            }
-        }
-    }
-    
     // https://stackoverflow.com/questions/48576329/ios-urlstring-not-working-always
     func transformURLString(_ string: String) -> URLComponents? {
         guard let urlPath = string.components(separatedBy: "?").first else {
@@ -255,6 +234,35 @@ class MangaEpisodeViewController: UIViewController {
         }
         return components!
     }
+    
+    
+    func fadeScrollToBottomButton(bool: Bool){
+        if bool {
+            // fade out
+            UIView.animate(withDuration: 0.3) {
+                self.scrollToBottomButton.alpha = 0
+            }
+        }else{
+            // fade in
+            UIView.animate(withDuration: 0.3) {
+                self.scrollToBottomButton.alpha = 1
+            }
+        }
+    }
+    
+    
+    @IBAction func scrollToBottomButtonAction(_ sender: Any) {
+        DispatchQueue.main.async {
+
+            if self.mangaEpisodeTableView.contentSize.height > 0{
+                let indexPath = IndexPath(row: self.episodeArr.count - 1, section: 0)
+                
+                self.mangaEpisodeTableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+            }
+
+        }
+    }
+    
 }
 
 
@@ -265,6 +273,10 @@ extension MangaEpisodeViewController: UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let episodeCell = tableView.dequeueReusableCell(withIdentifier: "EpisodeCell") as! MangaEpisodeCell
+        
+        if indexPath.row > episodeArr.count - 1{
+            return UITableViewCell()
+        }
         
         episodeCell.episodeTitleLabel.text = episodeArr[indexPath.row].title
         episodeCell.episodeDescLabel.text = episodeArr[indexPath.row].description
@@ -320,39 +332,22 @@ extension MangaEpisodeViewController: UITableViewDelegate, UITableViewDataSource
         
         destStoryboard.mangaUrl = link
         
-        print(episodeArr[indexPath.row].previewImage)
-        
-        // save to history
-        if indexPath.row < episodeArr.count{
-            let manga = episodeArr[indexPath.row]
-
-            var previewImageUrl: String? = nil
-            var previewImage: UIImage? = nil
-
-
-            if let unwrappedPreviewImage = manga.previewImage{
-                previewImage = unwrappedPreviewImage
-            }
-
-            if let unwrappedPreviewImageUrl = manga.previewImageUrl{
-                previewImageUrl = unwrappedPreviewImageUrl
-            }
-
-            saveToMangaHistory(mangaTitle: manga.title, mangaLink: manga.link, mangaPreviewImageUrl: previewImageUrl, mangaPreviewImage: previewImage)
-        }
-        
         present(destStoryboard, animated: true, completion: nil)
     }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let lastElement = episodeArr.count - 1
-        
-        if indexPath.row == lastElement{
-            print("load more")
-        }
-    }
-    
 }
 
 
 
+extension MangaEpisodeViewController: UIScrollViewDelegate{
+    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+        let actualPosition = scrollView.panGestureRecognizer.translation(in: scrollView.superview)
+        
+        if (actualPosition.y > 0){
+            // Scrolling up
+            fadeScrollToBottomButton(bool: true)
+        }else{
+            // Scrolling down
+            fadeScrollToBottomButton(bool: false)
+        }
+    }
+}

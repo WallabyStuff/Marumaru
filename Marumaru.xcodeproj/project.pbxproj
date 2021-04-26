@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		764AE0D9262D7541000F490D /* MangaHistory+CoreDataClass copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764AE0D7262D7541000F490D /* MangaHistory+CoreDataClass copy.swift */; };
-		764AE0DA262D7541000F490D /* MangaHistory+CoreDataProperties copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764AE0D8262D7541000F490D /* MangaHistory+CoreDataProperties copy.swift */; };
 		764AE0E2262DA971000F490D /* MangaHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764AE0E1262DA971000F490D /* MangaHistoryViewController.swift */; };
 		765C8B29261CA2C30056C83B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8B28261CA2C30056C83B /* AppDelegate.swift */; };
 		765C8B2B261CA2C30056C83B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8B2A261CA2C30056C83B /* SceneDelegate.swift */; };
@@ -32,8 +30,6 @@
 		76BEEB5E2622FB8500642001 /* error_circle.json in Resources */ = {isa = PBXBuildFile; fileRef = 76BEEB5C2622FB8500642001 /* error_circle.json */; };
 		76BEEB5F2622FB8500642001 /* error_circle.json in Resources */ = {isa = PBXBuildFile; fileRef = 76BEEB5C2622FB8500642001 /* error_circle.json */; };
 		76BEEBA926248A1600642001 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BEEBA826248A1600642001 /* SearchViewController.swift */; };
-		76BEEBAA26248A1600642001 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BEEBA826248A1600642001 /* SearchViewController.swift */; };
-		76BEEBAB26248A1600642001 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BEEBA826248A1600642001 /* SearchViewController.swift */; };
 		76BEEBB02624B64E00642001 /* ResultMangaCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BEEBAF2624B64E00642001 /* ResultMangaCell.swift */; };
 		76BEEBB12624B64E00642001 /* ResultMangaCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BEEBAF2624B64E00642001 /* ResultMangaCell.swift */; };
 		76BEEBB22624B64E00642001 /* ResultMangaCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BEEBAF2624B64E00642001 /* ResultMangaCell.swift */; };
@@ -44,6 +40,9 @@
 		76BEEBDB262978C100642001 /* loading_horizontal.json in Resources */ = {isa = PBXBuildFile; fileRef = 76BEEBD9262978C000642001 /* loading_horizontal.json */; };
 		76BEEBDC262978C100642001 /* loading_horizontal.json in Resources */ = {isa = PBXBuildFile; fileRef = 76BEEBD9262978C000642001 /* loading_horizontal.json */; };
 		76C9A1B92631BC7F000F801C /* NetworkHandelr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C9A1B82631BC7F000F801C /* NetworkHandelr.swift */; };
+		76C9A27A2636A843000F801C /* SaveToWatchHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C9A2792636A842000F801C /* SaveToWatchHistory.swift */; };
+		76C9A2872636AF2A000F801C /* WatchHistory+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C9A2852636AF2A000F801C /* WatchHistory+CoreDataProperties.swift */; };
+		76C9A2882636AF2A000F801C /* WatchHistory+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C9A2862636AF2A000F801C /* WatchHistory+CoreDataClass.swift */; };
 		9C8D265B35A9DBEC89A99257 /* Pods_Marumaru_MarumaruUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48210CEC09A72371A2CA875A /* Pods_Marumaru_MarumaruUITests.framework */; };
 		9CE54091D15F3D416DB44187 /* Pods_MarumaruTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5ED1A6BA4DC636B3CCD84B1E /* Pods_MarumaruTests.framework */; };
 		D3FF4785F0B112C5D86BD47C /* Pods_Marumaru.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84A9524FF95BAEAB169EB1C3 /* Pods_Marumaru.framework */; };
@@ -70,8 +69,6 @@
 		48210CEC09A72371A2CA875A /* Pods_Marumaru_MarumaruUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Marumaru_MarumaruUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5ED1A6BA4DC636B3CCD84B1E /* Pods_MarumaruTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MarumaruTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		75B38F94C6426583177E9F4C /* Pods-Marumaru.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Marumaru.release.xcconfig"; path = "Target Support Files/Pods-Marumaru/Pods-Marumaru.release.xcconfig"; sourceTree = "<group>"; };
-		764AE0D7262D7541000F490D /* MangaHistory+CoreDataClass copy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MangaHistory+CoreDataClass copy.swift"; sourceTree = "<group>"; };
-		764AE0D8262D7541000F490D /* MangaHistory+CoreDataProperties copy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MangaHistory+CoreDataProperties copy.swift"; sourceTree = "<group>"; };
 		764AE0E1262DA971000F490D /* MangaHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MangaHistoryViewController.swift; sourceTree = "<group>"; };
 		765C8B25261CA2C30056C83B /* Marumaru.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Marumaru.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		765C8B28261CA2C30056C83B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -101,6 +98,9 @@
 		76BEEBCF262977EE00642001 /* loading_square.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading_square.json; sourceTree = "<group>"; };
 		76BEEBD9262978C000642001 /* loading_horizontal.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading_horizontal.json; sourceTree = "<group>"; };
 		76C9A1B82631BC7F000F801C /* NetworkHandelr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkHandelr.swift; sourceTree = "<group>"; };
+		76C9A2792636A842000F801C /* SaveToWatchHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveToWatchHistory.swift; sourceTree = "<group>"; };
+		76C9A2852636AF2A000F801C /* WatchHistory+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "WatchHistory+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		76C9A2862636AF2A000F801C /* WatchHistory+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "WatchHistory+CoreDataClass.swift"; sourceTree = "<group>"; };
 		84A9524FF95BAEAB169EB1C3 /* Pods_Marumaru.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Marumaru.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		85EE1F44E4EA0C6AF74FC541 /* Pods-MarumaruTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MarumaruTests.debug.xcconfig"; path = "Target Support Files/Pods-MarumaruTests/Pods-MarumaruTests.debug.xcconfig"; sourceTree = "<group>"; };
 		CF29403175D2D4B8E4CD79A6 /* Pods-Marumaru-MarumaruUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Marumaru-MarumaruUITests.debug.xcconfig"; path = "Target Support Files/Pods-Marumaru-MarumaruUITests/Pods-Marumaru-MarumaruUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -153,8 +153,8 @@
 		764AE0D0262C4F70000F490D /* HistoryItem */ = {
 			isa = PBXGroup;
 			children = (
-				764AE0D8262D7541000F490D /* MangaHistory+CoreDataProperties copy.swift */,
-				764AE0D7262D7541000F490D /* MangaHistory+CoreDataClass copy.swift */,
+				76C9A2862636AF2A000F801C /* WatchHistory+CoreDataClass.swift */,
+				76C9A2852636AF2A000F801C /* WatchHistory+CoreDataProperties.swift */,
 			);
 			name = HistoryItem;
 			sourceTree = "<group>";
@@ -187,19 +187,15 @@
 				76BEEB4B2622D80000642001 /* LottieAnims */,
 				765C8B28261CA2C30056C83B /* AppDelegate.swift */,
 				765C8B2A261CA2C30056C83B /* SceneDelegate.swift */,
-				765C8B2C261CA2C30056C83B /* ViewController.swift */,
-				764AE0E1262DA971000F490D /* MangaHistoryViewController.swift */,
+				76C9A27E2636A847000F801C /* Classes */,
+				764AE0D0262C4F70000F490D /* HistoryItem */,
+				76C9A20426356C08000F801C /* ViewControllers */,
+				765C8C81261F1AA10056C83B /* Cells */,
 				765C8B2E261CA2C30056C83B /* Main.storyboard */,
 				765C8B34261CA2C50056C83B /* Assets.xcassets */,
 				765C8B36261CA2C50056C83B /* LaunchScreen.storyboard */,
 				765C8B39261CA2C50056C83B /* Info.plist */,
 				765C8B31261CA2C30056C83B /* Marumaru.xcdatamodeld */,
-				765C8C67261F05BD0056C83B /* MangaEpisodeViewController.swift */,
-				76BEEBA826248A1600642001 /* SearchViewController.swift */,
-				765C8C6C261F16880056C83B /* ViewMangaViewController.swift */,
-				765C8C81261F1AA10056C83B /* Cells */,
-				764AE0D0262C4F70000F490D /* HistoryItem */,
-				76C9A1B82631BC7F000F801C /* NetworkHandelr.swift */,
 			);
 			path = Marumaru;
 			sourceTree = "<group>";
@@ -243,6 +239,27 @@
 				76BEEBD9262978C000642001 /* loading_horizontal.json */,
 			);
 			name = LottieAnims;
+			sourceTree = "<group>";
+		};
+		76C9A20426356C08000F801C /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				765C8B2C261CA2C30056C83B /* ViewController.swift */,
+				76BEEBA826248A1600642001 /* SearchViewController.swift */,
+				764AE0E1262DA971000F490D /* MangaHistoryViewController.swift */,
+				765C8C67261F05BD0056C83B /* MangaEpisodeViewController.swift */,
+				765C8C6C261F16880056C83B /* ViewMangaViewController.swift */,
+			);
+			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		76C9A27E2636A847000F801C /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				76C9A1B82631BC7F000F801C /* NetworkHandelr.swift */,
+				76C9A2792636A842000F801C /* SaveToWatchHistory.swift */,
+			);
+			name = Classes;
 			sourceTree = "<group>";
 		};
 		C4905DE0F56F23021F4F66E7 /* Frameworks */ = {
@@ -507,20 +524,21 @@
 			files = (
 				765C8C68261F05BD0056C83B /* MangaEpisodeViewController.swift in Sources */,
 				76BEEBA926248A1600642001 /* SearchViewController.swift in Sources */,
+				76C9A2882636AF2A000F801C /* WatchHistory+CoreDataClass.swift in Sources */,
+				76C9A27A2636A843000F801C /* SaveToWatchHistory.swift in Sources */,
 				765C8C78261F192C0056C83B /* MangaEpisodeCell.swift in Sources */,
+				76C9A2872636AF2A000F801C /* WatchHistory+CoreDataProperties.swift in Sources */,
 				765C8B2D261CA2C30056C83B /* ViewController.swift in Sources */,
 				764AE0E2262DA971000F490D /* MangaHistoryViewController.swift in Sources */,
 				765C8B29261CA2C30056C83B /* AppDelegate.swift in Sources */,
 				765C8B2B261CA2C30056C83B /* SceneDelegate.swift in Sources */,
 				76C9A1B92631BC7F000F801C /* NetworkHandelr.swift in Sources */,
 				765C8C3C261DBADF0056C83B /* MangaCollectionCell.swift in Sources */,
-				764AE0D9262D7541000F490D /* MangaHistory+CoreDataClass copy.swift in Sources */,
 				76BEEBB02624B64E00642001 /* ResultMangaCell.swift in Sources */,
 				765C8C4B261DBC960056C83B /* TopRankMangaCell.swift in Sources */,
 				765C8C6D261F16880056C83B /* ViewMangaViewController.swift in Sources */,
 				765C8B33261CA2C30056C83B /* Marumaru.xcdatamodeld in Sources */,
 				765C8C7D261F1A2C0056C83B /* MangaSceneCell.swift in Sources */,
-				764AE0DA262D7541000F490D /* MangaHistory+CoreDataProperties copy.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -528,7 +546,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				76BEEBAA26248A1600642001 /* SearchViewController.swift in Sources */,
 				76BEEBB12624B64E00642001 /* ResultMangaCell.swift in Sources */,
 				765C8B43261CA2C50056C83B /* MarumaruTests.swift in Sources */,
 			);
@@ -538,7 +555,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				76BEEBAB26248A1600642001 /* SearchViewController.swift in Sources */,
 				76BEEBB22624B64E00642001 /* ResultMangaCell.swift in Sources */,
 				765C8B4E261CA2C50056C83B /* MarumaruUITests.swift in Sources */,
 			);

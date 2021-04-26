@@ -8,9 +8,15 @@
 import UIKit
 import CoreData
 
+protocol DismissDelegate {
+    func refreshHistory()
+}
+
 class MangaHistoryViewController: UIViewController {
     
-    var mangaHistoryArr = Array<MangaHistory>()
+    var dismissDelegate: DismissDelegate?
+    
+    var mangaHistoryArr = Array<WatchHistory>()
     let baseUrl = "https://marumaru.cloud"
 
     @IBOutlet weak var mangaHistoryPlaceholderLabel: UILabel!
@@ -22,8 +28,13 @@ class MangaHistoryViewController: UIViewController {
     
         initDesign()
         initInstance()
-        
         loadMangaHistory()
+    }
+
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        print("view did disappear")
+        dismissDelegate?.refreshHistory()
     }
     
     func initDesign(){
@@ -46,7 +57,7 @@ class MangaHistoryViewController: UIViewController {
         
         DispatchQueue.global(qos: .background).async {
             do{
-                let recentMangas = try context.fetch(MangaHistory.fetchRequest()) as! [MangaHistory]
+                let recentMangas = try context.fetch(WatchHistory.fetchRequest()) as! [WatchHistory]
                 
                 self.mangaHistoryArr = recentMangas.reversed()
                 
@@ -99,6 +110,7 @@ class MangaHistoryViewController: UIViewController {
             removeHistory(object: $0)
         }
         mangaHistoryCollectionView.reloadData()
+        mangaHistoryArr.removeAll()
     }
     
     @IBAction func clearHistoryButtonAction(_ sender: Any) {

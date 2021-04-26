@@ -16,7 +16,6 @@ class SearchViewController: UIViewController {
         var desc1: String
         var desc2: String
         var previewImageUrl: String?
-        var previewImage: UIImage?
         var serialNumber: String
     }
     
@@ -25,6 +24,8 @@ class SearchViewController: UIViewController {
     
     let networkHandler = NetworkHandler()
     var resultMangaArr = Array<Manga>()
+    
+    let loadingSqaureAnimView = AnimationView(name: "loading_square")
     
     @IBOutlet weak var searchTextField: UITextField!
     @IBOutlet weak var resultMangaTableView: UITableView!
@@ -39,9 +40,6 @@ class SearchViewController: UIViewController {
         initInstance()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        setLottieAnims()
-    }
     
     override var preferredStatusBarStyle: UIStatusBarStyle{
         return .darkContent
@@ -70,18 +68,23 @@ class SearchViewController: UIViewController {
         resultMangaTableView.dataSource = self
     }
     
-    func setLottieAnims(){
-        // set search loading anim -lottie-
-        let loadingSqaureAnimView = AnimationView(name: "loading_square")
-        loadingSqaureAnimView.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
-        loadingSqaureAnimView.center = loadingResultView.center
-        loadingSqaureAnimView.play()
-        loadingSqaureAnimView.loopMode = .loop
-        loadingResultView.addSubview(loadingSqaureAnimView)
-    }
-    
     
     func search(title: String){
+        
+        resultMangaArr.removeAll()
+        resultMangaTableView.reloadData()
+        noResultsLabel.isHidden = true
+        startLoadingAnimation()
+        
+        
+        if title.count < 1{
+            stopLoadingAnimation()
+            noResultsLabel.isHidden = false
+            self.view.makeToast("최소 한 글자 이상의 단어로 검색해주세요")
+            
+            return
+        }
+        
         
         DispatchQueue.global(qos: .background).async {
             let modifiedTitle = title.replacingOccurrences(of: " ", with: "+")
@@ -129,7 +132,7 @@ class SearchViewController: UIViewController {
                             
                             
                             // Append to array
-                            self.resultMangaArr.append(Manga(title: title, desc1: descs[0] , desc2: descs[1], previewImageUrl: imgUrl, previewImage: nil, serialNumber: SN))
+                            self.resultMangaArr.append(Manga(title: title, desc1: descs[0] , desc2: descs[1], previewImageUrl: imgUrl, serialNumber: SN))
                             
                             
                             print(title)
@@ -140,12 +143,12 @@ class SearchViewController: UIViewController {
                     
                     DispatchQueue.main.async {
                         self.resultMangaTableView.reloadData()
+                        self.stopLoadingAnimation()
                         
                         if self.resultMangaArr.count == 0{
                             self.noResultsLabel.isHidden = false
-                            self.loadingResultView.isHidden = true
                         }else{
-                            self.loadingResultView.isHidden = true
+                            self.noResultsLabel.isHidden = true
                         }
                     }
                     
@@ -158,6 +161,26 @@ class SearchViewController: UIViewController {
             }
         }
         
+    }
+    
+    func startLoadingAnimation(){
+        DispatchQueue.main.async {
+            self.loadingResultView.isHidden = false
+            
+            self.loadingSqaureAnimView.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
+            self.loadingSqaureAnimView.center = self.loadingResultView.center
+            self.loadingSqaureAnimView.play()
+            self.loadingSqaureAnimView.loopMode = .loop
+            self.loadingResultView.addSubview(self.loadingSqaureAnimView)
+        }
+    }
+    
+    func stopLoadingAnimation(){
+        DispatchQueue.main.async {
+            self.loadingResultView.isHidden = true
+            
+            self.loadingSqaureAnimView.stop()
+        }
     }
     
     // https://stackoverflow.com/questions/48576329/ios-urlstring-not-working-always
@@ -191,11 +214,6 @@ extension SearchViewController: UITextFieldDelegate{
         
         // Seach action on keyboard
         if let title = textField.text?.trimmingCharacters(in: .whitespaces){
-            resultMangaArr.removeAll()
-            resultMangaTableView.reloadData()
-            loadingResultView.isHidden = false
-            noResultsLabel.isHidden = true
-            
             search(title: title)
         }
         
@@ -212,12 +230,23 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ResultMangaCell") as! ResultMangaCell
         
+        if indexPath.row > resultMangaArr.count - 1{
+            return UITableViewCell()
+        }
+        
+        
         cell.titleLabel.text = resultMangaArr[indexPath.row].title
         cell.desc1Label.text = resultMangaArr[indexPath.row].desc1
         cell.desc2Label.text = resultMangaArr[indexPath.row].desc2
         cell.previewImagePlaceholderLabel.text = resultMangaArr[indexPath.row].title
         cell.previewImagePlaceholderLabel.isHidden = false
         cell.previewImage.image = UIImage()
+        
+        if resultMangaArr[indexPath.row].desc2.contains("미분류"){
+            cell.desc2Label.textColor = UIColor(named: "BasicSubTextColor")!
+        }else{
+            cell.desc2Label.textColor = UIColor(named: "SubPointColor")!
+        }
         
         
         if let previewImageUrl = resultMangaArr[indexPath.row].previewImageUrl{
@@ -251,48 +280,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource{
                 }
             }
         }
-//
-//
-//        // Check preview image did loaded
-//        if resultMangaArr[indexPath.row].previewImage != nil{
-//            // preview image is already loaded , preview image is exists
-//            cell.previewImage.image = resultMangaArr[indexPath.row].previewImage
-//            cell.previewImage.layer.masksToBounds = true
-//            cell.previewImagePlaceholderLabel.isHidden = true
-//
-//        }else{
-//            // Preview image has not been loaded
-//            DispatchQueue.global(qos: .background).async {
-//                if self.resultMangaArr[indexPath.row].previewImageUrl != ""{
-//                    do{
-//                        let url = URL(string: self.resultMangaArr[indexPath.row].previewImageUrl!)
-//                        let data = try Data(contentsOf: url!)
-//                        self.resultMangaArr[indexPath.row].previewImage = UIImage(data: data)
-//
-//                        DispatchQueue.main.async {
-//                            cell.previewImage.alpha = 0
-//                            cell.previewImage.image = self.resultMangaArr[indexPath.row].previewImage
-//                            cell.previewImagePlaceholderLabel.isHidden = true
-//
-//                            UIView.animate(withDuration: 0.5) {
-//                                cell.previewImage.alpha = 1
-//                            }
-//                        }
-//                    }catch{
-//                        DispatchQueue.main.async {
-//                            print(error.localizedDescription)
-//                            cell.previewImagePlaceholderLabel.text = self.resultMangaArr[indexPath.row].title
-//                            cell.previewImagePlaceholderLabel.isHidden = false
-//                        }
-//                    }
-//                }else{
-//                    DispatchQueue.main.async {
-//                        cell.previewImagePlaceholderLabel.text = self.resultMangaArr[indexPath.row].title
-//                        cell.previewImagePlaceholderLabel.isHidden = false
-//                    }
-//                }
-//            }
-//        }
+
         
         return cell
     }

@@ -10,29 +10,31 @@ import Alamofire
 import SwiftSoup
 import Lottie
 import CoreData
+import Foundation
 
 
 class ViewMangaViewController: UIViewController {
 
     struct Scene {
         var sceneUrl: String
-        var sceneImage: UIImage?
     }
     
-    
     let networkHandler = NetworkHandler()
+    let coredataHandler = CoreDataHandler()
     var sceneArr = Array<Scene>()
+    var cellHeightDictionary: NSMutableDictionary = [:]
     
     let baseUrl = "https://marumaru.cloud/"
     var mangaUrl: String = ""
-
     
     @IBOutlet weak var sceneLoadingView: UIView!
     @IBOutlet weak var topBarView: UIView!
+    @IBOutlet weak var bottomIndicatorView: UIView!
     @IBOutlet weak var mangaTitleLabel: UILabel!
     @IBOutlet weak var mangaSceneTableView: UITableView!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollContentView: UIView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,7 +49,7 @@ class ViewMangaViewController: UIViewController {
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle{
-        return .darkContent
+        return .lightContent
     }
     
     
@@ -90,20 +92,27 @@ class ViewMangaViewController: UIViewController {
                     
                     // Set manga title
                     let titleDoc = try doc.getElementsByClass("view-wrap")
-                    let mangaTitle = try titleDoc.select("h1").text()
+                    var mangaTitle = try titleDoc.select("h1").text().trimmingCharacters(in: .whitespacesAndNewlines)
+                    if let index = mangaTitle.index(of: "인기 :"){
+                        mangaTitle = String(mangaTitle[..<index])
+                    }
+                    
+                    
+                    
+                    
                     
                     DispatchQueue.main.async {
                         self.mangaTitleLabel.text = mangaTitle
                     }
                     
-                    // Apends manga scenes
+                    // Append manga scenes
                     for (_, element) in elements.enumerated(){
                         var imgUrl = try element.select("img").attr("src")
                         if !imgUrl.contains(self.baseUrl){
                             imgUrl = "\(self.baseUrl)\(imgUrl)"
                         }
                         
-                        self.sceneArr.append(Scene(sceneUrl: imgUrl, sceneImage: nil))
+                        self.sceneArr.append(Scene(sceneUrl: imgUrl))
                     }
                     
                     // if successfuly appending scenes
@@ -111,6 +120,36 @@ class ViewMangaViewController: UIViewController {
                         self.sceneLoadingView.isHidden = true
                         self.mangaSceneTableView.reloadData()
                     }
+                    
+                    // save to watch history
+                    
+                    if self.sceneArr.count > 0{
+                        if let url = URL(string: self.sceneArr[0].sceneUrl){
+                            self.networkHandler.getImage(url){ result in
+                                do{
+                                    // success to get image
+                                    print("Log : Successfully load image")
+                                    let image = try result.get()
+                                    self.coredataHandler.saveToWatchHistory(mangaTitle: mangaTitle, mangaLink: self.mangaUrl, mangaPreviewImageUrl: self.sceneArr[0].sceneUrl, mangaPreviewImage: image)
+                                }catch{
+                                    // fail to get image
+                                    print("Log : fail to get image")
+                                    self.coredataHandler.saveToWatchHistory(mangaTitle: mangaTitle, mangaLink: self.mangaUrl, mangaPreviewImageUrl: self.sceneArr[0].sceneUrl, mangaPreviewImage: nil)
+                                    print(error)
+                                }
+                            }
+                        }else{
+                            // fail to convert string to url
+                            print("Log : fail to convert image to url")
+                            self.coredataHandler.saveToWatchHistory(mangaTitle: mangaTitle, mangaLink: self.mangaUrl, mangaPreviewImageUrl: self.sceneArr[0].sceneUrl, mangaPreviewImage: nil)
+                        }
+                    }else{
+                        // first scene image is not exists
+                        print("Log : scene iamge is not exists")
+                        self.coredataHandler.saveToWatchHistory(mangaTitle: mangaTitle, mangaLink: self.mangaUrl, mangaPreviewImageUrl: nil, mangaPreviewImage: nil)
+                    }
+                    
+                    
                             
                 }catch{
                     print(error.localizedDescription)
@@ -119,9 +158,17 @@ class ViewMangaViewController: UIViewController {
         }
     }
     
-    func fadeTopbar(bool: Bool){
+    func loadNextEpisode(){
+        
+    }
+    
+    func loadPreviousEpisode(){
+        
+    }
+    
+    func fadeTopbarView(bool: Bool){
         if bool {
-            UIView.animate(withDuration: 0.5) {
+            UIView.animate(withDuration: 0.3) {
                 self.topBarView.alpha = 0
             } completion: { _ in
                 self.topBarView.isHidden = true
@@ -129,28 +176,64 @@ class ViewMangaViewController: UIViewController {
         }else{
             self.topBarView.isHidden = false
             
-            UIView.animate(withDuration: 0.5) {
+            UIView.animate(withDuration: 0.3) {
                 self.topBarView.alpha = 1
             }
         }
     }
     
-   
+    func fadeIndicatorView(bool: Bool){
+        if bool {
+            UIView.animate(withDuration: 0.3) {
+                self.bottomIndicatorView.alpha = 0
+            } completion: { _ in
+                self.bottomIndicatorView.isHidden = true
+            }
+        }else{
+            self.bottomIndicatorView.isHidden = false
+            
+            UIView.animate(withDuration: 0.3) {
+                self.bottomIndicatorView.alpha = 1
+            }
+        }
+    }
+    
     
     @objc func handleTap(sender: UITapGestureRecognizer){
         if sender.state == .ended{
             if topBarView.isHidden {
-                fadeTopbar(bool: false)
+                fadeTopbarView(bool: false)
             }else{
-                fadeTopbar(bool: true)
+                fadeTopbarView(bool: true)
+            }
+            
+            if bottomIndicatorView.isHidden{
+                fadeIndicatorView(bool: false)
+            }else{
+                fadeIndicatorView(bool: true)
             }
         }
+        
     }
 
     @IBAction func backButtonAction(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
+    
+    @IBAction func previousEpisodeButtonAction(_ sender: Any) {
+        
+    }
+    
+    @IBAction func nextEpisodeButtonAction(_ sender: Any) {
+        
+    }
+    
+    @IBAction func viewEpisodeListButtonAction(_ sender: Any) {
+        
+    }
 }
+
+
 
 
 
@@ -164,6 +247,14 @@ extension ViewMangaViewController: UITableViewDelegate ,UITableViewDataSource{
         let sceneCell = tableView.dequeueReusableCell(withIdentifier: "MangaSceneCell") as! MangaSceneCell
         
         sceneCell.selectionStyle = .none
+        
+        // save cell height
+        cellHeightDictionary.setObject(sceneCell.frame.height, forKey: indexPath as NSCopying)
+        
+        
+        if indexPath.row > sceneArr.count - 1{
+            return UITableViewCell()
+        }
         
         // set background tile
         let tileImage = UIImage(named: "Tile")!
@@ -198,40 +289,16 @@ extension ViewMangaViewController: UITableViewDelegate ,UITableViewDataSource{
         }
         
         
-//        // set background tile
-//        let tileImage = UIImage(named: "Tile")!
-//        let patternBackground = UIColor(patternImage: tileImage)
-//        sceneCell.backgroundColor = patternBackground
-//        sceneCell.sceneImageView.image = UIImage()
-//
-//        // 안전하게 인덱스 접근
-//        if  indexPath.row < sceneArr.count{
-//            if sceneArr[indexPath.row].sceneImage != nil {
-//                // scene image already loaded
-//                sceneCell.sceneImageView.image = sceneArr[indexPath.row].sceneImage
-//                sceneCell.backgroundColor = UIColor(named: "BackgroundColor")!
-//            }else{
-//                // scene has not been loaded
-//                DispatchQueue.global(qos: .background).async {
-//                    do{
-//                        let sceneImgUrl = URL(string: self.sceneArr[indexPath.row].sceneUrl)
-//                        let sceneImgData = try Data(contentsOf: sceneImgUrl!)
-//                        let sceneImg = UIImage(data: sceneImgData)
-//                        self.sceneArr[indexPath.row].sceneImage = sceneImg
-//
-//                        DispatchQueue.main.async {
-//                            sceneCell.sceneImageView.image = sceneImg
-//                            sceneCell.backgroundColor = UIColor(named: "BackgroundColor")!
-//                        }
-//                    }catch{
-//                        sceneCell.backgroundColor = patternBackground
-//                        print(error.localizedDescription)
-//                    }
-//                }
-//            }
-//        }
-        
         return sceneCell
+    }
+    
+    // Scroll to current position when orientation changed
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        if let height = cellHeightDictionary.object(forKey: indexPath) as? Double{
+            return CGFloat(height)
+        }
+        
+        return UITableView.automaticDimension
     }
 }
 
@@ -243,19 +310,23 @@ extension ViewMangaViewController: UIScrollViewDelegate{
         
         if (actualPosition.y > 0){
             // scrolling up
-            fadeTopbar(bool: false)
+            fadeTopbarView(bool: false)
+            fadeIndicatorView(bool: false)
         }else{
             // scrolling down
-            fadeTopbar(bool: true)
+            fadeTopbarView(bool: true)
+            fadeIndicatorView(bool: true)
         }
         
         let height = scrollView.frame.height
         let contentYoffset = scrollView.contentOffset.y
         let distanceFromBottom = scrollView.contentSize.height - contentYoffset
         
+        // scroll over down
         if distanceFromBottom <= height{
-            UIView.animate(withDuration: 0.5){
+            UIView.animate(withDuration: 0.3){
                 self.topBarView.alpha = 1
+                self.bottomIndicatorView.alpha = 1
             }
         }
     }
@@ -263,5 +334,31 @@ extension ViewMangaViewController: UIScrollViewDelegate{
     // Set scrollview zoomable
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return self.scrollContentView
+    }
+}
+
+
+//https://stackoverflow.com/questions/32305891/index-of-a-substring-in-a-string-with-swift
+extension StringProtocol {
+    func index<S: StringProtocol>(of string: S, options: String.CompareOptions = []) -> Index? {
+        range(of: string, options: options)?.lowerBound
+    }
+    func endIndex<S: StringProtocol>(of string: S, options: String.CompareOptions = []) -> Index? {
+        range(of: string, options: options)?.upperBound
+    }
+    func indices<S: StringProtocol>(of string: S, options: String.CompareOptions = []) -> [Index] {
+        ranges(of: string, options: options).map(\.lowerBound)
+    }
+    func ranges<S: StringProtocol>(of string: S, options: String.CompareOptions = []) -> [Range<Index>] {
+        var result: [Range<Index>] = []
+        var startIndex = self.startIndex
+        while startIndex < endIndex,
+            let range = self[startIndex...]
+                .range(of: string, options: options) {
+                result.append(range)
+                startIndex = range.lowerBound < range.upperBound ? range.upperBound :
+                    index(range.lowerBound, offsetBy: 1, limitedBy: endIndex) ?? endIndex
+        }
+        return result
     }
 }
