@@ -16,6 +16,7 @@ class MangaHistoryViewController: UIViewController {
     
     var dismissDelegate: DismissDelegate?
     
+    let coredataHandler = CoreDataHandler()
     var mangaHistoryArr = Array<WatchHistory>()
     let baseUrl = "https://marumaru.cloud"
 
@@ -31,9 +32,7 @@ class MangaHistoryViewController: UIViewController {
         loadMangaHistory()
     }
 
-    
     override func viewDidDisappear(_ animated: Bool) {
-        print("view did disappear")
         dismissDelegate?.refreshHistory()
     }
     
@@ -52,14 +51,11 @@ class MangaHistoryViewController: UIViewController {
         mangaHistoryCollectionView.reloadData()
         self.mangaHistoryPlaceholderLabel.isHidden = false
         
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let context = appDelegate.persistentContainer.viewContext
-        
-        DispatchQueue.global(qos: .background).async {
+        coredataHandler.getWatchHistory(){ Result in
             do{
-                let recentMangas = try context.fetch(WatchHistory.fetchRequest()) as! [WatchHistory]
+                let recentMangas = try Result.get()
                 
-                self.mangaHistoryArr = recentMangas.reversed()
+                self.mangaHistoryArr = recentMangas
                 
                 DispatchQueue.main.async {
                     if self.mangaHistoryArr.count > 0{
@@ -68,7 +64,6 @@ class MangaHistoryViewController: UIViewController {
                     
                     self.mangaHistoryCollectionView.reloadData()
                 }
-                
             }catch{
                 print(error.localizedDescription)
             }
@@ -92,25 +87,21 @@ class MangaHistoryViewController: UIViewController {
         self.present(deleteMenu, animated: true)
     }
     
-    func removeHistory(object: NSManagedObject){
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let context = appDelegate.persistentContainer.viewContext
-        
-        context.delete(object)
-        
-        do{
-            try context.save()
-        }catch{
-            print(error.localizedDescription)
-        }
-    }
-    
     func clearHistory(){
-        mangaHistoryArr.forEach {
-            removeHistory(object: $0)
+        coredataHandler.clearWatchHistory(){Result in
+            do{
+                let success = try Result.get()
+                if success{
+                    DispatchQueue.main.async {
+                        self.mangaHistoryCollectionView.reloadData()
+                        self.mangaHistoryArr.removeAll()
+                        self.loadMangaHistory()
+                    }
+                }
+            }catch{
+                print(error.localizedDescription)
+            }
         }
-        mangaHistoryCollectionView.reloadData()
-        mangaHistoryArr.removeAll()
     }
     
     @IBAction func clearHistoryButtonAction(_ sender: Any) {
@@ -186,23 +177,27 @@ extension MangaHistoryViewController: UICollectionViewDelegate, UICollectionView
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-        let destStoryboard = mainStoryboard.instantiateViewController(identifier: "ViewMangaStoryboard") as! ViewMangaViewController
-        
-        destStoryboard.modalPresentationStyle = .fullScreen
-        
-        let link = mangaHistoryArr[indexPath.row].link
-        
-        if var unwrappedlink = link{
-            // check link does have baseUrl
-            if !unwrappedlink.contains(baseUrl){
-                unwrappedlink = "\(baseUrl)\(unwrappedlink)"
+        if mangaHistoryArr.count > indexPath.row{
+            let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+            let destStoryboard = mainStoryboard.instantiateViewController(identifier: "ViewMangaStoryboard") as! ViewMangaViewController
+            
+            destStoryboard.modalPresentationStyle = .fullScreen
+            
+            let link = mangaHistoryArr[indexPath.row].link
+            let title = mangaHistoryArr[indexPath.row].title!
+            
+            if var unwrappedLink = link{
+                // check link does have baseUrl
+                if !unwrappedLink.contains(baseUrl){
+                    unwrappedLink = "\(baseUrl)\(unwrappedLink)"
+                }
+                
+                // pass data
+                destStoryboard.mangaUrl = unwrappedLink
+                destStoryboard.mangaTitle = title
+                
+                present(destStoryboard, animated: true, completion: nil)
             }
-            
-            // pass data
-            destStoryboard.mangaUrl = unwrappedlink
-            
-            present(destStoryboard, animated: true, completion: nil)
         }
     }
 }

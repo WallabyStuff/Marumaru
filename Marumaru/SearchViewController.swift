@@ -263,6 +263,16 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource{
                                 UIView.animate(withDuration: 0.5) {
                                     cell.previewImage.alpha = 1
                                 }
+                                
+                                
+                                // Set preview image shadow with average color of preview image
+                                cell.previewImageBaseView.layer.shadowColor = image.averageColor?.cgColor
+                                cell.previewImageBaseView.layer.shadowOffset = .zero
+                                cell.previewImageBaseView.layer.shadowRadius = 7
+                                cell.previewImageBaseView.layer.shadowOpacity = 30
+                                cell.previewImageBaseView.layer.masksToBounds = false
+                                cell.previewImageBaseView.layer.borderWidth = 0
+                                cell.previewImageBaseView.layer.shouldRasterize = true
                             }
                         }catch{
                             DispatchQueue.main.async {

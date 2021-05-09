@@ -11,6 +11,7 @@ import SwiftSoup
 import Lottie
 import CoreData
 import Foundation
+import Toast
 
 
 class ViewMangaViewController: UIViewController {
@@ -19,13 +20,24 @@ class ViewMangaViewController: UIViewController {
         var sceneUrl: String
     }
     
+    var baseUrl = "https://marumaru.cloud/"
+    var baseDocument: Document?
+    
+    var mangaTitle: String = ""
+    var mangaUrl: String = ""
+    
+    var episodeArr = Array<Episode>()
+    var sceneArr = Array<Scene>()
+    
+    var currentEpisodeIndex: Int?
+    @IBOutlet weak var viewEpisodeListButton: UIButton!
+    
     let networkHandler = NetworkHandler()
     let coredataHandler = CoreDataHandler()
-    var sceneArr = Array<Scene>()
+    
     var cellHeightDictionary: NSMutableDictionary = [:]
     
-    let baseUrl = "https://marumaru.cloud/"
-    var mangaUrl: String = ""
+    var sceneLoadingAnim = AnimationView()
     
     @IBOutlet weak var sceneLoadingView: UIView!
     @IBOutlet weak var topBarView: UIView!
@@ -39,19 +51,33 @@ class ViewMangaViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        checkIntegrity()
+        
         initDesign()
         initInstance()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         setLottieAnims()
-        getMangaScenes()
+        loadMangaScenes(mangaUrl)
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle{
         return .lightContent
     }
     
+    
+    func checkIntegrity(){
+        if mangaUrl.isEmpty{
+            dismiss(animated: true, completion: nil)
+        }
+        
+        if mangaTitle.isEmpty{
+            dismiss(animated: true, completion: nil)
+        }else{
+            mangaTitleLabel.text = mangaTitle
+        }
+    }
     
     func initDesign(){
         
@@ -70,100 +96,200 @@ class ViewMangaViewController: UIViewController {
     
     func setLottieAnims(){
         // Set scene loading animation
-        let sceneLoadingAnim = AnimationView(name: "loading_square")
+        sceneLoadingAnim = AnimationView(name: "loading_square")
         sceneLoadingAnim.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
         sceneLoadingAnim.center = sceneLoadingView.center
         sceneLoadingAnim.loopMode = .loop
         sceneLoadingAnim.play()
-        
         sceneLoadingView.addSubview(sceneLoadingAnim)
     }
     
-    func getMangaScenes(){
+    func loadMangaScenes(_ mangaUrl: String){
         self.sceneLoadingView.isHidden = false
+        sceneArr.removeAll()
+        mangaSceneTableView.reloadData()
         
         DispatchQueue.global(qos: .background).async {
             if !self.mangaUrl.isEmpty{
                 do{
-                    guard let url = URL(string: self.mangaUrl) else {return}
+                    guard let url = URL(string: mangaUrl) else {return}
                     let htmlContent = try String(contentsOf: url, encoding: .utf8)
-                    let doc = try SwiftSoup.parse(htmlContent)
-                    let elements = try doc.getElementsByClass("img-tag")
+                    self.baseDocument = try SwiftSoup.parse(htmlContent)
                     
-                    // Set manga title
-                    let titleDoc = try doc.getElementsByClass("view-wrap")
-                    var mangaTitle = try titleDoc.select("h1").text().trimmingCharacters(in: .whitespacesAndNewlines)
-                    if let index = mangaTitle.index(of: "인기 :"){
-                        mangaTitle = String(mangaTitle[..<index])
-                    }
-                    
-                    
-                    
-                    
-                    
-                    DispatchQueue.main.async {
-                        self.mangaTitleLabel.text = mangaTitle
-                    }
-                    
-                    // Append manga scenes
-                    for (_, element) in elements.enumerated(){
-                        var imgUrl = try element.select("img").attr("src")
-                        if !imgUrl.contains(self.baseUrl){
-                            imgUrl = "\(self.baseUrl)\(imgUrl)"
+                    if let doc = self.baseDocument{
+                        let elements = try doc.getElementsByClass("img-tag")
+                        
+                        
+                        // Append manga scenes
+                        for (_, element) in elements.enumerated(){
+                            var imgUrl = try element.select("img").attr("src")
+                            if !imgUrl.contains(self.baseUrl){
+                                imgUrl = "\(self.baseUrl)\(imgUrl)"
+                            }
+                            
+                            self.sceneArr.append(Scene(sceneUrl: imgUrl))
                         }
                         
-                        self.sceneArr.append(Scene(sceneUrl: imgUrl))
-                    }
-                    
-                    // if successfuly appending scenes
-                    DispatchQueue.main.sync {
-                        self.sceneLoadingView.isHidden = true
-                        self.mangaSceneTableView.reloadData()
-                    }
-                    
-                    // save to watch history
-                    
-                    if self.sceneArr.count > 0{
-                        if let url = URL(string: self.sceneArr[0].sceneUrl){
-                            self.networkHandler.getImage(url){ result in
-                                do{
-                                    // success to get image
-                                    print("Log : Successfully load image")
-                                    let image = try result.get()
-                                    self.coredataHandler.saveToWatchHistory(mangaTitle: mangaTitle, mangaLink: self.mangaUrl, mangaPreviewImageUrl: self.sceneArr[0].sceneUrl, mangaPreviewImage: image)
-                                }catch{
-                                    // fail to get image
-                                    print("Log : fail to get image")
-                                    self.coredataHandler.saveToWatchHistory(mangaTitle: mangaTitle, mangaLink: self.mangaUrl, mangaPreviewImageUrl: self.sceneArr[0].sceneUrl, mangaPreviewImage: nil)
-                                    print(error)
+                        // if successfuly appending scenes
+                        DispatchQueue.main.sync {
+                            self.sceneLoadingView.isHidden = true
+                            self.mangaSceneTableView.reloadData()
+                        }
+                        
+                        // save to watch history
+                        if self.sceneArr.count > 0{
+                            
+                            // check is exists already
+                            if let url = URL(string: self.sceneArr[0].sceneUrl){
+                                self.networkHandler.getImage(url){ result in
+                                    do{
+                                        // success to get image
+                                        print("Log : Successfully load image")
+                                        let image = try result.get()
+                                        self.coredataHandler.saveToWatchHistory(mangaTitle: self.mangaTitle, mangaLink: mangaUrl, mangaPreviewImageUrl: self.sceneArr[0].sceneUrl, mangaPreviewImage: image)
+                                    }catch{
+                                        // fail to get image
+                                        print("Log : fail to get image")
+                                        self.coredataHandler.saveToWatchHistory(mangaTitle: self.mangaTitle, mangaLink: mangaUrl, mangaPreviewImageUrl: self.sceneArr[0].sceneUrl, mangaPreviewImage: nil)
+                                        print(error)
+                                    }
                                 }
+                            }else{
+                                // fail to convert string to url
+                                print("Log : fail to convert image to url")
+                                self.coredataHandler.saveToWatchHistory(mangaTitle: self.mangaTitle, mangaLink: mangaUrl, mangaPreviewImageUrl: self.sceneArr[0].sceneUrl, mangaPreviewImage: nil)
                             }
                         }else{
-                            // fail to convert string to url
-                            print("Log : fail to convert image to url")
-                            self.coredataHandler.saveToWatchHistory(mangaTitle: mangaTitle, mangaLink: self.mangaUrl, mangaPreviewImageUrl: self.sceneArr[0].sceneUrl, mangaPreviewImage: nil)
+                            // first scene image is not exists
+                            print("Log : scene iamge is not exists")
+                            self.coredataHandler.saveToWatchHistory(mangaTitle: self.mangaTitle, mangaLink: mangaUrl, mangaPreviewImageUrl: nil, mangaPreviewImage: nil)
                         }
+                        
+                        
+                        self.getEpisodes()
+                        
                     }else{
-                        // first scene image is not exists
-                        print("Log : scene iamge is not exists")
-                        self.coredataHandler.saveToWatchHistory(mangaTitle: mangaTitle, mangaLink: self.mangaUrl, mangaPreviewImageUrl: nil, mangaPreviewImage: nil)
+                        // document is nil
+                        self.view.makeToast("불러오기에 실패하였습니다. 다시 시도해주시기 바랍니다.")
                     }
-                    
                     
                             
                 }catch{
-                    print(error.localizedDescription)
+                    print("Log error: \(error.localizedDescription)")
                 }
             }
         }
     }
     
-    func loadNextEpisode(){
+    
+    func getEpisodes(){
+        DispatchQueue.global(qos: .background).async {
+            
+            do{
+                if let doc = self.baseDocument{
+                    let tmpDoc = try doc.getElementsByClass("chart").first()
+                    if let chart = try tmpDoc?.select("option"){
+                        
+                        for (index, Element) in chart.enumerated(){
+                            do{
+                                let episodeTitle = try Element.text().trimmingCharacters(in: .whitespaces)
+                                let episodeSN = try Element.attr("value")
+                                
+                                if try Element.text().trimmingCharacters(in: .whitespaces) == self.mangaTitle.trimmingCharacters(in: .whitespaces){
+                                    
+                                    self.currentEpisodeIndex = index
+                                }
+                                
+                                
+                                if index != chart.count - 1{
+                                    self.episodeArr.append(Episode(episodeTitle, episodeSN))
+                                }
+                                
+                            }catch{
+                                print(error.localizedDescription)
+                            }
+                        }
+                    }
+                }
+                
+            }catch{
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    
+    func setIndicator(){
+        getEpisodes()
+    }
+    
+    func showEpisodePopoverView(){
+        let episodePopoverVC = storyboard?.instantiateViewController(identifier: "EpisodePopoverStoryboard") as! EpisodePopoverViewController
         
+        episodePopoverVC.modalPresentationStyle = .popover
+        episodePopoverVC.preferredContentSize = CGSize(width: 200, height: 300)
+        episodePopoverVC.popoverPresentationController?.permittedArrowDirections = .down
+        episodePopoverVC.popoverPresentationController?.sourceRect = viewEpisodeListButton.bounds
+        episodePopoverVC.popoverPresentationController?.sourceView = viewEpisodeListButton
+        episodePopoverVC.presentationController?.delegate = self
+        episodePopoverVC.selectItemDelegate = self
+        
+        episodePopoverVC.episodeArr = episodeArr
+        
+        present(episodePopoverVC, animated: true, completion: nil)
+    }
+    
+    
+    func loadNextEpisode(){
+        if !episodeArr.isEmpty{
+            if let currentEpisodeIndex = currentEpisodeIndex{
+                if 0 <= currentEpisodeIndex - 1{
+                    
+                    let nextEpisode = episodeArr[currentEpisodeIndex - 1]
+                    
+                    guard let nextEpisodeTitle = nextEpisode.episodeTitle, let nextEpisodeSN = nextEpisode.episodeSN else{
+                        return
+                    }
+                    
+                    let url = replaceSerialNumber(nextEpisodeSN)
+                    
+                    mangaTitle = nextEpisodeTitle
+                    mangaTitleLabel.text = nextEpisodeTitle
+                    loadMangaScenes(url)
+                    
+                    sceneLoadingAnim.play()
+                    
+                }else{
+//                    self.view.makeToast("out of range")
+                }
+            }
+        }
     }
     
     func loadPreviousEpisode(){
-        
+        if !episodeArr.isEmpty{
+            if let currentEpisodeIndex = currentEpisodeIndex{
+                if episodeArr.count > currentEpisodeIndex + 1{
+                    
+                    
+                    let prevEpisode = episodeArr[currentEpisodeIndex + 1]
+                    
+                    guard let prevEpisodeTitle = prevEpisode.episodeTitle, let prevEpisodeSN = prevEpisode.episodeSN else{
+                        return
+                    }
+                    
+                    let url = replaceSerialNumber(prevEpisodeSN)
+                    
+                    mangaTitle = prevEpisodeTitle
+                    mangaTitleLabel.text = prevEpisodeTitle
+                    loadMangaScenes(url)
+                    
+                    sceneLoadingAnim.play()
+                }
+            }else{
+//                self.view.makeToast("out of range")
+            }
+        }
     }
     
     func fadeTopbarView(bool: Bool){
@@ -198,6 +324,25 @@ class ViewMangaViewController: UIViewController {
         }
     }
     
+    func replaceSerialNumber(_ newSerialNumber: String) -> String{
+        
+        var separatedUrl = mangaUrl.split(separator: "/")
+        separatedUrl = separatedUrl.dropLast()
+        
+        var completeUrl = ""
+        
+        separatedUrl.forEach { Substring in
+            if Substring == "https:"{
+                completeUrl = completeUrl.appending(Substring).appending("//")
+            }else{
+                completeUrl = completeUrl.appending(Substring).appending("/")
+            }
+        }
+        completeUrl = completeUrl.appending(newSerialNumber)
+        
+        return completeUrl
+    }
+    
     
     @objc func handleTap(sender: UITapGestureRecognizer){
         if sender.state == .ended{
@@ -221,15 +366,15 @@ class ViewMangaViewController: UIViewController {
     }
     
     @IBAction func previousEpisodeButtonAction(_ sender: Any) {
-        
+        loadPreviousEpisode()
     }
     
     @IBAction func nextEpisodeButtonAction(_ sender: Any) {
-        
+        loadNextEpisode()
     }
     
     @IBAction func viewEpisodeListButtonAction(_ sender: Any) {
-        
+        showEpisodePopoverView()
     }
 }
 
@@ -260,7 +405,9 @@ extension ViewMangaViewController: UITableViewDelegate ,UITableViewDataSource{
         let tileImage = UIImage(named: "Tile")!
         let patternBackground = UIColor(patternImage: tileImage)
         sceneCell.backgroundColor = patternBackground
+        sceneCell.sceneDividerView.backgroundColor = patternBackground
         sceneCell.sceneImageView.image = UIImage()
+        
 
         // set scene
         if let url = URL(string: sceneArr[indexPath.row].sceneUrl){
@@ -271,6 +418,7 @@ extension ViewMangaViewController: UITableViewDelegate ,UITableViewDataSource{
                         DispatchQueue.main.async {
                             sceneCell.sceneImageView.image = image
                             sceneCell.backgroundColor = UIColor(named: "BackgroundColor")!
+                            sceneCell.sceneDividerView.backgroundColor = UIColor(named: "BackgroundColor")
                         }
                     }catch{
                         DispatchQueue.main.async {
@@ -360,5 +508,26 @@ extension StringProtocol {
                     index(range.lowerBound, offsetBy: 1, limitedBy: endIndex) ?? endIndex
         }
         return result
+    }
+}
+
+
+extension UIViewController: UIPopoverPresentationControllerDelegate {
+    public func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+        return .none
+    }
+}
+
+
+extension ViewMangaViewController: SelectItemDelegate{
+    func loadSelectedEpisode(_ episode: Episode) {
+    
+        let url = replaceSerialNumber(episode.episodeSN!)
+        
+        mangaTitle = episode.episodeTitle!
+        mangaTitleLabel.text = episode.episodeTitle
+        loadMangaScenes(url)
+        
+        sceneLoadingAnim.play()
     }
 }

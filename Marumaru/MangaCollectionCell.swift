@@ -20,12 +20,14 @@ class MangaCollectionCell: UICollectionViewCell{
         previewImage.layer.cornerRadius = 10
         previewImageBaseView.layer.cornerRadius = 10
         
-        previewImageBaseView.layer.shadowColor = UIColor(named: "PointColor")!.cgColor
+        previewImageBaseView.layer.shadowColor = UIColor(named: "ShadowColor")!.cgColor
         previewImageBaseView.layer.shadowOffset = .zero
         previewImageBaseView.layer.shadowRadius = 6
         previewImageBaseView.layer.shadowOpacity = 30
         previewImageBaseView.layer.masksToBounds = false
         previewImageBaseView.layer.borderWidth = 0
+        previewImageBaseView.layer.shouldRasterize = true
+        
     }
     
     override func prepareForReuse() {

@@ -20,7 +20,7 @@ class MangaEpisodeViewController: UIViewController {
         var link: String
     }
     
-    let baseUrl = "https://marumaru.cloud/bbs/cmoic/"
+    let baseUrl = "https://marumaru.cloud"
     let baseImgUrl = "https://marumaru.cloud"
     public var mangaSN: String?
     
@@ -64,7 +64,7 @@ class MangaEpisodeViewController: UIViewController {
     
     func initDesign(){
         infoView.layer.cornerRadius = 15
-        infoView.layer.shadowColor = UIColor(named: "PointColor")!.cgColor
+        infoView.layer.shadowColor = UIColor(named: "ShadowColor")!.cgColor
         infoView.layer.shadowOffset = .zero
         infoView.layer.shadowRadius = 8
         infoView.layer.shadowOpacity = 0.5
@@ -76,7 +76,7 @@ class MangaEpisodeViewController: UIViewController {
         
         // scroll to bottom button
         scrollToBottomButton.layer.cornerRadius = 10
-        scrollToBottomButton.layer.shadowColor = UIColor.gray.cgColor
+        scrollToBottomButton.layer.shadowColor = UIColor(named: "ShadowColor")!.cgColor
         scrollToBottomButton.layer.shadowRadius = 7
         scrollToBottomButton.layer.shadowOpacity = 0.5
         scrollToBottomButton.layer.shadowOffset = .zero
@@ -107,7 +107,8 @@ class MangaEpisodeViewController: UIViewController {
         DispatchQueue.global(qos: .background).async {
             if let serialNumber = self.mangaSN{
                 do{
-                    let completeUrl = "\(self.baseUrl)\(serialNumber)"
+                    let completeUrl = "\(self.baseUrl)/bbs/cmoic/\(serialNumber)"
+//                    let completeUrl = "\(self.baseUrl)\(serialNumber)"
                     
                     print(completeUrl)
                     guard let url = URL(string: completeUrl) else {return}
@@ -125,7 +126,7 @@ class MangaEpisodeViewController: UIViewController {
                             let episodeElement = try tbody.getElementsByTag("tr")
                             
                             try episodeElement.forEach { (Element) in
-                                let title = try Element.select("a").text()
+                                let title = try Element.select("a").text().trimmingCharacters(in: .whitespaces)
                                 let description = try Element.getElementsByTag("span").text()
                                 
                                 var link = String(try Element.select("a").attr("href"))
@@ -137,9 +138,6 @@ class MangaEpisodeViewController: UIViewController {
                                 if !previewImageUrl.isEmpty && !previewImageUrl.contains(self.baseImgUrl){
                                     previewImageUrl = "\(self.baseImgUrl)\(previewImageUrl)"
                                 }
-                                
-                                print("\(title)\n preview image url is \(previewImageUrl)")
-                                
                                 
                                 self.episodeArr.append(Episode(title: title, description: description, previewImageUrl: previewImageUrl, link: link))
                             }
@@ -195,6 +193,9 @@ class MangaEpisodeViewController: UIViewController {
                                 UIView.animate(withDuration: 0.3) {
                                     self.infoPreviewImage.alpha = 1
                                 }
+                                
+                                // change preview image's border color as average color of image
+                                self.infoPreviewImage.layer.borderColor = image.averageColor?.cgColor
                             }
                         }catch{
                             DispatchQueue.main.async {
@@ -203,7 +204,6 @@ class MangaEpisodeViewController: UIViewController {
                             }
                             print(error.localizedDescription)
                         }
-                        
                     }
                 }
             }else{
@@ -259,7 +259,6 @@ class MangaEpisodeViewController: UIViewController {
                 
                 self.mangaEpisodeTableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
             }
-
         }
     }
     
@@ -319,20 +318,25 @@ extension MangaEpisodeViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-        let destStoryboard = mainStoryboard.instantiateViewController(identifier: "ViewMangaStoryboard") as! ViewMangaViewController
         
-        destStoryboard.modalPresentationStyle = .fullScreen
-        
-        var link = episodeArr[indexPath.row].link
-        
-        if !link.contains(baseUrl){
-            link = "\(baseUrl)\(link)"
+        if episodeArr.count > indexPath.row{
+            let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+            let destStoryboard = mainStoryboard.instantiateViewController(identifier: "ViewMangaStoryboard") as! ViewMangaViewController
+            
+            destStoryboard.modalPresentationStyle = .fullScreen
+            
+            var mangaLink = episodeArr[indexPath.row].link
+            let mangaTitle = episodeArr[indexPath.row].title.trimmingCharacters(in: .whitespaces)
+            
+            if !mangaLink.contains(baseUrl){
+                mangaLink = "\(baseUrl)\(mangaLink)"
+            }
+            
+            destStoryboard.mangaUrl = mangaLink
+            destStoryboard.mangaTitle = mangaTitle
+            
+            present(destStoryboard, animated: true, completion: nil)
         }
-        
-        destStoryboard.mangaUrl = link
-        
-        present(destStoryboard, animated: true, completion: nil)
     }
 }
 

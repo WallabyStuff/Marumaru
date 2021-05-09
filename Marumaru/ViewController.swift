@@ -36,6 +36,7 @@ class ViewController: UIViewController {
     
     
     let networkHandler = NetworkHandler()
+    let coredataHandler = CoreDataHandler()
     var updatedMangaArr = Array<UpdatedManga>()
     var recentMangaArr = Array<WatchHistory>()
     var topRankMangaArr = Array<TopRankManga>()
@@ -133,7 +134,7 @@ class ViewController: UIViewController {
             
             self.updatedMangaArr.removeAll()
             
-            for (index, Element) in updatedMangas.enumerated(){
+            for (_, Element) in updatedMangas.enumerated(){
                 
                 let title = try Element.select("a").text()
                 var imgUrl = try String(Element.select("img").attr("src"))
@@ -173,7 +174,7 @@ class ViewController: UIViewController {
             
             self.topRankMangaArr.removeAll()
             
-            for (index, Element) in rankElements.enumerated(){
+            for (_, Element) in rankElements.enumerated(){
                 do{
                     let title = try Element.select("a").text()
                     let link = try Element.select("a").attr("href")
@@ -198,19 +199,14 @@ class ViewController: UIViewController {
     
     
     func loadMangaHistory(){
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let context = appDelegate.persistentContainer.viewContext
-        
-        DispatchQueue.global(qos: .background).async {
+        coredataHandler.getWatchHistory(){ Result in
             do{
-                let recentMangas = try context.fetch(WatchHistory.fetchRequest()) as! [WatchHistory]
-                
-            
+                let recentMangas = try Result.get()
                 // check has history update
-                if !self.recentMangaArr.elementsEqual(recentMangas.reversed()){
-                    // if hisotry has updates
+                if !self.recentMangaArr.elementsEqual(recentMangas){
+                    self.recentMangaArr = recentMangas
+                    
                     DispatchQueue.main.async {
-                        self.recentMangaArr = recentMangas.reversed()
                         if self.recentMangaArr.count > 0{
                             self.recentMangaPlaceholderLabel.isHidden = true
                         }else{
@@ -220,14 +216,14 @@ class ViewController: UIViewController {
                         self.recentMangaCollectionView.reloadData()
                     }
                 }
-                
             }catch{
+                print(error.localizedDescription)
+                
                 DispatchQueue.main.async {
                     self.recentMangaArr.removeAll()
                     self.recentMangaCollectionView.reloadData()
                     self.recentMangaPlaceholderLabel.isHidden = false
                 }
-                print(error.localizedDescription)
             }
         }
     }
@@ -391,20 +387,22 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource{
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
         let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
         let destStoryboard = mainStoryboard.instantiateViewController(identifier: "ViewMangaStoryboard") as! ViewMangaViewController
         
         destStoryboard.modalPresentationStyle = .fullScreen
         
         var link = ""
+        var title = ""
         
         // check collectionview type
         if collectionView == updatedMangaCollectionView {
             link = updatedMangaArr[indexPath.row].link
+            title = updatedMangaArr[indexPath.row].title
         }else{
-            if let mangaUrl = recentMangaArr[indexPath.row].link{
-                link = mangaUrl
-            }
+            link = recentMangaArr[indexPath.row].link!
+            title = recentMangaArr[indexPath.row].title!
         }
         
         // check link does have baseUrl
@@ -414,6 +412,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource{
         
         // pass data
         destStoryboard.mangaUrl = link
+        destStoryboard.mangaTitle = title
         
         present(destStoryboard, animated: true, completion: nil)
     }
@@ -459,12 +458,14 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
         destStroyboard.modalPresentationStyle = .fullScreen
         
         var link = topRankMangaArr[indexPath.row].link
+        let title = topRankMangaArr[indexPath.row].title
         
         if !link.contains(baseUrl) {
             link = "\(baseUrl)\(link)"
         }
         
         destStroyboard.mangaUrl = link
+        destStroyboard.mangaTitle = title
         
         present(destStroyboard, animated: true, completion: nil)
     }
@@ -473,5 +474,22 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
 extension ViewController: DismissDelegate{
     func refreshHistory() {
         self.loadMangaHistory()
+    }
+}
+
+
+public extension UIImage {
+    var averageColor: UIColor? {
+        guard let inputImage = CIImage(image: self) else { return nil }
+        let extentVector = CIVector(x: inputImage.extent.origin.x, y: inputImage.extent.origin.y, z: inputImage.extent.size.width, w: inputImage.extent.size.height)
+
+        guard let filter = CIFilter(name: "CIAreaAverage", parameters: [kCIInputImageKey: inputImage, kCIInputExtentKey: extentVector]) else { return nil }
+        guard let outputImage = filter.outputImage else { return nil }
+
+        var bitmap = [UInt8](repeating: 0, count: 4)
+        let context = CIContext(options: [.workingColorSpace: kCFNull])
+        context.render(outputImage, toBitmap: &bitmap, rowBytes: 4, bounds: CGRect(x: 0, y: 0, width: 1, height: 1), format: .RGBA8, colorSpace: nil)
+
+        return UIColor(red: CGFloat(bitmap[0]) / 255, green: CGFloat(bitmap[1]) / 255, blue: CGFloat(bitmap[2]) / 255, alpha: CGFloat(bitmap[3]) / 255)
     }
 }

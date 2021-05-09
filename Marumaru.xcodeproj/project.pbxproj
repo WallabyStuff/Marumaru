@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7641C3AF2646826100A79A79 /* MangaEpisodePopoverCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641C3AE2646826100A79A79 /* MangaEpisodePopoverCell.swift */; };
+		7641C3B1264682B900A79A79 /* EpisodePopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641C3B0264682B900A79A79 /* EpisodePopoverViewController.swift */; };
+		7641C3B32646874300A79A79 /* Episode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641C3B22646874300A79A79 /* Episode.swift */; };
 		764AE0E2262DA971000F490D /* MangaHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764AE0E1262DA971000F490D /* MangaHistoryViewController.swift */; };
 		765C8B29261CA2C30056C83B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8B28261CA2C30056C83B /* AppDelegate.swift */; };
 		765C8B2B261CA2C30056C83B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8B2A261CA2C30056C83B /* SceneDelegate.swift */; };
@@ -69,6 +72,9 @@
 		48210CEC09A72371A2CA875A /* Pods_Marumaru_MarumaruUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Marumaru_MarumaruUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5ED1A6BA4DC636B3CCD84B1E /* Pods_MarumaruTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MarumaruTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		75B38F94C6426583177E9F4C /* Pods-Marumaru.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Marumaru.release.xcconfig"; path = "Target Support Files/Pods-Marumaru/Pods-Marumaru.release.xcconfig"; sourceTree = "<group>"; };
+		7641C3AE2646826100A79A79 /* MangaEpisodePopoverCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MangaEpisodePopoverCell.swift; sourceTree = "<group>"; };
+		7641C3B0264682B900A79A79 /* EpisodePopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodePopoverViewController.swift; sourceTree = "<group>"; };
+		7641C3B22646874300A79A79 /* Episode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Episode.swift; sourceTree = "<group>"; };
 		764AE0E1262DA971000F490D /* MangaHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MangaHistoryViewController.swift; sourceTree = "<group>"; };
 		765C8B25261CA2C30056C83B /* Marumaru.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Marumaru.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		765C8B28261CA2C30056C83B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -226,6 +232,7 @@
 				765C8C77261F192C0056C83B /* MangaEpisodeCell.swift */,
 				765C8C7C261F1A2C0056C83B /* MangaSceneCell.swift */,
 				76BEEBAF2624B64E00642001 /* ResultMangaCell.swift */,
+				7641C3AE2646826100A79A79 /* MangaEpisodePopoverCell.swift */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -249,6 +256,7 @@
 				764AE0E1262DA971000F490D /* MangaHistoryViewController.swift */,
 				765C8C67261F05BD0056C83B /* MangaEpisodeViewController.swift */,
 				765C8C6C261F16880056C83B /* ViewMangaViewController.swift */,
+				7641C3B0264682B900A79A79 /* EpisodePopoverViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -258,6 +266,7 @@
 			children = (
 				76C9A1B82631BC7F000F801C /* NetworkHandelr.swift */,
 				76C9A2792636A842000F801C /* SaveToWatchHistory.swift */,
+				7641C3B22646874300A79A79 /* Episode.swift */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -534,8 +543,11 @@
 				765C8B2B261CA2C30056C83B /* SceneDelegate.swift in Sources */,
 				76C9A1B92631BC7F000F801C /* NetworkHandelr.swift in Sources */,
 				765C8C3C261DBADF0056C83B /* MangaCollectionCell.swift in Sources */,
+				7641C3AF2646826100A79A79 /* MangaEpisodePopoverCell.swift in Sources */,
+				7641C3B32646874300A79A79 /* Episode.swift in Sources */,
 				76BEEBB02624B64E00642001 /* ResultMangaCell.swift in Sources */,
 				765C8C4B261DBC960056C83B /* TopRankMangaCell.swift in Sources */,
+				7641C3B1264682B900A79A79 /* EpisodePopoverViewController.swift in Sources */,
 				765C8C6D261F16880056C83B /* ViewMangaViewController.swift in Sources */,
 				765C8B33261CA2C30056C83B /* Marumaru.xcdatamodeld in Sources */,
 				765C8C7D261F1A2C0056C83B /* MangaSceneCell.swift in Sources */,

@@ -10,6 +10,7 @@ import UIKit
 class MangaSceneCell: UITableViewCell{
     
     @IBOutlet weak var sceneImageView: UIImageView!
+    @IBOutlet weak var sceneDividerView: UIView!
     
     var onReuse: () -> Void = {}
     
