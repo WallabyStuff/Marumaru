@@ -27,6 +27,8 @@ class SearchViewController: UIViewController {
     
     let loadingSqaureAnimView = AnimationView(name: "loading_square")
     
+    var isSearching = false
+    
     @IBOutlet weak var searchTextField: UITextField!
     @IBOutlet weak var resultMangaTableView: UITableView!
     @IBOutlet weak var loadingResultView: UIView!
@@ -75,6 +77,8 @@ class SearchViewController: UIViewController {
         resultMangaTableView.reloadData()
         noResultsLabel.isHidden = true
         startLoadingAnimation()
+        isSearching = true
+        view.endEditing(true)
         
         
         if title.count < 1{
@@ -134,7 +138,6 @@ class SearchViewController: UIViewController {
                             // Append to array
                             self.resultMangaArr.append(Manga(title: title, desc1: descs[0] , desc2: descs[1], previewImageUrl: imgUrl, serialNumber: SN))
                             
-                            
                             print(title)
                         }catch{
                             print(error.localizedDescription)
@@ -144,6 +147,8 @@ class SearchViewController: UIViewController {
                     DispatchQueue.main.async {
                         self.resultMangaTableView.reloadData()
                         self.stopLoadingAnimation()
+                        self.isSearching = false
+                        
                         
                         if self.resultMangaArr.count == 0{
                             self.noResultsLabel.isHidden = false
@@ -214,12 +219,16 @@ extension SearchViewController: UITextFieldDelegate{
         
         // Seach action on keyboard
         if let title = textField.text?.trimmingCharacters(in: .whitespaces){
+            if isSearching{
+                self.view.makeToast("please wait for searching")
+                return true
+            }
+            
             search(title: title)
         }
         
         return true
     }
-    
 }
 
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource{

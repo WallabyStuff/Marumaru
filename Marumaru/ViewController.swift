@@ -42,6 +42,7 @@ class ViewController: UIViewController {
     var topRankMangaArr = Array<TopRankManga>()
     
 
+    @IBOutlet weak var appBarView: UIView!
     @IBOutlet weak var homeIcon: UIImageView!
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var mainScrollView: UIScrollView!
@@ -82,6 +83,10 @@ class ViewController: UIViewController {
         
         topRankMangaTableView.layer.cornerRadius = 10
         topRankMangaTableView.layer.masksToBounds = true
+        
+        // init appbar height
+        let topSafeAreaHeight = UIApplication.shared.windows[0].safeAreaInsets.top
+        appBarView.heightAnchor.constraint(equalToConstant: topSafeAreaHeight + 80).isActive = true
     }
     
     func initInstance(){
@@ -287,6 +292,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource{
                         DispatchQueue.global(qos: .background).async {
                             do{
                                 let image = try result.get()
+                                
                                 DispatchQueue.main.async {
                                     collectionCell.previewImage.image = image
                                     collectionCell.previewImagePlaceholderLabel.isHidden = true

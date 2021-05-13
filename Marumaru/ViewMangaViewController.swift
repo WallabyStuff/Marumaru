@@ -31,6 +31,9 @@ class ViewMangaViewController: UIViewController {
     
     var currentEpisodeIndex: Int?
     @IBOutlet weak var viewEpisodeListButton: UIButton!
+    @IBOutlet weak var nextEpisodeButton: UIButton!
+    @IBOutlet weak var previousEpisodeButton: UIButton!
+    
     
     let networkHandler = NetworkHandler()
     let coredataHandler = CoreDataHandler()
@@ -55,6 +58,8 @@ class ViewMangaViewController: UIViewController {
         
         initDesign()
         initInstance()
+        
+        indicatorState(false)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -108,6 +113,7 @@ class ViewMangaViewController: UIViewController {
         self.sceneLoadingView.isHidden = false
         sceneArr.removeAll()
         mangaSceneTableView.reloadData()
+        indicatorState(false)
         
         DispatchQueue.global(qos: .background).async {
             if !self.mangaUrl.isEmpty{
@@ -134,39 +140,9 @@ class ViewMangaViewController: UIViewController {
                         DispatchQueue.main.sync {
                             self.sceneLoadingView.isHidden = true
                             self.mangaSceneTableView.reloadData()
+                            self.saveToHistory()
+                            self.getEpisodes()
                         }
-                        
-                        // save to watch history
-                        if self.sceneArr.count > 0{
-                            
-                            // check is exists already
-                            if let url = URL(string: self.sceneArr[0].sceneUrl){
-                                self.networkHandler.getImage(url){ result in
-                                    do{
-                                        // success to get image
-                                        print("Log : Successfully load image")
-                                        let image = try result.get()
-                                        self.coredataHandler.saveToWatchHistory(mangaTitle: self.mangaTitle, mangaLink: mangaUrl, mangaPreviewImageUrl: self.sceneArr[0].sceneUrl, mangaPreviewImage: image)
-                                    }catch{
-                                        // fail to get image
-                                        print("Log : fail to get image")
-                                        self.coredataHandler.saveToWatchHistory(mangaTitle: self.mangaTitle, mangaLink: mangaUrl, mangaPreviewImageUrl: self.sceneArr[0].sceneUrl, mangaPreviewImage: nil)
-                                        print(error)
-                                    }
-                                }
-                            }else{
-                                // fail to convert string to url
-                                print("Log : fail to convert image to url")
-                                self.coredataHandler.saveToWatchHistory(mangaTitle: self.mangaTitle, mangaLink: mangaUrl, mangaPreviewImageUrl: self.sceneArr[0].sceneUrl, mangaPreviewImage: nil)
-                            }
-                        }else{
-                            // first scene image is not exists
-                            print("Log : scene iamge is not exists")
-                            self.coredataHandler.saveToWatchHistory(mangaTitle: self.mangaTitle, mangaLink: mangaUrl, mangaPreviewImageUrl: nil, mangaPreviewImage: nil)
-                        }
-                        
-                        
-                        self.getEpisodes()
                         
                     }else{
                         // document is nil
@@ -181,8 +157,42 @@ class ViewMangaViewController: UIViewController {
         }
     }
     
+    func saveToHistory(){
+        // save to watch history
+        if self.sceneArr.count > 0{
+            
+            // check is exists already
+            if let url = URL(string: self.sceneArr[0].sceneUrl){
+                self.networkHandler.getImage(url){ result in
+                    do{
+                        // success to get image
+                        print("Log : Successfully load image")
+                        let image = try result.get()
+                        // 여기 out of range 잘 나는데 한번 이유 찾아보기
+                        self.coredataHandler.saveToWatchHistory(mangaTitle: self.mangaTitle, mangaLink: self.mangaUrl, mangaPreviewImageUrl: self.sceneArr[0].sceneUrl, mangaPreviewImage: image)
+                    }catch{
+                        // fail to get image
+                        print("Log : fail to get image")
+                        self.coredataHandler.saveToWatchHistory(mangaTitle: self.mangaTitle, mangaLink: self.mangaUrl, mangaPreviewImageUrl: self.sceneArr[0].sceneUrl, mangaPreviewImage: nil)
+                        print(error)
+                    }
+                }
+            }else{
+                // fail to convert string to url
+                print("Log : fail to convert image to url")
+                self.coredataHandler.saveToWatchHistory(mangaTitle: self.mangaTitle, mangaLink: mangaUrl, mangaPreviewImageUrl: self.sceneArr[0].sceneUrl, mangaPreviewImage: nil)
+            }
+        }else{
+            // first scene image is not exists
+            print("Log : scene iamge is not exists")
+            self.coredataHandler.saveToWatchHistory(mangaTitle: self.mangaTitle, mangaLink: mangaUrl, mangaPreviewImageUrl: nil, mangaPreviewImage: nil)
+        }
+    }
+    
     
     func getEpisodes(){
+        episodeArr.removeAll()
+        
         DispatchQueue.global(qos: .background).async {
             
             do{
@@ -195,7 +205,7 @@ class ViewMangaViewController: UIViewController {
                                 let episodeTitle = try Element.text().trimmingCharacters(in: .whitespaces)
                                 let episodeSN = try Element.attr("value")
                                 
-                                if try Element.text().trimmingCharacters(in: .whitespaces) == self.mangaTitle.trimmingCharacters(in: .whitespaces){
+                                if try Element.text().trimmingCharacters(in: .whitespaces).lowercased() == self.mangaTitle.trimmingCharacters(in: .whitespaces).lowercased(){
                                     
                                     self.currentEpisodeIndex = index
                                 }
@@ -203,6 +213,11 @@ class ViewMangaViewController: UIViewController {
                                 
                                 if index != chart.count - 1{
                                     self.episodeArr.append(Episode(episodeTitle, episodeSN))
+                                }
+                                
+                                
+                                DispatchQueue.main.async {
+                                    self.indicatorState(true)
                                 }
                                 
                             }catch{
@@ -236,6 +251,15 @@ class ViewMangaViewController: UIViewController {
         
         episodePopoverVC.episodeArr = episodeArr
         
+        if let index = currentEpisodeIndex{
+            if let episodeTitle = episodeArr[index].episodeTitle{
+                episodePopoverVC.currentEpisodeTitle = episodeTitle
+            }
+        }else{
+            episodePopoverVC.currentEpisodeTitle = mangaTitle
+        }
+        
+        
         present(episodePopoverVC, animated: true, completion: nil)
     }
     
@@ -260,7 +284,7 @@ class ViewMangaViewController: UIViewController {
                     sceneLoadingAnim.play()
                     
                 }else{
-//                    self.view.makeToast("out of range")
+//                    self.view.makeToast("마지막 화 입니다.")
                 }
             }
         }
@@ -287,7 +311,7 @@ class ViewMangaViewController: UIViewController {
                     sceneLoadingAnim.play()
                 }
             }else{
-//                self.view.makeToast("out of range")
+//                self.view.makeToast("첫 화 입니다.")
             }
         }
     }
@@ -341,6 +365,18 @@ class ViewMangaViewController: UIViewController {
         completeUrl = completeUrl.appending(newSerialNumber)
         
         return completeUrl
+    }
+    
+    func indicatorState(_ bool: Bool){
+        if bool{
+            nextEpisodeButton.isEnabled = true
+            previousEpisodeButton.isEnabled = true
+            viewEpisodeListButton.isEnabled = true
+        }else{
+            nextEpisodeButton.isEnabled = false
+            previousEpisodeButton.isEnabled = false
+            viewEpisodeListButton.isEnabled = false
+        }
     }
     
     

@@ -27,7 +27,6 @@ class MangaCollectionCell: UICollectionViewCell{
         previewImageBaseView.layer.masksToBounds = false
         previewImageBaseView.layer.borderWidth = 0
         previewImageBaseView.layer.shouldRasterize = true
-        
     }
     
     override func prepareForReuse() {
