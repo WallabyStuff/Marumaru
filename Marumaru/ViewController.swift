@@ -58,7 +58,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        initDesigns()
+        initView()
         initInstance()
         
         setMainContents()
@@ -74,7 +74,7 @@ class ViewController: UIViewController {
     }
     
     
-    func initDesigns(){
+    func initView(){
         homeIcon.image = homeIcon.image!.withRenderingMode(.alwaysTemplate)
         searchButton.imageView?.image = searchButton.imageView?.image?.withRenderingMode(.alwaysTemplate)
         
@@ -141,9 +141,9 @@ class ViewController: UIViewController {
             
             for (_, Element) in updatedMangas.enumerated(){
                 
-                let title = try Element.select("a").text()
-                var imgUrl = try String(Element.select("img").attr("src"))
-                let link = try Element.select("a").attr("href")
+                let title = try Element.select("a").text().trimmingCharacters(in: .whitespaces)
+                var imgUrl = try String(Element.select("img").attr("src")).trimmingCharacters(in: .whitespaces)
+                let link = try Element.select("a").attr("href").trimmingCharacters(in: .whitespaces)
                 
                 // url preset
                 if !imgUrl.contains(self.baseUrl) {
@@ -181,8 +181,8 @@ class ViewController: UIViewController {
             
             for (_, Element) in rankElements.enumerated(){
                 do{
-                    let title = try Element.select("a").text()
-                    let link = try Element.select("a").attr("href")
+                    let title = try Element.select("a").text().trimmingCharacters(in: .whitespaces)
+                    let link = try Element.select("a").attr("href").trimmingCharacters(in: .whitespaces)
                     
                     self.topRankMangaArr.append(TopRankManga(title: title, link: link))
                     
@@ -391,7 +391,6 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource{
     }
     
     
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
@@ -447,10 +446,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
         topRankCell.selectedBackgroundView = selectedUIView
         
         topRankCell.rankLabel.text = String(indexPath.row + 1)
-        
-        if indexPath.row < updatedMangaArr.count{
-            topRankCell.titleLabel.text = topRankMangaArr[indexPath.row].title
-        }
+        topRankCell.titleLabel.text = topRankMangaArr[indexPath.row].title
         
         return topRankCell
     }

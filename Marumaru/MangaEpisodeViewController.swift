@@ -37,7 +37,7 @@ class MangaEpisodeViewController: UIViewController {
     @IBOutlet weak var infoTitleLabel: UILabel!
     @IBOutlet weak var infoDesc1Label: UILabel!
     @IBOutlet weak var infoDesc2Label: UILabel!
-    @IBOutlet weak var mangaSizeLabel: UILabel!
+    @IBOutlet weak var episodeSizeLabel: UILabel!
     @IBOutlet weak var loadingView: UIView!
     @IBOutlet weak var scrollToBottomButton: UIButton!
     
@@ -47,7 +47,7 @@ class MangaEpisodeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        initDesign()
+        initView()
         initInstance()
         
         getData()
@@ -62,7 +62,7 @@ class MangaEpisodeViewController: UIViewController {
         return .darkContent
     }
     
-    func initDesign(){
+    func initView(){
         infoView.layer.cornerRadius = 15
         infoView.layer.shadowColor = UIColor(named: "ShadowColor")!.cgColor
         infoView.layer.shadowOffset = .zero
@@ -145,7 +145,7 @@ class MangaEpisodeViewController: UIViewController {
                         
                         DispatchQueue.main.async {
                             self.mangaEpisodeTableView.reloadData()
-                            self.mangaSizeLabel.text = "총 \(self.episodeArr.count)화"
+                            self.episodeSizeLabel.text = "총 \(self.episodeArr.count)화"
                             
                             self.loadingView.isHidden = true
                         }

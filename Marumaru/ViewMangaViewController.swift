@@ -41,6 +41,9 @@ class ViewMangaViewController: UIViewController {
     var cellHeightDictionary: NSMutableDictionary = [:]
     
     var sceneLoadingAnim = AnimationView()
+    var detailInfoView = UIView()
+    var detailInfoTitleLabel = UILabel()
+    var detailInfoEpisodeSizeLabel = UILabel()
     
     @IBOutlet weak var sceneLoadingView: UIView!
     @IBOutlet weak var topBarView: UIView!
@@ -56,8 +59,9 @@ class ViewMangaViewController: UIViewController {
 
         checkIntegrity()
         
-        initDesign()
+        initView()
         initInstance()
+        initEventListener()
         
         indicatorState(false)
     }
@@ -84,7 +88,48 @@ class ViewMangaViewController: UIViewController {
         }
     }
     
-    func initDesign(){
+    func initView(){
+        detailInfoView = UIView(frame: UIScreen.main.bounds)
+        view.addSubview(detailInfoView)
+        detailInfoView.translatesAutoresizingMaskIntoConstraints = false
+        detailInfoView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        detailInfoView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        detailInfoView.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
+        detailInfoView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        detailInfoView.alpha = 0
+        
+        
+        let blurEffect = UIBlurEffect(style: .light)
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        blurView.frame = detailInfoView.frame
+        detailInfoView.addSubview(blurView)
+        blurView.translatesAutoresizingMaskIntoConstraints = false
+        blurView.topAnchor.constraint(equalTo: detailInfoView.topAnchor).isActive = true
+        blurView.trailingAnchor.constraint(equalTo: detailInfoView.trailingAnchor).isActive = true
+        blurView.leadingAnchor.constraint(equalTo: detailInfoView.leadingAnchor).isActive = true
+        blurView.bottomAnchor.constraint(equalTo: detailInfoView.bottomAnchor).isActive = true
+        
+        
+        detailInfoTitleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: blurView.contentView.frame.width, height: 300))
+        detailInfoTitleLabel.textColor = UIColor(named: "BasicTextColor")
+        detailInfoTitleLabel.font = UIFont.boldSystemFont(ofSize: 24)
+        detailInfoTitleLabel.numberOfLines = 7
+        detailInfoTitleLabel.text = mangaTitle
+        blurView.contentView.addSubview(detailInfoTitleLabel)
+        detailInfoTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        detailInfoTitleLabel.topAnchor.constraint(equalTo: blurView.contentView.topAnchor, constant: 100).isActive = true
+        detailInfoTitleLabel.leftAnchor.constraint(equalTo: blurView.contentView.leftAnchor, constant: 30).isActive = true
+        detailInfoTitleLabel.rightAnchor.constraint(equalTo: blurView.contentView.rightAnchor, constant: -30).isActive = true
+        
+        
+        detailInfoEpisodeSizeLabel = UILabel(frame: CGRect(x: 0, y: 0, width: blurView.contentView.frame.width, height: 30))
+        detailInfoEpisodeSizeLabel.textColor = UIColor(named: "BasicTextColor")
+        detailInfoEpisodeSizeLabel.text = "총 --화"
+        blurView.contentView.addSubview(detailInfoEpisodeSizeLabel)
+        detailInfoEpisodeSizeLabel.translatesAutoresizingMaskIntoConstraints = false
+        detailInfoEpisodeSizeLabel.topAnchor.constraint(equalTo: detailInfoTitleLabel.bottomAnchor, constant: 15).isActive = true
+        detailInfoEpisodeSizeLabel.leftAnchor.constraint(equalTo: blurView.contentView.leftAnchor, constant: 35).isActive = true
+        detailInfoEpisodeSizeLabel.rightAnchor.constraint(equalTo: blurView.contentView.rightAnchor, constant: 35).isActive = true
         
     }
     
@@ -96,7 +141,14 @@ class ViewMangaViewController: UIViewController {
         scrollView.maximumZoomScale = 3.0
         scrollView.minimumZoomScale = 1.0
         
+    }
+    
+    func initEventListener(){
         scrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(sender:))))
+        
+        topBarView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(topBarTap(sender:))))
+        
+        detailInfoView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(detailInfoViewTap(sender:))))
     }
     
     func setLottieAnims(){
@@ -197,32 +249,30 @@ class ViewMangaViewController: UIViewController {
             
             do{
                 if let doc = self.baseDocument{
-                    let tmpDoc = try doc.getElementsByClass("chart").first()
-                    if let chart = try tmpDoc?.select("option"){
+                    let chartDoc = try doc.getElementsByClass("chart").first()
+                    if let chart = try chartDoc?.select("option"){
                         
+                        // append items
                         for (index, Element) in chart.enumerated(){
-                            do{
-                                let episodeTitle = try Element.text().trimmingCharacters(in: .whitespaces)
-                                let episodeSN = try Element.attr("value")
-                                
-                                if try Element.text().trimmingCharacters(in: .whitespaces).lowercased() == self.mangaTitle.trimmingCharacters(in: .whitespaces).lowercased(){
-                                    
-                                    self.currentEpisodeIndex = index
-                                }
-                                
-                                
-                                if index != chart.count - 1{
-                                    self.episodeArr.append(Episode(episodeTitle, episodeSN))
-                                }
-                                
-                                
-                                DispatchQueue.main.async {
-                                    self.indicatorState(true)
-                                }
-                                
-                            }catch{
-                                print(error.localizedDescription)
+                            
+                            let episodeTitle = try Element.text().trimmingCharacters(in: .whitespaces)
+                            let episodeSN = try Element.attr("value")
+                            
+                            if chart.count - 1 != index{ // 마지막 인덱스는 항상 비어서 마지막 인덱스 저장 안되도록
+                                self.episodeArr.append(Episode(episodeTitle, episodeSN))
                             }
+                            
+                            
+                            // get current episode index
+                            if self.mangaUrl.contains(episodeSN){
+                                self.mangaTitle = episodeTitle
+                                self.currentEpisodeIndex = index
+                            }
+                        }
+                        
+                        // finish to load episodes
+                        DispatchQueue.main.async {
+                            self.indicatorState(true)
                         }
                     }
                 }
@@ -250,6 +300,7 @@ class ViewMangaViewController: UIViewController {
         episodePopoverVC.selectItemDelegate = self
         
         episodePopoverVC.episodeArr = episodeArr
+        episodePopoverVC.currentEpisodeIndex = currentEpisodeIndex
         
         if let index = currentEpisodeIndex{
             if let episodeTitle = episodeArr[index].episodeTitle{
@@ -313,6 +364,23 @@ class ViewMangaViewController: UIViewController {
             }else{
 //                self.view.makeToast("첫 화 입니다.")
             }
+        }
+    }
+    
+    func showDetailInfoView(){
+        
+        detailInfoTitleLabel.text = mangaTitle
+        detailInfoEpisodeSizeLabel.text = "총 \(episodeArr.count)화"
+        
+        detailInfoView.alpha = 0
+        UIView.animate(withDuration: 0.2) {
+            self.detailInfoView.alpha = 1.0
+        }
+    }
+    
+    func hideDetailInfoView(){
+        UIView.animate(withDuration: 0.2) {
+            self.detailInfoView.alpha = 0
         }
     }
     
@@ -395,6 +463,18 @@ class ViewMangaViewController: UIViewController {
             }
         }
         
+    }
+    
+    @objc func topBarTap(sender: UITapGestureRecognizer){
+        if sender.state == .ended{
+            showDetailInfoView()
+        }
+    }
+    
+    @objc func detailInfoViewTap(sender: UIGestureRecognizer){
+        if sender.state == .ended{
+            hideDetailInfoView()
+        }
     }
 
     @IBAction func backButtonAction(_ sender: Any) {

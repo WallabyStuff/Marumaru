@@ -17,17 +17,24 @@ class EpisodePopoverViewController: UIViewController {
     
     var episodeArr = Array<Episode>()
     var currentEpisodeTitle = ""
+    var currentEpisodeIndex: Int?
     
     @IBOutlet weak var episodePopoverTableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        initDesign()
+        initView()
         initInstance()
+        
     }
     
-    func initDesign(){
+    override func viewDidAppear(_ animated: Bool) {
+        setEpisodeTableView()
+    }
+    
+    
+    func initView(){
         episodePopoverTableView.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
         episodePopoverTableView.tableFooterView = UIView()
     }
@@ -36,7 +43,14 @@ class EpisodePopoverViewController: UIViewController {
         episodePopoverTableView.delegate = self
         episodePopoverTableView.dataSource = self
     }
-
+    
+    func setEpisodeTableView(){
+        if let index = currentEpisodeIndex{
+            let indexPath = IndexPath(row: index, section: 0)
+            episodePopoverTableView.scrollToRow(at: indexPath, at: .top, animated: true)
+        }
+    }
+    
 }
 
 extension EpisodePopoverViewController: UITableViewDelegate, UITableViewDataSource{

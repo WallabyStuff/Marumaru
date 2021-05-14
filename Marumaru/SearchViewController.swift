@@ -38,7 +38,7 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        initDesign()
+        initView()
         initInstance()
     }
     
@@ -47,7 +47,7 @@ class SearchViewController: UIViewController {
         return .darkContent
     }
 
-    func initDesign(){
+    func initView(){
         searchTextField.layer.cornerRadius = 15
         searchTextField.layer.borderWidth = 2
         searchTextField.layer.borderColor = UIColor(named: "PointColor")?.cgColor

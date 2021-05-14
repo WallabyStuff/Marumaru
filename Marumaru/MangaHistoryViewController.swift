@@ -27,7 +27,7 @@ class MangaHistoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     
-        initDesign()
+        initView()
         initInstance()
         loadMangaHistory()
     }
@@ -36,7 +36,7 @@ class MangaHistoryViewController: UIViewController {
         dismissDelegate?.refreshHistory()
     }
     
-    func initDesign(){
+    func initView(){
         mangaHistoryCollectionView.contentInset = UIEdgeInsets(top: 0, left: 25, bottom: 0, right: 25)
     }
     
