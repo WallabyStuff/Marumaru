@@ -220,8 +220,12 @@ class ViewMangaViewController: UIViewController {
                         // success to get image
                         print("Log : Successfully load image")
                         let image = try result.get()
-                        // 여기 out of range 잘 나는데 한번 이유 찾아보기
-                        self.coredataHandler.saveToWatchHistory(mangaTitle: self.mangaTitle, mangaLink: self.mangaUrl, mangaPreviewImageUrl: self.sceneArr[0].sceneUrl, mangaPreviewImage: image)
+                        
+                        if self.sceneArr.count > 0{ // sceneArr.count > 0 로 감싸져 있음에도 index out of range 에러가 나서 다시 한 번 확인
+                            self.coredataHandler.saveToWatchHistory(mangaTitle: self.mangaTitle, mangaLink: self.mangaUrl, mangaPreviewImageUrl: self.sceneArr[0].sceneUrl, mangaPreviewImage: image)
+                        }else{
+                            self.coredataHandler.saveToWatchHistory(mangaTitle: self.mangaTitle, mangaLink: self.mangaUrl, mangaPreviewImageUrl: nil, mangaPreviewImage: nil)
+                        }
                     }catch{
                         // fail to get image
                         print("Log : fail to get image")
@@ -333,9 +337,8 @@ class ViewMangaViewController: UIViewController {
                     loadMangaScenes(url)
                     
                     sceneLoadingAnim.play()
-                    
                 }else{
-//                    self.view.makeToast("마지막 화 입니다.")
+                    self.view.makeToast("마지막 화 입니다")
                 }
             }
         }
@@ -345,7 +348,6 @@ class ViewMangaViewController: UIViewController {
         if !episodeArr.isEmpty{
             if let currentEpisodeIndex = currentEpisodeIndex{
                 if episodeArr.count > currentEpisodeIndex + 1{
-                    
                     
                     let prevEpisode = episodeArr[currentEpisodeIndex + 1]
                     
@@ -360,9 +362,9 @@ class ViewMangaViewController: UIViewController {
                     loadMangaScenes(url)
                     
                     sceneLoadingAnim.play()
+                }else{
+                    self.view.makeToast("첫 화 입니다")
                 }
-            }else{
-//                self.view.makeToast("첫 화 입니다.")
             }
         }
     }
@@ -431,6 +433,8 @@ class ViewMangaViewController: UIViewController {
             }
         }
         completeUrl = completeUrl.appending(newSerialNumber)
+        
+        self.mangaUrl = completeUrl
         
         return completeUrl
     }

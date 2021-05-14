@@ -183,8 +183,12 @@ extension MangaHistoryViewController: UICollectionViewDelegate, UICollectionView
             
             destStoryboard.modalPresentationStyle = .fullScreen
             
+            var title = ""
             let link = mangaHistoryArr[indexPath.row].link
-            let title = mangaHistoryArr[indexPath.row].title!
+            if let unwrappedTitle = mangaHistoryArr[indexPath.row].title{
+                title = unwrappedTitle
+            }
+            
             
             if var unwrappedLink = link{
                 // check link does have baseUrl
