@@ -16,6 +16,7 @@ import Toast
 
 class ViewMangaViewController: UIViewController {
 
+    // MARK: - Declarations
     struct Scene {
         var sceneUrl: String
     }
@@ -54,6 +55,7 @@ class ViewMangaViewController: UIViewController {
     @IBOutlet weak var scrollContentView: UIView!
     
     
+    // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -71,31 +73,33 @@ class ViewMangaViewController: UIViewController {
         loadMangaScenes(mangaUrl)
     }
     
+    // MARK: - Overrides
     override var preferredStatusBarStyle: UIStatusBarStyle{
         return .lightContent
     }
     
     
-    func checkIntegrity(){
-        if mangaUrl.isEmpty{
-            dismiss(animated: true, completion: nil)
-        }
-        
-        if mangaTitle.isEmpty{
-            dismiss(animated: true, completion: nil)
-        }else{
-            mangaTitleLabel.text = mangaTitle
-        }
-    }
     
+    // MARK: - Initializations
     func initView(){
+        NSLayoutConstraint.activate([
+            topBarView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            topBarView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            
+            bottomIndicatorView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            bottomIndicatorView.leftAnchor.constraint(equalTo: view.leftAnchor)
+        ])
+        
+        
         detailInfoView = UIView(frame: UIScreen.main.bounds)
         view.addSubview(detailInfoView)
         detailInfoView.translatesAutoresizingMaskIntoConstraints = false
-        detailInfoView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        detailInfoView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        detailInfoView.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
-        detailInfoView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            detailInfoView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            detailInfoView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            detailInfoView.heightAnchor.constraint(equalTo: view.heightAnchor),
+            detailInfoView.widthAnchor.constraint(equalTo: view.widthAnchor)
+        ])
         detailInfoView.alpha = 0
         
         
@@ -104,10 +108,13 @@ class ViewMangaViewController: UIViewController {
         blurView.frame = detailInfoView.frame
         detailInfoView.addSubview(blurView)
         blurView.translatesAutoresizingMaskIntoConstraints = false
-        blurView.topAnchor.constraint(equalTo: detailInfoView.topAnchor).isActive = true
-        blurView.trailingAnchor.constraint(equalTo: detailInfoView.trailingAnchor).isActive = true
-        blurView.leadingAnchor.constraint(equalTo: detailInfoView.leadingAnchor).isActive = true
-        blurView.bottomAnchor.constraint(equalTo: detailInfoView.bottomAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            blurView.topAnchor.constraint(equalTo: detailInfoView.topAnchor),
+            blurView.trailingAnchor.constraint(equalTo: detailInfoView.trailingAnchor),
+            blurView.leadingAnchor.constraint(equalTo: detailInfoView.leadingAnchor),
+            blurView.bottomAnchor.constraint(equalTo: detailInfoView.bottomAnchor)
+        ])
+        
         
         
         detailInfoTitleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: blurView.contentView.frame.width, height: 300))
@@ -117,9 +124,12 @@ class ViewMangaViewController: UIViewController {
         detailInfoTitleLabel.text = mangaTitle
         blurView.contentView.addSubview(detailInfoTitleLabel)
         detailInfoTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        detailInfoTitleLabel.topAnchor.constraint(equalTo: blurView.contentView.topAnchor, constant: 100).isActive = true
-        detailInfoTitleLabel.leftAnchor.constraint(equalTo: blurView.contentView.leftAnchor, constant: 30).isActive = true
-        detailInfoTitleLabel.rightAnchor.constraint(equalTo: blurView.contentView.rightAnchor, constant: -30).isActive = true
+        NSLayoutConstraint.activate([
+            detailInfoTitleLabel.topAnchor.constraint(equalTo: blurView.contentView.topAnchor, constant: 100),
+            detailInfoTitleLabel.leftAnchor.constraint(equalTo: blurView.contentView.leftAnchor, constant: 30),
+            detailInfoTitleLabel.rightAnchor.constraint(equalTo: blurView.contentView.rightAnchor, constant: -30),
+        ])
+        
         
         
         detailInfoEpisodeSizeLabel = UILabel(frame: CGRect(x: 0, y: 0, width: blurView.contentView.frame.width, height: 30))
@@ -127,9 +137,12 @@ class ViewMangaViewController: UIViewController {
         detailInfoEpisodeSizeLabel.text = "총 --화"
         blurView.contentView.addSubview(detailInfoEpisodeSizeLabel)
         detailInfoEpisodeSizeLabel.translatesAutoresizingMaskIntoConstraints = false
-        detailInfoEpisodeSizeLabel.topAnchor.constraint(equalTo: detailInfoTitleLabel.bottomAnchor, constant: 15).isActive = true
-        detailInfoEpisodeSizeLabel.leftAnchor.constraint(equalTo: blurView.contentView.leftAnchor, constant: 35).isActive = true
-        detailInfoEpisodeSizeLabel.rightAnchor.constraint(equalTo: blurView.contentView.rightAnchor, constant: 35).isActive = true
+        NSLayoutConstraint.activate([
+            detailInfoEpisodeSizeLabel.topAnchor.constraint(equalTo: detailInfoTitleLabel.bottomAnchor, constant: 15),
+            detailInfoEpisodeSizeLabel.leftAnchor.constraint(equalTo: blurView.contentView.leftAnchor, constant: 35),
+            detailInfoEpisodeSizeLabel.rightAnchor.constraint(equalTo: blurView.contentView.rightAnchor, constant: 35)
+        ])
+        
         
     }
     
@@ -149,6 +162,20 @@ class ViewMangaViewController: UIViewController {
         topBarView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(topBarTap(sender:))))
         
         detailInfoView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(detailInfoViewTap(sender:))))
+    }
+    
+    
+    // MARK: - Methods
+    func checkIntegrity(){
+        if mangaUrl.isEmpty{
+            dismiss(animated: true, completion: nil)
+        }
+        
+        if mangaTitle.isEmpty{
+            dismiss(animated: true, completion: nil)
+        }else{
+            mangaTitleLabel.text = mangaTitle
+        }
     }
     
     func setLottieAnims(){
@@ -451,7 +478,7 @@ class ViewMangaViewController: UIViewController {
         }
     }
     
-    
+    // MARK: - Actions
     @objc func handleTap(sender: UITapGestureRecognizer){
         if sender.state == .ended{
             if topBarView.isHidden {
@@ -502,7 +529,7 @@ class ViewMangaViewController: UIViewController {
 
 
 
-
+// MARK: - Extensions
 extension ViewMangaViewController: UITableViewDelegate ,UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return sceneArr.count

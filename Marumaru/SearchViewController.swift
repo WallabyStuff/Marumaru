@@ -11,6 +11,7 @@ import Lottie
 
 class SearchViewController: UIViewController {
 
+    // MARK: - Declarations
     struct Manga {
         var title: String
         var desc1: String
@@ -35,18 +36,22 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var noResultsLabel: UILabel!
     
     
+    // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
         initView()
         initInstance()
+        initEventListener()
     }
     
     
+    // MARK: - Overrides
     override var preferredStatusBarStyle: UIStatusBarStyle{
         return .darkContent
     }
-
+    
+    // MARK: - Initializations
     func initView(){
         searchTextField.layer.cornerRadius = 15
         searchTextField.layer.borderWidth = 2
@@ -70,7 +75,10 @@ class SearchViewController: UIViewController {
         resultMangaTableView.dataSource = self
     }
     
+    func initEventListener(){}
     
+    
+    // MARK: - Methods
     func search(title: String){
         
         resultMangaArr.removeAll()
@@ -208,12 +216,14 @@ class SearchViewController: UIViewController {
         return components!
     }
     
+    // MARK: - Actions
     @IBAction func backButtonAction(_ sender: Any) {
         self.dismiss(animated: true)
     }
 }
 
 
+// MARK: - Extensions
 extension SearchViewController: UITextFieldDelegate{
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         

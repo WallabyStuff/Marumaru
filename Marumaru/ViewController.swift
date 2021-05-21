@@ -14,6 +14,7 @@ import CoreData
 
 class ViewController: UIViewController {
     
+    // MARK: - Declarations
     let baseUrl = "https://marumaru.cloud"
     
     struct UpdatedManga {
@@ -55,6 +56,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var topRankMangaTableView: UITableView!
     
     
+    // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -74,6 +76,7 @@ class ViewController: UIViewController {
     }
     
     
+    // MARK: - Initializations
     func initView(){
         homeIcon.image = homeIcon.image!.withRenderingMode(.alwaysTemplate)
         searchButton.imageView?.image = searchButton.imageView?.image?.withRenderingMode(.alwaysTemplate)
@@ -103,6 +106,8 @@ class ViewController: UIViewController {
         topRankMangaTableView.dataSource = self
     }
     
+    
+    // MARK: - Methods
     func setMainContents(){
         DispatchQueue.global(qos: .background).async {
             self.setUpdated()
@@ -234,6 +239,7 @@ class ViewController: UIViewController {
     }
     
     
+    // MARK: - Actions
     @IBAction func searchButtonAction(_ sender: Any) {
         let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
         let destStotyboard = mainStoryboard.instantiateViewController(identifier: "SearchStoryboard") as! SearchViewController
@@ -255,6 +261,7 @@ class ViewController: UIViewController {
 
 
 
+// MARK: - Extensions
 extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         

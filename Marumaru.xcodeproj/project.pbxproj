@@ -156,15 +156,6 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		764AE0D0262C4F70000F490D /* HistoryItem */ = {
-			isa = PBXGroup;
-			children = (
-				76C9A2862636AF2A000F801C /* WatchHistory+CoreDataClass.swift */,
-				76C9A2852636AF2A000F801C /* WatchHistory+CoreDataProperties.swift */,
-			);
-			name = HistoryItem;
-			sourceTree = "<group>";
-		};
 		765C8B1C261CA2C30056C83B = {
 			isa = PBXGroup;
 			children = (
@@ -190,18 +181,15 @@
 		765C8B27261CA2C30056C83B /* Marumaru */ = {
 			isa = PBXGroup;
 			children = (
+				76937C592657925300D36C45 /* View */,
+				76937C572657923900D36C45 /* Model */,
 				76BEEB4B2622D80000642001 /* LottieAnims */,
+				76C9A20426356C08000F801C /* Controller */,
+				765C8C81261F1AA10056C83B /* Cells */,
+				765C8B34261CA2C50056C83B /* Assets.xcassets */,
+				765C8B39261CA2C50056C83B /* Info.plist */,
 				765C8B28261CA2C30056C83B /* AppDelegate.swift */,
 				765C8B2A261CA2C30056C83B /* SceneDelegate.swift */,
-				76C9A27E2636A847000F801C /* Classes */,
-				764AE0D0262C4F70000F490D /* HistoryItem */,
-				76C9A20426356C08000F801C /* ViewControllers */,
-				765C8C81261F1AA10056C83B /* Cells */,
-				765C8B2E261CA2C30056C83B /* Main.storyboard */,
-				765C8B34261CA2C50056C83B /* Assets.xcassets */,
-				765C8B36261CA2C50056C83B /* LaunchScreen.storyboard */,
-				765C8B39261CA2C50056C83B /* Info.plist */,
-				765C8B31261CA2C30056C83B /* Marumaru.xcdatamodeld */,
 			);
 			path = Marumaru;
 			sourceTree = "<group>";
@@ -237,6 +225,32 @@
 			name = Cells;
 			sourceTree = "<group>";
 		};
+		76937C572657923900D36C45 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				765C8B31261CA2C30056C83B /* Marumaru.xcdatamodeld */,
+				76C9A2862636AF2A000F801C /* WatchHistory+CoreDataClass.swift */,
+				76C9A2852636AF2A000F801C /* WatchHistory+CoreDataProperties.swift */,
+				76C9A1B82631BC7F000F801C /* NetworkHandelr.swift */,
+				76C9A2792636A842000F801C /* CoreDataHandler.swift */,
+				7641C3B22646874300A79A79 /* Episode.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		76937C592657925300D36C45 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				765C8B2C261CA2C30056C83B /* ViewController.swift */,
+				76BEEBA826248A1600642001 /* SearchViewController.swift */,
+				764AE0E1262DA971000F490D /* MangaHistoryViewController.swift */,
+				765C8C67261F05BD0056C83B /* MangaEpisodeViewController.swift */,
+				765C8C6C261F16880056C83B /* ViewMangaViewController.swift */,
+				7641C3B0264682B900A79A79 /* EpisodePopoverViewController.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
 		76BEEB4B2622D80000642001 /* LottieAnims */ = {
 			isa = PBXGroup;
 			children = (
@@ -248,27 +262,13 @@
 			name = LottieAnims;
 			sourceTree = "<group>";
 		};
-		76C9A20426356C08000F801C /* ViewControllers */ = {
+		76C9A20426356C08000F801C /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				765C8B2C261CA2C30056C83B /* ViewController.swift */,
-				76BEEBA826248A1600642001 /* SearchViewController.swift */,
-				764AE0E1262DA971000F490D /* MangaHistoryViewController.swift */,
-				765C8C67261F05BD0056C83B /* MangaEpisodeViewController.swift */,
-				765C8C6C261F16880056C83B /* ViewMangaViewController.swift */,
-				7641C3B0264682B900A79A79 /* EpisodePopoverViewController.swift */,
+				765C8B2E261CA2C30056C83B /* Main.storyboard */,
+				765C8B36261CA2C50056C83B /* LaunchScreen.storyboard */,
 			);
-			name = ViewControllers;
-			sourceTree = "<group>";
-		};
-		76C9A27E2636A847000F801C /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				76C9A1B82631BC7F000F801C /* NetworkHandelr.swift */,
-				76C9A2792636A842000F801C /* CoreDataHandler.swift */,
-				7641C3B22646874300A79A79 /* Episode.swift */,
-			);
-			name = Classes;
+			name = Controller;
 			sourceTree = "<group>";
 		};
 		C4905DE0F56F23021F4F66E7 /* Frameworks */ = {
@@ -729,15 +729,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 497P4L97SV;
 				INFOPLIST_FILE = Marumaru/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = MuffinLabs.Marumaru;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -749,15 +753,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 497P4L97SV;
 				INFOPLIST_FILE = Marumaru/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = MuffinLabs.Marumaru;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

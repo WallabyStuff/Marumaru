@@ -7,12 +7,15 @@
 
 import UIKit
 
+// MARK: Protocol
 protocol SelectItemDelegate {
     func loadSelectedEpisode(_ episode: Episode)
 }
 
 class EpisodePopoverViewController: UIViewController {
     
+    
+    // MARK: - Declarations
     var selectItemDelegate: SelectItemDelegate?
     
     var episodeArr = Array<Episode>()
@@ -21,6 +24,7 @@ class EpisodePopoverViewController: UIViewController {
     
     @IBOutlet weak var episodePopoverTableView: UITableView!
     
+    // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -34,6 +38,7 @@ class EpisodePopoverViewController: UIViewController {
     }
     
     
+    // MARK: Initializations
     func initView(){
         episodePopoverTableView.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
         episodePopoverTableView.tableFooterView = UIView()
@@ -53,6 +58,7 @@ class EpisodePopoverViewController: UIViewController {
     
 }
 
+// MARK: - Extensions
 extension EpisodePopoverViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         

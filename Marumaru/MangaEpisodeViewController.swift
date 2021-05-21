@@ -13,6 +13,7 @@ import CoreData
 
 class MangaEpisodeViewController: UIViewController {
 
+    // MARK: - Declarations
     struct Episode {
         var title: String
         var description: String
@@ -44,6 +45,7 @@ class MangaEpisodeViewController: UIViewController {
     @IBOutlet weak var mangaEpisodeTableView: UITableView!
     
     
+    // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -62,6 +64,7 @@ class MangaEpisodeViewController: UIViewController {
         return .darkContent
     }
     
+    // MARK: - Initializations
     func initView(){
         infoView.layer.cornerRadius = 15
         infoView.layer.shadowColor = UIColor(named: "ShadowColor")!.cgColor
@@ -87,6 +90,7 @@ class MangaEpisodeViewController: UIViewController {
         mangaEpisodeTableView.dataSource = self
     }
     
+    // MARK: - Methods
     func setLottieAnims(){
         // set manga episode loading anim -lottie-
         let loadingSquareAnimView = AnimationView(name: "loading_square")
@@ -251,6 +255,7 @@ class MangaEpisodeViewController: UIViewController {
     }
     
     
+    // MARK: - Actions
     @IBAction func scrollToBottomButtonAction(_ sender: Any) {
         DispatchQueue.main.async {
 
@@ -265,6 +270,7 @@ class MangaEpisodeViewController: UIViewController {
 }
 
 
+// MARK: - Extenstions
 extension MangaEpisodeViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return episodeArr.count

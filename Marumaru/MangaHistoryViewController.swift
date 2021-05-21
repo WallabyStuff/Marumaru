@@ -8,12 +8,14 @@
 import UIKit
 import CoreData
 
+// MARK: - Protocol
 protocol DismissDelegate {
     func refreshHistory()
 }
 
 class MangaHistoryViewController: UIViewController {
     
+    // MARK: - Declarations
     var dismissDelegate: DismissDelegate?
     
     let coredataHandler = CoreDataHandler()
@@ -24,6 +26,7 @@ class MangaHistoryViewController: UIViewController {
     @IBOutlet weak var mangaHistoryCollectionView: UICollectionView!
     @IBOutlet weak var clearHistoryButton: UIButton!
     
+    // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
     
@@ -32,10 +35,12 @@ class MangaHistoryViewController: UIViewController {
         loadMangaHistory()
     }
 
+    // MARK: - Overrides
     override func viewDidDisappear(_ animated: Bool) {
         dismissDelegate?.refreshHistory()
     }
     
+    // MARK: - Initializations
     func initView(){
         mangaHistoryCollectionView.contentInset = UIEdgeInsets(top: 0, left: 25, bottom: 0, right: 25)
     }
@@ -46,6 +51,7 @@ class MangaHistoryViewController: UIViewController {
     }
     
     
+    // MARK: - Methods
     func loadMangaHistory(){
         mangaHistoryArr.removeAll()
         mangaHistoryCollectionView.reloadData()
@@ -104,6 +110,7 @@ class MangaHistoryViewController: UIViewController {
         }
     }
     
+    // MARK: - Actions
     @IBAction func clearHistoryButtonAction(_ sender: Any) {
         showClearHistoryActionSheet()
     }
@@ -111,9 +118,7 @@ class MangaHistoryViewController: UIViewController {
 
 
 
-
-
-
+// MARK: - Extensions
 extension MangaHistoryViewController: UICollectionViewDelegate, UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return mangaHistoryArr.count

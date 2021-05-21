@@ -12,6 +12,7 @@ class NetworkHandler{
     var loadedImages = [URL: UIImage]()
     var runningRequest = [UUID: URLSessionDataTask]()
     
+    @discardableResult
     func getImage(_ url: URL, _ completion: @escaping (Result<UIImage, Error>) -> Void) -> UUID?{
         
         if let image = loadedImages[url]{

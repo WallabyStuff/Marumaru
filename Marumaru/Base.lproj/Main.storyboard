@@ -656,7 +656,7 @@
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="LbO-vB-uci"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="BackgroundColor"/>
                         <constraints>
                             <constraint firstItem="eEY-hA-7LT" firstAttribute="leading" secondItem="LbO-vB-uci" secondAttribute="leading" constant="10" id="5xx-i6-9di"/>
                             <constraint firstItem="hIR-P7-L5Q" firstAttribute="top" secondItem="CUE-4w-N81" secondAttribute="top" id="GeG-SS-5JA"/>
