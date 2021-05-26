@@ -42,13 +42,18 @@ class ViewController: UIViewController {
     var recentMangaArr = Array<WatchHistory>()
     var topRankMangaArr = Array<TopRankManga>()
     
+    var isLoadingUpdatedManga = false
+    var isLoadingTopRankManga = false
+    
+    var loadingUpdatedMangaAnimView = AnimationView()
+    var loadingToprankMangaAnimView = AnimationView()
 
     @IBOutlet weak var appBarView: UIView!
     @IBOutlet weak var homeIcon: UIImageView!
+    @IBOutlet weak var reloadUpdatedMangaButton: UIButton!
+    @IBOutlet weak var reloadTopRankMangaButton: UIButton!
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var mainScrollView: UIScrollView!
-    @IBOutlet weak var loadingUpdatedMangaAnimView: UIView!
-    @IBOutlet weak var loadingMangaRankAnimView: UIView!
     @IBOutlet weak var recentMangaPlaceholderLabel: UILabel!
     
     @IBOutlet weak var updatedMangaCollectionView: UICollectionView!
@@ -67,7 +72,6 @@ class ViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        setLottieAnims()
         loadMangaHistory()
     }
     
@@ -81,15 +85,42 @@ class ViewController: UIViewController {
         homeIcon.image = homeIcon.image!.withRenderingMode(.alwaysTemplate)
         searchButton.imageView?.image = searchButton.imageView?.image?.withRenderingMode(.alwaysTemplate)
         
+        
+        reloadUpdatedMangaButton.imageEdgeInsets = UIEdgeInsets(top: 6, left: 6, bottom: 6, right: 6)
+        reloadTopRankMangaButton.imageEdgeInsets = UIEdgeInsets(top: 6, left: 6, bottom: 6, right: 6)
+        
+        
         updatedMangaCollectionView.contentInset = UIEdgeInsets(top: 0, left: 25, bottom: 0, right: 25)
         recentMangaCollectionView.contentInset = UIEdgeInsets(top: 0, left: 25, bottom: 0, right: 25)
+        
         
         topRankMangaTableView.layer.cornerRadius = 10
         topRankMangaTableView.layer.masksToBounds = true
         
+        
         // init appbar height
         let topSafeAreaHeight = UIApplication.shared.windows[0].safeAreaInsets.top
         appBarView.heightAnchor.constraint(equalToConstant: topSafeAreaHeight + 80).isActive = true
+        
+        
+        loadingUpdatedMangaAnimView = AnimationView(name: "loading_square")
+        loadingUpdatedMangaAnimView.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
+        loadingUpdatedMangaAnimView.loopMode = .loop
+        updatedMangaCollectionView.addSubview(loadingUpdatedMangaAnimView)
+        loadingUpdatedMangaAnimView.translatesAutoresizingMaskIntoConstraints = false
+        loadingUpdatedMangaAnimView.centerXAnchor.constraint(equalTo: updatedMangaCollectionView.centerXAnchor,constant: -25).isActive = true
+        loadingUpdatedMangaAnimView.centerYAnchor.constraint(equalTo: updatedMangaCollectionView.centerYAnchor).isActive = true
+        loadingUpdatedMangaAnimView.isHidden = true
+        
+        
+        loadingToprankMangaAnimView = AnimationView(name: "loading_square")
+        loadingToprankMangaAnimView.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
+        loadingToprankMangaAnimView.loopMode = .loop
+        topRankMangaTableView.addSubview(loadingToprankMangaAnimView)
+        loadingToprankMangaAnimView.translatesAutoresizingMaskIntoConstraints = false
+        loadingToprankMangaAnimView.centerXAnchor.constraint(equalTo: topRankMangaTableView.centerXAnchor).isActive = true
+        loadingToprankMangaAnimView.centerYAnchor.constraint(equalTo: topRankMangaTableView.centerYAnchor).isActive = true
+        loadingToprankMangaAnimView.isHidden = true
     }
     
     func initInstance(){
@@ -110,31 +141,56 @@ class ViewController: UIViewController {
     // MARK: - Methods
     func setMainContents(){
         DispatchQueue.global(qos: .background).async {
+            self.startLoadingUpdateAnim()
             self.setUpdated()
+        }
+        DispatchQueue.global(qos: .background).async {
+            self.startLoadingRankAnim()
             self.setRank()
         }
     }
     
-    func setLottieAnims(){
-        // set updated manga loading anim -lottie-
-        let loadingSqaureAnimView = AnimationView(name: "loading_square")
-        loadingSqaureAnimView.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
-        loadingSqaureAnimView.center = loadingUpdatedMangaAnimView.center
-        loadingSqaureAnimView.loopMode = .loop
-        loadingSqaureAnimView.play()
-        loadingUpdatedMangaAnimView.addSubview(loadingSqaureAnimView)
-        
-        // set top rank manga loading anim -lottie-
-        let loadingCircleAnimView = AnimationView(name: "loading_horizontal")
-        loadingCircleAnimView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
-        loadingCircleAnimView.center = loadingMangaRankAnimView.center
-        loadingCircleAnimView.loopMode = .loop
-        loadingCircleAnimView.play()
-        loadingMangaRankAnimView.addSubview(loadingCircleAnimView)
+    func startLoadingUpdateAnim(){
+        DispatchQueue.main.async {
+            self.loadingUpdatedMangaAnimView.isHidden = false
+            self.loadingUpdatedMangaAnimView.play()
+        }
+    }
+    
+    func stopLoadingUpdateAnim(){
+        DispatchQueue.main.async {
+            self.loadingUpdatedMangaAnimView.isHidden = true
+            self.loadingUpdatedMangaAnimView.stop()
+        }
+    }
+    
+    func startLoadingRankAnim(){
+        DispatchQueue.main.async {
+            self.loadingToprankMangaAnimView.isHidden = false
+            self.loadingToprankMangaAnimView.play()
+        }
+    }
+    
+    func stopLoadingRankAnim(){
+        DispatchQueue.main.async {
+            self.loadingToprankMangaAnimView.isHidden = true
+            self.loadingToprankMangaAnimView.stop()
+        }
     }
     
     
     func setUpdated(){
+        if isLoadingUpdatedManga == true {
+            return
+        }
+        
+        DispatchQueue.main.async {
+            self.isLoadingUpdatedManga = true
+            self.updatedMangaArr.removeAll()
+            self.updatedMangaCollectionView.reloadData()
+            self.startLoadingUpdateAnim()
+        }
+        
         guard let baseUrl = URL(string: "https://marumaru.cloud") else {return}
         
         do{
@@ -160,20 +216,29 @@ class ViewController: UIViewController {
             
             // Finish to load updated manga
             DispatchQueue.main.async {
-                self.loadingUpdatedMangaAnimView.isHidden = true
-                
+                self.stopLoadingUpdateAnim()
                 self.updatedMangaCollectionView.reloadData()
+                self.isLoadingUpdatedManga = false
             }
             
         }catch{
-            
-            
             print(error.localizedDescription)
         }
         
     }
     
     func setRank(){
+        if isLoadingTopRankManga == true{
+            return
+        }
+        
+        DispatchQueue.main.async {
+            self.isLoadingTopRankManga = true
+            self.topRankMangaArr.removeAll()
+            self.topRankMangaTableView.reloadData()
+            self.startLoadingRankAnim()
+        }
+        
         guard let baseUrl = URL(string: "https://marumaru.cloud") else {return}
         
         do{
@@ -198,8 +263,9 @@ class ViewController: UIViewController {
             
             // Finish to load TopRank Manga data
             DispatchQueue.main.async {
-                self.loadingMangaRankAnimView.isHidden = true
+                self.stopLoadingRankAnim()
                 self.topRankMangaTableView.reloadData()
+                self.isLoadingTopRankManga = false
             }
 
         }catch{
@@ -256,6 +322,20 @@ class ViewController: UIViewController {
         destStoryboard.dismissDelegate = self
         
         present(destStoryboard, animated: true)
+    }
+    
+    
+    @IBAction func reloadUpdatedMangaButtonAction(_ sender: Any) {
+        DispatchQueue.global(qos: .background).async {
+            self.setUpdated()
+        }
+    }
+    
+    
+    @IBAction func reloadTopRankMangaButtonAction(_ sender: Any) {
+        DispatchQueue.global(qos: .background).async {
+            self.setRank()
+        }
     }
 }
 

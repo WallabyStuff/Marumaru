@@ -26,13 +26,12 @@ class SearchViewController: UIViewController {
     let networkHandler = NetworkHandler()
     var resultMangaArr = Array<Manga>()
     
-    let loadingSqaureAnimView = AnimationView(name: "loading_square")
+    var loadingSearchAnimView = AnimationView()
     
     var isSearching = false
     
     @IBOutlet weak var searchTextField: UITextField!
     @IBOutlet weak var resultMangaTableView: UITableView!
-    @IBOutlet weak var loadingResultView: UIView!
     @IBOutlet weak var noResultsLabel: UILabel!
     
     
@@ -66,6 +65,16 @@ class SearchViewController: UIViewController {
         // Textfield keyboard return type to search
         searchTextField.returnKeyType = .search
         searchTextField.delegate = self
+        
+        
+        loadingSearchAnimView = AnimationView(name: "loading_square")
+        loadingSearchAnimView.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
+        loadingSearchAnimView.loopMode = .loop
+        view.addSubview(self.loadingSearchAnimView)
+        loadingSearchAnimView.translatesAutoresizingMaskIntoConstraints = false
+        loadingSearchAnimView.centerXAnchor.constraint(equalTo: self.resultMangaTableView.centerXAnchor).isActive = true
+        loadingSearchAnimView.centerYAnchor.constraint(equalTo: self.resultMangaTableView.centerYAnchor, constant: -50).isActive = true
+        loadingSearchAnimView.isHidden = true
     }
     
     func initInstance(){
@@ -84,13 +93,13 @@ class SearchViewController: UIViewController {
         resultMangaArr.removeAll()
         resultMangaTableView.reloadData()
         noResultsLabel.isHidden = true
-        startLoadingAnimation()
+        startLoadingSearchResultAnimation()
         isSearching = true
         view.endEditing(true)
         
         
         if title.count < 1{
-            stopLoadingAnimation()
+            stopLoadingSearchResultAnimation()
             noResultsLabel.isHidden = false
             self.view.makeToast("최소 한 글자 이상의 단어로 검색해주세요")
             
@@ -154,7 +163,7 @@ class SearchViewController: UIViewController {
                     
                     DispatchQueue.main.async {
                         self.resultMangaTableView.reloadData()
-                        self.stopLoadingAnimation()
+                        self.stopLoadingSearchResultAnimation()
                         self.isSearching = false
                         
                         
@@ -176,23 +185,17 @@ class SearchViewController: UIViewController {
         
     }
     
-    func startLoadingAnimation(){
+    func startLoadingSearchResultAnimation(){
         DispatchQueue.main.async {
-            self.loadingResultView.isHidden = false
-            
-            self.loadingSqaureAnimView.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
-            self.loadingSqaureAnimView.center = self.loadingResultView.center
-            self.loadingSqaureAnimView.play()
-            self.loadingSqaureAnimView.loopMode = .loop
-            self.loadingResultView.addSubview(self.loadingSqaureAnimView)
+            self.loadingSearchAnimView.isHidden = false
+            self.loadingSearchAnimView.play()
         }
     }
     
-    func stopLoadingAnimation(){
+    func stopLoadingSearchResultAnimation(){
         DispatchQueue.main.async {
-            self.loadingResultView.isHidden = true
-            
-            self.loadingSqaureAnimView.stop()
+            self.loadingSearchAnimView.isHidden = true
+            self.loadingSearchAnimView.stop()
         }
     }
     

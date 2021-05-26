@@ -282,24 +282,30 @@
                                                             </tableViewCell>
                                                         </prototypes>
                                                     </tableView>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XzT-p4-j8a">
-                                                        <rect key="frame" x="0.0" y="76" width="390" height="204"/>
-                                                        <color key="backgroundColor" name="Transparent"/>
-                                                    </view>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kdC-L7-ipV">
+                                                        <rect key="frame" x="96.666666666666671" y="-3" width="30" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="ADt-96-zgh"/>
+                                                            <constraint firstAttribute="width" constant="30" id="OUJ-Tt-A8e"/>
+                                                        </constraints>
+                                                        <color key="tintColor" name="TextFieldPlaceHolderColor"/>
+                                                        <state key="normal" image="reload-arrow"/>
+                                                        <connections>
+                                                            <action selector="reloadTopRankMangaButtonAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="yqD-wC-eAF"/>
+                                                        </connections>
+                                                    </button>
                                                 </subviews>
                                                 <color key="backgroundColor" name="BackgroundColor"/>
                                                 <constraints>
-                                                    <constraint firstItem="XzT-p4-j8a" firstAttribute="leading" secondItem="Hzq-ru-sea" secondAttribute="leading" id="FEN-Vm-AmQ"/>
-                                                    <constraint firstAttribute="trailing" secondItem="XzT-p4-j8a" secondAttribute="trailing" id="MKx-gT-lZ8"/>
                                                     <constraint firstItem="QoE-Qg-aZ4" firstAttribute="top" secondItem="lG1-9W-Kbb" secondAttribute="bottom" constant="25" id="O96-ie-xK8"/>
+                                                    <constraint firstItem="kdC-L7-ipV" firstAttribute="leading" secondItem="taV-Zq-Kk6" secondAttribute="trailing" constant="7" id="QWL-JU-2IK"/>
                                                     <constraint firstAttribute="height" constant="80" id="T7d-xU-qOg">
                                                         <variation key="heightClass=regular-widthClass=regular" constant="650"/>
                                                     </constraint>
-                                                    <constraint firstAttribute="bottom" secondItem="XzT-p4-j8a" secondAttribute="bottom" constant="120" id="WH6-kl-LC1"/>
+                                                    <constraint firstItem="kdC-L7-ipV" firstAttribute="centerY" secondItem="taV-Zq-Kk6" secondAttribute="centerY" id="Xft-iE-o4v"/>
                                                     <constraint firstItem="taV-Zq-Kk6" firstAttribute="leading" secondItem="Hzq-ru-sea" secondAttribute="leading" constant="25" id="crI-at-qwx"/>
                                                     <constraint firstAttribute="bottom" secondItem="QoE-Qg-aZ4" secondAttribute="bottom" constant="10" id="efh-Ku-88E"/>
                                                     <constraint firstItem="lG1-9W-Kbb" firstAttribute="top" secondItem="taV-Zq-Kk6" secondAttribute="bottom" constant="20" id="lDf-KX-jSK"/>
-                                                    <constraint firstItem="XzT-p4-j8a" firstAttribute="top" secondItem="lG1-9W-Kbb" secondAttribute="bottom" id="lVO-BH-jHu"/>
                                                     <constraint firstAttribute="width" constant="300" id="mlx-pm-Omp">
                                                         <variation key="heightClass=regular-widthClass=regular" constant="350"/>
                                                     </constraint>
@@ -411,11 +417,18 @@
                                                             </collectionViewCell>
                                                         </cells>
                                                     </collectionView>
-                                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z7J-cS-6l6" userLabel="loadingAnimationView">
-                                                        <rect key="frame" x="0.0" y="34" width="390" height="150"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <color key="backgroundColor" name="Transparent"/>
-                                                    </view>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wkB-zm-yZd">
+                                                        <rect key="frame" x="112" y="-3" width="30" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="CIg-UB-9m1"/>
+                                                            <constraint firstAttribute="width" constant="30" id="RQU-3e-frw"/>
+                                                        </constraints>
+                                                        <color key="tintColor" name="PlaceHolderTextColor"/>
+                                                        <state key="normal" image="reload-arrow"/>
+                                                        <connections>
+                                                            <action selector="reloadUpdatedMangaButtonAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="8m0-Z7-S6Z"/>
+                                                        </connections>
+                                                    </button>
                                                 </subviews>
                                                 <color key="backgroundColor" name="BackgroundColor"/>
                                                 <constraints>
@@ -424,10 +437,12 @@
                                                     <constraint firstAttribute="trailing" secondItem="Zal-TW-flL" secondAttribute="trailing" id="9ft-bb-4QK"/>
                                                     <constraint firstItem="c3j-Pf-FCr" firstAttribute="leading" secondItem="VBH-nw-8Kn" secondAttribute="leading" constant="25" id="Atg-KA-pyZ"/>
                                                     <constraint firstAttribute="bottom" secondItem="Zal-TW-flL" secondAttribute="bottom" id="LaN-w3-I3U"/>
+                                                    <constraint firstItem="wkB-zm-yZd" firstAttribute="centerY" secondItem="c3j-Pf-FCr" secondAttribute="centerY" id="Qe8-FX-3bA"/>
                                                     <constraint firstItem="Zal-TW-flL" firstAttribute="top" secondItem="c3j-Pf-FCr" secondAttribute="bottom" constant="10" id="m2X-dw-5cX"/>
                                                     <constraint firstAttribute="height" constant="294" id="pIZ-Z6-gk4">
                                                         <variation key="heightClass=regular-widthClass=regular" constant="294"/>
                                                     </constraint>
+                                                    <constraint firstItem="wkB-zm-yZd" firstAttribute="leading" secondItem="c3j-Pf-FCr" secondAttribute="trailing" constant="7" id="peV-hK-ZlR"/>
                                                     <constraint firstItem="Zal-TW-flL" firstAttribute="leading" secondItem="VBH-nw-8Kn" secondAttribute="leading" id="wkJ-Uf-OBu"/>
                                                 </constraints>
                                             </view>
@@ -516,11 +531,11 @@
                     <connections>
                         <outlet property="appBarView" destination="296-5O-QfB" id="GgL-Kw-iHP"/>
                         <outlet property="homeIcon" destination="KKe-rq-gTi" id="PAV-mP-eDS"/>
-                        <outlet property="loadingMangaRankAnimView" destination="XzT-p4-j8a" id="BsV-ZI-4dZ"/>
-                        <outlet property="loadingUpdatedMangaAnimView" destination="z7J-cS-6l6" id="gIU-6a-8PM"/>
                         <outlet property="mainScrollView" destination="IQz-28-dsB" id="P8U-Bf-Ghm"/>
                         <outlet property="recentMangaCollectionView" destination="2a4-xp-lFc" id="ulR-ff-lhr"/>
                         <outlet property="recentMangaPlaceholderLabel" destination="s2m-Qm-Zw0" id="WjF-YH-QqB"/>
+                        <outlet property="reloadTopRankMangaButton" destination="kdC-L7-ipV" id="S1q-eT-nIp"/>
+                        <outlet property="reloadUpdatedMangaButton" destination="wkB-zm-yZd" id="JCu-Bc-dvZ"/>
                         <outlet property="searchButton" destination="pZs-pi-tED" id="AQL-gO-sXR"/>
                         <outlet property="topRankMangaTableView" destination="QoE-Qg-aZ4" id="9ry-8Q-425"/>
                         <outlet property="updatedMangaCollectionView" destination="Zal-TW-flL" id="k0Y-XS-HgD"/>
@@ -826,13 +841,6 @@
                                     <action selector="scrollToBottomButtonAction:" destination="ADA-EH-zKm" eventType="touchUpInside" id="vfJ-jj-IR2"/>
                                 </connections>
                             </button>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ahV-Su-G1f">
-                                <rect key="frame" x="0.0" y="264.33333333333331" width="390" height="50"/>
-                                <color key="backgroundColor" name="Transparent"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="MOS-Rm-ygG"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="8ni-z9-mkU"/>
                         <color key="backgroundColor" name="BackgroundColor"/>
@@ -840,12 +848,9 @@
                             <constraint firstItem="Gaa-P6-XUJ" firstAttribute="top" secondItem="8ni-z9-mkU" secondAttribute="top" constant="30" id="42K-mq-PWK"/>
                             <constraint firstItem="Gaa-P6-XUJ" firstAttribute="leading" secondItem="8ni-z9-mkU" secondAttribute="leading" constant="15" id="54z-H9-w7V"/>
                             <constraint firstItem="7Au-2g-nvi" firstAttribute="top" secondItem="ekE-NH-46s" secondAttribute="bottom" constant="15" id="6sh-dA-Cyn"/>
-                            <constraint firstItem="ahV-Su-G1f" firstAttribute="top" secondItem="ekE-NH-46s" secondAttribute="bottom" id="I1r-sJ-40s"/>
                             <constraint firstAttribute="bottom" secondItem="7Au-2g-nvi" secondAttribute="bottom" id="NhA-hR-69z"/>
                             <constraint firstItem="8ni-z9-mkU" firstAttribute="trailing" secondItem="ubJ-hJ-ACR" secondAttribute="trailing" constant="30" id="PWe-uZ-6iG"/>
                             <constraint firstItem="8ni-z9-mkU" firstAttribute="trailing" secondItem="Gaa-P6-XUJ" secondAttribute="trailing" constant="15" id="RrW-sF-FPa"/>
-                            <constraint firstItem="ahV-Su-G1f" firstAttribute="trailing" secondItem="8ni-z9-mkU" secondAttribute="trailing" id="TUs-TC-V9X"/>
-                            <constraint firstItem="ahV-Su-G1f" firstAttribute="leading" secondItem="8ni-z9-mkU" secondAttribute="leading" id="TgF-GS-TkV"/>
                             <constraint firstItem="ekE-NH-46s" firstAttribute="leading" secondItem="8ni-z9-mkU" secondAttribute="leading" constant="30" id="UNb-XO-PSj"/>
                             <constraint firstItem="ekE-NH-46s" firstAttribute="top" secondItem="Gaa-P6-XUJ" secondAttribute="bottom" constant="20" id="btG-RM-gRg"/>
                             <constraint firstAttribute="bottom" secondItem="ubJ-hJ-ACR" secondAttribute="bottom" constant="30" id="kJJ-CB-BGf"/>
@@ -860,7 +865,6 @@
                         <outlet property="infoPreviewImage" destination="lZ1-BF-N6y" id="fR0-9i-LtN"/>
                         <outlet property="infoTitleLabel" destination="ly4-7n-RTf" id="bOE-HZ-IU6"/>
                         <outlet property="infoView" destination="Gaa-P6-XUJ" id="67E-Lm-j1J"/>
-                        <outlet property="loadingView" destination="ahV-Su-G1f" id="E5I-h8-iIe"/>
                         <outlet property="mangaEpisodeTableView" destination="7Au-2g-nvi" id="qMB-c9-41m"/>
                         <outlet property="scrollToBottomButton" destination="ubJ-hJ-ACR" id="uGD-oN-Ih2"/>
                     </connections>
@@ -880,7 +884,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HxK-ZS-3yQ">
                                 <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                                 <subviews>
-                                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AwG-7w-ItO">
+                                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AwG-7w-ItO">
                                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k67-ye-UTq">
@@ -1288,10 +1292,6 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GV0-6v-QJs">
-                                <rect key="frame" x="0.0" y="120" width="390" height="422"/>
-                                <color key="backgroundColor" name="Transparent"/>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="j27-LF-bUm"/>
                         <color key="backgroundColor" name="BackgroundColor"/>
@@ -1299,18 +1299,14 @@
                             <constraint firstAttribute="trailing" secondItem="miC-cB-Gp8" secondAttribute="trailing" id="87e-Db-jja"/>
                             <constraint firstItem="hhh-J1-nX3" firstAttribute="trailing" secondItem="j27-LF-bUm" secondAttribute="trailing" id="8kX-5v-Oon"/>
                             <constraint firstItem="HxK-ZS-3yQ" firstAttribute="leading" secondItem="j27-LF-bUm" secondAttribute="leading" id="MSq-s4-bE0"/>
-                            <constraint firstItem="GV0-6v-QJs" firstAttribute="trailing" secondItem="j27-LF-bUm" secondAttribute="trailing" id="WRE-0S-ZVD"/>
                             <constraint firstItem="miC-cB-Gp8" firstAttribute="leading" secondItem="s13-Uy-9I7" secondAttribute="leading" id="XJQ-PZ-lRb"/>
                             <constraint firstAttribute="bottom" secondItem="HxK-ZS-3yQ" secondAttribute="bottom" id="b5N-dq-BL7"/>
                             <constraint firstItem="j27-LF-bUm" firstAttribute="trailing" secondItem="HxK-ZS-3yQ" secondAttribute="trailing" id="cVN-mT-Een"/>
-                            <constraint firstItem="GV0-6v-QJs" firstAttribute="leading" secondItem="j27-LF-bUm" secondAttribute="leading" id="d6K-mG-ZlQ"/>
-                            <constraint firstItem="GV0-6v-QJs" firstAttribute="height" secondItem="s13-Uy-9I7" secondAttribute="height" multiplier="0.5" id="dPc-SA-ziK"/>
                             <constraint firstItem="miC-cB-Gp8" firstAttribute="trailing" secondItem="j27-LF-bUm" secondAttribute="trailing" id="f2y-4e-Kho"/>
                             <constraint firstAttribute="bottom" secondItem="hhh-J1-nX3" secondAttribute="bottom" id="fRP-oE-bgd"/>
                             <constraint firstItem="HxK-ZS-3yQ" firstAttribute="top" secondItem="s13-Uy-9I7" secondAttribute="top" id="hgD-cJ-Nr0"/>
                             <constraint firstItem="miC-cB-Gp8" firstAttribute="leading" secondItem="j27-LF-bUm" secondAttribute="leading" id="hvj-IQ-X68"/>
                             <constraint firstItem="hhh-J1-nX3" firstAttribute="leading" secondItem="j27-LF-bUm" secondAttribute="leading" id="jVV-jM-ks5"/>
-                            <constraint firstItem="GV0-6v-QJs" firstAttribute="top" secondItem="miC-cB-Gp8" secondAttribute="bottom" id="mzF-rp-J3R"/>
                             <constraint firstItem="hhh-J1-nX3" firstAttribute="leading" secondItem="s13-Uy-9I7" secondAttribute="leading" id="uyh-oo-Qb7"/>
                             <constraint firstAttribute="trailing" secondItem="hhh-J1-nX3" secondAttribute="trailing" id="yM4-63-Nmg"/>
                             <constraint firstItem="miC-cB-Gp8" firstAttribute="top" secondItem="s13-Uy-9I7" secondAttribute="top" id="yNX-QH-11c"/>
@@ -1342,7 +1338,6 @@
                         <outlet property="mangaTitleLabel" destination="5hY-ZZ-2dm" id="L4c-x8-Vv7"/>
                         <outlet property="nextEpisodeButton" destination="8x2-bT-JIn" id="l0g-LQ-6DR"/>
                         <outlet property="previousEpisodeButton" destination="6Im-73-8L9" id="C0H-qr-9QE"/>
-                        <outlet property="sceneLoadingView" destination="GV0-6v-QJs" id="FoS-o2-NiG"/>
                         <outlet property="scrollContentView" destination="k67-ye-UTq" id="BgB-18-fE8"/>
                         <outlet property="scrollView" destination="AwG-7w-ItO" id="WfN-yG-wno"/>
                         <outlet property="topBarView" destination="miC-cB-Gp8" id="R0e-Eh-usC"/>
@@ -1539,11 +1534,6 @@
                                 <color key="textColor" name="PlaceHolderTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Trq-Kb-ndw">
-                                <rect key="frame" x="0.0" y="104" width="390" height="422"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" name="Transparent"/>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Ox7-Rc-3kD"/>
                         <color key="backgroundColor" name="BackgroundColor"/>
@@ -1562,7 +1552,6 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="loadingResultView" destination="Trq-Kb-ndw" id="Kg6-yY-Ydd"/>
                         <outlet property="noResultsLabel" destination="PNC-8C-8gb" id="ttb-sc-b2P"/>
                         <outlet property="resultMangaTableView" destination="aPX-e5-V2H" id="YbP-Z1-FcA"/>
                         <outlet property="searchTextField" destination="wej-i3-lxG" id="4kr-BL-R17"/>
@@ -1582,6 +1571,7 @@
         <image name="home" width="512" height="512"/>
         <image name="left-arrow" width="384" height="320"/>
         <image name="magnifying-glass" width="512" height="512"/>
+        <image name="reload-arrow" width="512" height="512"/>
         <image name="square.stack.3d.up.fill" catalog="system" width="128" height="124"/>
         <image name="trash" catalog="system" width="121" height="128"/>
         <namedColor name="BackgroundColor">
@@ -1610,9 +1600,6 @@
         </namedColor>
         <namedColor name="TextFieldPlaceHolderColor">
             <color red="0.63168418226820044" green="0.63168418226820044" blue="0.63168418226820044" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-        </namedColor>
-        <namedColor name="Transparent">
-            <color red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

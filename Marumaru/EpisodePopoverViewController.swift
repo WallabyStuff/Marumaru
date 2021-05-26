@@ -52,7 +52,7 @@ class EpisodePopoverViewController: UIViewController {
     func setEpisodeTableView(){
         if let index = currentEpisodeIndex{
             let indexPath = IndexPath(row: index, section: 0)
-            episodePopoverTableView.scrollToRow(at: indexPath, at: .top, animated: true)
+            episodePopoverTableView.scrollToRow(at: indexPath, at: .middle, animated: true)
         }
     }
     
@@ -66,7 +66,6 @@ extension EpisodePopoverViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         if episodeArr.count <= indexPath.row{
             return UITableViewCell()
         }

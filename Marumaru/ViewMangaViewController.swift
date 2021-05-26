@@ -21,6 +21,11 @@ class ViewMangaViewController: UIViewController {
         var sceneUrl: String
     }
     
+    let networkHandler = NetworkHandler()
+    let coredataHandler = CoreDataHandler()
+    
+    var currentEpisodeIndex: Int?
+    
     var baseUrl = "https://marumaru.cloud/"
     var baseDocument: Document?
     
@@ -29,24 +34,20 @@ class ViewMangaViewController: UIViewController {
     
     var episodeArr = Array<Episode>()
     var sceneArr = Array<Scene>()
-    
-    var currentEpisodeIndex: Int?
-    @IBOutlet weak var viewEpisodeListButton: UIButton!
-    @IBOutlet weak var nextEpisodeButton: UIButton!
-    @IBOutlet weak var previousEpisodeButton: UIButton!
-    
-    
-    let networkHandler = NetworkHandler()
-    let coredataHandler = CoreDataHandler()
-    
+
     var cellHeightDictionary: NSMutableDictionary = [:]
     
-    var sceneLoadingAnim = AnimationView()
+    let safeAreaInsets = UIApplication.shared.windows[0].safeAreaInsets
+    
+    var loadingSceneAnimView = AnimationView()
     var detailInfoView = UIView()
     var detailInfoTitleLabel = UILabel()
     var detailInfoEpisodeSizeLabel = UILabel()
-    
-    @IBOutlet weak var sceneLoadingView: UIView!
+    var detailInfoEpisodeTableView = UITableView()
+
+    @IBOutlet weak var viewEpisodeListButton: UIButton!
+    @IBOutlet weak var nextEpisodeButton: UIButton!
+    @IBOutlet weak var previousEpisodeButton: UIButton!
     @IBOutlet weak var topBarView: UIView!
     @IBOutlet weak var bottomIndicatorView: UIView!
     @IBOutlet weak var mangaTitleLabel: UILabel!
@@ -69,7 +70,6 @@ class ViewMangaViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        setLottieAnims()
         loadMangaScenes(mangaUrl)
     }
     
@@ -81,14 +81,23 @@ class ViewMangaViewController: UIViewController {
     
     
     // MARK: - Initializations
-    func initView(){
-        NSLayoutConstraint.activate([
-            topBarView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            topBarView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            
-            bottomIndicatorView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            bottomIndicatorView.leftAnchor.constraint(equalTo: view.leftAnchor)
-        ])
+    func initView(){        
+        loadingSceneAnimView = AnimationView(name: "loading_square")
+        loadingSceneAnimView.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
+        loadingSceneAnimView.loopMode = .loop
+        view.addSubview(loadingSceneAnimView)
+        loadingSceneAnimView.translatesAutoresizingMaskIntoConstraints = false
+        loadingSceneAnimView.centerXAnchor.constraint(equalTo: mangaSceneTableView.centerXAnchor).isActive = true
+        loadingSceneAnimView.centerYAnchor.constraint(equalTo: mangaSceneTableView.centerYAnchor).isActive = true
+        loadingSceneAnimView.isHidden = true
+        
+        
+        topBarView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        topBarView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        
+        
+        bottomIndicatorView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        bottomIndicatorView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         
         
         detailInfoView = UIView(frame: UIScreen.main.bounds)
@@ -116,7 +125,6 @@ class ViewMangaViewController: UIViewController {
         ])
         
         
-        
         detailInfoTitleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: blurView.contentView.frame.width, height: 300))
         detailInfoTitleLabel.textColor = UIColor(named: "BasicTextColor")
         detailInfoTitleLabel.font = UIFont.boldSystemFont(ofSize: 24)
@@ -125,11 +133,10 @@ class ViewMangaViewController: UIViewController {
         blurView.contentView.addSubview(detailInfoTitleLabel)
         detailInfoTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            detailInfoTitleLabel.topAnchor.constraint(equalTo: blurView.contentView.topAnchor, constant: 100),
-            detailInfoTitleLabel.leftAnchor.constraint(equalTo: blurView.contentView.leftAnchor, constant: 30),
-            detailInfoTitleLabel.rightAnchor.constraint(equalTo: blurView.contentView.rightAnchor, constant: -30),
+            detailInfoTitleLabel.topAnchor.constraint(equalTo: blurView.contentView.topAnchor, constant: 70 + safeAreaInsets.top),
+            detailInfoTitleLabel.leftAnchor.constraint(equalTo: blurView.contentView.leftAnchor, constant: 30 + safeAreaInsets.left),
+            detailInfoTitleLabel.rightAnchor.constraint(equalTo: blurView.contentView.rightAnchor, constant: -30 - safeAreaInsets.right),
         ])
-        
         
         
         detailInfoEpisodeSizeLabel = UILabel(frame: CGRect(x: 0, y: 0, width: blurView.contentView.frame.width, height: 30))
@@ -137,12 +144,19 @@ class ViewMangaViewController: UIViewController {
         detailInfoEpisodeSizeLabel.text = "총 --화"
         blurView.contentView.addSubview(detailInfoEpisodeSizeLabel)
         detailInfoEpisodeSizeLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            detailInfoEpisodeSizeLabel.topAnchor.constraint(equalTo: detailInfoTitleLabel.bottomAnchor, constant: 15),
-            detailInfoEpisodeSizeLabel.leftAnchor.constraint(equalTo: blurView.contentView.leftAnchor, constant: 35),
-            detailInfoEpisodeSizeLabel.rightAnchor.constraint(equalTo: blurView.contentView.rightAnchor, constant: 35)
-        ])
+        detailInfoEpisodeSizeLabel.topAnchor.constraint(equalTo: detailInfoTitleLabel.bottomAnchor, constant: 15).isActive = true
+        detailInfoEpisodeSizeLabel.leftAnchor.constraint(equalTo: blurView.contentView.leftAnchor, constant: 35).isActive = true
+        detailInfoEpisodeSizeLabel.rightAnchor.constraint(equalTo: blurView.contentView.rightAnchor, constant: -35).isActive = true
         
+        
+        detailInfoEpisodeTableView = UITableView(frame: CGRect(x: 0, y: 0, width: 200, height: 300))
+        detailInfoEpisodeTableView.backgroundColor = UIColor(named: "Transparent")
+        blurView.contentView.addSubview(detailInfoEpisodeTableView)
+        detailInfoEpisodeTableView.translatesAutoresizingMaskIntoConstraints = false
+        detailInfoEpisodeTableView.topAnchor.constraint(equalTo: detailInfoEpisodeSizeLabel.bottomAnchor, constant: 40).isActive = true
+        detailInfoEpisodeTableView.bottomAnchor.constraint(equalTo: blurView.contentView.bottomAnchor, constant: -80).isActive = true
+        detailInfoEpisodeTableView.trailingAnchor.constraint(equalTo: blurView.contentView.trailingAnchor, constant: -30).isActive = true
+        detailInfoEpisodeTableView.leadingAnchor.constraint(equalTo: blurView.contentView.leadingAnchor, constant: 30).isActive = true
         
     }
     
@@ -154,14 +168,22 @@ class ViewMangaViewController: UIViewController {
         scrollView.maximumZoomScale = 3.0
         scrollView.minimumZoomScale = 1.0
         
+        detailInfoEpisodeTableView.register(MangaEpisodePopoverCell.self, forCellReuseIdentifier: "EpisodeCell")
+        detailInfoEpisodeTableView.dataSource = self
+        detailInfoEpisodeTableView.delegate = self
+        
     }
     
     func initEventListener(){
         scrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(sender:))))
         
+        
         topBarView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(topBarTap(sender:))))
         
-        detailInfoView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(detailInfoViewTap(sender:))))
+        
+        let detailInfoViewGesture = UITapGestureRecognizer(target: self, action: #selector(detailInfoViewTap(sender:)))
+        detailInfoViewGesture.delegate = self
+        detailInfoView.addGestureRecognizer(detailInfoViewGesture)
     }
     
     
@@ -178,18 +200,22 @@ class ViewMangaViewController: UIViewController {
         }
     }
     
-    func setLottieAnims(){
-        // Set scene loading animation
-        sceneLoadingAnim = AnimationView(name: "loading_square")
-        sceneLoadingAnim.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
-        sceneLoadingAnim.center = sceneLoadingView.center
-        sceneLoadingAnim.loopMode = .loop
-        sceneLoadingAnim.play()
-        sceneLoadingView.addSubview(sceneLoadingAnim)
+    func startLoadingSceneAnim(){
+        DispatchQueue.main.async {
+            self.loadingSceneAnimView.isHidden = false
+            self.loadingSceneAnimView.play()
+        }
+    }
+    
+    func stopLoadingSceneAnim(){
+        DispatchQueue.main.async {
+            self.loadingSceneAnimView.isHidden = true
+            self.loadingSceneAnimView.stop()
+        }
     }
     
     func loadMangaScenes(_ mangaUrl: String){
-        self.sceneLoadingView.isHidden = false
+        startLoadingSceneAnim()
         sceneArr.removeAll()
         mangaSceneTableView.reloadData()
         indicatorState(false)
@@ -217,7 +243,7 @@ class ViewMangaViewController: UIViewController {
                         
                         // if successfuly appending scenes
                         DispatchQueue.main.sync {
-                            self.sceneLoadingView.isHidden = true
+                            self.stopLoadingSceneAnim()
                             self.mangaSceneTableView.reloadData()
                             self.saveToHistory()
                             self.getEpisodes()
@@ -304,6 +330,9 @@ class ViewMangaViewController: UIViewController {
                         // finish to load episodes
                         DispatchQueue.main.async {
                             self.indicatorState(true)
+                            self.detailInfoEpisodeTableView.reloadData()
+                            self.detailInfoEpisodeSizeLabel.text = "총 \(self.episodeArr.count)화"
+                            self.scrollToCurrentEpisodeOnInfoView()
                         }
                     }
                 }
@@ -363,7 +392,7 @@ class ViewMangaViewController: UIViewController {
                     mangaTitleLabel.text = nextEpisodeTitle
                     loadMangaScenes(url)
                     
-                    sceneLoadingAnim.play()
+                    startLoadingSceneAnim()
                 }else{
                     self.view.makeToast("마지막 화 입니다")
                 }
@@ -388,7 +417,7 @@ class ViewMangaViewController: UIViewController {
                     mangaTitleLabel.text = prevEpisodeTitle
                     loadMangaScenes(url)
                     
-                    sceneLoadingAnim.play()
+                    startLoadingSceneAnim()
                 }else{
                     self.view.makeToast("첫 화 입니다")
                 }
@@ -404,6 +433,15 @@ class ViewMangaViewController: UIViewController {
         detailInfoView.alpha = 0
         UIView.animate(withDuration: 0.2) {
             self.detailInfoView.alpha = 1.0
+        }
+        
+        scrollToCurrentEpisodeOnInfoView()
+    }
+    
+    func scrollToCurrentEpisodeOnInfoView(){
+        if let index = currentEpisodeIndex{
+            let indexPath = IndexPath(row: index, section: 0)
+            detailInfoEpisodeTableView.scrollToRow(at: indexPath, at: .middle, animated: true)
         }
     }
     
@@ -532,59 +570,98 @@ class ViewMangaViewController: UIViewController {
 // MARK: - Extensions
 extension ViewMangaViewController: UITableViewDelegate ,UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sceneArr.count
+        switch tableView {
+        case mangaSceneTableView:
+            return sceneArr.count
+        case detailInfoEpisodeTableView:
+            return episodeArr.count
+        default:
+            return 0
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let sceneCell = tableView.dequeueReusableCell(withIdentifier: "MangaSceneCell") as! MangaSceneCell
-        
-        sceneCell.selectionStyle = .none
-        
-        // save cell height
-        cellHeightDictionary.setObject(sceneCell.frame.height, forKey: indexPath as NSCopying)
-        
-        
-        if indexPath.row > sceneArr.count - 1{
-            return UITableViewCell()
-        }
-        
-        // set background tile
-        let tileImage = UIImage(named: "Tile")!
-        let patternBackground = UIColor(patternImage: tileImage)
-        sceneCell.backgroundColor = patternBackground
-        sceneCell.sceneDividerView.backgroundColor = patternBackground
-        sceneCell.sceneImageView.image = UIImage()
-        
+        switch tableView {
+        case mangaSceneTableView:
+            guard let sceneCell = tableView.dequeueReusableCell(withIdentifier: "MangaSceneCell") as? MangaSceneCell else {return UITableViewCell()}
+            
+            sceneCell.selectionStyle = .none
+            
+            // save cell height
+            cellHeightDictionary.setObject(sceneCell.frame.height, forKey: indexPath as NSCopying)
+            
+            
+            if indexPath.row > sceneArr.count - 1{
+                return UITableViewCell()
+            }
+            
+            // set background tile
+            let tileImage = UIImage(named: "Tile")!
+            let patternBackground = UIColor(patternImage: tileImage)
+            sceneCell.backgroundColor = patternBackground
+            sceneCell.sceneDividerView.backgroundColor = patternBackground
+            sceneCell.sceneImageView.image = UIImage()
+            
 
-        // set scene
-        if let url = URL(string: sceneArr[indexPath.row].sceneUrl){
-            let token = networkHandler.getImage(url){result in
-                DispatchQueue.global(qos: .background).async {
-                    do{
-                        let image = try result.get()
-                        DispatchQueue.main.async {
-                            sceneCell.sceneImageView.image = image
-                            sceneCell.backgroundColor = UIColor(named: "BackgroundColor")!
-                            sceneCell.sceneDividerView.backgroundColor = UIColor(named: "BackgroundColor")
+            // set scene
+            if let url = URL(string: sceneArr[indexPath.row].sceneUrl){
+                let token = networkHandler.getImage(url){result in
+                    DispatchQueue.global(qos: .background).async {
+                        do{
+                            let image = try result.get()
+                            DispatchQueue.main.async {
+                                sceneCell.sceneImageView.image = image
+                                sceneCell.backgroundColor = UIColor(named: "BackgroundColor")!
+                                sceneCell.sceneDividerView.backgroundColor = UIColor(named: "BackgroundColor")
+                            }
+                        }catch{
+                            DispatchQueue.main.async {
+                                sceneCell.backgroundColor = patternBackground
+                            }
+                            print(error.localizedDescription)
                         }
-                    }catch{
-                        DispatchQueue.main.async {
-                            sceneCell.backgroundColor = patternBackground
-                        }
-                        print(error.localizedDescription)
+                    }
+                }
+                
+                sceneCell.onReuse = {
+                    if let token = token{
+                        self.networkHandler.cancelLoadImage(token)
                     }
                 }
             }
             
-            sceneCell.onReuse = {
-                if let token = token{
-                    self.networkHandler.cancelLoadImage(token)
+            
+            return sceneCell
+        case detailInfoEpisodeTableView:
+            let episodeCell = tableView.dequeueReusableCell(withIdentifier: "EpisodeCell") as! MangaEpisodePopoverCell
+            
+            if indexPath.row > episodeArr.count - 1{
+                return UITableViewCell()
+            }
+            
+            
+            // Accent text color to current episode
+            if let index = currentEpisodeIndex{
+                if let currentEpisodeTitle = episodeArr[index].episodeTitle{
+                    if episodeArr[indexPath.row].episodeTitle?.lowercased().trimmingCharacters(in: .whitespaces) == currentEpisodeTitle.lowercased().trimmingCharacters(in: .whitespaces){
+                        episodeCell.textLabel?.textColor = UIColor(named: "PointColor")!
+                    }else{
+                        episodeCell.textLabel?.textColor = UIColor(named: "BasicTextColor")!
+                    }
                 }
             }
+            
+            
+            episodeCell.textLabel?.text = episodeArr[indexPath.row].episodeTitle
+            episodeCell.textLabel?.lineBreakMode = .byTruncatingMiddle
+            episodeCell.backgroundColor = UIColor(named: "Transparent")
+            episodeCell.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+            
+            return episodeCell
+        default:
+            return UITableViewCell()
         }
         
-        
-        return sceneCell
     }
     
     // Scroll to current position when orientation changed
@@ -594,6 +671,20 @@ extension ViewMangaViewController: UITableViewDelegate ,UITableViewDataSource{
         }
         
         return UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView == detailInfoEpisodeTableView{
+            
+            let url = replaceSerialNumber(episodeArr[indexPath.row].episodeSN!)
+            
+            mangaTitle = episodeArr[indexPath.row].episodeTitle!
+            mangaTitleLabel.text = episodeArr[indexPath.row].episodeTitle!
+            
+            hideDetailInfoView()
+            
+            loadMangaScenes(url)
+        }
     }
 }
 
@@ -675,6 +766,13 @@ extension ViewMangaViewController: SelectItemDelegate{
         mangaTitleLabel.text = episode.episodeTitle
         loadMangaScenes(url)
         
-        sceneLoadingAnim.play()
+        startLoadingSceneAnim()
+    }
+}
+
+
+extension ViewMangaViewController: UIGestureRecognizerDelegate{
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        return !self.detailInfoEpisodeTableView.frame.contains(touch.location(in: self.view))
     }
 }

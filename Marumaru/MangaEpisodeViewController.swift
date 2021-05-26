@@ -33,13 +33,14 @@ class MangaEpisodeViewController: UIViewController {
     let networkHandler = NetworkHandler()
     var episodeArr = Array<Episode>()
     
+    var loadingEpisodeAnimView = AnimationView()
+    
     @IBOutlet weak var infoView: UIView!
     @IBOutlet weak var infoPreviewImage: UIImageView!
     @IBOutlet weak var infoTitleLabel: UILabel!
     @IBOutlet weak var infoDesc1Label: UILabel!
     @IBOutlet weak var infoDesc2Label: UILabel!
     @IBOutlet weak var episodeSizeLabel: UILabel!
-    @IBOutlet weak var loadingView: UIView!
     @IBOutlet weak var scrollToBottomButton: UIButton!
     
     @IBOutlet weak var mangaEpisodeTableView: UITableView!
@@ -56,9 +57,6 @@ class MangaEpisodeViewController: UIViewController {
         setMangaInfo()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        setLottieAnims()
-    }
     
     override var preferredStatusBarStyle: UIStatusBarStyle{
         return .darkContent
@@ -77,12 +75,21 @@ class MangaEpisodeViewController: UIViewController {
         infoPreviewImage.layer.borderWidth = 1
         infoPreviewImage.layer.borderColor = UIColor(named: "PointColor")?.cgColor
         
-        // scroll to bottom button
         scrollToBottomButton.layer.cornerRadius = 10
         scrollToBottomButton.layer.shadowColor = UIColor(named: "ShadowColor")!.cgColor
         scrollToBottomButton.layer.shadowRadius = 7
         scrollToBottomButton.layer.shadowOpacity = 0.5
         scrollToBottomButton.layer.shadowOffset = .zero
+        
+        
+        loadingEpisodeAnimView = AnimationView(name: "loading_square")
+        loadingEpisodeAnimView.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
+        self.view.addSubview(loadingEpisodeAnimView)
+        loadingEpisodeAnimView.translatesAutoresizingMaskIntoConstraints = false
+        loadingEpisodeAnimView.centerXAnchor.constraint(equalTo: mangaEpisodeTableView.centerXAnchor).isActive = true
+        loadingEpisodeAnimView.centerYAnchor.constraint(equalTo: mangaEpisodeTableView.centerYAnchor, constant: -50).isActive = true
+        loadingEpisodeAnimView.isHidden = true
+        
     }
     
     func initInstance(){
@@ -91,14 +98,18 @@ class MangaEpisodeViewController: UIViewController {
     }
     
     // MARK: - Methods
-    func setLottieAnims(){
-        // set manga episode loading anim -lottie-
-        let loadingSquareAnimView = AnimationView(name: "loading_square")
-        loadingSquareAnimView.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
-        loadingSquareAnimView.center = loadingView.center
-        loadingSquareAnimView.loopMode = .loop
-        loadingSquareAnimView.play()
-        loadingView.addSubview(loadingSquareAnimView)
+    func startLoadingEpisodeAnim(){
+        DispatchQueue.main.async {
+            self.loadingEpisodeAnimView.isHidden = false
+            self.loadingEpisodeAnimView.play()
+        }
+    }
+    
+    func stopLoadingEpisodeAnim(){
+        DispatchQueue.main.async {
+            self.loadingEpisodeAnimView.isHidden = true
+            self.loadingEpisodeAnimView.stop()
+        }
     }
     
     func getData(){
@@ -106,13 +117,12 @@ class MangaEpisodeViewController: UIViewController {
             return
         }
         
-        loadingView.isHidden = false
+        startLoadingEpisodeAnim()
         
         DispatchQueue.global(qos: .background).async {
             if let serialNumber = self.mangaSN{
                 do{
                     let completeUrl = "\(self.baseUrl)/bbs/cmoic/\(serialNumber)"
-//                    let completeUrl = "\(self.baseUrl)\(serialNumber)"
                     
                     print(completeUrl)
                     guard let url = URL(string: completeUrl) else {return}
@@ -151,12 +161,12 @@ class MangaEpisodeViewController: UIViewController {
                             self.mangaEpisodeTableView.reloadData()
                             self.episodeSizeLabel.text = "총 \(self.episodeArr.count)화"
                             
-                            self.loadingView.isHidden = true
+                            self.stopLoadingEpisodeAnim()
                         }
                         
                     }else{
                         // no episodes
-                        self.loadingView.isHidden = true
+                        self.stopLoadingEpisodeAnim()
                     }
                     
                 }catch{

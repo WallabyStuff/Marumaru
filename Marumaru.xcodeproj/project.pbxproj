@@ -241,12 +241,8 @@
 		76937C592657925300D36C45 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				765C8B2C261CA2C30056C83B /* ViewController.swift */,
-				76BEEBA826248A1600642001 /* SearchViewController.swift */,
-				764AE0E1262DA971000F490D /* MangaHistoryViewController.swift */,
-				765C8C67261F05BD0056C83B /* MangaEpisodeViewController.swift */,
-				765C8C6C261F16880056C83B /* ViewMangaViewController.swift */,
-				7641C3B0264682B900A79A79 /* EpisodePopoverViewController.swift */,
+				765C8B2E261CA2C30056C83B /* Main.storyboard */,
+				765C8B36261CA2C50056C83B /* LaunchScreen.storyboard */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -265,8 +261,12 @@
 		76C9A20426356C08000F801C /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				765C8B2E261CA2C30056C83B /* Main.storyboard */,
-				765C8B36261CA2C50056C83B /* LaunchScreen.storyboard */,
+				765C8B2C261CA2C30056C83B /* ViewController.swift */,
+				76BEEBA826248A1600642001 /* SearchViewController.swift */,
+				764AE0E1262DA971000F490D /* MangaHistoryViewController.swift */,
+				765C8C67261F05BD0056C83B /* MangaEpisodeViewController.swift */,
+				765C8C6C261F16880056C83B /* ViewMangaViewController.swift */,
+				7641C3B0264682B900A79A79 /* EpisodePopoverViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -738,7 +738,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 0.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = MuffinLabs.Marumaru;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -762,7 +762,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 0.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = MuffinLabs.Marumaru;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
