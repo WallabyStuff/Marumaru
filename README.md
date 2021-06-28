@@ -1,6 +1,11 @@
 # Marumaru app
 <img src="https://user-images.githubusercontent.com/63496607/123590904-4c932280-d826-11eb-8305-077c7eb9c86e.png" width="10%"></img>
+<br><br><br>
 
+Downloads
+------------
+Email me I will add you a beta tester because This app can't be uploaded on appstore.
+or Clone my project and open on Xcode and download on your own device.
 
 Screenshots
  ------------
@@ -20,7 +25,7 @@ Screenshots
 
 
  ## Why I made this?
- + 귀칼 보려고ㅎㅎ
+ + 귀칼 보려고ㅎㅎ 헤키레키 잇센!!@!@!
  <br><br><br>
 
 
