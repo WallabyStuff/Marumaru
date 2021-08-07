@@ -1571,7 +1571,7 @@
         <image name="home" width="512" height="512"/>
         <image name="left-arrow" width="384" height="320"/>
         <image name="magnifying-glass" width="512" height="512"/>
-        <image name="reload-arrow" width="512" height="512"/>
+        <image name="reload-arrow" width="344.3699951171875" height="344.3699951171875"/>
         <image name="square.stack.3d.up.fill" catalog="system" width="128" height="124"/>
         <image name="trash" catalog="system" width="121" height="128"/>
         <namedColor name="BackgroundColor">
