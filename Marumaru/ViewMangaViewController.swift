@@ -6,12 +6,14 @@
 //
 
 import UIKit
+
 import Alamofire
 import SwiftSoup
 import Lottie
 import CoreData
 import Foundation
 import Toast
+import Hero
 
 
 class ViewMangaViewController: UIViewController {
@@ -25,18 +27,13 @@ class ViewMangaViewController: UIViewController {
     let coredataHandler = CoreDataHandler()
     
     var currentEpisodeIndex: Int?
-    
     var baseUrl = "https://marumaru.cloud/"
     var baseDocument: Document?
-    
     var mangaTitle: String = ""
     var mangaUrl: String = ""
-    
     var episodeArr = Array<Episode>()
     var sceneArr = Array<Scene>()
-
     var cellHeightDictionary: NSMutableDictionary = [:]
-    
     let safeAreaInsets = UIApplication.shared.windows[0].safeAreaInsets
     
     var loadingSceneAnimView = AnimationView()
@@ -45,15 +42,16 @@ class ViewMangaViewController: UIViewController {
     var detailInfoEpisodeSizeLabel = UILabel()
     var detailInfoEpisodeTableView = UITableView()
 
-    @IBOutlet weak var viewEpisodeListButton: UIButton!
+    @IBOutlet weak var episodeListButton: UIButton!
     @IBOutlet weak var nextEpisodeButton: UIButton!
     @IBOutlet weak var previousEpisodeButton: UIButton!
-    @IBOutlet weak var topBarView: UIView!
+    @IBOutlet weak var appbarView: UIView!
     @IBOutlet weak var bottomIndicatorView: UIView!
     @IBOutlet weak var mangaTitleLabel: UILabel!
     @IBOutlet weak var mangaSceneTableView: UITableView!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollContentView: UIView!
+    @IBOutlet weak var backButton: UIButton!
     
     
     // MARK: - LifeCycle
@@ -75,13 +73,16 @@ class ViewMangaViewController: UIViewController {
     
     // MARK: - Overrides
     override var preferredStatusBarStyle: UIStatusBarStyle{
-        return .lightContent
+        return .darkContent
     }
     
     
-    
     // MARK: - Initializations
-    func initView(){        
+    func initView(){
+        // hero enable
+        self.hero.isEnabled = true
+        
+        // loading scene AnimView
         loadingSceneAnimView = AnimationView(name: "loading_square")
         loadingSceneAnimView.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
         loadingSceneAnimView.loopMode = .loop
@@ -91,15 +92,19 @@ class ViewMangaViewController: UIViewController {
         loadingSceneAnimView.centerYAnchor.constraint(equalTo: mangaSceneTableView.centerYAnchor).isActive = true
         loadingSceneAnimView.isHidden = true
         
+        // appbar View
+        appbarView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        appbarView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        appbarView.layer.cornerRadius = 40
+        appbarView.layer.maskedCorners = CACornerMask([.layerMinXMaxYCorner])
+        appbarView.hero.modifiers = [.translate(y: -appbarView.frame.height)]
         
-        topBarView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        topBarView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        
-        
+        // bottom Indicator View
         bottomIndicatorView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         bottomIndicatorView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        bottomIndicatorView.hero.modifiers = [.translate(y: bottomIndicatorView.frame.height)]
         
-        
+        // detail Info View
         detailInfoView = UIView(frame: UIScreen.main.bounds)
         view.addSubview(detailInfoView)
         detailInfoView.translatesAutoresizingMaskIntoConstraints = false
@@ -111,7 +116,23 @@ class ViewMangaViewController: UIViewController {
         ])
         detailInfoView.alpha = 0
         
+        // back Button
+        backButton.layer.cornerRadius = 13
+        backButton.imageEdgeInsets(with: 10)
         
+        // next episode Button
+        nextEpisodeButton.layer.cornerRadius = 10
+        nextEpisodeButton.imageEdgeInsets(with: 6)
+        
+        // previous episode Button
+        previousEpisodeButton.layer.cornerRadius = 10
+        previousEpisodeButton.imageEdgeInsets(with: 6)
+        
+        // episodes Button
+        episodeListButton.layer.cornerRadius = 10
+        episodeListButton.imageEdgeInsets(with: 8)
+        
+        // detail info blur background View
         let blurEffect = UIBlurEffect(style: .light)
         let blurView = UIVisualEffectView(effect: blurEffect)
         blurView.frame = detailInfoView.frame
@@ -124,9 +145,9 @@ class ViewMangaViewController: UIViewController {
             blurView.bottomAnchor.constraint(equalTo: detailInfoView.bottomAnchor)
         ])
         
-        
+        // detail info title Label
         detailInfoTitleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: blurView.contentView.frame.width, height: 300))
-        detailInfoTitleLabel.textColor = UIColor(named: "BasicTextColor")
+        detailInfoTitleLabel.textColor = ColorSet.textColor
         detailInfoTitleLabel.font = UIFont.boldSystemFont(ofSize: 24)
         detailInfoTitleLabel.numberOfLines = 7
         detailInfoTitleLabel.text = mangaTitle
@@ -138,9 +159,9 @@ class ViewMangaViewController: UIViewController {
             detailInfoTitleLabel.rightAnchor.constraint(equalTo: blurView.contentView.rightAnchor, constant: -30 - safeAreaInsets.right),
         ])
         
-        
+        // detail info episode size Label
         detailInfoEpisodeSizeLabel = UILabel(frame: CGRect(x: 0, y: 0, width: blurView.contentView.frame.width, height: 30))
-        detailInfoEpisodeSizeLabel.textColor = UIColor(named: "BasicTextColor")
+        detailInfoEpisodeSizeLabel.textColor = ColorSet.textColor
         detailInfoEpisodeSizeLabel.text = "총 --화"
         blurView.contentView.addSubview(detailInfoEpisodeSizeLabel)
         detailInfoEpisodeSizeLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -148,16 +169,15 @@ class ViewMangaViewController: UIViewController {
         detailInfoEpisodeSizeLabel.leftAnchor.constraint(equalTo: blurView.contentView.leftAnchor, constant: 35).isActive = true
         detailInfoEpisodeSizeLabel.rightAnchor.constraint(equalTo: blurView.contentView.rightAnchor, constant: -35).isActive = true
         
-        
+        // detail info episode TableView
         detailInfoEpisodeTableView = UITableView(frame: CGRect(x: 0, y: 0, width: 200, height: 300))
-        detailInfoEpisodeTableView.backgroundColor = UIColor(named: "Transparent")
+        detailInfoEpisodeTableView.backgroundColor = ColorSet.transparentColor
         blurView.contentView.addSubview(detailInfoEpisodeTableView)
         detailInfoEpisodeTableView.translatesAutoresizingMaskIntoConstraints = false
         detailInfoEpisodeTableView.topAnchor.constraint(equalTo: detailInfoEpisodeSizeLabel.bottomAnchor, constant: 40).isActive = true
         detailInfoEpisodeTableView.bottomAnchor.constraint(equalTo: blurView.contentView.bottomAnchor, constant: -80).isActive = true
         detailInfoEpisodeTableView.trailingAnchor.constraint(equalTo: blurView.contentView.trailingAnchor, constant: -30).isActive = true
         detailInfoEpisodeTableView.leadingAnchor.constraint(equalTo: blurView.contentView.leadingAnchor, constant: 30).isActive = true
-        
     }
     
     func initInstance(){
@@ -178,7 +198,7 @@ class ViewMangaViewController: UIViewController {
         scrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(sender:))))
         
         
-        topBarView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(topBarTap(sender:))))
+        appbarView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(topBarTap(sender:))))
         
         
         let detailInfoViewGesture = UITapGestureRecognizer(target: self, action: #selector(detailInfoViewTap(sender:)))
@@ -354,8 +374,8 @@ class ViewMangaViewController: UIViewController {
         episodePopoverVC.modalPresentationStyle = .popover
         episodePopoverVC.preferredContentSize = CGSize(width: 200, height: 300)
         episodePopoverVC.popoverPresentationController?.permittedArrowDirections = .down
-        episodePopoverVC.popoverPresentationController?.sourceRect = viewEpisodeListButton.bounds
-        episodePopoverVC.popoverPresentationController?.sourceView = viewEpisodeListButton
+        episodePopoverVC.popoverPresentationController?.sourceRect = episodeListButton.bounds
+        episodePopoverVC.popoverPresentationController?.sourceView = episodeListButton
         episodePopoverVC.presentationController?.delegate = self
         episodePopoverVC.selectItemDelegate = self
         
@@ -454,15 +474,15 @@ class ViewMangaViewController: UIViewController {
     func fadeTopbarView(bool: Bool){
         if bool {
             UIView.animate(withDuration: 0.3) {
-                self.topBarView.alpha = 0
+                self.appbarView.alpha = 0
             } completion: { _ in
-                self.topBarView.isHidden = true
+                self.appbarView.isHidden = true
             }
         }else{
-            self.topBarView.isHidden = false
+            self.appbarView.isHidden = false
             
             UIView.animate(withDuration: 0.3) {
-                self.topBarView.alpha = 1
+                self.appbarView.alpha = 1
             }
         }
     }
@@ -508,18 +528,18 @@ class ViewMangaViewController: UIViewController {
         if bool{
             nextEpisodeButton.isEnabled = true
             previousEpisodeButton.isEnabled = true
-            viewEpisodeListButton.isEnabled = true
+            episodeListButton.isEnabled = true
         }else{
             nextEpisodeButton.isEnabled = false
             previousEpisodeButton.isEnabled = false
-            viewEpisodeListButton.isEnabled = false
+            episodeListButton.isEnabled = false
         }
     }
     
     // MARK: - Actions
     @objc func handleTap(sender: UITapGestureRecognizer){
         if sender.state == .ended{
-            if topBarView.isHidden {
+            if appbarView.isHidden {
                 fadeTopbarView(bool: false)
             }else{
                 fadeTopbarView(bool: true)
@@ -611,8 +631,8 @@ extension ViewMangaViewController: UITableViewDelegate ,UITableViewDataSource{
                             let image = try result.get()
                             DispatchQueue.main.async {
                                 sceneCell.sceneImageView.image = image
-                                sceneCell.backgroundColor = UIColor(named: "BackgroundColor")!
-                                sceneCell.sceneDividerView.backgroundColor = UIColor(named: "BackgroundColor")
+                                sceneCell.backgroundColor = ColorSet.backgroundColor
+                                sceneCell.sceneDividerView.backgroundColor = ColorSet.backgroundColor
                             }
                         }catch{
                             DispatchQueue.main.async {
@@ -644,9 +664,9 @@ extension ViewMangaViewController: UITableViewDelegate ,UITableViewDataSource{
             if let index = currentEpisodeIndex{
                 if let currentEpisodeTitle = episodeArr[index].episodeTitle{
                     if episodeArr[indexPath.row].episodeTitle?.lowercased().trimmingCharacters(in: .whitespaces) == currentEpisodeTitle.lowercased().trimmingCharacters(in: .whitespaces){
-                        episodeCell.textLabel?.textColor = UIColor(named: "PointColor")!
+                        episodeCell.textLabel?.textColor = ColorSet.accentColor
                     }else{
-                        episodeCell.textLabel?.textColor = UIColor(named: "BasicTextColor")!
+                        episodeCell.textLabel?.textColor = ColorSet.textColor
                     }
                 }
             }
@@ -654,7 +674,7 @@ extension ViewMangaViewController: UITableViewDelegate ,UITableViewDataSource{
             
             episodeCell.textLabel?.text = episodeArr[indexPath.row].episodeTitle
             episodeCell.textLabel?.lineBreakMode = .byTruncatingMiddle
-            episodeCell.backgroundColor = UIColor(named: "Transparent")
+            episodeCell.backgroundColor = ColorSet.transparentColor
             episodeCell.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
             
             return episodeCell
@@ -711,7 +731,7 @@ extension ViewMangaViewController: UIScrollViewDelegate{
         // scroll over down
         if distanceFromBottom <= height{
             UIView.animate(withDuration: 0.3){
-                self.topBarView.alpha = 1
+                self.appbarView.alpha = 1
                 self.bottomIndicatorView.alpha = 1
             }
         }

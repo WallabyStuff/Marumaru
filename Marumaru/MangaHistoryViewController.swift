@@ -6,7 +6,9 @@
 //
 
 import UIKit
+
 import CoreData
+import Hero
 
 // MARK: - Protocol
 protocol DismissDelegate {
@@ -22,9 +24,11 @@ class MangaHistoryViewController: UIViewController {
     var mangaHistoryArr = Array<WatchHistory>()
     let baseUrl = "https://marumaru.cloud"
 
+    @IBOutlet weak var appbarView: UIView!
     @IBOutlet weak var mangaHistoryPlaceholderLabel: UILabel!
     @IBOutlet weak var mangaHistoryCollectionView: UICollectionView!
     @IBOutlet weak var clearHistoryButton: UIButton!
+    @IBOutlet weak var backButton: UIButton!
     
     // MARK: - LifeCycle
     override func viewDidLoad() {
@@ -42,7 +46,25 @@ class MangaHistoryViewController: UIViewController {
     
     // MARK: - Initializations
     func initView(){
+        // hero enable
+        self.hero.isEnabled = true
+        
+        // appbar View
+        appbarView.hero.id = "appbar"
+        appbarView.layer.cornerRadius = 40
+        appbarView.layer.maskedCorners = CACornerMask([.layerMinXMaxYCorner])
+        
+        // Manga history collectionView
         mangaHistoryCollectionView.contentInset = UIEdgeInsets(top: 0, left: 25, bottom: 0, right: 25)
+        
+        // clear history Button
+        clearHistoryButton.layer.masksToBounds = true
+        clearHistoryButton.layer.cornerRadius = 10
+        
+        // back Button
+        backButton.hero.id = "appbarButton"
+        backButton.imageEdgeInsets(with: 10)
+        backButton.layer.cornerRadius = 13
     }
     
     func initInstance(){
@@ -113,6 +135,10 @@ class MangaHistoryViewController: UIViewController {
     // MARK: - Actions
     @IBAction func clearHistoryButtonAction(_ sender: Any) {
         showClearHistoryActionSheet()
+    }
+    
+    @IBAction func backButtonAction(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
     }
 }
 

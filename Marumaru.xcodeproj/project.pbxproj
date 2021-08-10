@@ -11,6 +11,11 @@
 		7641C3B1264682B900A79A79 /* EpisodePopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641C3B0264682B900A79A79 /* EpisodePopoverViewController.swift */; };
 		7641C3B32646874300A79A79 /* Episode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641C3B22646874300A79A79 /* Episode.swift */; };
 		764AE0E2262DA971000F490D /* MangaHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764AE0E1262DA971000F490D /* MangaHistoryViewController.swift */; };
+		765A0FC526BED824005DDD8B /* ColorSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765A0FC426BED824005DDD8B /* ColorSet.swift */; };
+		765A0FC726BEE9B2005DDD8B /* ViewGlobalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765A0FC626BEE9B2005DDD8B /* ViewGlobalExtension.swift */; };
+		765A0FC926BEFB05005DDD8B /* IconSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765A0FC826BEFB05005DDD8B /* IconSet.swift */; };
+		765A0FF626C16629005DDD8B /* loading_circle.json in Resources */ = {isa = PBXBuildFile; fileRef = 765A0FF426C16629005DDD8B /* loading_circle.json */; };
+		765A0FF726C16629005DDD8B /* loading_square.json in Resources */ = {isa = PBXBuildFile; fileRef = 765A0FF526C16629005DDD8B /* loading_square.json */; };
 		765C8B29261CA2C30056C83B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8B28261CA2C30056C83B /* AppDelegate.swift */; };
 		765C8B2B261CA2C30056C83B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8B2A261CA2C30056C83B /* SceneDelegate.swift */; };
 		765C8B2D261CA2C30056C83B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8B2C261CA2C30056C83B /* ViewController.swift */; };
@@ -26,9 +31,6 @@
 		765C8C6D261F16880056C83B /* ViewMangaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8C6C261F16880056C83B /* ViewMangaViewController.swift */; };
 		765C8C78261F192C0056C83B /* MangaEpisodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8C77261F192C0056C83B /* MangaEpisodeCell.swift */; };
 		765C8C7D261F1A2C0056C83B /* MangaSceneCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8C7C261F1A2C0056C83B /* MangaSceneCell.swift */; };
-		76BEEB422622D7FC00642001 /* loading_circle.json in Resources */ = {isa = PBXBuildFile; fileRef = 76BEEB412622D7FC00642001 /* loading_circle.json */; };
-		76BEEB432622D7FC00642001 /* loading_circle.json in Resources */ = {isa = PBXBuildFile; fileRef = 76BEEB412622D7FC00642001 /* loading_circle.json */; };
-		76BEEB442622D7FC00642001 /* loading_circle.json in Resources */ = {isa = PBXBuildFile; fileRef = 76BEEB412622D7FC00642001 /* loading_circle.json */; };
 		76BEEB5D2622FB8500642001 /* error_circle.json in Resources */ = {isa = PBXBuildFile; fileRef = 76BEEB5C2622FB8500642001 /* error_circle.json */; };
 		76BEEB5E2622FB8500642001 /* error_circle.json in Resources */ = {isa = PBXBuildFile; fileRef = 76BEEB5C2622FB8500642001 /* error_circle.json */; };
 		76BEEB5F2622FB8500642001 /* error_circle.json in Resources */ = {isa = PBXBuildFile; fileRef = 76BEEB5C2622FB8500642001 /* error_circle.json */; };
@@ -36,12 +38,6 @@
 		76BEEBB02624B64E00642001 /* ResultMangaCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BEEBAF2624B64E00642001 /* ResultMangaCell.swift */; };
 		76BEEBB12624B64E00642001 /* ResultMangaCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BEEBAF2624B64E00642001 /* ResultMangaCell.swift */; };
 		76BEEBB22624B64E00642001 /* ResultMangaCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BEEBAF2624B64E00642001 /* ResultMangaCell.swift */; };
-		76BEEBD0262977EE00642001 /* loading_square.json in Resources */ = {isa = PBXBuildFile; fileRef = 76BEEBCF262977EE00642001 /* loading_square.json */; };
-		76BEEBD1262977EE00642001 /* loading_square.json in Resources */ = {isa = PBXBuildFile; fileRef = 76BEEBCF262977EE00642001 /* loading_square.json */; };
-		76BEEBD2262977EE00642001 /* loading_square.json in Resources */ = {isa = PBXBuildFile; fileRef = 76BEEBCF262977EE00642001 /* loading_square.json */; };
-		76BEEBDA262978C100642001 /* loading_horizontal.json in Resources */ = {isa = PBXBuildFile; fileRef = 76BEEBD9262978C000642001 /* loading_horizontal.json */; };
-		76BEEBDB262978C100642001 /* loading_horizontal.json in Resources */ = {isa = PBXBuildFile; fileRef = 76BEEBD9262978C000642001 /* loading_horizontal.json */; };
-		76BEEBDC262978C100642001 /* loading_horizontal.json in Resources */ = {isa = PBXBuildFile; fileRef = 76BEEBD9262978C000642001 /* loading_horizontal.json */; };
 		76C9A1B92631BC7F000F801C /* NetworkHandelr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C9A1B82631BC7F000F801C /* NetworkHandelr.swift */; };
 		76C9A27A2636A843000F801C /* CoreDataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C9A2792636A842000F801C /* CoreDataHandler.swift */; };
 		76C9A2872636AF2A000F801C /* WatchHistory+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C9A2852636AF2A000F801C /* WatchHistory+CoreDataProperties.swift */; };
@@ -76,6 +72,11 @@
 		7641C3B0264682B900A79A79 /* EpisodePopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodePopoverViewController.swift; sourceTree = "<group>"; };
 		7641C3B22646874300A79A79 /* Episode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Episode.swift; sourceTree = "<group>"; };
 		764AE0E1262DA971000F490D /* MangaHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MangaHistoryViewController.swift; sourceTree = "<group>"; };
+		765A0FC426BED824005DDD8B /* ColorSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSet.swift; sourceTree = "<group>"; };
+		765A0FC626BEE9B2005DDD8B /* ViewGlobalExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewGlobalExtension.swift; sourceTree = "<group>"; };
+		765A0FC826BEFB05005DDD8B /* IconSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconSet.swift; sourceTree = "<group>"; };
+		765A0FF426C16629005DDD8B /* loading_circle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading_circle.json; sourceTree = "<group>"; };
+		765A0FF526C16629005DDD8B /* loading_square.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading_square.json; sourceTree = "<group>"; };
 		765C8B25261CA2C30056C83B /* Marumaru.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Marumaru.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		765C8B28261CA2C30056C83B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		765C8B2A261CA2C30056C83B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -97,12 +98,9 @@
 		765C8C6C261F16880056C83B /* ViewMangaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewMangaViewController.swift; sourceTree = "<group>"; };
 		765C8C77261F192C0056C83B /* MangaEpisodeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MangaEpisodeCell.swift; sourceTree = "<group>"; };
 		765C8C7C261F1A2C0056C83B /* MangaSceneCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MangaSceneCell.swift; sourceTree = "<group>"; };
-		76BEEB412622D7FC00642001 /* loading_circle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading_circle.json; sourceTree = "<group>"; };
 		76BEEB5C2622FB8500642001 /* error_circle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = error_circle.json; sourceTree = "<group>"; };
 		76BEEBA826248A1600642001 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		76BEEBAF2624B64E00642001 /* ResultMangaCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultMangaCell.swift; sourceTree = "<group>"; };
-		76BEEBCF262977EE00642001 /* loading_square.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading_square.json; sourceTree = "<group>"; };
-		76BEEBD9262978C000642001 /* loading_horizontal.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading_horizontal.json; sourceTree = "<group>"; };
 		76C9A1B82631BC7F000F801C /* NetworkHandelr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkHandelr.swift; sourceTree = "<group>"; };
 		76C9A2792636A842000F801C /* CoreDataHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHandler.swift; sourceTree = "<group>"; };
 		76C9A2852636AF2A000F801C /* WatchHistory+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "WatchHistory+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -156,6 +154,16 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		765A0FC326BED7ED005DDD8B /* Storyboard */ = {
+			isa = PBXGroup;
+			children = (
+				765C8C81261F1AA10056C83B /* Cells */,
+				765C8B2E261CA2C30056C83B /* Main.storyboard */,
+				765C8B36261CA2C50056C83B /* LaunchScreen.storyboard */,
+			);
+			name = Storyboard;
+			sourceTree = "<group>";
+		};
 		765C8B1C261CA2C30056C83B = {
 			isa = PBXGroup;
 			children = (
@@ -181,11 +189,10 @@
 		765C8B27261CA2C30056C83B /* Marumaru */ = {
 			isa = PBXGroup;
 			children = (
-				76937C592657925300D36C45 /* View */,
 				76937C572657923900D36C45 /* Model */,
-				76BEEB4B2622D80000642001 /* LottieAnims */,
+				76937C592657925300D36C45 /* View */,
 				76C9A20426356C08000F801C /* Controller */,
-				765C8C81261F1AA10056C83B /* Cells */,
+				76BEEB4B2622D80000642001 /* LottieAnims */,
 				765C8B34261CA2C50056C83B /* Assets.xcassets */,
 				765C8B39261CA2C50056C83B /* Info.plist */,
 				765C8B28261CA2C30056C83B /* AppDelegate.swift */,
@@ -241,8 +248,10 @@
 		76937C592657925300D36C45 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				765C8B2E261CA2C30056C83B /* Main.storyboard */,
-				765C8B36261CA2C50056C83B /* LaunchScreen.storyboard */,
+				765A0FC326BED7ED005DDD8B /* Storyboard */,
+				765A0FC426BED824005DDD8B /* ColorSet.swift */,
+				765A0FC826BEFB05005DDD8B /* IconSet.swift */,
+				765A0FC626BEE9B2005DDD8B /* ViewGlobalExtension.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -250,10 +259,9 @@
 		76BEEB4B2622D80000642001 /* LottieAnims */ = {
 			isa = PBXGroup;
 			children = (
-				76BEEBCF262977EE00642001 /* loading_square.json */,
+				765A0FF426C16629005DDD8B /* loading_circle.json */,
+				765A0FF526C16629005DDD8B /* loading_square.json */,
 				76BEEB5C2622FB8500642001 /* error_circle.json */,
-				76BEEB412622D7FC00642001 /* loading_circle.json */,
-				76BEEBD9262978C000642001 /* loading_horizontal.json */,
 			);
 			name = LottieAnims;
 			sourceTree = "<group>";
@@ -390,12 +398,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				765C8B38261CA2C50056C83B /* LaunchScreen.storyboard in Resources */,
-				76BEEB422622D7FC00642001 /* loading_circle.json in Resources */,
+				765A0FF726C16629005DDD8B /* loading_square.json in Resources */,
 				765C8B35261CA2C50056C83B /* Assets.xcassets in Resources */,
-				76BEEBDA262978C100642001 /* loading_horizontal.json in Resources */,
-				76BEEBD0262977EE00642001 /* loading_square.json in Resources */,
 				76BEEB5D2622FB8500642001 /* error_circle.json in Resources */,
 				765C8B30261CA2C30056C83B /* Main.storyboard in Resources */,
+				765A0FF626C16629005DDD8B /* loading_circle.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -404,9 +411,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				76BEEB5E2622FB8500642001 /* error_circle.json in Resources */,
-				76BEEBD1262977EE00642001 /* loading_square.json in Resources */,
-				76BEEBDB262978C100642001 /* loading_horizontal.json in Resources */,
-				76BEEB432622D7FC00642001 /* loading_circle.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -415,9 +419,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				76BEEB5F2622FB8500642001 /* error_circle.json in Resources */,
-				76BEEBD2262977EE00642001 /* loading_square.json in Resources */,
-				76BEEBDC262978C100642001 /* loading_horizontal.json in Resources */,
-				76BEEB442622D7FC00642001 /* loading_circle.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -532,7 +533,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				765C8C68261F05BD0056C83B /* MangaEpisodeViewController.swift in Sources */,
+				765A0FC926BEFB05005DDD8B /* IconSet.swift in Sources */,
+				765A0FC726BEE9B2005DDD8B /* ViewGlobalExtension.swift in Sources */,
 				76BEEBA926248A1600642001 /* SearchViewController.swift in Sources */,
+				765A0FC526BED824005DDD8B /* ColorSet.swift in Sources */,
 				76C9A2882636AF2A000F801C /* WatchHistory+CoreDataClass.swift in Sources */,
 				76C9A27A2636A843000F801C /* CoreDataHandler.swift in Sources */,
 				765C8C78261F192C0056C83B /* MangaEpisodeCell.swift in Sources */,

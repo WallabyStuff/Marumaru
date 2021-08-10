@@ -17,10 +17,7 @@ class MangaEpisodeCell: UITableViewCell{
     var onReuse: () -> Void = {}
     
     override func awakeFromNib() {
-        previewImage.layer.cornerRadius = 10
-        previewImage.layer.masksToBounds = true
-        previewImage.layer.borderWidth = 1
-        previewImage.layer.borderColor = UIColor(named: "PlaceHolderTextColor")?.cgColor
+        initView()
     }
     
     override func prepareForReuse() {
@@ -32,5 +29,19 @@ class MangaEpisodeCell: UITableViewCell{
         episodeTitleLabel.text = ""
         episodeDescLabel.text = ""
         episodeIndexLabel.text = ""
+    }
+    
+    private func initView() {
+        // selection View
+        let selectionView = UIView(frame: self.frame)
+        selectionView.layer.cornerRadius = 12
+        selectionView.backgroundColor = ColorSet.cellSelectionColor
+        self.selectedBackgroundView = selectionView
+        
+        // preview Image
+        previewImage.layer.cornerRadius = 10
+        previewImage.layer.masksToBounds = true
+        previewImage.layer.borderWidth = 1
+        previewImage.layer.borderColor = UIColor(named: "PlaceHolderTextColor")?.cgColor
     }
 }

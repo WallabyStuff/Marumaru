@@ -8,6 +8,7 @@
 import UIKit
 import SwiftSoup
 import Lottie
+import Hero
 
 class SearchViewController: UIViewController {
 
@@ -22,17 +23,16 @@ class SearchViewController: UIViewController {
     
     let baseUrl = "https://marumaru.cloud"
     let searchUrl = "/bbs/search.php?url=%2Fbbs%2Fsearch.php&stx="
-    
     let networkHandler = NetworkHandler()
     var resultMangaArr = Array<Manga>()
-    
     var loadingSearchAnimView = AnimationView()
-    
     var isSearching = false
     
+    @IBOutlet weak var appbarView: UIView!
     @IBOutlet weak var searchTextField: UITextField!
     @IBOutlet weak var resultMangaTableView: UITableView!
     @IBOutlet weak var noResultsLabel: UILabel!
+    @IBOutlet weak var backButton: UIButton!
     
     
     // MARK: - LifeCycle
@@ -44,21 +44,31 @@ class SearchViewController: UIViewController {
         initEventListener()
     }
     
-    
     // MARK: - Overrides
-    override var preferredStatusBarStyle: UIStatusBarStyle{
+    override var preferredStatusBarStyle: UIStatusBarStyle {
         return .darkContent
     }
     
     // MARK: - Initializations
-    func initView(){
+    func initView() {
+        // hero enable
+        self.hero.isEnabled = true
+        
+        // appbarView
+        appbarView.hero.id = "appbar"
+        appbarView.layer.cornerRadius = 40
+        appbarView.layer.maskedCorners = CACornerMask([.layerMaxXMaxYCorner, .layerMinXMaxYCorner])
+        
+        // search TextField
         searchTextField.layer.cornerRadius = 15
         searchTextField.layer.borderWidth = 2
-        searchTextField.layer.borderColor = UIColor(named: "PointColor")?.cgColor
-        searchTextField.attributedPlaceholder = NSAttributedString(string: "find by manga title", attributes: [NSAttributedString.Key.foregroundColor: UIColor(named: "TextFieldPlaceHolderColor") ?? .gray])
+        searchTextField.layer.borderColor = ColorSet.accentColor?.cgColor
         
         // Add padding to search textfield
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: self.searchTextField.frame.height))
+        let paddingView = UIView(frame: CGRect(x: 0,
+                                               y: 0,
+                                               width: 15,
+                                               height: self.searchTextField.frame.height))
         searchTextField.leftView = paddingView
         searchTextField.leftViewMode = .always
         
@@ -66,26 +76,40 @@ class SearchViewController: UIViewController {
         searchTextField.returnKeyType = .search
         searchTextField.delegate = self
         
+        // back Button
+        backButton.hero.id = "appbarButton"
+        backButton.imageEdgeInsets(with: 10)
+        backButton.layer.masksToBounds = true
+        backButton.layer.cornerRadius = 13
         
+        // search loading AnimView
         loadingSearchAnimView = AnimationView(name: "loading_square")
-        loadingSearchAnimView.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
+        loadingSearchAnimView.frame = CGRect(x: 0,
+                                             y: 0,
+                                             width: 300,
+                                             height: 300)
         loadingSearchAnimView.loopMode = .loop
         view.addSubview(self.loadingSearchAnimView)
         loadingSearchAnimView.translatesAutoresizingMaskIntoConstraints = false
         loadingSearchAnimView.centerXAnchor.constraint(equalTo: self.resultMangaTableView.centerXAnchor).isActive = true
         loadingSearchAnimView.centerYAnchor.constraint(equalTo: self.resultMangaTableView.centerYAnchor, constant: -50).isActive = true
         loadingSearchAnimView.isHidden = true
+        
+        // result manga Tableview
+        resultMangaTableView.contentInset = UIEdgeInsets(top: 60,
+                                                         left: 0,
+                                                         bottom: 40,
+                                                         right: 0)
     }
     
-    func initInstance(){
+    func initInstance() {
         searchTextField.becomeFirstResponder()
         
         resultMangaTableView.delegate = self
         resultMangaTableView.dataSource = self
     }
     
-    func initEventListener(){}
-    
+    func initEventListener() {}
     
     // MARK: - Methods
     func search(title: String){
@@ -97,7 +121,6 @@ class SearchViewController: UIViewController {
         isSearching = true
         view.endEditing(true)
         
-        
         if title.count < 1{
             stopLoadingSearchResultAnimation()
             noResultsLabel.isHidden = false
@@ -105,7 +128,6 @@ class SearchViewController: UIViewController {
             
             return
         }
-        
         
         DispatchQueue.global(qos: .background).async {
             let modifiedTitle = title.replacingOccurrences(of: " ", with: "+")
@@ -185,14 +207,14 @@ class SearchViewController: UIViewController {
         
     }
     
-    func startLoadingSearchResultAnimation(){
+    func startLoadingSearchResultAnimation() {
         DispatchQueue.main.async {
             self.loadingSearchAnimView.isHidden = false
             self.loadingSearchAnimView.play()
         }
     }
     
-    func stopLoadingSearchResultAnimation(){
+    func stopLoadingSearchResultAnimation() {
         DispatchQueue.main.async {
             self.loadingSearchAnimView.isHidden = true
             self.loadingSearchAnimView.stop()
@@ -227,7 +249,7 @@ class SearchViewController: UIViewController {
 
 
 // MARK: - Extensions
-extension SearchViewController: UITextFieldDelegate{
+extension SearchViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
         // Seach action on keyboard
@@ -244,7 +266,7 @@ extension SearchViewController: UITextFieldDelegate{
     }
 }
 
-extension SearchViewController: UITableViewDelegate, UITableViewDataSource{
+extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return resultMangaArr.count
     }
@@ -256,8 +278,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource{
             return UITableViewCell()
         }
         
-        
-        cell.titleLabel.text = resultMangaArr[indexPath.row].title
+        cell.mangaTitleLabel.text = resultMangaArr[indexPath.row].title
         cell.desc1Label.text = resultMangaArr[indexPath.row].desc1
         cell.desc2Label.text = resultMangaArr[indexPath.row].desc2
         cell.previewImagePlaceholderLabel.text = resultMangaArr[indexPath.row].title
@@ -265,9 +286,9 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource{
         cell.previewImage.image = UIImage()
         
         if resultMangaArr[indexPath.row].desc2.contains("미분류"){
-            cell.desc2Label.textColor = UIColor(named: "BasicSubTextColor")!
+            cell.desc2Label.textColor = ColorSet.subTextColor
         }else{
-            cell.desc2Label.textColor = UIColor(named: "SubPointColor")!
+            cell.desc2Label.textColor = ColorSet.subTextColor
         }
         
         
@@ -322,6 +343,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource{
         let destStoryboard = mainStoryboard.instantiateViewController(identifier: "MangaEpisodeStoryboard") as! MangaEpisodeViewController
         
         // Pass datas
+        destStoryboard.modalPresentationStyle = .fullScreen
         let currentManga = resultMangaArr[indexPath.row]
         destStoryboard.mangaSN = currentManga.serialNumber
         destStoryboard.infoTitle = currentManga.title
