@@ -6,10 +6,12 @@
 //
 
 import UIKit
+
 import SwiftSoup
 import Toast
 import Lottie
 import CoreData
+import Hero
 
 class MangaEpisodeViewController: UIViewController {
 
@@ -35,15 +37,16 @@ class MangaEpisodeViewController: UIViewController {
     
     var loadingEpisodeAnimView = AnimationView()
     
-    @IBOutlet weak var infoView: UIView!
+    @IBOutlet weak var appbarView: UIView!
+    @IBOutlet weak var infoContentView: UIView!
     @IBOutlet weak var infoPreviewImage: UIImageView!
-    @IBOutlet weak var infoTitleLabel: UILabel!
+    @IBOutlet weak var mangaTitleLabel: UILabel!
     @IBOutlet weak var infoDesc1Label: UILabel!
     @IBOutlet weak var infoDesc2Label: UILabel!
     @IBOutlet weak var episodeSizeLabel: UILabel!
     @IBOutlet weak var scrollToBottomButton: UIButton!
-    
     @IBOutlet weak var mangaEpisodeTableView: UITableView!
+    @IBOutlet weak var backButton: UIButton!
     
     
     // MARK: - LifeCycle
@@ -58,30 +61,50 @@ class MangaEpisodeViewController: UIViewController {
     }
     
     
-    override var preferredStatusBarStyle: UIStatusBarStyle{
+    override var preferredStatusBarStyle: UIStatusBarStyle {
         return .darkContent
     }
     
     // MARK: - Initializations
-    func initView(){
-        infoView.layer.cornerRadius = 15
-        infoView.layer.shadowColor = UIColor(named: "ShadowColor")!.cgColor
-        infoView.layer.shadowOffset = .zero
-        infoView.layer.shadowRadius = 8
-        infoView.layer.shadowOpacity = 0.5
+    func initView() {
+        // hero enable
+        self.hero.isEnabled = true
         
+        // appbar View
+        appbarView.hero.id = "appbar"
+        appbarView.layer.cornerRadius = 40
+        appbarView.layer.maskedCorners = [.layerMinXMaxYCorner]
+        
+        // back Button
+        backButton.hero.id = "appbarButton"
+        backButton.imageEdgeInsets(with: 10)
+        backButton.layer.masksToBounds = true
+        backButton.layer.cornerRadius = 13
+        
+        // manga info View
+        infoContentView.hero.id = "infoContentView"
+        infoContentView.layer.cornerRadius = 15
+        infoContentView.layer.shadowColor = ColorSet.shadowColor?.cgColor
+        infoContentView.layer.shadowOffset = .zero
+        infoContentView.layer.shadowRadius = 8
+        infoContentView.layer.shadowOpacity = 0.5
+        
+        // manga info Preview ImageView
+        infoPreviewImage.hero.id = "previewImage"
         infoPreviewImage.layer.masksToBounds = true
         infoPreviewImage.layer.cornerRadius = 10
         infoPreviewImage.layer.borderWidth = 1
-        infoPreviewImage.layer.borderColor = UIColor(named: "PointColor")?.cgColor
+        infoPreviewImage.layer.borderColor = ColorSet.imageBorderColor?.cgColor
         
-        scrollToBottomButton.layer.cornerRadius = 10
-        scrollToBottomButton.layer.shadowColor = UIColor(named: "ShadowColor")!.cgColor
-        scrollToBottomButton.layer.shadowRadius = 7
-        scrollToBottomButton.layer.shadowOpacity = 0.5
-        scrollToBottomButton.layer.shadowOffset = .zero
+        // manga title Label
+        mangaTitleLabel.hero.id = "mangaTitleLabel"
         
+        // scrollToBottom Button
+        scrollToBottomButton.layer.cornerRadius = 13
+        scrollToBottomButton.imageEdgeInsets(with: 10)
+        scrollToBottomButton.hero.modifiers = [.translate(y: 100)]
         
+        // Loading Episode AnimView
         loadingEpisodeAnimView = AnimationView(name: "loading_square")
         loadingEpisodeAnimView.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
         self.view.addSubview(loadingEpisodeAnimView)
@@ -89,7 +112,6 @@ class MangaEpisodeViewController: UIViewController {
         loadingEpisodeAnimView.centerXAnchor.constraint(equalTo: mangaEpisodeTableView.centerXAnchor).isActive = true
         loadingEpisodeAnimView.centerYAnchor.constraint(equalTo: mangaEpisodeTableView.centerYAnchor, constant: -50).isActive = true
         loadingEpisodeAnimView.isHidden = true
-        
     }
     
     func initInstance(){
@@ -174,7 +196,7 @@ class MangaEpisodeViewController: UIViewController {
                 }
             }else{
                 DispatchQueue.main.async {
-                    self.infoTitleLabel.text = "Fail to load"
+                    self.mangaTitleLabel.text = "Fail to load"
                     self.infoPreviewImage.image = UIImage(named: "empty-image")!
                 }
             }
@@ -182,14 +204,14 @@ class MangaEpisodeViewController: UIViewController {
     }
     
     func setMangaInfo(){
-        infoTitleLabel.text = infoTitle
+        mangaTitleLabel.text = infoTitle
         infoDesc1Label.text = infoDesc1
         infoDesc2Label.text = infoDesc2
         
         if infoDesc2.contains("미분류"){
-            infoDesc2Label.textColor = UIColor(named: "BasicSubTextColor")!
+            infoDesc2Label.textColor = ColorSet.subTextColor
         }else{
-            infoDesc2Label.textColor = UIColor(named: "SubPointColor")!
+            infoDesc2Label.textColor = ColorSet.subTextColor
         }
         
         DispatchQueue.global(qos: .background).async {
@@ -277,6 +299,10 @@ class MangaEpisodeViewController: UIViewController {
         }
     }
     
+    @IBAction func backButtonAction(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
+    
 }
 
 
@@ -297,7 +323,6 @@ extension MangaEpisodeViewController: UITableViewDelegate, UITableViewDataSource
         episodeCell.episodeDescLabel.text = episodeArr[indexPath.row].description
         episodeCell.episodeIndexLabel.text = String(episodeArr.count - indexPath.row)
         episodeCell.previewImage.image = nil
-        
         
         if let previewImageUrl = episodeArr[indexPath.row].previewImageUrl{
             if let url = URL(string: previewImageUrl){

@@ -11,6 +11,7 @@ import SwiftSoup
 import Toast
 import Lottie
 import CoreData
+import Hero
 
 class ViewController: UIViewController {
     
@@ -35,7 +36,6 @@ class ViewController: UIViewController {
         var link: String
     }
     
-    
     let networkHandler = NetworkHandler()
     let coredataHandler = CoreDataHandler()
     var updatedMangaArr = Array<UpdatedManga>()
@@ -48,10 +48,13 @@ class ViewController: UIViewController {
     var loadingUpdatedMangaAnimView = AnimationView()
     var loadingToprankMangaAnimView = AnimationView()
 
-    @IBOutlet weak var appBarView: UIView!
+    @IBOutlet weak var appbarView: UIView!
     @IBOutlet weak var homeIcon: UIImageView!
-    @IBOutlet weak var reloadUpdatedMangaButton: UIButton!
-    @IBOutlet weak var reloadTopRankMangaButton: UIButton!
+    @IBOutlet weak var updatesHeaderLabel: UILabel!
+    @IBOutlet weak var recentsHeaderLabel: UILabel!
+    @IBOutlet weak var top20HeaderLabel: UILabel!
+    @IBOutlet weak var refreshUpdatedMangaButton: UIButton!
+    @IBOutlet weak var refreshTop20MangaButton: UIButton!
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var mainScrollView: UIScrollView!
     @IBOutlet weak var recentMangaPlaceholderLabel: UILabel!
@@ -71,7 +74,15 @@ class ViewController: UIViewController {
         setMainContents()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        
         loadMangaHistory()
     }
     
@@ -81,27 +92,51 @@ class ViewController: UIViewController {
     
     
     // MARK: - Initializations
-    func initView(){
-        homeIcon.image = homeIcon.image!.withRenderingMode(.alwaysTemplate)
-        searchButton.imageView?.image = searchButton.imageView?.image?.withRenderingMode(.alwaysTemplate)
+    func initView() {
+        // hero enable
+        self.hero.isEnabled = true
         
         
-        reloadUpdatedMangaButton.imageEdgeInsets = UIEdgeInsets(top: 6, left: 6, bottom: 6, right: 6)
-        reloadTopRankMangaButton.imageEdgeInsets = UIEdgeInsets(top: 6, left: 6, bottom: 6, right: 6)
+        // appbar View
+//        let topSafeAreaHeight = UIApplication.shared.windows[0].safeAreaInsets.top
+//        appBarView.heightAnchor.constraint(equalToConstant: topSafeAreaHeight + 80).isActive = true
+//        appbarView.hero.id = "appbar"
+        appbarView.layer.cornerRadius = 40
+        appbarView.layer.maskedCorners = CACornerMask([.layerMaxXMaxYCorner])
         
         
+        // search button ImageView
+        searchButton.hero.id = "appbarButton"
+        searchButton.imageEdgeInsets(with: 10)
+        searchButton.layer.cornerRadius = 13
+        
+        // reloadUpdatedManga Button
+        refreshUpdatedMangaButton.imageEdgeInsets(with: 6)
+        refreshTop20MangaButton.imageEdgeInsets(with: 6)
+        
+        // updatedManga CollectionView
         updatedMangaCollectionView.contentInset = UIEdgeInsets(top: 0, left: 25, bottom: 0, right: 25)
+        updatedMangaCollectionView.layer.masksToBounds = false
+        
+        // recentManga CollectionView
         recentMangaCollectionView.contentInset = UIEdgeInsets(top: 0, left: 25, bottom: 0, right: 25)
+        recentMangaCollectionView.layer.masksToBounds = false
         
-        
+        // topRankManga TableView
         topRankMangaTableView.layer.cornerRadius = 10
         topRankMangaTableView.layer.masksToBounds = true
         
+        // updates Header Label
+        updatesHeaderLabel.layer.masksToBounds = true
+        updatesHeaderLabel.layer.cornerRadius = 10
         
-        // init appbar height
-        let topSafeAreaHeight = UIApplication.shared.windows[0].safeAreaInsets.top
-        appBarView.heightAnchor.constraint(equalToConstant: topSafeAreaHeight + 80).isActive = true
+        // recentse Header Label
+        recentsHeaderLabel.layer.masksToBounds = true
+        recentsHeaderLabel.layer.cornerRadius = 10
         
+        // top20 Header Label
+        top20HeaderLabel.layer.masksToBounds = true
+        top20HeaderLabel.layer.cornerRadius = 10
         
         loadingUpdatedMangaAnimView = AnimationView(name: "loading_square")
         loadingUpdatedMangaAnimView.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
@@ -123,7 +158,7 @@ class ViewController: UIViewController {
         loadingToprankMangaAnimView.isHidden = true
     }
     
-    func initInstance(){
+    func initInstance() {
         // Updated Manga CollectionView initialization
         updatedMangaCollectionView.delegate = self
         updatedMangaCollectionView.dataSource = self
@@ -315,22 +350,21 @@ class ViewController: UIViewController {
         present(destStotyboard, animated: true)
     }
     
-    
     @IBAction func showAllHistoryButtonAction(_ sender: Any) {
         let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
         let destStoryboard = mainStoryboard.instantiateViewController(identifier: "MangaHistoryStoryboard") as! MangaHistoryViewController
+        
         destStoryboard.dismissDelegate = self
+        destStoryboard.modalPresentationStyle = .fullScreen
         
         present(destStoryboard, animated: true)
     }
-    
     
     @IBAction func reloadUpdatedMangaButtonAction(_ sender: Any) {
         DispatchQueue.global(qos: .background).async {
             self.setUpdated()
         }
     }
-    
     
     @IBAction func reloadTopRankMangaButtonAction(_ sender: Any) {
         DispatchQueue.global(qos: .background).async {
@@ -342,7 +376,7 @@ class ViewController: UIViewController {
 
 
 // MARK: - Extensions
-extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource{
+extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         switch collectionView {
@@ -373,7 +407,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource{
             collectionCell.previewImagePlaceholderLabel.text = updatedMangaArr[indexPath.row].title
             
             
-            if let previewImageUrl = updatedMangaArr[indexPath.row].previewImageUrl{
+            if let previewImageUrl = updatedMangaArr[indexPath.row].previewImageUrl {
                 if let url = URL(string: previewImageUrl){
                     let token = networkHandler.getImage(url){result in
                         DispatchQueue.global(qos: .background).async {
@@ -411,7 +445,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource{
         case recentMangaCollectionView:
             let collectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: "RecentMangaCell", for: indexPath) as! MangaCollectionCell
             
-            if indexPath.row > recentMangaArr.count - 1{
+            if indexPath.row > recentMangaArr.count - 1 {
                 return UICollectionViewCell()
             }
             
@@ -529,7 +563,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
         let rect = CGRect(x: 0, y: 0, width: 200, height: 200)
         let selectedUIView = UIView(frame: rect)
         selectedUIView.layer.cornerRadius = 10
-        selectedUIView.backgroundColor = UIColor(named: "CellSelectionColor")
+        selectedUIView.backgroundColor = ColorSet.cellSelectionColor
         topRankCell.selectedBackgroundView = selectedUIView
         
         topRankCell.rankLabel.text = String(indexPath.row + 1)
@@ -566,19 +600,3 @@ extension ViewController: DismissDelegate{
     }
 }
 
-
-public extension UIImage {
-    var averageColor: UIColor? {
-        guard let inputImage = CIImage(image: self) else { return nil }
-        let extentVector = CIVector(x: inputImage.extent.origin.x, y: inputImage.extent.origin.y, z: inputImage.extent.size.width, w: inputImage.extent.size.height)
-
-        guard let filter = CIFilter(name: "CIAreaAverage", parameters: [kCIInputImageKey: inputImage, kCIInputExtentKey: extentVector]) else { return nil }
-        guard let outputImage = filter.outputImage else { return nil }
-
-        var bitmap = [UInt8](repeating: 0, count: 4)
-        let context = CIContext(options: [.workingColorSpace: kCFNull])
-        context.render(outputImage, toBitmap: &bitmap, rowBytes: 4, bounds: CGRect(x: 0, y: 0, width: 1, height: 1), format: .RGBA8, colorSpace: nil)
-
-        return UIColor(red: CGFloat(bitmap[0]) / 255, green: CGFloat(bitmap[1]) / 255, blue: CGFloat(bitmap[2]) / 255, alpha: CGFloat(bitmap[3]) / 255)
-    }
-}

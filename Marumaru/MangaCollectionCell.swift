@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Hero
 
 class MangaCollectionCell: UICollectionViewCell{
     
@@ -17,16 +18,7 @@ class MangaCollectionCell: UICollectionViewCell{
     var onReuse: () -> Void = {}
     
     override func awakeFromNib() {
-        previewImage.layer.cornerRadius = 10
-        previewImageBaseView.layer.cornerRadius = 10
-        
-        previewImageBaseView.layer.shadowColor = UIColor(named: "ShadowColor")!.cgColor
-        previewImageBaseView.layer.shadowOffset = .zero
-        previewImageBaseView.layer.shadowRadius = 6
-        previewImageBaseView.layer.shadowOpacity = 30
-        previewImageBaseView.layer.masksToBounds = false
-        previewImageBaseView.layer.borderWidth = 0
-        previewImageBaseView.layer.shouldRasterize = true
+        initView()
     }
     
     override func prepareForReuse() {
@@ -37,5 +29,23 @@ class MangaCollectionCell: UICollectionViewCell{
         previewImage.image = nil
         titleLabel.text = ""
         previewImagePlaceholderLabel.text = ""
+    }
+    
+    private func initView() {
+        // hero enable
+        self.hero.isEnabled = true
+        
+        // preview ImageView
+        previewImage.layer.cornerRadius = 10
+        
+        // previewImage base View
+        previewImageBaseView.layer.cornerRadius = 10
+        previewImageBaseView.layer.shadowColor = UIColor(named: "ShadowColor")!.cgColor
+        previewImageBaseView.layer.shadowOffset = .zero
+        previewImageBaseView.layer.shadowRadius = 6
+        previewImageBaseView.layer.shadowOpacity = 30
+        previewImageBaseView.layer.masksToBounds = false
+        previewImageBaseView.layer.borderWidth = 0
+        previewImageBaseView.layer.shouldRasterize = true
     }
 }

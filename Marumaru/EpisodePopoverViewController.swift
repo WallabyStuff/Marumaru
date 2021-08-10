@@ -77,9 +77,9 @@ extension EpisodePopoverViewController: UITableViewDelegate, UITableViewDataSour
         
         // Accent text color to current episode
         if episodeCell.episodeTitleLabel.text?.lowercased().trimmingCharacters(in: .whitespaces) == currentEpisodeTitle.lowercased().trimmingCharacters(in: .whitespaces){
-            episodeCell.episodeTitleLabel.textColor = UIColor(named: "PointColor")!
+            episodeCell.episodeTitleLabel.textColor = ColorSet.accentColor
         }else{
-            episodeCell.episodeTitleLabel.textColor = UIColor(named: "BasicTextColor")!
+            episodeCell.episodeTitleLabel.textColor = ColorSet.textColor
         }
         
         
