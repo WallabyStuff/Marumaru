@@ -31,6 +31,7 @@
 		765C8C6D261F16880056C83B /* ViewMangaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8C6C261F16880056C83B /* ViewMangaViewController.swift */; };
 		765C8C78261F192C0056C83B /* MangaEpisodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8C77261F192C0056C83B /* MangaEpisodeCell.swift */; };
 		765C8C7D261F1A2C0056C83B /* MangaSceneCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8C7C261F1A2C0056C83B /* MangaSceneCell.swift */; };
+		76B60D3C26C5785700533562 /* AppbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B60D3B26C5785700533562 /* AppbarView.swift */; };
 		76BEEB5D2622FB8500642001 /* error_circle.json in Resources */ = {isa = PBXBuildFile; fileRef = 76BEEB5C2622FB8500642001 /* error_circle.json */; };
 		76BEEB5E2622FB8500642001 /* error_circle.json in Resources */ = {isa = PBXBuildFile; fileRef = 76BEEB5C2622FB8500642001 /* error_circle.json */; };
 		76BEEB5F2622FB8500642001 /* error_circle.json in Resources */ = {isa = PBXBuildFile; fileRef = 76BEEB5C2622FB8500642001 /* error_circle.json */; };
@@ -98,6 +99,7 @@
 		765C8C6C261F16880056C83B /* ViewMangaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewMangaViewController.swift; sourceTree = "<group>"; };
 		765C8C77261F192C0056C83B /* MangaEpisodeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MangaEpisodeCell.swift; sourceTree = "<group>"; };
 		765C8C7C261F1A2C0056C83B /* MangaSceneCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MangaSceneCell.swift; sourceTree = "<group>"; };
+		76B60D3B26C5785700533562 /* AppbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppbarView.swift; sourceTree = "<group>"; };
 		76BEEB5C2622FB8500642001 /* error_circle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = error_circle.json; sourceTree = "<group>"; };
 		76BEEBA826248A1600642001 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		76BEEBAF2624B64E00642001 /* ResultMangaCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultMangaCell.swift; sourceTree = "<group>"; };
@@ -252,6 +254,7 @@
 				765A0FC426BED824005DDD8B /* ColorSet.swift */,
 				765A0FC826BEFB05005DDD8B /* IconSet.swift */,
 				765A0FC626BEE9B2005DDD8B /* ViewGlobalExtension.swift */,
+				76B60D3B26C5785700533562 /* AppbarView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -536,6 +539,7 @@
 				765A0FC926BEFB05005DDD8B /* IconSet.swift in Sources */,
 				765A0FC726BEE9B2005DDD8B /* ViewGlobalExtension.swift in Sources */,
 				76BEEBA926248A1600642001 /* SearchViewController.swift in Sources */,
+				76B60D3C26C5785700533562 /* AppbarView.swift in Sources */,
 				765A0FC526BED824005DDD8B /* ColorSet.swift in Sources */,
 				76C9A2882636AF2A000F801C /* WatchHistory+CoreDataClass.swift in Sources */,
 				76C9A27A2636A843000F801C /* CoreDataHandler.swift in Sources */,

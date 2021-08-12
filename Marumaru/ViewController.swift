@@ -48,7 +48,7 @@ class ViewController: UIViewController {
     var loadingUpdatedMangaAnimView = AnimationView()
     var loadingToprankMangaAnimView = AnimationView()
 
-    @IBOutlet weak var appbarView: UIView!
+    @IBOutlet weak var appbarView: AppbarView!
     @IBOutlet weak var homeIcon: UIImageView!
     @IBOutlet weak var updatesHeaderLabel: UILabel!
     @IBOutlet weak var recentsHeaderLabel: UILabel!
@@ -68,16 +68,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        initView()
+        DispatchQueue.main.async { self.initView() }
         initInstance()
         
         setMainContents()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -86,10 +80,13 @@ class ViewController: UIViewController {
         loadMangaHistory()
     }
     
+    override func viewWillLayoutSubviews() {
+        
+    }
+    
     override var preferredStatusBarStyle: UIStatusBarStyle{
         return .darkContent
     }
-    
     
     // MARK: - Initializations
     func initView() {
@@ -100,9 +97,7 @@ class ViewController: UIViewController {
         // appbar View
 //        let topSafeAreaHeight = UIApplication.shared.windows[0].safeAreaInsets.top
 //        appBarView.heightAnchor.constraint(equalToConstant: topSafeAreaHeight + 80).isActive = true
-//        appbarView.hero.id = "appbar"
-        appbarView.layer.cornerRadius = 40
-        appbarView.layer.maskedCorners = CACornerMask([.layerMaxXMaxYCorner])
+        appbarView.configure(frame: appbarView.frame, cornerRadius: 40, roundCorners: [.bottomRight])
         
         
         // search button ImageView
@@ -116,11 +111,11 @@ class ViewController: UIViewController {
         
         // updatedManga CollectionView
         updatedMangaCollectionView.contentInset = UIEdgeInsets(top: 0, left: 25, bottom: 0, right: 25)
-        updatedMangaCollectionView.layer.masksToBounds = false
+//        updatedMangaCollectionView.layer.masksToBounds = false
         
         // recentManga CollectionView
         recentMangaCollectionView.contentInset = UIEdgeInsets(top: 0, left: 25, bottom: 0, right: 25)
-        recentMangaCollectionView.layer.masksToBounds = false
+//        recentMangaCollectionView.layer.masksToBounds = false
         
         // topRankManga TableView
         topRankMangaTableView.layer.cornerRadius = 10
