@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension WatchHistory {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<WatchHistory> {

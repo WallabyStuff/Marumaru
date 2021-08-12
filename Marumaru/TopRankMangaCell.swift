@@ -7,8 +7,7 @@
 
 import UIKit
 
-
-class TopRankMangaCell: UITableViewCell{
+class TopRankMangaCell: UITableViewCell {
     
     @IBOutlet weak var innerView: UIView!
     @IBOutlet weak var rankLabel: UILabel!

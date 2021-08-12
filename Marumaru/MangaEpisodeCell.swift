@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MangaEpisodeCell: UITableViewCell{
+class MangaEpisodeCell: UITableViewCell {
     
     @IBOutlet weak var previewImage: UIImageView!
     @IBOutlet weak var episodeTitleLabel: UILabel!

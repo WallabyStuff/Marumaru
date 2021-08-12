@@ -8,10 +8,8 @@
 import UIKit
 
 class MangaEpisodePopoverCell: UITableViewCell {
-
     
     @IBOutlet weak var episodeTitleLabel: UILabel!
-    
     
     override func awakeFromNib() {
         super.awakeFromNib()

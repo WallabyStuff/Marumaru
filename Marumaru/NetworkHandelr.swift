@@ -7,35 +7,35 @@
 
 import UIKit
 
-class NetworkHandler{
+class NetworkHandler {
     
     var loadedImages = [URL: UIImage]()
     var runningRequest = [UUID: URLSessionDataTask]()
     
     @discardableResult
-    func getImage(_ url: URL, _ completion: @escaping (Result<UIImage, Error>) -> Void) -> UUID?{
+    func getImage(_ url: URL, _ completion: @escaping (Result<UIImage, Error>) -> Void) -> UUID? {
         
-        if let image = loadedImages[url]{
+        if let image = loadedImages[url] {
             completion(.success(image))
             return nil
         }
         
         let uuid = UUID()
         
-        let task = URLSession.shared.dataTask(with: url){ data, response, error in
-            defer{self.runningRequest.removeValue(forKey: uuid)}
+        let task = URLSession.shared.dataTask(with: url) { data, _, error in
+            defer {self.runningRequest.removeValue(forKey: uuid)}
             
-            if let data = data, let image = UIImage(data: data){
+            if let data = data, let image = UIImage(data: data) {
                 self.loadedImages[url] = image
                 completion(.success(image))
                 return
             }
             
-            guard let error = error else{
+            guard let error = error else {
                 return
             }
             
-            guard (error as NSError).code == NSURLErrorCancelled else{
+            guard (error as NSError).code == NSURLErrorCancelled else {
                 completion(.failure(error))
                 return
             }
@@ -48,7 +48,7 @@ class NetworkHandler{
         return uuid
     }
     
-    func cancelLoadImage(_ uuid: UUID){
+    func cancelLoadImage(_ uuid: UUID) {
         runningRequest[uuid]?.cancel()
         runningRequest.removeValue(forKey: uuid)
     }
