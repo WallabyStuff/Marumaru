@@ -1,0 +1,12 @@
+disabled_rules:
+- line_length
+- type_body_length
+- trailing_whitespace
+- force_cast
+- inclusive_language
+- identifier_name
+
+included:
+
+excluded:
+- Pods

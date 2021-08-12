@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MangaSceneCell: UITableViewCell{
+class MangaSceneCell: UITableViewCell {
     
     @IBOutlet weak var sceneImageView: UIImageView!
     @IBOutlet weak var sceneDividerView: UIView!

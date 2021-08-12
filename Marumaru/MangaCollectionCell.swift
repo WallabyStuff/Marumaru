@@ -8,7 +8,7 @@
 import UIKit
 import Hero
 
-class MangaCollectionCell: UICollectionViewCell{
+class MangaCollectionCell: UICollectionViewCell {
     
     @IBOutlet weak var previewImageBaseView: UIView!
     @IBOutlet weak var previewImage: UIImageView!

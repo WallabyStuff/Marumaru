@@ -7,11 +7,11 @@
 
 import UIKit
 
-class Episode{
+class Episode {
     var episodeTitle: String?
     var episodeSN: String?
     
-    init(_ episodeTitle: String, _ episodeSN: String){
+    init(_ episodeTitle: String, _ episodeSN: String) {
         self.episodeTitle = episodeTitle
         self.episodeSN = episodeSN
     }

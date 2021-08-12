@@ -31,6 +31,7 @@
 		765C8C6D261F16880056C83B /* ViewMangaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8C6C261F16880056C83B /* ViewMangaViewController.swift */; };
 		765C8C78261F192C0056C83B /* MangaEpisodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8C77261F192C0056C83B /* MangaEpisodeCell.swift */; };
 		765C8C7D261F1A2C0056C83B /* MangaSceneCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8C7C261F1A2C0056C83B /* MangaSceneCell.swift */; };
+		7684F3D026C590B80012BD8E /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 7684F3CF26C590B80012BD8E /* .swiftlint.yml */; };
 		76B60D3C26C5785700533562 /* AppbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B60D3B26C5785700533562 /* AppbarView.swift */; };
 		76BEEB5D2622FB8500642001 /* error_circle.json in Resources */ = {isa = PBXBuildFile; fileRef = 76BEEB5C2622FB8500642001 /* error_circle.json */; };
 		76BEEB5E2622FB8500642001 /* error_circle.json in Resources */ = {isa = PBXBuildFile; fileRef = 76BEEB5C2622FB8500642001 /* error_circle.json */; };
@@ -99,6 +100,7 @@
 		765C8C6C261F16880056C83B /* ViewMangaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewMangaViewController.swift; sourceTree = "<group>"; };
 		765C8C77261F192C0056C83B /* MangaEpisodeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MangaEpisodeCell.swift; sourceTree = "<group>"; };
 		765C8C7C261F1A2C0056C83B /* MangaSceneCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MangaSceneCell.swift; sourceTree = "<group>"; };
+		7684F3CF26C590B80012BD8E /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		76B60D3B26C5785700533562 /* AppbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppbarView.swift; sourceTree = "<group>"; };
 		76BEEB5C2622FB8500642001 /* error_circle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = error_circle.json; sourceTree = "<group>"; };
 		76BEEBA826248A1600642001 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 		765C8B1C261CA2C30056C83B = {
 			isa = PBXGroup;
 			children = (
+				7684F3CF26C590B80012BD8E /* .swiftlint.yml */,
 				765C8B27261CA2C30056C83B /* Marumaru */,
 				765C8B41261CA2C50056C83B /* MarumaruTests */,
 				765C8B4C261CA2C50056C83B /* MarumaruUITests */,
@@ -304,6 +307,7 @@
 				765C8B22261CA2C30056C83B /* Frameworks */,
 				765C8B23261CA2C30056C83B /* Resources */,
 				A6D4304743DCB090A454511C /* [CP] Embed Pods Frameworks */,
+				7684F3CE26C590A00012BD8E /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -403,6 +407,7 @@
 				765C8B38261CA2C50056C83B /* LaunchScreen.storyboard in Resources */,
 				765A0FF726C16629005DDD8B /* loading_square.json in Resources */,
 				765C8B35261CA2C50056C83B /* Assets.xcassets in Resources */,
+				7684F3D026C590B80012BD8E /* .swiftlint.yml in Resources */,
 				76BEEB5D2622FB8500642001 /* error_circle.json in Resources */,
 				765C8B30261CA2C30056C83B /* Main.storyboard in Resources */,
 				765A0FF626C16629005DDD8B /* loading_circle.json in Resources */,
@@ -449,6 +454,23 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		7684F3CE26C590A00012BD8E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${PODS_ROOT}/SwiftLint/swiftlint\n";
 		};
 		86F1510F3FE0F952C7E45F39 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

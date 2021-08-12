@@ -24,7 +24,7 @@ class SearchViewController: UIViewController {
     let baseUrl = "https://marumaru.cloud"
     let searchUrl = "/bbs/search.php?url=%2Fbbs%2Fsearch.php&stx="
     let networkHandler = NetworkHandler()
-    var resultMangaArr = Array<Manga>()
+    var resultMangaArr: [Manga] = []
     var loadingSearchAnimView = AnimationView()
     var isSearching = false
     
@@ -33,7 +33,6 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var resultMangaTableView: UITableView!
     @IBOutlet weak var noResultsLabel: UILabel!
     @IBOutlet weak var backButton: UIButton!
-    
     
     // MARK: - LifeCycle
     override func viewDidLoad() {
@@ -112,7 +111,7 @@ class SearchViewController: UIViewController {
     func initEventListener() {}
     
     // MARK: - Methods
-    func search(title: String){
+    func search(title: String) {
         
         resultMangaArr.removeAll()
         resultMangaTableView.reloadData()
@@ -121,7 +120,7 @@ class SearchViewController: UIViewController {
         isSearching = true
         view.endEditing(true)
         
-        if title.count < 1{
+        if title.count < 1 {
             stopLoadingSearchResultAnimation()
             noResultsLabel.isHidden = false
             self.view.makeToast("최소 한 글자 이상의 단어로 검색해주세요")
@@ -135,26 +134,26 @@ class SearchViewController: UIViewController {
             
             let transformedUrl = self.transformURLString(fullPath)
             
-            if let url = transformedUrl?.string{
+            if let url = transformedUrl?.string {
                 guard let searchUrl = URL(string: url) else {return}
                 
-                do{
+                do {
                     let htmlContent = try String(contentsOf: searchUrl, encoding: .utf8)
                     let doc = try SwiftSoup.parse(htmlContent)
                     let resultElements = try doc.getElementsByClass("media")
                     
                     resultElements.forEach { (Element) in
-                        do{
+                        do {
                             // get Title
                             let title = try Element.getElementsByClass("media-heading").text()
                             
                             // get Descriptions
-                            var descs = Array<String>()
+                            var descs: [String] = []
                             let descElement = try Element.getElementsByClass("text-muted")
                             descElement.forEach { (Element) in
-                                do{
+                                do {
                                     descs.append(try Element.text())
-                                }catch{
+                                } catch {
                                     descs.append("")
                                     print(error.localizedDescription)
                                 }
@@ -162,23 +161,22 @@ class SearchViewController: UIViewController {
                             
                             // get Image
                             var imgUrl = String(try Element.select("img").attr("src"))
-                            if !imgUrl.contains(self.baseUrl) && !imgUrl.isEmpty{
+                            if !imgUrl.contains(self.baseUrl) && !imgUrl.isEmpty {
                                 imgUrl = "\(self.baseUrl)\(imgUrl)"
                             }
                             
                             // get Link
                             var SN = ""
                             let link = String(try Element.select("a").attr("href"))
-                            if let range = link.range(of: "sca="){
+                            if let range = link.range(of: "sca=") {
                                 SN = String(link[range.upperBound...])
                             }
                             
-                            
                             // Append to array
-                            self.resultMangaArr.append(Manga(title: title, desc1: descs[0] , desc2: descs[1], previewImageUrl: imgUrl, serialNumber: SN))
+                            self.resultMangaArr.append(Manga(title: title, desc1: descs[0], desc2: descs[1], previewImageUrl: imgUrl, serialNumber: SN))
                             
                             print(title)
-                        }catch{
+                        } catch {
                             print(error.localizedDescription)
                         }
                     }
@@ -188,18 +186,17 @@ class SearchViewController: UIViewController {
                         self.stopLoadingSearchResultAnimation()
                         self.isSearching = false
                         
-                        
-                        if self.resultMangaArr.count == 0{
+                        if self.resultMangaArr.count == 0 {
                             self.noResultsLabel.isHidden = false
-                        }else{
+                        } else {
                             self.noResultsLabel.isHidden = true
                         }
                     }
                     
-                }catch{
+                } catch {
                     print(error.localizedDescription)
                 }
-            }else{
+            } else {
                 // fail to transform the url
                 return
             }
@@ -247,14 +244,13 @@ class SearchViewController: UIViewController {
     }
 }
 
-
 // MARK: - Extensions
 extension SearchViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
         // Seach action on keyboard
-        if let title = textField.text?.trimmingCharacters(in: .whitespaces){
-            if isSearching{
+        if let title = textField.text?.trimmingCharacters(in: .whitespaces) {
+            if isSearching {
                 self.view.makeToast("please wait for searching")
                 return true
             }
@@ -274,7 +270,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ResultMangaCell") as! ResultMangaCell
         
-        if indexPath.row > resultMangaArr.count - 1{
+        if indexPath.row > resultMangaArr.count - 1 {
             return UITableViewCell()
         }
         
@@ -285,18 +281,17 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         cell.previewImagePlaceholderLabel.isHidden = false
         cell.previewImage.image = UIImage()
         
-        if resultMangaArr[indexPath.row].desc2.contains("미분류"){
+        if resultMangaArr[indexPath.row].desc2.contains("미분류") {
             cell.desc2Label.textColor = ColorSet.subTextColor
-        }else{
+        } else {
             cell.desc2Label.textColor = ColorSet.subTextColor
         }
         
-        
-        if let previewImageUrl = resultMangaArr[indexPath.row].previewImageUrl{
-            if let url = URL(string: previewImageUrl){
-                let token = networkHandler.getImage(url){ result in
+        if let previewImageUrl = resultMangaArr[indexPath.row].previewImageUrl {
+            if let url = URL(string: previewImageUrl) {
+                let token = networkHandler.getImage(url) { result in
                     DispatchQueue.global(qos: .background).async {
-                        do{
+                        do {
                             let image = try result.get()
                             DispatchQueue.main.async {
                                 cell.previewImage.image = image
@@ -307,7 +302,6 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
                                     cell.previewImage.alpha = 1
                                 }
                                 
-                                
                                 // Set preview image shadow with average color of preview image
                                 cell.previewImageBaseView.layer.shadowColor = image.averageColor?.cgColor
                                 cell.previewImageBaseView.layer.shadowOffset = .zero
@@ -317,7 +311,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
                                 cell.previewImageBaseView.layer.borderWidth = 0
                                 cell.previewImageBaseView.layer.shouldRasterize = true
                             }
-                        }catch{
+                        } catch {
                             DispatchQueue.main.async {
                                 cell.previewImagePlaceholderLabel.isHidden = false
                             }
@@ -327,13 +321,12 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
                 }
                 
                 cell.onReuse = {
-                    if let token = token{
+                    if let token = token {
                         self.networkHandler.cancelLoadImage(token)
                     }
                 }
             }
         }
-
         
         return cell
     }
@@ -355,8 +348,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-
-extension SearchViewController: UIScrollViewDelegate{
+extension SearchViewController: UIScrollViewDelegate {
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
         self.view.endEditing(true)
     }

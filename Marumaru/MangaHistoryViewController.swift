@@ -11,17 +11,17 @@ import CoreData
 import Hero
 
 // MARK: - Protocol
-protocol DismissDelegate {
+protocol DismissDelegate: AnyObject {
     func refreshHistory()
 }
 
 class MangaHistoryViewController: UIViewController {
     
     // MARK: - Declarations
-    var dismissDelegate: DismissDelegate?
+    weak var dismissDelegate: DismissDelegate?
     
     let coredataHandler = CoreDataHandler()
-    var mangaHistoryArr = Array<WatchHistory>()
+    var mangaHistoryArr = [WatchHistory]()
     let baseUrl = "https://marumaru.cloud"
 
     @IBOutlet weak var appbarView: UIView!
@@ -45,7 +45,7 @@ class MangaHistoryViewController: UIViewController {
     }
     
     // MARK: - Initializations
-    func initView(){
+    func initView() {
         // hero enable
         self.hero.isEnabled = true
         
@@ -67,41 +67,40 @@ class MangaHistoryViewController: UIViewController {
         backButton.layer.cornerRadius = 13
     }
     
-    func initInstance(){
+    func initInstance() {
         mangaHistoryCollectionView.delegate = self
         mangaHistoryCollectionView.dataSource = self
     }
     
-    
     // MARK: - Methods
-    func loadMangaHistory(){
+    func loadMangaHistory() {
         mangaHistoryArr.removeAll()
         mangaHistoryCollectionView.reloadData()
         self.mangaHistoryPlaceholderLabel.isHidden = false
         
-        coredataHandler.getWatchHistory(){ Result in
-            do{
+        coredataHandler.getWatchHistory { Result in
+            do {
                 let recentMangas = try Result.get()
                 
                 self.mangaHistoryArr = recentMangas
                 
                 DispatchQueue.main.async {
-                    if self.mangaHistoryArr.count > 0{
+                    if self.mangaHistoryArr.count > 0 {
                         self.mangaHistoryPlaceholderLabel.isHidden = true
                     }
                     
                     self.mangaHistoryCollectionView.reloadData()
                 }
-            }catch{
+            } catch {
                 print(error.localizedDescription)
             }
         }
     }
     
-    func showClearHistoryActionSheet(){
+    func showClearHistoryActionSheet() {
         let deleteMenu = UIAlertController(title: "Clear History", message: "Press delete button to clear all the watch histories", preferredStyle: .actionSheet)
         
-        let clearAction = UIAlertAction(title: "Clear History", style: .destructive) { (UIAlertAction) in
+        let clearAction = UIAlertAction(title: "Clear History", style: .destructive) { (_) in
             self.clearHistory()
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
@@ -115,18 +114,18 @@ class MangaHistoryViewController: UIViewController {
         self.present(deleteMenu, animated: true)
     }
     
-    func clearHistory(){
-        coredataHandler.clearWatchHistory(){Result in
-            do{
+    func clearHistory() {
+        coredataHandler.clearWatchHistory {Result in
+            do {
                 let success = try Result.get()
-                if success{
+                if success {
                     DispatchQueue.main.async {
                         self.mangaHistoryCollectionView.reloadData()
                         self.mangaHistoryArr.removeAll()
                         self.loadMangaHistory()
                     }
                 }
-            }catch{
+            } catch {
                 print(error.localizedDescription)
             }
         }
@@ -142,10 +141,8 @@ class MangaHistoryViewController: UIViewController {
     }
 }
 
-
-
 // MARK: - Extensions
-extension MangaHistoryViewController: UICollectionViewDelegate, UICollectionViewDataSource{
+extension MangaHistoryViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return mangaHistoryArr.count
     }
@@ -156,39 +153,39 @@ extension MangaHistoryViewController: UICollectionViewDelegate, UICollectionView
         // init preview image
         collectionCell.previewImage.image = UIImage()
         
-        if let title = mangaHistoryArr[indexPath.row].title{
+        if let title = mangaHistoryArr[indexPath.row].title {
             // set title & place holder
             collectionCell.titleLabel.text = title
             collectionCell.previewImagePlaceholderLabel.text = title
         }
         
         // set preview image
-        if let previewImage = mangaHistoryArr[indexPath.row].preview_image{
-            if !previewImage.isEmpty{
+        if let previewImage = mangaHistoryArr[indexPath.row].preview_image {
+            if !previewImage.isEmpty {
                 // preview image is exists
                 collectionCell.previewImage.image = UIImage(data: previewImage)
                 collectionCell.previewImagePlaceholderLabel.isHidden = true
-            }else{
-                if let previewImageUrl = mangaHistoryArr[indexPath.row].preview_image_url{
-                    if !previewImageUrl.isEmpty{
+            } else {
+                if let previewImageUrl = mangaHistoryArr[indexPath.row].preview_image_url {
+                    if !previewImageUrl.isEmpty {
                         // preview image url is exists
                         DispatchQueue.global(qos: .background).async {
-                            do{
+                            do {
                                 let url = URL(string: previewImageUrl)
                                 
-                                if let url = url{
+                                if let url = url {
                                     let data = try Data(contentsOf: url)
                                     
                                     DispatchQueue.main.async {
                                         collectionCell.previewImage.image = UIImage(data: data)
                                         collectionCell.previewImagePlaceholderLabel.isHidden = true
                                     }
-                                }else{
+                                } else {
                                     DispatchQueue.main.async {
                                         collectionCell.previewImagePlaceholderLabel.isHidden = false
                                     }
                                 }
-                            }catch{
+                            } catch {
                                 DispatchQueue.main.async {
                                     collectionCell.previewImagePlaceholderLabel.isHidden = false
                                 }
@@ -196,11 +193,11 @@ extension MangaHistoryViewController: UICollectionViewDelegate, UICollectionView
                             }
                         }
                     }
-                }else{
+                } else {
                     collectionCell.previewImagePlaceholderLabel.isHidden = false
                 }
             }
-        }else{
+        } else {
             collectionCell.previewImagePlaceholderLabel.isHidden = false
         }
         
@@ -208,7 +205,7 @@ extension MangaHistoryViewController: UICollectionViewDelegate, UICollectionView
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if mangaHistoryArr.count > indexPath.row{
+        if mangaHistoryArr.count > indexPath.row {
             let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
             let destStoryboard = mainStoryboard.instantiateViewController(identifier: "ViewMangaStoryboard") as! ViewMangaViewController
             
@@ -216,14 +213,13 @@ extension MangaHistoryViewController: UICollectionViewDelegate, UICollectionView
             
             var title = ""
             let link = mangaHistoryArr[indexPath.row].link
-            if let unwrappedTitle = mangaHistoryArr[indexPath.row].title{
+            if let unwrappedTitle = mangaHistoryArr[indexPath.row].title {
                 title = unwrappedTitle
             }
             
-            
-            if var unwrappedLink = link{
+            if var unwrappedLink = link {
                 // check link does have baseUrl
-                if !unwrappedLink.contains(baseUrl){
+                if !unwrappedLink.contains(baseUrl) {
                     unwrappedLink = "\(baseUrl)\(unwrappedLink)"
                 }
                 

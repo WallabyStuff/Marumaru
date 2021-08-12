@@ -8,7 +8,7 @@
 import UIKit
 import Hero
 
-class ResultMangaCell: UITableViewCell{
+class ResultMangaCell: UITableViewCell {
     
     @IBOutlet weak var mangaTitleLabel: UILabel!
     @IBOutlet weak var desc1Label: UILabel!
