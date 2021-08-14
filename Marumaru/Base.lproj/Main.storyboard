@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="retina6_0" orientation="portrait" appearance="light"/>
+    <device id="retina6_0" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
@@ -725,7 +725,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="390" height="144"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="History" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="beT-y3-JM2">
-                                        <rect key="frame" x="155.66666666666663" y="85" width="79" height="28"/>
+                                        <rect key="frame" x="155.66666666666666" y="85" width="79" height="28"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="23"/>
                                         <color key="textColor" name="TextColor"/>
                                         <nil key="highlightedColor"/>
@@ -892,7 +892,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" name="Transparent"/>
+                                            <color key="backgroundColor" name="BackgroundColor"/>
                                             <constraints>
                                                 <constraint firstItem="Hoe-GZ-EEv" firstAttribute="top" secondItem="YeH-Tf-67Z" secondAttribute="topMargin" id="AsX-1k-cWK"/>
                                                 <constraint firstItem="gXF-ka-4dx" firstAttribute="centerY" secondItem="YeH-Tf-67Z" secondAttribute="centerY" id="Dza-Kw-uah"/>
@@ -1606,7 +1606,6 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" name="Transparent"/>
                                             <constraints>
                                                 <constraint firstAttribute="trailingMargin" secondItem="sth-ba-Mfw" secondAttribute="trailing" constant="20" id="5Gp-a9-lMw"/>
                                                 <constraint firstItem="7tD-iT-yFD" firstAttribute="centerY" secondItem="dLh-g2-dng" secondAttribute="centerY" id="6l7-uA-m1e"/>
@@ -1623,6 +1622,7 @@
                                                 <constraint firstItem="Tam-h4-vXN" firstAttribute="leading" secondItem="dLh-g2-dng" secondAttribute="leadingMargin" id="tdK-Bv-0WV"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" name="BackgroundColor"/>
                                         <connections>
                                             <outlet property="desc1Label" destination="Qhd-IA-DO3" id="1ki-Qo-tL7"/>
                                             <outlet property="desc2Label" destination="VgU-lH-stk" id="rvF-2J-RMY"/>
@@ -1678,7 +1678,7 @@
                                 </constraints>
                             </view>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No results" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PNC-8C-8gb">
-                                <rect key="frame" x="147.33333333333337" y="410" width="95.666666666666657" height="24"/>
+                                <rect key="frame" x="147.33333333333334" y="410" width="95.666666666666657" height="24"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                 <color key="textColor" name="PlaceHolderTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -1795,9 +1795,6 @@
         </namedColor>
         <namedColor name="TextFieldPlaceHolderColor">
             <color red="0.63168418226820044" green="0.63168418226820044" blue="0.63168418226820044" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-        </namedColor>
-        <namedColor name="Transparent">
-            <color red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

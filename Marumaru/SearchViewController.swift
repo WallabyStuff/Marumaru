@@ -6,9 +6,12 @@
 //
 
 import UIKit
+
 import SwiftSoup
 import Lottie
 import Hero
+import RxSwift
+import RxCocoa
 
 class SearchViewController: UIViewController {
 
@@ -21,6 +24,7 @@ class SearchViewController: UIViewController {
         var serialNumber: String
     }
     
+    var disposeBag = DisposeBag()
     let baseUrl = "https://marumaru.cloud"
     let searchUrl = "/bbs/search.php?url=%2Fbbs%2Fsearch.php&stx="
     let networkHandler = NetworkHandler()
@@ -238,6 +242,10 @@ class SearchViewController: UIViewController {
         return components!
     }
     
+    private func presentEpisdoeVC() {
+        
+    }
+    
     // MARK: - Actions
     @IBAction func backButtonAction(_ sender: Any) {
         self.dismiss(animated: true)
@@ -292,18 +300,17 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
                 let token = networkHandler.getImage(url) { result in
                     DispatchQueue.global(qos: .background).async {
                         do {
-                            let image = try result.get()
+                            let result = try result.get()
                             DispatchQueue.main.async {
-                                cell.previewImage.image = image
+                                cell.previewImage.image = result.imageCache.image
                                 cell.previewImagePlaceholderLabel.isHidden = true
                                 
-                                cell.previewImage.alpha = 0
-                                UIView.animate(withDuration: 0.5) {
-                                    cell.previewImage.alpha = 1
+                                if result.animate {
+                                    cell.previewImage.startFadeInAnim(duration: 0.5)
                                 }
                                 
                                 // Set preview image shadow with average color of preview image
-                                cell.previewImageBaseView.layer.shadowColor = image.averageColor?.cgColor
+                                cell.previewImageBaseView.layer.shadowColor = result.imageCache.averageColor.cgColor
                                 cell.previewImageBaseView.layer.shadowOffset = .zero
                                 cell.previewImageBaseView.layer.shadowRadius = 7
                                 cell.previewImageBaseView.layer.shadowOpacity = 30

@@ -12,6 +12,8 @@ import Toast
 import Lottie
 import CoreData
 import Hero
+import RxSwift
+import RxCocoa
 
 class MangaEpisodeViewController: UIViewController {
 
@@ -26,6 +28,7 @@ class MangaEpisodeViewController: UIViewController {
     let baseUrl = "https://marumaru.cloud"
     let baseImgUrl = "https://marumaru.cloud"
     public var mangaSN: String?
+    var disposeBag = DisposeBag()
     
     var infoTitle = ""
     var infoDesc1 = ""
@@ -216,19 +219,19 @@ class MangaEpisodeViewController: UIViewController {
                 if let url = URL(string: self.infoPreviewImageUrl) {
                     self.networkHandler.getImage(url) { result in
                         do {
-                            let image = try result.get()
+                            let result = try result.get()
                             
                             DispatchQueue.main.async {
                                 self.infoPreviewImage.contentMode = .scaleAspectFill
-                                self.infoPreviewImage.image = image
+                                self.infoPreviewImage.image = result.imageCache.image
                                 
-                                self.infoPreviewImage.alpha = 0
-                                UIView.animate(withDuration: 0.3) {
-                                    self.infoPreviewImage.alpha = 1
+                                print("image has loaded")
+                                if result.animate {
+                                    self.infoPreviewImage.startFadeInAnim(duration: 0.3)
                                 }
                                 
                                 // change preview image's border color as average color of image
-                                self.infoPreviewImage.layer.borderColor = image.averageColor?.cgColor
+                                self.infoPreviewImage.layer.borderColor = result.imageCache.averageColor.cgColor
                             }
                         } catch {
                             DispatchQueue.main.async {
@@ -323,15 +326,13 @@ extension MangaEpisodeViewController: UITableViewDelegate, UITableViewDataSource
                 let token = self.networkHandler.getImage(url) { result in
                     DispatchQueue.global(qos: .background).async {
                         do {
-                            let image = try result.get()
+                            let result = try result.get()
                             
                             DispatchQueue.main.async {
-                                episodeCell.previewImage.image = image
+                                episodeCell.previewImage.image = result.imageCache.image
                                 
-                                // fade in image animation
-                                episodeCell.previewImage.alpha = 0
-                                UIView.animate(withDuration: 0.5) {
-                                    episodeCell.previewImage.alpha = 1
+                                if result.animate {
+                                    episodeCell.previewImage.startFadeInAnim(duration: 0.5)
                                 }
                             }
                         } catch {
@@ -340,6 +341,7 @@ extension MangaEpisodeViewController: UITableViewDelegate, UITableViewDataSource
                     }
                 }
                 
+                // stop loading image on reuse State
                 episodeCell.onReuse = {
                     if let token = token {
                         self.networkHandler.cancelLoadImage(token)

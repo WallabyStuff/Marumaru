@@ -6,12 +6,16 @@
 //
 
 import UIKit
+
 import Alamofire
 import SwiftSoup
 import Toast
 import Lottie
 import CoreData
 import Hero
+import RealmSwift
+import RxSwift
+import RxCocoa
 
 class ViewController: UIViewController {
     
@@ -36,8 +40,10 @@ class ViewController: UIViewController {
         var link: String
     }
     
+    let disposeBag = DisposeBag()
+    let imageCacheHandler = ImageCacheHandler()
     let networkHandler = NetworkHandler()
-    let coredataHandler = CoreDataHandler()
+    let coredataHandler = HistoryHandler()
     var updatedMangaArr: [UpdatedManga] = []
     var recentMangaArr: [WatchHistory] = []
     var topRankMangaArr: [TopRankManga] = []
@@ -71,16 +77,13 @@ class ViewController: UIViewController {
         initInstance()
         
         setMainContents()
+        print(Realm.Configuration.defaultConfiguration.fileURL)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
         loadMangaHistory()
-    }
-    
-    override func viewWillLayoutSubviews() {
-        
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -395,15 +398,14 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
                     let token = networkHandler.getImage(url) { result in
                         DispatchQueue.global(qos: .background).async {
                             do {
-                                let image = try result.get()
+                                let result = try result.get()
                                 
                                 DispatchQueue.main.async {
-                                    collectionCell.previewImage.image = image
+                                    collectionCell.previewImage.image = result.imageCache.image
                                     collectionCell.previewImagePlaceholderLabel.isHidden = true
                                     
-                                    collectionCell.previewImage.alpha = 0
-                                    UIView.animate(withDuration: 0.5) {
-                                        collectionCell.previewImage.alpha = 1
+                                    if result.animate {
+                                        collectionCell.previewImage.startFadeInAnim(duration: 0.5)
                                     }
                                 }
                             } catch {
@@ -455,16 +457,14 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
                                 networkHandler.getImage(url) { result in
                                     DispatchQueue.global(qos: .background).async {
                                         do {
-                                            let image = try result.get()
+                                            let result = try result.get()
                                             
                                             DispatchQueue.main.async {
-                                                collectionCell.previewImage.image = image
+                                                collectionCell.previewImage.image = result.imageCache.image
                                                 collectionCell.previewImagePlaceholderLabel.isHidden = true
                                                 
-                                                // preview image fade in animation
-                                                collectionCell.previewImage.alpha = 0
-                                                UIView.animate(withDuration: 0.5) {
-                                                    collectionCell.previewImage.alpha = 1
+                                                if result.animate {
+                                                    collectionCell.previewImage.startFadeInAnim(duration: 0.5)
                                                 }
                                             }
                                         } catch {

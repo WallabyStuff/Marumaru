@@ -8,7 +8,7 @@
 import UIKit
 import CoreData
 
-class CoreDataHandler {
+class HistoryHandler {
     
     weak var appDelegate = AppDelegate()
     var context = NSManagedObjectContext()
@@ -104,7 +104,6 @@ class CoreDataHandler {
     func removeFromWatchHistory(object: NSManagedObject) {
         
         DispatchQueue.main.async {
-            
             self.context.delete(object)
             
             do {
@@ -116,6 +115,7 @@ class CoreDataHandler {
     }
     
     func clearWatchHistory(_ completion: ( (Result<Bool, Error>) -> Void)?) {
+        
         DispatchQueue.global(qos: .background).async {
             self.getWatchHistory {Result in
                 do {
