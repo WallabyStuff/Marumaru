@@ -7,27 +7,70 @@
 
 import UIKit
 
+import RxSwift
+import RxCocoa
+
+struct ImageResult {
+    var imageCache: ImageCache
+    var animate: Bool
+}
+
 class NetworkHandler {
+
+    var disposeBag = DisposeBag()
     
-    var loadedImages = [URL: UIImage]()
+    let imageCacheHandler = ImageCacheHandler()
     var runningRequest = [UUID: URLSessionDataTask]()
+    var imageCaches: [ImageCache] = []
+    
+    init() {
+        fetchImageCaches()
+    }
     
     @discardableResult
-    func getImage(_ url: URL, _ completion: @escaping (Result<UIImage, Error>) -> Void) -> UUID? {
+    func getImage(_ url: URL, _ completion: @escaping (Result<ImageResult, Error>) -> Void) -> UUID? {
         
-        if let image = loadedImages[url] {
-            completion(.success(image))
-            return nil
+        // Check does image existing on Cache data
+        var isExists = false
+        
+        imageCaches.forEach { imageCache in
+            if imageCache.url == url.path {
+                print("already exists")
+                isExists = true
+                let result = ImageResult(imageCache: imageCache, animate: false)
+                completion(.success(result))
+            }
         }
+
+        if isExists { return nil }
         
         let uuid = UUID()
         
+        // if image is not existing on Cache data download from url
         let task = URLSession.shared.dataTask(with: url) { data, _, error in
             defer {self.runningRequest.removeValue(forKey: uuid)}
             
             if let data = data, let image = UIImage(data: data) {
-                self.loadedImages[url] = image
-                completion(.success(image))
+                let imageCache = ImageCache(url: url.path,
+                                            image: image,
+                                            imageAvgColor: image.averageColor ?? ColorSet.shadowColor!)
+                
+                print("Image load from url")
+                // Image load from url & save to Cache
+                let result = ImageResult(imageCache: imageCache, animate: true)
+                completion(.success(result))
+                
+                // save image to CacheData
+                self.imageCacheHandler.addData(imageCache)
+                    .subscribe(on: MainScheduler.instance)
+                    .subscribe { event in
+                        // if success to save image to cahce reload saved imageCaches for query
+                        if event.isCompleted {
+                            self.fetchImageCaches()
+                        }
+                    }
+                    .disposed(by: self.disposeBag)
+
                 return
             }
             
@@ -39,17 +82,27 @@ class NetworkHandler {
                 completion(.failure(error))
                 return
             }
-            
         }
         
+        // start loading image
         task.resume()
         
-        runningRequest[uuid] = task
+        self.runningRequest[uuid] = task
         return uuid
     }
     
     func cancelLoadImage(_ uuid: UUID) {
         runningRequest[uuid]?.cancel()
         runningRequest.removeValue(forKey: uuid)
+    }
+    
+    private func fetchImageCaches() {
+        imageCaches.removeAll()
+        imageCacheHandler.fetchData()
+            .subscribe { event in
+                if let imageCaches = event.element {
+                    self.imageCaches = imageCaches
+                }
+            }.disposed(by: disposeBag)
     }
 }

@@ -14,6 +14,8 @@ import CoreData
 import Foundation
 import Toast
 import Hero
+import RxSwift
+import RxCocoa
 
 class ViewMangaViewController: UIViewController {
 
@@ -22,8 +24,9 @@ class ViewMangaViewController: UIViewController {
         var sceneUrl: String
     }
     
+    var disposeBag = DisposeBag()
     let networkHandler = NetworkHandler()
-    let coredataHandler = CoreDataHandler()
+    let coredataHandler = HistoryHandler()
     
     var currentEpisodeIndex: Int?
     var baseUrl = "https://marumaru.cloud/"
@@ -245,12 +248,12 @@ class ViewMangaViewController: UIViewController {
                         let elements = try doc.getElementsByClass("img-tag")
                         
                         // Append manga scenes
-                        for (_, element) in elements.enumerated() {
+                        try elements.forEach { element in
                             var imgUrl = try element.select("img").attr("src")
                             if !imgUrl.contains(self.baseUrl) {
                                 imgUrl = "\(self.baseUrl)\(imgUrl)"
                             }
-                            
+                         
                             self.sceneArr.append(Scene(sceneUrl: imgUrl))
                         }
                         
@@ -284,10 +287,10 @@ class ViewMangaViewController: UIViewController {
                     do {
                         // success to get image
                         print("Log : Successfully load image")
-                        let image = try result.get()
+                        let result = try result.get()
                         
                         if self.sceneArr.count > 0 { // sceneArr.count > 0 로 감싸져 있음에도 index out of range 에러가 나서 다시 한 번 확인
-                            self.coredataHandler.saveToWatchHistory(mangaTitle: self.mangaTitle, mangaLink: self.mangaUrl, mangaPreviewImageUrl: self.sceneArr[0].sceneUrl, mangaPreviewImage: image)
+                            self.coredataHandler.saveToWatchHistory(mangaTitle: self.mangaTitle, mangaLink: self.mangaUrl, mangaPreviewImageUrl: self.sceneArr[0].sceneUrl, mangaPreviewImage: result.imageCache.image)
                         } else {
                             self.coredataHandler.saveToWatchHistory(mangaTitle: self.mangaTitle, mangaLink: self.mangaUrl, mangaPreviewImageUrl: nil, mangaPreviewImage: nil)
                         }
@@ -606,12 +609,12 @@ extension ViewMangaViewController: UITableViewDelegate, UITableViewDataSource {
 
             // set scene
             if let url = URL(string: sceneArr[indexPath.row].sceneUrl) {
-                let token = networkHandler.getImage(url) {result in
+                let token = networkHandler.getImage(url) { result in
                     DispatchQueue.global(qos: .background).async {
                         do {
-                            let image = try result.get()
+                            let result = try result.get()
                             DispatchQueue.main.async {
-                                sceneCell.sceneImageView.image = image
+                                sceneCell.sceneImageView.image = result.imageCache.image
                                 sceneCell.backgroundColor = ColorSet.backgroundColor
                                 sceneCell.sceneDividerView.backgroundColor = ColorSet.backgroundColor
                             }

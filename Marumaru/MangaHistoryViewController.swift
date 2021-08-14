@@ -20,7 +20,7 @@ class MangaHistoryViewController: UIViewController {
     // MARK: - Declarations
     weak var dismissDelegate: DismissDelegate?
     
-    let coredataHandler = CoreDataHandler()
+    let coredataHandler = HistoryHandler()
     var mangaHistoryArr = [WatchHistory]()
     let baseUrl = "https://marumaru.cloud"
 
@@ -42,6 +42,10 @@ class MangaHistoryViewController: UIViewController {
     // MARK: - Overrides
     override func viewDidDisappear(_ animated: Bool) {
         dismissDelegate?.refreshHistory()
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .darkContent
     }
     
     // MARK: - Initializations
