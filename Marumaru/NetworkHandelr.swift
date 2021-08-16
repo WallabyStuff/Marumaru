@@ -63,11 +63,9 @@ class NetworkHandler {
                 // save image to CacheData
                 self.imageCacheHandler.addData(imageCache)
                     .subscribe(on: MainScheduler.instance)
-                    .subscribe { event in
-                        // if success to save image to cahce reload saved imageCaches for query
-                        if event.isCompleted {
-                            self.fetchImageCaches()
-                        }
+                    .subscribe { _ in
+                        // Success saving image to cache data STATE
+                        self.imageCaches.append(imageCache)
                     }
                     .disposed(by: self.disposeBag)
 
