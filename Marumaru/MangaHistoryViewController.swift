@@ -64,6 +64,7 @@ class MangaHistoryViewController: UIViewController {
         // clear history Button
         clearHistoryButton.layer.masksToBounds = true
         clearHistoryButton.layer.cornerRadius = 10
+        clearHistoryButton.hero.modifiers = [.scale(0)]
         
         // back Button
         backButton.hero.id = "appbarButton"

@@ -73,11 +73,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        DispatchQueue.main.async { self.initView() }
+        initView()
         initInstance()
         
         setMainContents()
-        print(Realm.Configuration.defaultConfiguration.fileURL)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -115,7 +114,6 @@ class ViewController: UIViewController {
         
         // recentManga CollectionView
         recentMangaCollectionView.contentInset = UIEdgeInsets(top: 0, left: 25, bottom: 0, right: 25)
-//        recentMangaCollectionView.layer.masksToBounds = false
         
         // topRankManga TableView
         topRankMangaTableView.layer.cornerRadius = 10
@@ -227,11 +225,10 @@ class ViewController: UIViewController {
             
             self.updatedMangaArr.removeAll()
             
-            for (_, Element) in updatedMangas.enumerated() {
-                
-                let title = try Element.select("a").text().trimmingCharacters(in: .whitespaces)
-                var imgUrl = try String(Element.select("img").attr("src")).trimmingCharacters(in: .whitespaces)
-                let link = try Element.select("a").attr("href").trimmingCharacters(in: .whitespaces)
+            try updatedMangas.forEach { element in
+                let title = try element.select("a").text().trimmingCharacters(in: .whitespaces)
+                var imgUrl = try String(element.select("img").attr("src")).trimmingCharacters(in: .whitespaces)
+                let link = try element.select("a").attr("href").trimmingCharacters(in: .whitespaces)
                 
                 // url preset
                 if !imgUrl.contains(self.baseUrl) {
@@ -276,16 +273,11 @@ class ViewController: UIViewController {
             
             self.topRankMangaArr.removeAll()
             
-            for (_, Element) in rankElements.enumerated() {
-                do {
-                    let title = try Element.select("a").text().trimmingCharacters(in: .whitespaces)
-                    let link = try Element.select("a").attr("href").trimmingCharacters(in: .whitespaces)
-                    
-                    self.topRankMangaArr.append(TopRankManga(title: title, link: link))
-                    
-                } catch {
-                    print(error.localizedDescription)
-                }
+            try rankElements.forEach { element in
+                let title = try element.select("a").text().trimmingCharacters(in: .whitespaces)
+                let link = try element.select("a").attr("href").trimmingCharacters(in: .whitespaces)
+                
+                self.topRankMangaArr.append(TopRankManga(title: title, link: link))
             }
             
             // Finish to load TopRank Manga data

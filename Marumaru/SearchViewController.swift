@@ -106,6 +106,7 @@ class SearchViewController: UIViewController {
     }
     
     func initInstance() {
+        // focus to search textField and show up the keyboard
         searchTextField.becomeFirstResponder()
         
         resultMangaTableView.delegate = self
