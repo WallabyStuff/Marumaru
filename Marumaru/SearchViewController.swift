@@ -47,6 +47,12 @@ class SearchViewController: UIViewController {
         initEventListener()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        
+        focusToSearchTextField()
+    }
+
     // MARK: - Overrides
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .darkContent
@@ -106,9 +112,7 @@ class SearchViewController: UIViewController {
     }
     
     func initInstance() {
-        // focus to search textField and show up the keyboard
-        searchTextField.becomeFirstResponder()
-        
+        // result manga TableView
         resultMangaTableView.delegate = self
         resultMangaTableView.dataSource = self
     }
@@ -206,7 +210,6 @@ class SearchViewController: UIViewController {
                 return
             }
         }
-        
     }
     
     func startLoadingSearchResultAnimation() {
@@ -221,6 +224,11 @@ class SearchViewController: UIViewController {
             self.loadingSearchAnimView.isHidden = true
             self.loadingSearchAnimView.stop()
         }
+    }
+    
+    func focusToSearchTextField() {
+        // focus to search textField and show up the keyboard
+        searchTextField.becomeFirstResponder()
     }
     
     // https://stackoverflow.com/questions/48576329/ios-urlstring-not-working-always
