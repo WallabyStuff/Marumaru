@@ -39,11 +39,21 @@ public extension UIImage {
 
 public extension UIView {
     
+    // start fade in animation
     func startFadeInAnim(duration: Double) {
         self.alpha = 0
         UIView.animate(withDuration: duration) {
             self.alpha = 1
         }
+    }
+    
+    // view from safeArea
+    var xFromSafeArea: CGFloat {
+        self.frame.origin.x + SafeAreaInset.left
+    }
+    
+    var yFromSafeArea: CGFloat {
+        self.frame.origin.y + SafeAreaInset.top
     }
 }
 

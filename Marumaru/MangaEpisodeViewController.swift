@@ -100,6 +100,9 @@ class MangaEpisodeViewController: UIViewController {
         // manga title Label
         mangaTitleLabel.hero.id = "mangaTitleLabel"
         
+        // episode size Label
+        episodeSizeLabel.hero.modifiers = [.translate(x: -150)]
+        
         // scrollToBottom Button
         scrollToBottomButton.layer.cornerRadius = 13
         scrollToBottomButton.imageEdgeInsets(with: 10)
