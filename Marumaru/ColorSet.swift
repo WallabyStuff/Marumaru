@@ -19,9 +19,12 @@ enum ColorSet {
     static let cellSelectionColor           = UIColor(named: "CellSelctionColor")
     static let floatingViewBackgroundColor  = UIColor(named: "FloatingViewBackgroundColor")
     static let imageBorderColor             = UIColor(named: "ImageBorderColor")
+    static let labelEffectBackgroundColor   = UIColor(named: "LabelEffectBackgroundColor")
+    static let labelEffectForegroundColor   = UIColor(named: "LabelEffectForegroundColor")
     static let placeHolderTextColor         = UIColor(named: "PlaceHoldeTextColor")
     static let shadowColor                  = UIColor(named: "ShadowColor")
     static let subTextColor                 = UIColor(named: "SubTextColor")
     static let textColor                    = UIColor(named: "TextColor")
+    static let thumbnailBorderColor         = UIColor(named: "ThumbnailBorderColor")
     static let transparentColor             = UIColor(named: "Transparent")
 }

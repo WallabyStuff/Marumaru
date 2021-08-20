@@ -21,12 +21,13 @@ class ViewMangaViewController: UIViewController {
 
     // MARK: - Declarations
     struct Scene {
-        var sceneUrl: String
+        var sceneImage: UIImage?
+        var sceneImageUrl: String
     }
     
     var disposeBag = DisposeBag()
     let networkHandler = NetworkHandler()
-    let coredataHandler = HistoryHandler()
+    let watchHistoryHandler = WatchHistoryHandler()
     
     var currentEpisodeIndex: Int?
     var baseUrl = "https://marumaru.cloud/"
@@ -51,8 +52,8 @@ class ViewMangaViewController: UIViewController {
     @IBOutlet weak var bottomIndicatorView: UIView!
     @IBOutlet weak var mangaTitleLabel: UILabel!
     @IBOutlet weak var mangaSceneTableView: UITableView!
-    @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var scrollContentView: UIView!
+    @IBOutlet weak var mangaScrollView: UIScrollView!
+    @IBOutlet weak var mangaScrollContentView: UIView!
     @IBOutlet weak var backButton: UIButton!
     
     // MARK: - LifeCycle
@@ -184,22 +185,26 @@ class ViewMangaViewController: UIViewController {
         mangaSceneTableView.delegate = self
         mangaSceneTableView.dataSource = self
         
-        scrollView.delegate = self
-        scrollView.maximumZoomScale = 3.0
-        scrollView.minimumZoomScale = 1.0
+        mangaScrollView.delegate = self
+        mangaScrollView.maximumZoomScale = 3.0
+        mangaScrollView.minimumZoomScale = 1.0
         
         detailInfoEpisodeTableView.register(MangaEpisodePopoverCell.self, forCellReuseIdentifier: "EpisodeCell")
         detailInfoEpisodeTableView.dataSource = self
         detailInfoEpisodeTableView.delegate = self
-        
     }
     
     func initEventListener() {
-        scrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(sender:))))
+        // manga ScrollView tap gesture
+        let mangaScrollViewTapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapMangaScrollView(sender:)))
+        mangaScrollView.addGestureRecognizer(mangaScrollViewTapGesture)
         
-        appbarView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(topBarTap(sender:))))
+        // appbar tap gesture
+        let appbarTapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapAppbar(sender:)))
+        appbarView.addGestureRecognizer(appbarTapGesture)
         
-        let detailInfoViewGesture = UITapGestureRecognizer(target: self, action: #selector(detailInfoViewTap(sender:)))
+        // detail info View tap gesture
+        let detailInfoViewGesture = UITapGestureRecognizer(target: self, action: #selector(didTapDetailInfoView(sender:)))
         detailInfoViewGesture.delegate = self
         detailInfoView.addGestureRecognizer(detailInfoViewGesture)
     }
@@ -254,7 +259,7 @@ class ViewMangaViewController: UIViewController {
                                 imgUrl = "\(self.baseUrl)\(imgUrl)"
                             }
                          
-                            self.sceneArr.append(Scene(sceneUrl: imgUrl))
+                            self.sceneArr.append(Scene(sceneImage: nil, sceneImageUrl: imgUrl))
                         }
                         
                         // if successfuly appending scenes
@@ -280,36 +285,18 @@ class ViewMangaViewController: UIViewController {
     func saveToHistory() {
         // save to watch history
         if self.sceneArr.count > 0 {
-            
-            // check is exists already
-            if let url = URL(string: self.sceneArr[0].sceneUrl) {
-                self.networkHandler.getImage(url) { result in
-                    do {
-                        // success to get image
-                        print("Log : Successfully load image")
-                        let result = try result.get()
-                        
-                        if self.sceneArr.count > 0 { // sceneArr.count > 0 로 감싸져 있음에도 index out of range 에러가 나서 다시 한 번 확인
-                            self.coredataHandler.saveToWatchHistory(mangaTitle: self.mangaTitle, mangaLink: self.mangaUrl, mangaPreviewImageUrl: self.sceneArr[0].sceneUrl, mangaPreviewImage: result.imageCache.image)
-                        } else {
-                            self.coredataHandler.saveToWatchHistory(mangaTitle: self.mangaTitle, mangaLink: self.mangaUrl, mangaPreviewImageUrl: nil, mangaPreviewImage: nil)
-                        }
-                    } catch {
-                        // fail to get image
-                        print("Log : fail to get image")
-                        self.coredataHandler.saveToWatchHistory(mangaTitle: self.mangaTitle, mangaLink: self.mangaUrl, mangaPreviewImageUrl: self.sceneArr[0].sceneUrl, mangaPreviewImage: nil)
-                        print(error)
-                    }
-                }
-            } else {
-                // fail to convert string to url
-                print("Log : fail to convert image to url")
-                self.coredataHandler.saveToWatchHistory(mangaTitle: self.mangaTitle, mangaLink: mangaUrl, mangaPreviewImageUrl: self.sceneArr[0].sceneUrl, mangaPreviewImage: nil)
-            }
+            self.watchHistoryHandler.addData(mangaUrl: self.mangaUrl,
+                                             mangaTitle: self.mangaTitle,
+                                             thumbnailImageUrl: self.sceneArr[0].sceneImageUrl)
+                .subscribe()
+                .disposed(by: self.disposeBag)
         } else {
             // first scene image is not exists
-            print("Log : scene iamge is not exists")
-            self.coredataHandler.saveToWatchHistory(mangaTitle: self.mangaTitle, mangaLink: mangaUrl, mangaPreviewImageUrl: nil, mangaPreviewImage: nil)
+            self.watchHistoryHandler.addData(mangaUrl: self.mangaUrl,
+                                             mangaTitle: self.mangaTitle,
+                                             thumbnailImageUrl: "")
+                .subscribe()
+                .disposed(by: self.disposeBag)
         }
     }
     
@@ -330,7 +317,7 @@ class ViewMangaViewController: UIViewController {
                             let episodeSN = try Element.attr("value")
                             
                             if chart.count - 1 != index { // 마지막 인덱스는 항상 비어서 마지막 인덱스 저장 안되도록
-                                self.episodeArr.append(Episode(episodeTitle, episodeSN))
+                                self.episodeArr.append(Episode(title: episodeTitle, serialNumber: episodeSN))
                             }
                             
                             // get current episode index
@@ -375,9 +362,7 @@ class ViewMangaViewController: UIViewController {
         episodePopoverVC.currentEpisodeIndex = currentEpisodeIndex
         
         if let index = currentEpisodeIndex {
-            if let episodeTitle = episodeArr[index].episodeTitle {
-                episodePopoverVC.currentEpisodeTitle = episodeTitle
-            }
+            episodePopoverVC.currentEpisodeTitle = episodeArr[index].title
         } else {
             episodePopoverVC.currentEpisodeTitle = mangaTitle
         }
@@ -392,14 +377,10 @@ class ViewMangaViewController: UIViewController {
                     
                     let nextEpisode = episodeArr[currentEpisodeIndex - 1]
                     
-                    guard let nextEpisodeTitle = nextEpisode.episodeTitle, let nextEpisodeSN = nextEpisode.episodeSN else {
-                        return
-                    }
+                    mangaTitle = nextEpisode.title
+                    mangaTitleLabel.text = nextEpisode.title
                     
-                    let url = replaceSerialNumber(nextEpisodeSN)
-                    
-                    mangaTitle = nextEpisodeTitle
-                    mangaTitleLabel.text = nextEpisodeTitle
+                    let url = replaceSerialNumber(nextEpisode.serialNumber)
                     loadMangaScenes(url)
                     
                     startLoadingSceneAnim()
@@ -417,14 +398,10 @@ class ViewMangaViewController: UIViewController {
                     
                     let prevEpisode = episodeArr[currentEpisodeIndex + 1]
                     
-                    guard let prevEpisodeTitle = prevEpisode.episodeTitle, let prevEpisodeSN = prevEpisode.episodeSN else {
-                        return
-                    }
+                    mangaTitle = prevEpisode.title
+                    mangaTitleLabel.text = prevEpisode.title
                     
-                    let url = replaceSerialNumber(prevEpisodeSN)
-                    
-                    mangaTitle = prevEpisodeTitle
-                    mangaTitleLabel.text = prevEpisodeTitle
+                    let url = replaceSerialNumber(prevEpisode.title)
                     loadMangaScenes(url)
                     
                     startLoadingSceneAnim()
@@ -526,8 +503,8 @@ class ViewMangaViewController: UIViewController {
         }
     }
     
-    // MARK: - Actions
-    @objc func handleTap(sender: UITapGestureRecognizer) {
+    @objc func didTapMangaScrollView(sender: UITapGestureRecognizer) {
+        print("activated")
         if sender.state == .ended {
             if appbarView.isHidden {
                 fadeTopbarView(bool: false)
@@ -544,18 +521,19 @@ class ViewMangaViewController: UIViewController {
         
     }
     
-    @objc func topBarTap(sender: UITapGestureRecognizer) {
+    @objc func didTapAppbar(sender: UITapGestureRecognizer) {
         if sender.state == .ended {
             showDetailInfoView()
         }
     }
     
-    @objc func detailInfoViewTap(sender: UIGestureRecognizer) {
+    @objc func didTapDetailInfoView(sender: UIGestureRecognizer) {
         if sender.state == .ended {
             hideDetailInfoView()
         }
     }
-
+    
+    // MARK: - Actions
     @IBAction func backButtonAction(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
@@ -608,7 +586,7 @@ extension ViewMangaViewController: UITableViewDelegate, UITableViewDataSource {
             sceneCell.sceneImageView.image = UIImage()
 
             // set scene
-            if let url = URL(string: sceneArr[indexPath.row].sceneUrl) {
+            if let url = URL(string: sceneArr[indexPath.row].sceneImageUrl) {
                 let token = networkHandler.getImage(url) { result in
                     DispatchQueue.global(qos: .background).async {
                         do {
@@ -636,24 +614,22 @@ extension ViewMangaViewController: UITableViewDelegate, UITableViewDataSource {
             
             return sceneCell
         case detailInfoEpisodeTableView:
-            let episodeCell = tableView.dequeueReusableCell(withIdentifier: "EpisodeCell") as! MangaEpisodePopoverCell
+            guard let episodeCell = tableView.dequeueReusableCell(withIdentifier: "EpisodeCell") as? MangaEpisodePopoverCell else { return UITableViewCell() }
             
             if indexPath.row > episodeArr.count - 1 {
                 return UITableViewCell()
             }
             
             // Accent text color to current episode
-            if let index = currentEpisodeIndex {
-                if let currentEpisodeTitle = episodeArr[index].episodeTitle {
-                    if episodeArr[indexPath.row].episodeTitle?.lowercased().trimmingCharacters(in: .whitespaces) == currentEpisodeTitle.lowercased().trimmingCharacters(in: .whitespaces) {
-                        episodeCell.textLabel?.textColor = ColorSet.accentColor
-                    } else {
-                        episodeCell.textLabel?.textColor = ColorSet.textColor
-                    }
+            if let currentEpisodeIndex = currentEpisodeIndex {
+                if episodeArr[indexPath.row].title.lowercased().trimmingCharacters(in: .whitespaces) == episodeArr[currentEpisodeIndex].title.lowercased().trimmingCharacters(in: .whitespaces) {
+                    episodeCell.textLabel?.textColor = ColorSet.accentColor
+                } else {
+                    episodeCell.textLabel?.textColor = ColorSet.textColor
                 }
             }
             
-            episodeCell.textLabel?.text = episodeArr[indexPath.row].episodeTitle
+            episodeCell.textLabel?.text = episodeArr[indexPath.row].title
             episodeCell.textLabel?.lineBreakMode = .byTruncatingMiddle
             episodeCell.backgroundColor = ColorSet.transparentColor
             episodeCell.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
@@ -676,14 +652,12 @@ extension ViewMangaViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == detailInfoEpisodeTableView {
-            
-            let url = replaceSerialNumber(episodeArr[indexPath.row].episodeSN!)
-            
-            mangaTitle = episodeArr[indexPath.row].episodeTitle!
-            mangaTitleLabel.text = episodeArr[indexPath.row].episodeTitle!
+            mangaTitle = episodeArr[indexPath.row].title
+            mangaTitleLabel.text = episodeArr[indexPath.row].title
             
             hideDetailInfoView()
             
+            let url = replaceSerialNumber(episodeArr[indexPath.row].serialNumber)
             loadMangaScenes(url)
         }
     }
@@ -719,32 +693,7 @@ extension ViewMangaViewController: UIScrollViewDelegate {
     
     // Set scrollview zoomable
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return self.scrollContentView
-    }
-}
-
-//https://stackoverflow.com/questions/32305891/index-of-a-substring-in-a-string-with-swift
-extension StringProtocol {
-    func index<S: StringProtocol>(of string: S, options: String.CompareOptions = []) -> Index? {
-        range(of: string, options: options)?.lowerBound
-    }
-    func endIndex<S: StringProtocol>(of string: S, options: String.CompareOptions = []) -> Index? {
-        range(of: string, options: options)?.upperBound
-    }
-    func indices<S: StringProtocol>(of string: S, options: String.CompareOptions = []) -> [Index] {
-        ranges(of: string, options: options).map(\.lowerBound)
-    }
-    func ranges<S: StringProtocol>(of string: S, options: String.CompareOptions = []) -> [Range<Index>] {
-        var result: [Range<Index>] = []
-        var startIndex = self.startIndex
-        while startIndex < endIndex,
-            let range = self[startIndex...]
-                .range(of: string, options: options) {
-                result.append(range)
-                startIndex = range.lowerBound < range.upperBound ? range.upperBound :
-                    index(range.lowerBound, offsetBy: 1, limitedBy: endIndex) ?? endIndex
-        }
-        return result
+        return self.mangaScrollContentView
     }
 }
 
@@ -756,11 +705,10 @@ extension UIViewController: UIPopoverPresentationControllerDelegate {
 
 extension ViewMangaViewController: SelectItemDelegate {
     func loadSelectedEpisode(_ episode: Episode) {
-    
-        let url = replaceSerialNumber(episode.episodeSN!)
+        mangaTitle = episode.title
+        mangaTitleLabel.text = episode.title
         
-        mangaTitle = episode.episodeTitle!
-        mangaTitleLabel.text = episode.episodeTitle
+        let url = replaceSerialNumber(episode.serialNumber)
         loadMangaScenes(url)
         
         startLoadingSceneAnim()

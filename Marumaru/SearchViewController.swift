@@ -16,25 +16,17 @@ import RxCocoa
 class SearchViewController: UIViewController {
 
     // MARK: - Declarations
-    struct Manga {
-        var title: String
-        var desc1: String
-        var desc2: String
-        var previewImageUrl: String?
-        var serialNumber: String
-    }
-    
     var disposeBag = DisposeBag()
     let baseUrl = "https://marumaru.cloud"
     let searchUrl = "/bbs/search.php?url=%2Fbbs%2Fsearch.php&stx="
     let networkHandler = NetworkHandler()
-    var resultMangaArr: [Manga] = []
+    var searchResultMangaArr: [MangaInfo] = []
     var loadingSearchAnimView = AnimationView()
     var isSearching = false
     
     @IBOutlet weak var appbarView: UIView!
     @IBOutlet weak var searchTextField: UITextField!
-    @IBOutlet weak var resultMangaTableView: UITableView!
+    @IBOutlet weak var searchResultMangaTableView: UITableView!
     @IBOutlet weak var noResultsLabel: UILabel!
     @IBOutlet weak var backButton: UIButton!
     
@@ -100,12 +92,12 @@ class SearchViewController: UIViewController {
         loadingSearchAnimView.loopMode = .loop
         view.addSubview(self.loadingSearchAnimView)
         loadingSearchAnimView.translatesAutoresizingMaskIntoConstraints = false
-        loadingSearchAnimView.centerXAnchor.constraint(equalTo: self.resultMangaTableView.centerXAnchor).isActive = true
-        loadingSearchAnimView.centerYAnchor.constraint(equalTo: self.resultMangaTableView.centerYAnchor, constant: -50).isActive = true
+        loadingSearchAnimView.centerXAnchor.constraint(equalTo: self.searchResultMangaTableView.centerXAnchor).isActive = true
+        loadingSearchAnimView.centerYAnchor.constraint(equalTo: self.searchResultMangaTableView.centerYAnchor, constant: -50).isActive = true
         loadingSearchAnimView.isHidden = true
         
         // result manga Tableview
-        resultMangaTableView.contentInset = UIEdgeInsets(top: 60,
+        searchResultMangaTableView.contentInset = UIEdgeInsets(top: 60,
                                                          left: 0,
                                                          bottom: 40,
                                                          right: 0)
@@ -113,17 +105,20 @@ class SearchViewController: UIViewController {
     
     func initInstance() {
         // result manga TableView
-        resultMangaTableView.delegate = self
-        resultMangaTableView.dataSource = self
+        let searchResultMangaTableCellNib = UINib(nibName: "MangaThumbnailTableViewCell", bundle: nil)
+        searchResultMangaTableView.register(searchResultMangaTableCellNib, forCellReuseIdentifier: "mangaThumbnailTableCell")
+        searchResultMangaTableView.delegate = self
+        searchResultMangaTableView.dataSource = self
+        searchResultMangaTableView.keyboardDismissMode = .onDrag
     }
     
-    func initEventListener() {}
+    func initEventListener() { }
     
     // MARK: - Methods
     func search(title: String) {
         
-        resultMangaArr.removeAll()
-        resultMangaTableView.reloadData()
+        searchResultMangaArr.removeAll()
+        searchResultMangaTableView.reloadData()
         noResultsLabel.isHidden = true
         startLoadingSearchResultAnimation()
         isSearching = true
@@ -181,8 +176,14 @@ class SearchViewController: UIViewController {
                                 SN = String(link[range.upperBound...])
                             }
                             
-                            // Append to array
-                            self.resultMangaArr.append(Manga(title: title, desc1: descs[0], desc2: descs[1], previewImageUrl: imgUrl, serialNumber: SN))
+                            // Append to result array
+                            let mangaInfo = MangaInfo(title: title,
+                                                      author: descs[0],
+                                                      updateCycle: descs[1],
+                                                      thumbnailImage: nil,
+                                                      thumbnailImageURL: imgUrl,
+                                                      mangaSN: SN)
+                            self.searchResultMangaArr.append(mangaInfo)
                             
                             print(title)
                         } catch {
@@ -191,11 +192,11 @@ class SearchViewController: UIViewController {
                     }
                     
                     DispatchQueue.main.async {
-                        self.resultMangaTableView.reloadData()
+                        self.searchResultMangaTableView.reloadData()
                         self.stopLoadingSearchResultAnimation()
                         self.isSearching = false
                         
-                        if self.resultMangaArr.count == 0 {
+                        if self.searchResultMangaArr.count == 0 {
                             self.noResultsLabel.isHidden = false
                         } else {
                             self.noResultsLabel.isHidden = true
@@ -228,7 +229,9 @@ class SearchViewController: UIViewController {
     
     func focusToSearchTextField() {
         // focus to search textField and show up the keyboard
-        searchTextField.becomeFirstResponder()
+        if searchResultMangaArr.count == 0 {
+            searchTextField.becomeFirstResponder()
+        }
     }
     
     // https://stackoverflow.com/questions/48576329/ios-urlstring-not-working-always
@@ -251,8 +254,14 @@ class SearchViewController: UIViewController {
         return components!
     }
     
-    private func presentEpisdoeVC() {
+    private func presentEpisdoeVC(_ mangaInfo: MangaInfo) {
+        guard let episodeVC = storyboard?.instantiateViewController(identifier: "MangaEpisodeStoryboard") as? MangaEpisodeViewController else { return }
         
+        episodeVC.modalPresentationStyle = .fullScreen
+        print("-------\(mangaInfo.mangaSN)=========")
+        episodeVC.currentManga = mangaInfo
+        
+        present(episodeVC, animated: true, completion: nil)
     }
     
     // MARK: - Actions
@@ -281,55 +290,45 @@ extension SearchViewController: UITextFieldDelegate {
 
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return resultMangaArr.count
+        return searchResultMangaArr.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ResultMangaCell") as! ResultMangaCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "mangaThumbnailTableCell") as? MangaThumbnailTableCell else { return UITableViewCell() }
         
-        if indexPath.row > resultMangaArr.count - 1 {
+        if indexPath.row > searchResultMangaArr.count - 1 {
             return UITableViewCell()
         }
         
-        cell.mangaTitleLabel.text = resultMangaArr[indexPath.row].title
-        cell.desc1Label.text = resultMangaArr[indexPath.row].desc1
-        cell.desc2Label.text = resultMangaArr[indexPath.row].desc2
-        cell.previewImagePlaceholderLabel.text = resultMangaArr[indexPath.row].title
-        cell.previewImagePlaceholderLabel.isHidden = false
-        cell.previewImage.image = UIImage()
+        cell.titleLabel.text = searchResultMangaArr[indexPath.row].title
+        cell.thumbnailImagePlaceholderLabel.text = searchResultMangaArr[indexPath.row].title
+        cell.authorLabel.text = searchResultMangaArr[indexPath.row].author
+        cell.updateCycleLabel.text = searchResultMangaArr[indexPath.row].updateCycle
         
-        if resultMangaArr[indexPath.row].desc2.contains("미분류") {
-            cell.desc2Label.textColor = ColorSet.subTextColor
-        } else {
-            cell.desc2Label.textColor = ColorSet.subTextColor
+        if !searchResultMangaArr[indexPath.row].updateCycle.contains("미분류") {
+            cell.setUpdateCycleLabelBackgroundTint()
         }
         
-        if let previewImageUrl = resultMangaArr[indexPath.row].previewImageUrl {
+        if let previewImageUrl = searchResultMangaArr[indexPath.row].thumbnailImageURL {
             if let url = URL(string: previewImageUrl) {
                 let token = networkHandler.getImage(url) { result in
                     DispatchQueue.global(qos: .background).async {
                         do {
                             let result = try result.get()
                             DispatchQueue.main.async {
-                                cell.previewImage.image = result.imageCache.image
-                                cell.previewImagePlaceholderLabel.isHidden = true
+                                // image loaded
+                                cell.thumbnailImageView.image = result.imageCache.image
+                                cell.thumbnailImagePlaceholderLabel.isHidden = true
+                                cell.thumbnailImageBaseView.setThumbnailShadow(with: result.imageCache.averageColor.cgColor)
+                                self.searchResultMangaArr[indexPath.row].thumbnailImage = result.imageCache.image
                                 
                                 if result.animate {
-                                    cell.previewImage.startFadeInAnim(duration: 0.5)
+                                    cell.thumbnailImageView.startFadeInAnim(duration: 0.5)
                                 }
-                                
-                                // Set preview image shadow with average color of preview image
-                                cell.previewImageBaseView.layer.shadowColor = result.imageCache.averageColor.cgColor
-                                cell.previewImageBaseView.layer.shadowOffset = .zero
-                                cell.previewImageBaseView.layer.shadowRadius = 7
-                                cell.previewImageBaseView.layer.shadowOpacity = 30
-                                cell.previewImageBaseView.layer.masksToBounds = false
-                                cell.previewImageBaseView.layer.borderWidth = 0
-                                cell.previewImageBaseView.layer.shouldRasterize = true
                             }
                         } catch {
                             DispatchQueue.main.async {
-                                cell.previewImagePlaceholderLabel.isHidden = false
+                                cell.thumbnailImagePlaceholderLabel.isHidden = false
                             }
                             print(error.localizedDescription)
                         }
@@ -348,19 +347,17 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-        let destStoryboard = mainStoryboard.instantiateViewController(identifier: "MangaEpisodeStoryboard") as! MangaEpisodeViewController
         
-        // Pass datas
-        destStoryboard.modalPresentationStyle = .fullScreen
-        let currentManga = resultMangaArr[indexPath.row]
-        destStoryboard.mangaSN = currentManga.serialNumber
-        destStoryboard.infoTitle = currentManga.title
-        destStoryboard.infoDesc1 = currentManga.desc1
-        destStoryboard.infoDesc2 = currentManga.desc2
-        destStoryboard.infoPreviewImageUrl = currentManga.previewImageUrl ?? ""
+        let manga = searchResultMangaArr[indexPath.row]
         
-        present(destStoryboard, animated: true, completion: nil)
+        let mangaInfo = MangaInfo(title: manga.title,
+                                  author: manga.author,
+                                  updateCycle: manga.updateCycle,
+                                  thumbnailImage: manga.thumbnailImage,
+                                  thumbnailImageURL: manga.thumbnailImageURL,
+                                  mangaSN: manga.mangaSN)
+        
+        presentEpisdoeVC(mangaInfo)
     }
 }
 

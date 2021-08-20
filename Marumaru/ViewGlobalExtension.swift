@@ -35,6 +35,10 @@ public extension UIImage {
 
         return UIColor(red: CGFloat(bitmap[0]) / 255, green: CGFloat(bitmap[1]) / 255, blue: CGFloat(bitmap[2]) / 255, alpha: CGFloat(bitmap[3]) / 255)
     }
+    
+    func isEmpty() -> Bool {
+        return self.size.width == 0 ? true : false
+    }
 }
 
 public extension UIView {
@@ -47,6 +51,13 @@ public extension UIView {
         }
     }
     
+    // start fade out animation
+    func startFadeOutAnim(duration: Double) {
+        UIView.animate(withDuration: duration) {
+            self.alpha = 0
+        }
+    }
+    
     // view from safeArea
     var xFromSafeArea: CGFloat {
         self.frame.origin.x + SafeAreaInset.left
@@ -54,6 +65,44 @@ public extension UIView {
     
     var yFromSafeArea: CGFloat {
         self.frame.origin.y + SafeAreaInset.top
+    }
+    
+    // thumbnail image shadow (default)
+    func setThubmailShadow() {
+        self.layer.shadowColor = ColorSet.shadowColor?.cgColor
+        self.layer.shadowOffset = .zero
+        self.layer.shadowRadius = 7
+        self.layer.shadowOpacity = 0.6
+        self.layer.masksToBounds = false
+        self.layer.borderWidth = 0
+        self.layer.shouldRasterize = true
+    }
+    
+    // thumbnail image shadow with custom color
+    func setThumbnailShadow(with color: CGColor) {
+        self.layer.shadowColor = color
+        self.layer.shadowOffset = .zero
+        self.layer.shadowRadius = 7
+        self.layer.shadowOpacity = 0.9
+        self.layer.masksToBounds = false
+        self.layer.borderWidth = 0
+        self.layer.shouldRasterize = true
+    }
+}
+
+public extension UILabel {
+    
+    func makeRoundedBackground(cornerRadius: CGFloat, backgroundColor: UIColor, foregroundColor: UIColor) {
+        self.clipsToBounds = true
+        self.backgroundColor = backgroundColor
+        self.textColor = foregroundColor
+        self.layer.cornerRadius = cornerRadius
+        self.text = "  \(self.text!)  "
+    }
+    
+    func removeRoundedBackground(foregroundColor: UIColor) {
+        self.backgroundColor = .clear
+        self.textColor = foregroundColor
     }
 }
 

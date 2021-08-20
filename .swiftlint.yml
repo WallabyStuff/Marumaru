@@ -5,6 +5,7 @@ disabled_rules:
 - force_cast
 - inclusive_language
 - identifier_name
+- cyclomatic_complexity
 
 included:
 

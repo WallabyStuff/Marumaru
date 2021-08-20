@@ -7,12 +7,7 @@
 
 import UIKit
 
-class Episode {
-    var episodeTitle: String?
-    var episodeSN: String?
-    
-    init(_ episodeTitle: String, _ episodeSN: String) {
-        self.episodeTitle = episodeTitle
-        self.episodeSN = episodeSN
-    }
+struct Episode {
+    var title: String
+    var serialNumber: String
 }

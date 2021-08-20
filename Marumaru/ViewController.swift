@@ -43,9 +43,9 @@ class ViewController: UIViewController {
     let disposeBag = DisposeBag()
     let imageCacheHandler = ImageCacheHandler()
     let networkHandler = NetworkHandler()
-    let coredataHandler = HistoryHandler()
+    let watchHistoryHandler = WatchHistoryHandler()
     var updatedMangaArr: [UpdatedManga] = []
-    var recentMangaArr: [WatchHistory] = []
+    var watchHistoryArr: [WatchHistory] = []
     var topRankMangaArr: [TopRankManga] = []
     
     var isLoadingUpdatedManga = false
@@ -63,10 +63,10 @@ class ViewController: UIViewController {
     @IBOutlet weak var refreshTop20MangaButton: UIButton!
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var mainScrollView: UIScrollView!
-    @IBOutlet weak var recentMangaPlaceholderLabel: UILabel!
+    @IBOutlet weak var watchHisotryPlaceholderLabel: UILabel!
     
     @IBOutlet weak var updatedMangaCollectionView: UICollectionView!
-    @IBOutlet weak var recentMangaCollectionView: UICollectionView!
+    @IBOutlet weak var watchHistoryCollectionView: UICollectionView!
     @IBOutlet weak var topRankMangaTableView: UITableView!
     
     // MARK: - LifeCycle
@@ -95,8 +95,6 @@ class ViewController: UIViewController {
         self.hero.isEnabled = true
         
         // appbar View
-//        let topSafeAreaHeight = UIApplication.shared.windows[0].safeAreaInsets.top
-//        appBarView.heightAnchor.constraint(equalToConstant: topSafeAreaHeight + 80).isActive = true
         appbarView.configure(frame: appbarView.frame, cornerRadius: 40, roundCorners: [.bottomRight])
         
         // search button ImageView
@@ -113,7 +111,7 @@ class ViewController: UIViewController {
 //        updatedMangaCollectionView.layer.masksToBounds = false
         
         // recentManga CollectionView
-        recentMangaCollectionView.contentInset = UIEdgeInsets(top: 0, left: 25, bottom: 0, right: 25)
+        watchHistoryCollectionView.contentInset = UIEdgeInsets(top: 0, left: 25, bottom: 0, right: 25)
         
         // topRankManga TableView
         topRankMangaTableView.layer.cornerRadius = 10
@@ -152,12 +150,15 @@ class ViewController: UIViewController {
     
     func initInstance() {
         // Updated Manga CollectionView initialization
+        let mangaThumbnailCollectionCellNib = UINib(nibName: "MangaThumbnailCollectionViewCell", bundle: nil)
+        updatedMangaCollectionView.register(mangaThumbnailCollectionCellNib, forCellWithReuseIdentifier: "mangaThumbnailCollectionCell")
         updatedMangaCollectionView.delegate = self
         updatedMangaCollectionView.dataSource = self
         
         // Recent Manga CollectionView inistialization
-        recentMangaCollectionView.delegate = self
-        recentMangaCollectionView.dataSource = self
+        watchHistoryCollectionView.register(mangaThumbnailCollectionCellNib, forCellWithReuseIdentifier: "mangaThumbnailCollectionCell")
+        watchHistoryCollectionView.delegate = self
+        watchHistoryCollectionView.dataSource = self
         
         // Top Rank Manga TableView initialization
         topRankMangaTableView.delegate = self
@@ -216,7 +217,7 @@ class ViewController: UIViewController {
             self.startLoadingUpdateAnim()
         }
         
-        guard let baseUrl = URL(string: "https://marumaru.cloud") else {return}
+        guard let baseUrl = URL(string: "https://marumaru.cloud") else { return }
         
         do {
             let htmlContent = try String(contentsOf: baseUrl, encoding: .utf8)
@@ -246,6 +247,7 @@ class ViewController: UIViewController {
             }
             
         } catch {
+            print("Log something wend wrong")
             print(error.localizedDescription)
         }
         
@@ -293,39 +295,44 @@ class ViewController: UIViewController {
     }
     
     func loadMangaHistory() {
-        coredataHandler.getWatchHistory { result in
-            do {
-                let recentMangas = try result.get()
-                // check has history update
-                if !self.recentMangaArr.elementsEqual(recentMangas) {
-                    self.recentMangaArr = recentMangas
-                    
-                    DispatchQueue.main.async {
-                        if self.recentMangaArr.count > 0 {
-                            self.recentMangaPlaceholderLabel.isHidden = true
-                        } else {
-                            self.recentMangaPlaceholderLabel.isHidden = false
-                        }
-                        
-                        self.recentMangaCollectionView.reloadData()
-                    }
+        watchHistoryArr.removeAll()
+        watchHistoryCollectionView.reloadData()
+        
+        watchHistoryHandler.fetchData()
+            .subscribe { event in
+                if let watchHistories = event.element {
+                    self.watchHistoryArr = watchHistories
+                    self.reloadWatchHistoryCollectionView()
                 }
-            } catch {
-                print(error.localizedDescription)
                 
-                DispatchQueue.main.async {
-                    self.recentMangaArr.removeAll()
-                    self.recentMangaCollectionView.reloadData()
-                    self.recentMangaPlaceholderLabel.isHidden = false
-                }
+            }.disposed(by: disposeBag)
+    }
+    
+    func reloadWatchHistoryCollectionView() {
+        DispatchQueue.main.async {
+            self.watchHistoryCollectionView.reloadData()
+            
+            if self.watchHistoryArr.count == 0 {
+                self.watchHisotryPlaceholderLabel.isHidden = false
+            } else {
+                self.watchHisotryPlaceholderLabel.isHidden = true
             }
         }
     }
     
+    func presentViewMangaVC(_ mangaTitle: String, _ mangaUrl: String) {
+        guard let viewMangaVC = storyboard?.instantiateViewController(identifier: "ViewMangaStoryboard") as? ViewMangaViewController else { return }
+        viewMangaVC.modalPresentationStyle = .fullScreen
+        
+        viewMangaVC.mangaTitle = mangaTitle
+        viewMangaVC.mangaUrl = mangaUrl
+        
+        present(viewMangaVC, animated: true, completion: nil)
+    }
+    
     // MARK: - Actions
     @IBAction func searchButtonAction(_ sender: Any) {
-        let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-        let destStotyboard = mainStoryboard.instantiateViewController(identifier: "SearchStoryboard") as! SearchViewController
+        let destStotyboard = storyboard?.instantiateViewController(identifier: "SearchStoryboard") as! SearchViewController
         
         destStotyboard.modalPresentationStyle = .fullScreen
         
@@ -333,8 +340,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func showAllHistoryButtonAction(_ sender: Any) {
-        let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-        let destStoryboard = mainStoryboard.instantiateViewController(identifier: "MangaHistoryStoryboard") as! MangaHistoryViewController
+        guard let destStoryboard = storyboard?.instantiateViewController(identifier: "MangaHistoryStoryboard") as? WatchHistoryViewController else { return }
         
         destStoryboard.dismissDelegate = self
         destStoryboard.modalPresentationStyle = .fullScreen
@@ -362,9 +368,9 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
         switch collectionView {
         case updatedMangaCollectionView:
             return updatedMangaArr.count
-        case recentMangaCollectionView:
+        case watchHistoryCollectionView:
             // limit maximum item count
-            return min(15, recentMangaArr.count)
+            return min(15, watchHistoryArr.count)
         default:
             return 0
         }
@@ -374,16 +380,16 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
         
         switch collectionView {
         case updatedMangaCollectionView:
-            let collectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: "UpdatedMangaCell", for: indexPath) as! MangaCollectionCell
+            guard let collectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: "mangaThumbnailCollectionCell", for: indexPath) as? MangaThumbnailCollectionCell else { return UICollectionViewCell() }
             
             if indexPath.row > updatedMangaArr.count - 1 {
                 return UICollectionViewCell()
             }
             
             collectionCell.titleLabel.text = updatedMangaArr[indexPath.row].title
-            collectionCell.previewImage.image = UIImage()
-            collectionCell.previewImagePlaceholderLabel.isHidden = false
-            collectionCell.previewImagePlaceholderLabel.text = updatedMangaArr[indexPath.row].title
+            collectionCell.thumbnailImageView.image = UIImage()
+            collectionCell.thumbnailImagePlaceholderLabel.isHidden = false
+            collectionCell.thumbnailImagePlaceholderLabel.text = updatedMangaArr[indexPath.row].title
             
             if let previewImageUrl = updatedMangaArr[indexPath.row].previewImageUrl {
                 if let url = URL(string: previewImageUrl) {
@@ -393,19 +399,19 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
                                 let result = try result.get()
                                 
                                 DispatchQueue.main.async {
-                                    collectionCell.previewImage.image = result.imageCache.image
-                                    collectionCell.previewImagePlaceholderLabel.isHidden = true
+                                    collectionCell.thumbnailImageView.image = result.imageCache.image
+                                    collectionCell.thumbnailImagePlaceholderLabel.isHidden = true
+                                    collectionCell.thumbnailImageBaseView.setThumbnailShadow(with: result.imageCache.averageColor.cgColor)
                                     
                                     if result.animate {
-                                        collectionCell.previewImage.startFadeInAnim(duration: 0.5)
+                                        collectionCell.thumbnailImageView.startFadeInAnim(duration: 0.5)
                                     }
                                 }
                             } catch {
-                                DispatchQueue.main.async {
-                                    collectionCell.previewImagePlaceholderLabel.isHidden = false
-                                }
-                                
                                 print(error.localizedDescription)
+                                DispatchQueue.main.async {
+                                    collectionCell.thumbnailImagePlaceholderLabel.isHidden = false
+                                }
                             }
                         }
                     }
@@ -419,65 +425,40 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
             }
             
             return collectionCell
-        case recentMangaCollectionView:
-            let collectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: "RecentMangaCell", for: indexPath) as! MangaCollectionCell
+        case watchHistoryCollectionView:
+            guard let collectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: "mangaThumbnailCollectionCell", for: indexPath) as? MangaThumbnailCollectionCell else { return UICollectionViewCell() }
             
-            if indexPath.row > recentMangaArr.count - 1 {
+            if indexPath.row > watchHistoryArr.count - 1 {
                 return UICollectionViewCell()
             }
             
-            // init preview image
-            collectionCell.previewImage.image = UIImage()
+            let currentManga = watchHistoryArr[indexPath.row]
+            // set title & place holder
+            collectionCell.titleLabel.text = currentManga.mangaTitle
+            collectionCell.thumbnailImagePlaceholderLabel.text = currentManga.mangaTitle
             
-            if let title = recentMangaArr[indexPath.row].title {
-                // set title & place holder
-                collectionCell.titleLabel.text = title
-                collectionCell.previewImagePlaceholderLabel.text = title
-            }
-            
-            // set preview image
-            if let previewImage = recentMangaArr[indexPath.row].preview_image {
-                if !previewImage.isEmpty {
-                    // preview image is exists
-                    collectionCell.previewImage.image = UIImage(data: previewImage)
-                    collectionCell.previewImagePlaceholderLabel.isHidden = true
-                } else {
-                    if let previewImageUrl = recentMangaArr[indexPath.row].preview_image_url {
-                        if !previewImageUrl.isEmpty {
-                            // preview image url is exists
-                            if let url = URL(string: previewImageUrl) {
-                                networkHandler.getImage(url) { result in
-                                    DispatchQueue.global(qos: .background).async {
-                                        do {
-                                            let result = try result.get()
-                                            
-                                            DispatchQueue.main.async {
-                                                collectionCell.previewImage.image = result.imageCache.image
-                                                collectionCell.previewImagePlaceholderLabel.isHidden = true
-                                                
-                                                if result.animate {
-                                                    collectionCell.previewImage.startFadeInAnim(duration: 0.5)
-                                                }
-                                            }
-                                        } catch {
-                                            DispatchQueue.main.async {
-                                                collectionCell.previewImagePlaceholderLabel.isHidden = false
-                                            }
-                                            print(error.localizedDescription)
-                                        }
-                                    }
-                                }
-                            } else {
-                                collectionCell.previewImagePlaceholderLabel.isHidden = false
-                            }
+            if let thumbnailImageUrl = URL(string: currentManga.thumbnailImageUrl) {
+                networkHandler.getImage(thumbnailImageUrl) { result in
+                    do {
+                        let result = try result.get()
+                        DispatchQueue.main.async {
+                            collectionCell.thumbnailImageView.image = result.imageCache.image
+                            collectionCell.thumbnailImageBaseView.setThumbnailShadow(with: result.imageCache.averageColor.cgColor)
+                            collectionCell.thumbnailImagePlaceholderLabel.isHidden = true
+                            collectionCell.thumbnailImageView.startFadeInAnim(duration: 0.3)
                         }
-                    } else {
-                        collectionCell.previewImagePlaceholderLabel.isHidden = false
+                    } catch {
+                        DispatchQueue.main.async {
+                            collectionCell.thumbnailImagePlaceholderLabel.isHidden = false
+                        }
                     }
                 }
             } else {
-                collectionCell.previewImagePlaceholderLabel.isHidden = false
+                DispatchQueue.main.async {
+                    collectionCell.thumbnailImagePlaceholderLabel.isHidden = false
+                }
             }
+            
             
             return collectionCell
         default:
@@ -488,33 +469,29 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-        let destStoryboard = mainStoryboard.instantiateViewController(identifier: "ViewMangaStoryboard") as! ViewMangaViewController
-        
-        destStoryboard.modalPresentationStyle = .fullScreen
-        
-        var link = ""
-        var title = ""
-        
-        // check collectionview type
         if collectionView == updatedMangaCollectionView {
-            link = updatedMangaArr[indexPath.row].link
-            title = updatedMangaArr[indexPath.row].title
+            var mangaUrl = updatedMangaArr[indexPath.row].link
+            let mangaTitle = updatedMangaArr[indexPath.row].title
+            
+            // check link does have baseUrl
+            if !mangaUrl.contains(baseUrl) {
+                mangaUrl = "\(baseUrl)\(mangaUrl)"
+            }
+            
+            presentViewMangaVC(mangaTitle, mangaUrl)
         } else {
-            link = recentMangaArr[indexPath.row].link!
-            title = recentMangaArr[indexPath.row].title!
+            var mangaUrl = watchHistoryArr[indexPath.row].mangaUrl
+            let mangaTitle = watchHistoryArr[indexPath.row].mangaTitle
+//            guard var mangaUrl = watchHistoryArr[indexPath.row].mangaUrl,
+//                  let mangaTitle = watchHistoryArr[indexPath.row].mangaTitle else { return }
+//
+            // check link does have baseUrl
+            if !mangaUrl.contains(baseUrl) {
+                mangaUrl = "\(baseUrl)\(mangaUrl)"
+            }
+            
+            presentViewMangaVC(mangaTitle, mangaUrl)
         }
-        
-        // check link does have baseUrl
-        if !link.contains(baseUrl) {
-            link = "\(baseUrl)\(link)"
-        }
-        
-        // pass data
-        destStoryboard.mangaUrl = link
-        destStoryboard.mangaTitle = title
-        
-        present(destStoryboard, animated: true, completion: nil)
     }
 }
 
@@ -525,7 +502,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let topRankCell = tableView.dequeueReusableCell(withIdentifier: "TopRankMangaCell", for: indexPath) as! TopRankMangaCell
+        guard let topRankCell = tableView.dequeueReusableCell(withIdentifier: "TopRankMangaCell", for: indexPath) as? TopRankMangaCell else { return UITableViewCell() }
         
         if indexPath.row > topRankMangaArr.count - 1 {
             return UITableViewCell()
@@ -545,23 +522,14 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+        var mangaUrl = topRankMangaArr[indexPath.row].link
+        let mangaTitl = topRankMangaArr[indexPath.row].title
         
-        let destStroyboard = mainStoryboard.instantiateViewController(identifier: "ViewMangaStoryboard") as! ViewMangaViewController
-        
-        destStroyboard.modalPresentationStyle = .fullScreen
-        
-        var link = topRankMangaArr[indexPath.row].link
-        let title = topRankMangaArr[indexPath.row].title
-        
-        if !link.contains(baseUrl) {
-            link = "\(baseUrl)\(link)"
+        if !mangaUrl.contains(baseUrl) {
+            mangaUrl = "\(baseUrl)\(mangaUrl)"
         }
         
-        destStroyboard.mangaUrl = link
-        destStroyboard.mangaTitle = title
-        
-        present(destStroyboard, animated: true, completion: nil)
+        presentViewMangaVC(mangaTitl, mangaUrl)
     }
 }
 
