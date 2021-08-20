@@ -18,9 +18,9 @@ class ImageCache: Object {
     }
     
     // MARK: - Properties
-    @objc dynamic var url: String               = ""
-    @objc dynamic var imageData: Data           = Data()
-    @objc dynamic var imageAvgColorHex: String     = ColorSet.shadowColor!.toHexString()
+    @objc dynamic var url: String = ""
+    @objc dynamic var imageData: Data = Data()
+    @objc dynamic var imageAvgColorHex: String = ColorSet.shadowColor!.toHexString()
     
     // MARK: - Initializations
     convenience init(url: String,
@@ -28,9 +28,9 @@ class ImageCache: Object {
                      imageAvgColor: UIColor) {
         self.init()
 
-        self.url            = url
-        self.imageData          = image.jpegData(compressionQuality: 1) ?? Data()
-        self.imageAvgColorHex  = imageAvgColor.toHexString()
+        self.url = url
+        self.imageData = image.jpegData(compressionQuality: 1) ?? Data()
+        self.imageAvgColorHex = imageAvgColor.toHexString()
     }
     
     override class func primaryKey() -> String? {

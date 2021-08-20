@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="mangaThumbnailCollectionCell" id="gTV-IL-0wX" customClass="MangaThumbnailCollectionCell" customModule="Marumaru" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="146" height="262"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="146" height="262"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xaf-0b-TKa">
+                        <rect key="frame" x="0.0" y="0.0" width="146" height="262"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hdb-Dm-Zes">
+                                <rect key="frame" x="13" y="15" width="120" height="173"/>
+                                <color key="backgroundColor" name="FloatingViewBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="173" id="LvV-Ak-e2o"/>
+                                    <constraint firstAttribute="width" constant="120" id="v5D-E4-64g"/>
+                                </constraints>
+                            </view>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Rui-tn-hTc">
+                                <rect key="frame" x="13" y="15" width="120" height="173"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="173" id="JOu-Cw-BuH"/>
+                                    <constraint firstAttribute="width" constant="120" id="NHI-q0-Xm3"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lkd-Eo-k8Q">
+                                <rect key="frame" x="12" y="198" width="122" height="18"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <color key="textColor" name="TextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c4q-bC-PYC">
+                                <rect key="frame" x="23" y="23.5" width="100" height="156"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="156" id="cAd-dZ-ACV"/>
+                                    <constraint firstAttribute="width" constant="100" id="fm3-A9-zHZ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <color key="textColor" name="PlaceHolderTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="c4q-bC-PYC" firstAttribute="centerX" secondItem="Rui-tn-hTc" secondAttribute="centerX" id="5H6-nB-VUY"/>
+                            <constraint firstItem="lkd-Eo-k8Q" firstAttribute="top" secondItem="Hdb-Dm-Zes" secondAttribute="bottom" constant="10" id="6xG-kX-giQ"/>
+                            <constraint firstAttribute="trailing" secondItem="lkd-Eo-k8Q" secondAttribute="trailing" constant="12" id="BnK-cx-fKO"/>
+                            <constraint firstItem="c4q-bC-PYC" firstAttribute="centerY" secondItem="Rui-tn-hTc" secondAttribute="centerY" id="MJ2-Pc-EpO"/>
+                            <constraint firstItem="Rui-tn-hTc" firstAttribute="centerX" secondItem="Xaf-0b-TKa" secondAttribute="centerX" id="OhT-q7-ArS"/>
+                            <constraint firstItem="lkd-Eo-k8Q" firstAttribute="leading" secondItem="Xaf-0b-TKa" secondAttribute="leading" constant="12" id="Ola-kT-6k9"/>
+                            <constraint firstItem="Hdb-Dm-Zes" firstAttribute="centerX" secondItem="Xaf-0b-TKa" secondAttribute="centerX" id="ect-9q-ewu"/>
+                            <constraint firstItem="Rui-tn-hTc" firstAttribute="top" secondItem="Xaf-0b-TKa" secondAttribute="top" constant="15" id="fma-0n-bAI"/>
+                            <constraint firstItem="Hdb-Dm-Zes" firstAttribute="top" secondItem="Xaf-0b-TKa" secondAttribute="top" constant="15" id="q3N-Rf-VZK"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="Xaf-0b-TKa" secondAttribute="trailing" id="15j-Vn-gaW"/>
+                <constraint firstAttribute="bottom" secondItem="Xaf-0b-TKa" secondAttribute="bottom" id="MGX-BQ-eAP"/>
+                <constraint firstItem="Xaf-0b-TKa" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="Ui9-xN-YWm"/>
+                <constraint firstItem="Xaf-0b-TKa" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="bFn-G9-mze"/>
+            </constraints>
+            <size key="customSize" width="196" height="294"/>
+            <connections>
+                <outlet property="thumbnailImageBaseView" destination="Hdb-Dm-Zes" id="Feq-9C-vtq"/>
+                <outlet property="thumbnailImagePlaceholderLabel" destination="c4q-bC-PYC" id="c5l-zH-RDW"/>
+                <outlet property="thumbnailImageView" destination="Rui-tn-hTc" id="4UC-wf-qEY"/>
+                <outlet property="titleLabel" destination="lkd-Eo-k8Q" id="Eb9-H3-qV2"/>
+            </connections>
+            <point key="canvasLocation" x="243.47826086956525" y="193.52678571428569"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <namedColor name="FloatingViewBackgroundColor">
+            <color red="0.9570000171661377" green="0.9570000171661377" blue="0.9570000171661377" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+        <namedColor name="PlaceHolderTextColor">
+            <color red="0.63200002908706665" green="0.63200002908706665" blue="0.63200002908706665" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+        <namedColor name="TextColor">
+            <color red="0.1080000028014183" green="0.10700000077486038" blue="0.1080000028014183" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+    </resources>
+</document>

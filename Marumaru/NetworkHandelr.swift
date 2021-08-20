@@ -35,7 +35,7 @@ class NetworkHandler {
         
         imageCaches.forEach { imageCache in
             if imageCache.url == url.path {
-                print("already exists")
+                // Already exists on Cache data
                 isExists = true
                 let result = ImageResult(imageCache: imageCache, animate: false)
                 completion(.success(result))
@@ -55,7 +55,6 @@ class NetworkHandler {
                                             image: image,
                                             imageAvgColor: image.averageColor ?? ColorSet.shadowColor!)
                 
-                print("Image load from url")
                 // Image load from url & save to Cache
                 let result = ImageResult(imageCache: imageCache, animate: true)
                 completion(.success(result))

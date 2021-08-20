@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17709" systemVersion="20E5231a" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="18154" systemVersion="20G5023d" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="WatchHistory" representedClassName="WatchHistory" syncable="YES">
-        <attribute name="link" optional="YES" attributeType="String"/>
-        <attribute name="preview_image" optional="YES" attributeType="Binary"/>
-        <attribute name="preview_image_url" optional="YES" attributeType="String"/>
-        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="mangaTitle" optional="YES" attributeType="String"/>
+        <attribute name="mangaUrl" optional="YES" attributeType="String"/>
+        <attribute name="thumbnailImageAvgColorHex" optional="YES" attributeType="String"/>
+        <attribute name="thumbnailImageData" optional="YES" attributeType="Binary"/>
+        <attribute name="thumbnailImageUrl" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="WatchHistory" positionX="-63" positionY="-18" width="128" height="89"/>
+        <element name="WatchHistory" positionX="-63" positionY="-18" width="128" height="104"/>
     </elements>
 </model>

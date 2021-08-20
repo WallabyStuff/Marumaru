@@ -63,19 +63,22 @@ extension EpisodePopoverViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let episodeCell = tableView.dequeueReusableCell(withIdentifier: "popoverEpisodeCell") as? MangaEpisodePopoverCell else { return UITableViewCell() }
+        
         if episodeArr.count <= indexPath.row {
             return UITableViewCell()
         }
         
-        let episodeCell = tableView.dequeueReusableCell(withIdentifier: "popoverEpisodeCell") as! MangaEpisodePopoverCell
-        
-        episodeCell.episodeTitleLabel.text = episodeArr[indexPath.row].episodeTitle
+        episodeCell.episodeTitleLabel.text = episodeArr[indexPath.row].title
         
         // Accent text color to current episode
-        if episodeCell.episodeTitleLabel.text?.lowercased().trimmingCharacters(in: .whitespaces) == currentEpisodeTitle.lowercased().trimmingCharacters(in: .whitespaces) {
+        if episodeCell.episodeTitleLabel.text?.lowercased().trimmingCharacters(in: .whitespaces) ==
+            currentEpisodeTitle.lowercased().trimmingCharacters(in: .whitespaces) {
             episodeCell.episodeTitleLabel.textColor = ColorSet.accentColor
+            episodeCell.contentView.backgroundColor = ColorSet.cellSelectionColor
         } else {
             episodeCell.episodeTitleLabel.textColor = ColorSet.textColor
+            episodeCell.contentView.backgroundColor = ColorSet.backgroundColor
         }
         
         return episodeCell

@@ -18,34 +18,24 @@ import RxCocoa
 class MangaEpisodeViewController: UIViewController {
 
     // MARK: - Declarations
-    struct Episode {
-        var title: String
-        var description: String
-        var previewImageUrl: String?
-        var link: String
-    }
-    
     let baseUrl = "https://marumaru.cloud"
     let baseImgUrl = "https://marumaru.cloud"
     public var mangaSN: String?
     var disposeBag = DisposeBag()
     
-    var infoTitle = ""
-    var infoDesc1 = ""
-    var infoDesc2 = ""
-    var infoPreviewImageUrl = ""
+    var currentManga: MangaInfo?
     
     let networkHandler = NetworkHandler()
-    var episodeArr = [Episode]()
+    var episodeArr = [MangaEpisode]()
     
     var loadingEpisodeAnimView = AnimationView()
     
     @IBOutlet weak var appbarView: UIView!
     @IBOutlet weak var infoContentView: UIView!
-    @IBOutlet weak var infoPreviewImage: UIImageView!
+    @IBOutlet weak var thumbnailImageView: UIImageView!
     @IBOutlet weak var mangaTitleLabel: UILabel!
-    @IBOutlet weak var infoDesc1Label: UILabel!
-    @IBOutlet weak var infoDesc2Label: UILabel!
+    @IBOutlet weak var authorLabel: UILabel!
+    @IBOutlet weak var updateCycleLabel: UILabel!
     @IBOutlet weak var episodeSizeLabel: UILabel!
     @IBOutlet weak var scrollToBottomButton: UIButton!
     @IBOutlet weak var mangaEpisodeTableView: UITableView!
@@ -57,9 +47,9 @@ class MangaEpisodeViewController: UIViewController {
 
         initView()
         initInstance()
+        initMangaInfo()
         
         getData()
-        setMangaInfo()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -91,11 +81,12 @@ class MangaEpisodeViewController: UIViewController {
         infoContentView.layer.shadowOpacity = 0.5
         
         // manga info Preview ImageView
-        infoPreviewImage.hero.id = "previewImage"
-        infoPreviewImage.layer.masksToBounds = true
-        infoPreviewImage.layer.cornerRadius = 10
-        infoPreviewImage.layer.borderWidth = 1
-        infoPreviewImage.layer.borderColor = ColorSet.imageBorderColor?.cgColor
+        thumbnailImageView.hero.id = "previewImage"
+        thumbnailImageView.layer.masksToBounds = true
+        thumbnailImageView.layer.cornerRadius = 10
+        thumbnailImageView.layer.borderWidth = 1
+        thumbnailImageView.layer.borderColor = ColorSet.floatingViewBackgroundColor?.cgColor
+        thumbnailImageView.backgroundColor = ColorSet.floatingViewBackgroundColor
         
         // manga title Label
         mangaTitleLabel.hero.id = "mangaTitleLabel"
@@ -111,16 +102,60 @@ class MangaEpisodeViewController: UIViewController {
         // Loading Episode AnimView
         loadingEpisodeAnimView = AnimationView(name: "loading_square")
         loadingEpisodeAnimView.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
+        loadingEpisodeAnimView.loopMode = .loop
+        loadingEpisodeAnimView.isHidden = true
         self.view.addSubview(loadingEpisodeAnimView)
         loadingEpisodeAnimView.translatesAutoresizingMaskIntoConstraints = false
         loadingEpisodeAnimView.centerXAnchor.constraint(equalTo: mangaEpisodeTableView.centerXAnchor).isActive = true
         loadingEpisodeAnimView.centerYAnchor.constraint(equalTo: mangaEpisodeTableView.centerYAnchor, constant: -50).isActive = true
-        loadingEpisodeAnimView.isHidden = true
     }
     
     func initInstance() {
+        // manga episode TableView
+        let mangaEpisodeTableCellNib = UINib(nibName: "MangaEpisodeTableViewCell", bundle: nil)
+        mangaEpisodeTableView.register(mangaEpisodeTableCellNib, forCellReuseIdentifier: "mangaEpisodeTableCell")
         mangaEpisodeTableView.delegate = self
         mangaEpisodeTableView.dataSource = self
+    }
+    
+    func initMangaInfo() {
+        guard let currentManga = currentManga else {
+            dismiss(animated: true, completion: nil)
+            return
+        }
+        
+        mangaTitleLabel.text = currentManga.title
+        authorLabel.text = currentManga.author
+        updateCycleLabel.text = currentManga.updateCycle
+        
+        if !currentManga.updateCycle.contains("미분류") {
+            updateCycleLabel.makeRoundedBackground(cornerRadius: 8,
+                                                  backgroundColor: ColorSet.labelEffectBackgroundColor!,
+                                                  foregroundColor: ColorSet.labelEffectForegroundColor!)
+        }
+        
+        if currentManga.thumbnailImage != nil {
+            thumbnailImageView.image = currentManga.thumbnailImage
+            thumbnailImageView.layer.borderColor = currentManga.thumbnailImage?.averageColor?.cgColor
+        } else {
+            // if thumbnail image was not passed from search result cell
+            if let thumbnailImageURL = currentManga.thumbnailImageURL {
+                if let url = URL(string: thumbnailImageURL) {
+                    networkHandler.getImage(url) { result in
+                        do {
+                            let result = try result.get()
+                            DispatchQueue.main.async {
+                                self.thumbnailImageView.image = result.imageCache.image
+                                self.thumbnailImageView.startFadeInAnim(duration: 0.3)
+                                self.thumbnailImageView.layer.borderColor = UIColor(hexString: result.imageCache.imageAvgColorHex).cgColor
+                            }
+                        } catch {
+                            print(error)
+                        }
+                    }
+                }
+            }
+        }
     }
     
     // MARK: - Methods
@@ -138,6 +173,8 @@ class MangaEpisodeViewController: UIViewController {
         }
     }
     
+    // get episode data from url
+    // TODO: move function to network handler
     func getData() {
         if episodeArr.count > 0 {
             return
@@ -146,110 +183,55 @@ class MangaEpisodeViewController: UIViewController {
         startLoadingEpisodeAnim()
         
         DispatchQueue.global(qos: .background).async {
-            if let serialNumber = self.mangaSN {
-                do {
-                    let completeUrl = "\(self.baseUrl)/bbs/cmoic/\(serialNumber)"
+            do {
+                let completeUrl = "\(self.baseUrl)/bbs/cmoic/\(self.currentManga!.mangaSN)"
+                
+                print(completeUrl)
+                guard let url = URL(string: completeUrl) else {return}
+                let htmlContent = try String(contentsOf: url, encoding: .utf8)
+                let doc = try SwiftSoup.parse(htmlContent)
+                
+                // Getting Infos
+                let headElement = try doc.getElementsByClass("list-wrap")
+                
+                if let superElement = headElement.first() {
+                    let tbody = try superElement.getElementsByTag("tbody")
                     
-                    print(completeUrl)
-                    guard let url = URL(string: completeUrl) else {return}
-                    let htmlContent = try String(contentsOf: url, encoding: .utf8)
-                    let doc = try SwiftSoup.parse(htmlContent)
-                    
-                    // Getting Infos
-                    let headElement = try doc.getElementsByClass("list-wrap")
-                    
-                    if let superElement = headElement.first() {
-                        let tbody = try superElement.getElementsByTag("tbody")
+                    if let tbody = tbody.first() {
+                        let episodeElement = try tbody.getElementsByTag("tr")
                         
-                        if let tbody = tbody.first() {
-                            let episodeElement = try tbody.getElementsByTag("tr")
+                        try episodeElement.forEach { (Element) in
+                            let title = try Element.select("a").text().trimmingCharacters(in: .whitespaces)
+                            let description = try Element.getElementsByTag("span").text()
                             
-                            try episodeElement.forEach { (Element) in
-                                let title = try Element.select("a").text().trimmingCharacters(in: .whitespaces)
-                                let description = try Element.getElementsByTag("span").text()
-                                
-                                var link = String(try Element.select("a").attr("href"))
-                                if link != "" && !link.contains(self.baseUrl) {
-                                    link = "\(self.baseUrl)\(link)"
-                                }
-                                
-                                var previewImageUrl = String(try Element.select("img").attr("src"))
-                                if !previewImageUrl.isEmpty && !previewImageUrl.contains(self.baseImgUrl) {
-                                    previewImageUrl = "\(self.baseImgUrl)\(previewImageUrl)"
-                                }
-                                
-                                self.episodeArr.append(Episode(title: title, description: description, previewImageUrl: previewImageUrl, link: link))
+                            var link = String(try Element.select("a").attr("href"))
+                            if link != "" && !link.contains(self.baseUrl) {
+                                link = "\(self.baseUrl)\(link)"
                             }
-                        }
-                        
-                        DispatchQueue.main.async {
-                            self.mangaEpisodeTableView.reloadData()
-                            self.episodeSizeLabel.text = "총 \(self.episodeArr.count)화"
                             
-                            self.stopLoadingEpisodeAnim()
+                            var previewImageUrl = String(try Element.select("img").attr("src"))
+                            if !previewImageUrl.isEmpty && !previewImageUrl.contains(self.baseImgUrl) {
+                                previewImageUrl = "\(self.baseImgUrl)\(previewImageUrl)"
+                            }
+                            
+                            self.episodeArr.append(MangaEpisode(title: title, description: description, thumbnailImageURL: previewImageUrl, mangaURL: link))
                         }
+                    }
+                    
+                    DispatchQueue.main.async {
+                        self.mangaEpisodeTableView.reloadData()
+                        self.episodeSizeLabel.text = "총 \(self.episodeArr.count)화"
                         
-                    } else {
-                        // no episodes
                         self.stopLoadingEpisodeAnim()
                     }
                     
-                } catch {
-                    print(error.localizedDescription)
+                } else {
+                    // no episodes
+                    self.stopLoadingEpisodeAnim()
                 }
-            } else {
-                DispatchQueue.main.async {
-                    self.mangaTitleLabel.text = "Fail to load"
-                    self.infoPreviewImage.image = UIImage(named: "empty-image")!
-                }
-            }
-        }
-    }
-    
-    func setMangaInfo() {
-        mangaTitleLabel.text = infoTitle
-        infoDesc1Label.text = infoDesc1
-        infoDesc2Label.text = infoDesc2
-        
-        if infoDesc2.contains("미분류") {
-            infoDesc2Label.textColor = ColorSet.subTextColor
-        } else {
-            infoDesc2Label.textColor = ColorSet.subTextColor
-        }
-        
-        DispatchQueue.global(qos: .background).async {
-            if self.infoPreviewImageUrl != ""{
-                if let url = URL(string: self.infoPreviewImageUrl) {
-                    self.networkHandler.getImage(url) { result in
-                        do {
-                            let result = try result.get()
-                            
-                            DispatchQueue.main.async {
-                                self.infoPreviewImage.contentMode = .scaleAspectFill
-                                self.infoPreviewImage.image = result.imageCache.image
-                                
-                                print("image has loaded")
-                                if result.animate {
-                                    self.infoPreviewImage.startFadeInAnim(duration: 0.3)
-                                }
-                                
-                                // change preview image's border color as average color of image
-                                self.infoPreviewImage.layer.borderColor = result.imageCache.averageColor.cgColor
-                            }
-                        } catch {
-                            DispatchQueue.main.async {
-                                self.infoPreviewImage.image = UIImage(named: "empty-image")!
-                                self.infoPreviewImage.contentMode = .scaleAspectFit
-                            }
-                            print(error.localizedDescription)
-                        }
-                    }
-                }
-            } else {
-                DispatchQueue.main.async {
-                    self.infoPreviewImage.image = UIImage(named: "empty-image")!
-                    self.infoPreviewImage.contentMode = .scaleAspectFit
-                }
+                
+            } catch {
+                print(error.localizedDescription)
             }
         }
     }
@@ -288,6 +270,16 @@ class MangaEpisodeViewController: UIViewController {
         }
     }
     
+    func presentViewMangaVC(_ mangaTitle: String, _ mangaUrl: String) {
+        guard let viewMangaVC = storyboard?.instantiateViewController(identifier: "ViewMangaStoryboard") as? ViewMangaViewController else { return }
+        viewMangaVC.modalPresentationStyle = .fullScreen
+        
+        viewMangaVC.mangaUrl = mangaUrl
+        viewMangaVC.mangaTitle = mangaTitle
+        
+        present(viewMangaVC, animated: true, completion: nil)
+    }
+    
     // MARK: - Actions
     @IBAction func scrollToBottomButtonAction(_ sender: Any) {
         DispatchQueue.main.async {
@@ -313,18 +305,18 @@ extension MangaEpisodeViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let episodeCell = tableView.dequeueReusableCell(withIdentifier: "EpisodeCell") as! MangaEpisodeCell
+        guard let episodeCell = tableView.dequeueReusableCell(withIdentifier: "mangaEpisodeTableCell") as? MangaEpisodeTableCell else { return UITableViewCell() }
         
         if indexPath.row > episodeArr.count - 1 {
             return UITableViewCell()
         }
         
-        episodeCell.episodeTitleLabel.text = episodeArr[indexPath.row].title
-        episodeCell.episodeDescLabel.text = episodeArr[indexPath.row].description
-        episodeCell.episodeIndexLabel.text = String(episodeArr.count - indexPath.row)
-        episodeCell.previewImage.image = nil
+        episodeCell.titleLabel.text = episodeArr[indexPath.row].title
+        episodeCell.descriptionLabel.text = episodeArr[indexPath.row].description
+        episodeCell.indexLabel.text = String(episodeArr.count - indexPath.row)
+        episodeCell.thumbnailImageView.image = nil
         
-        if let previewImageUrl = episodeArr[indexPath.row].previewImageUrl {
+        if let previewImageUrl = episodeArr[indexPath.row].thumbnailImageURL {
             if let url = URL(string: previewImageUrl) {
                 let token = self.networkHandler.getImage(url) { result in
                     DispatchQueue.global(qos: .background).async {
@@ -332,10 +324,10 @@ extension MangaEpisodeViewController: UITableViewDelegate, UITableViewDataSource
                             let result = try result.get()
                             
                             DispatchQueue.main.async {
-                                episodeCell.previewImage.image = result.imageCache.image
+                                episodeCell.thumbnailImageView.image = result.imageCache.image
                                 
                                 if result.animate {
-                                    episodeCell.previewImage.startFadeInAnim(duration: 0.5)
+                                    episodeCell.thumbnailImageView.startFadeInAnim(duration: 0.5)
                                 }
                             }
                         } catch {
@@ -359,22 +351,14 @@ extension MangaEpisodeViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if episodeArr.count > indexPath.row {
-            let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-            let destStoryboard = mainStoryboard.instantiateViewController(identifier: "ViewMangaStoryboard") as! ViewMangaViewController
-            
-            destStoryboard.modalPresentationStyle = .fullScreen
-            
-            var mangaLink = episodeArr[indexPath.row].link
+            var mangaUrl = episodeArr[indexPath.row].mangaURL
             let mangaTitle = episodeArr[indexPath.row].title.trimmingCharacters(in: .whitespaces)
             
-            if !mangaLink.contains(baseUrl) {
-                mangaLink = "\(baseUrl)\(mangaLink)"
+            if !mangaUrl.contains(baseUrl) {
+                mangaUrl = "\(baseUrl)\(mangaUrl)"
             }
             
-            destStoryboard.mangaUrl = mangaLink
-            destStoryboard.mangaTitle = mangaTitle
-            
-            present(destStoryboard, animated: true, completion: nil)
+            presentViewMangaVC(mangaTitle, mangaUrl)
         }
     }
 }
