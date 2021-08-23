@@ -7,21 +7,19 @@
 
 import UIKit
 
-import SwiftSoup
 import Lottie
 import Hero
 import RxSwift
 import RxCocoa
 
 class SearchViewController: UIViewController {
-
+    
     // MARK: - Declarations
     var disposeBag = DisposeBag()
-    let baseUrl = "https://marumaru.cloud"
-    let searchUrl = "/bbs/search.php?url=%2Fbbs%2Fsearch.php&stx="
     let networkHandler = NetworkHandler()
+    
     var searchResultMangaArr: [MangaInfo] = []
-    var loadingSearchAnimView = AnimationView()
+    var loadingSearchAnimView = LoadingView()
     var isSearching = false
     
     @IBOutlet weak var appbarView: UIView!
@@ -29,11 +27,12 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var searchResultMangaTableView: UITableView!
     @IBOutlet weak var noResultsLabel: UILabel!
     @IBOutlet weak var backButton: UIButton!
+    @IBOutlet weak var searchResultPlaceholderLabel: UILabel!
     
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         initView()
         initInstance()
         initEventListener()
@@ -44,7 +43,7 @@ class SearchViewController: UIViewController {
         
         focusToSearchTextField()
     }
-
+    
     // MARK: - Overrides
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .darkContent
@@ -84,23 +83,16 @@ class SearchViewController: UIViewController {
         backButton.layer.cornerRadius = 13
         
         // search loading AnimView
-        loadingSearchAnimView = AnimationView(name: "loading_square")
-        loadingSearchAnimView.frame = CGRect(x: 0,
-                                             y: 0,
-                                             width: 300,
-                                             height: 300)
-        loadingSearchAnimView.loopMode = .loop
+        loadingSearchAnimView = LoadingView(name: "loading_cat_radial",
+                                            frame: CGRect(x: 0, y: 0, width: 100, height: 100))
         view.addSubview(self.loadingSearchAnimView)
-        loadingSearchAnimView.translatesAutoresizingMaskIntoConstraints = false
-        loadingSearchAnimView.centerXAnchor.constraint(equalTo: self.searchResultMangaTableView.centerXAnchor).isActive = true
-        loadingSearchAnimView.centerYAnchor.constraint(equalTo: self.searchResultMangaTableView.centerYAnchor, constant: -50).isActive = true
-        loadingSearchAnimView.isHidden = true
+        loadingSearchAnimView.setConstraint(width: 100, targetView: view)
         
         // result manga Tableview
         searchResultMangaTableView.contentInset = UIEdgeInsets(top: 60,
-                                                         left: 0,
-                                                         bottom: 40,
-                                                         right: 0)
+                                                               left: 0,
+                                                               bottom: 40,
+                                                               right: 0)
     }
     
     func initInstance() {
@@ -112,20 +104,29 @@ class SearchViewController: UIViewController {
         searchResultMangaTableView.keyboardDismissMode = .onDrag
     }
     
-    func initEventListener() { }
+    func initEventListener() {
+        // back Button Action
+        backButton.rx.tap
+            .asDriver()
+            .drive(onNext: {
+                self.dismiss(animated: true)
+            })
+            .disposed(by: disposeBag)
+    }
     
     // MARK: - Methods
-    func search(title: String) {
+    func setSearchResult(title: String) {
         
         searchResultMangaArr.removeAll()
         searchResultMangaTableView.reloadData()
         noResultsLabel.isHidden = true
-        startLoadingSearchResultAnimation()
+        searchResultPlaceholderLabel.isHidden = true
+        loadingSearchAnimView.play()
         isSearching = true
         view.endEditing(true)
         
         if title.count < 1 {
-            stopLoadingSearchResultAnimation()
+            loadingSearchAnimView.stop()
             noResultsLabel.isHidden = false
             self.view.makeToast("최소 한 글자 이상의 단어로 검색해주세요")
             
@@ -133,97 +134,23 @@ class SearchViewController: UIViewController {
         }
         
         DispatchQueue.global(qos: .background).async {
-            let modifiedTitle = title.replacingOccurrences(of: " ", with: "+")
-            let fullPath = "\(self.baseUrl)\(self.searchUrl)\(modifiedTitle)"
-            
-            let transformedUrl = self.transformURLString(fullPath)
-            
-            if let url = transformedUrl?.string {
-                guard let searchUrl = URL(string: url) else {return}
-                
+            self.networkHandler.getSearchResult(title: title) { result in
                 do {
-                    let htmlContent = try String(contentsOf: searchUrl, encoding: .utf8)
-                    let doc = try SwiftSoup.parse(htmlContent)
-                    let resultElements = try doc.getElementsByClass("media")
-                    
-                    resultElements.forEach { (Element) in
-                        do {
-                            // get Title
-                            let title = try Element.getElementsByClass("media-heading").text()
-                            
-                            // get Descriptions
-                            var descs: [String] = []
-                            let descElement = try Element.getElementsByClass("text-muted")
-                            descElement.forEach { (Element) in
-                                do {
-                                    descs.append(try Element.text())
-                                } catch {
-                                    descs.append("")
-                                    print(error.localizedDescription)
-                                }
-                            }
-                            
-                            // get Image
-                            var imgUrl = String(try Element.select("img").attr("src"))
-                            if !imgUrl.contains(self.baseUrl) && !imgUrl.isEmpty {
-                                imgUrl = "\(self.baseUrl)\(imgUrl)"
-                            }
-                            
-                            // get Link
-                            var SN = ""
-                            let link = String(try Element.select("a").attr("href"))
-                            if let range = link.range(of: "sca=") {
-                                SN = String(link[range.upperBound...])
-                            }
-                            
-                            // Append to result array
-                            let mangaInfo = MangaInfo(title: title,
-                                                      author: descs[0],
-                                                      updateCycle: descs[1],
-                                                      thumbnailImage: nil,
-                                                      thumbnailImageURL: imgUrl,
-                                                      mangaSN: SN)
-                            self.searchResultMangaArr.append(mangaInfo)
-                            
-                            print(title)
-                        } catch {
-                            print(error.localizedDescription)
-                        }
-                    }
+                    let result = try result.get()
+                    self.searchResultMangaArr = result
                     
                     DispatchQueue.main.async {
-                        self.searchResultMangaTableView.reloadData()
-                        self.stopLoadingSearchResultAnimation()
-                        self.isSearching = false
-                        
-                        if self.searchResultMangaArr.count == 0 {
-                            self.noResultsLabel.isHidden = false
-                        } else {
-                            self.noResultsLabel.isHidden = true
-                        }
+                        self.loadingSearchAnimView.stop()
+                        self.reloadResultTableView()
                     }
-                    
                 } catch {
-                    print(error.localizedDescription)
+                    // failure state
+                    DispatchQueue.main.async {
+                        self.searchResultPlaceholderLabel.isHidden = false
+                        self.loadingSearchAnimView.stop()
+                    }
                 }
-            } else {
-                // fail to transform the url
-                return
             }
-        }
-    }
-    
-    func startLoadingSearchResultAnimation() {
-        DispatchQueue.main.async {
-            self.loadingSearchAnimView.isHidden = false
-            self.loadingSearchAnimView.play()
-        }
-    }
-    
-    func stopLoadingSearchResultAnimation() {
-        DispatchQueue.main.async {
-            self.loadingSearchAnimView.isHidden = true
-            self.loadingSearchAnimView.stop()
         }
     }
     
@@ -234,39 +161,26 @@ class SearchViewController: UIViewController {
         }
     }
     
-    // https://stackoverflow.com/questions/48576329/ios-urlstring-not-working-always
-    func transformURLString(_ string: String) -> URLComponents? {
-        guard let urlPath = string.components(separatedBy: "?").first else {
-            return nil
-        }
-        var components = URLComponents(string: urlPath)
-        if let queryString = string.components(separatedBy: "?").last {
-            components?.queryItems = []
-            let queryItems = queryString.components(separatedBy: "&")
-            for queryItem in queryItems {
-                guard let itemName = queryItem.components(separatedBy: "=").first,
-                      let itemValue = queryItem.components(separatedBy: "=").last else {
-                        continue
-                }
-                components?.queryItems?.append(URLQueryItem(name: itemName, value: itemValue))
+    func reloadResultTableView() {
+        DispatchQueue.main.async {
+            self.searchResultMangaTableView.reloadData()
+            self.isSearching = false
+            
+            if self.searchResultMangaArr.count == 0 {
+                self.noResultsLabel.isHidden = false
+            } else {
+                self.noResultsLabel.isHidden = true
             }
         }
-        return components!
     }
     
     private func presentEpisdoeVC(_ mangaInfo: MangaInfo) {
         guard let episodeVC = storyboard?.instantiateViewController(identifier: "MangaEpisodeStoryboard") as? MangaEpisodeViewController else { return }
         
         episodeVC.modalPresentationStyle = .fullScreen
-        print("-------\(mangaInfo.mangaSN)=========")
         episodeVC.currentManga = mangaInfo
         
         present(episodeVC, animated: true, completion: nil)
-    }
-    
-    // MARK: - Actions
-    @IBAction func backButtonAction(_ sender: Any) {
-        self.dismiss(animated: true)
     }
 }
 
@@ -281,7 +195,7 @@ extension SearchViewController: UITextFieldDelegate {
                 return true
             }
             
-            search(title: title)
+            setSearchResult(title: title)
         }
         
         return true
@@ -330,7 +244,6 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
                             DispatchQueue.main.async {
                                 cell.thumbnailImagePlaceholderLabel.isHidden = false
                             }
-                            print(error.localizedDescription)
                         }
                     }
                 }

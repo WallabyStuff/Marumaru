@@ -18,7 +18,12 @@ class MangaSceneCell: UITableViewCell {
         super.prepareForReuse()
         onReuse()
         
-        // Initialization
-        sceneImageView.image = nil
+        // set background tile
+        let tileImage = UIImage(named: "Tile")!
+        let patternBackground = UIColor(patternImage: tileImage)
+        backgroundColor = patternBackground
+        sceneDividerView.backgroundColor = patternBackground
+        backgroundColor = patternBackground
+        sceneImageView.image = UIImage()
     }
 }

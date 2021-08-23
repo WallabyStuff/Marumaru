@@ -14,7 +14,21 @@ class MangaEpisodePopoverCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        initView()
+    }
+    
+    func initView() {
+        // episode title Label
         episodeTitleLabel.text = ""
         episodeTitleLabel.lineBreakMode = .byTruncatingMiddle
+        episodeTitleLabel.textColor = ColorSet.textColor
+        
+        // contentView
+        contentView.backgroundColor = ColorSet.transparentColor
+        
+        // selection View
+        let selectionView = UIView(frame: self.frame)
+        selectionView.backgroundColor = ColorSet.cellSelectionColor
+        self.selectedBackgroundView = selectionView
     }
 }
