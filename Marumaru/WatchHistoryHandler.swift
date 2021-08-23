@@ -78,6 +78,7 @@ class WatchHistoryHandler {
                 watchHistories.sort { $0.mangaUrl < $1.mangaUrl }
                 
                 observable.onNext(watchHistories)
+                observable.onCompleted()
                 return Disposables.create()
             } catch {
                 observable.onError(error)
@@ -92,9 +93,11 @@ class WatchHistoryHandler {
             do {
                 let realmInstance = try Realm()
                 
+                let objects = realmInstance.objects(WatchHistory.self)
                 try realmInstance.write {
-                    realmInstance.deleteAll()
+                    realmInstance.delete(objects)
                     observable.onNext(true)
+                    observable.onCompleted()
                 }
                 return Disposables.create()
             } catch {

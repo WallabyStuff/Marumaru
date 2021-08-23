@@ -43,4 +43,16 @@ class MangaEpisodeTableCell: UITableViewCell {
         thumbnailImageView.layer.borderWidth = 1
         thumbnailImageView.layer.borderColor = ColorSet.thumbnailBorderColor?.cgColor
     }
+    
+    func setWatched() {
+        titleLabel.textColor = ColorSet.placeHolderTextColor
+        descriptionLabel.textColor = ColorSet.placeHolderTextColor
+        backgroundColor = ColorSet.cellSelectionColor
+    }
+    
+    func setNotWatched() {
+        titleLabel.textColor = ColorSet.textColor
+        descriptionLabel.textColor = ColorSet.subTextColor
+        backgroundColor = ColorSet.backgroundColor
+    }
 }

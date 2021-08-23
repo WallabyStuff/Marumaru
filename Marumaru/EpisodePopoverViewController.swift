@@ -18,7 +18,7 @@ class EpisodePopoverViewController: UIViewController {
     weak var selectItemDelegate: SelectItemDelegate?
     
     var episodeArr = [Episode]()
-    var currentEpisodeTitle = ""
+    var currentEpisode: Episode?
     var currentEpisodeIndex: Int?
     
     @IBOutlet weak var episodePopoverTableView: UITableView!
@@ -27,15 +27,23 @@ class EpisodePopoverViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        initData()
         initView()
         initInstance()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        setEpisodeTableView()
+        setEpisodeTableView(index: currentEpisodeIndex)
     }
     
     // MARK: Initializations
+    func initData() {
+        if currentEpisode == nil {
+            popoverPresentationController?.dismissalTransitionDidEnd(true)
+            return
+        }
+    }
+    
     func initView() {
         episodePopoverTableView.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
         episodePopoverTableView.tableFooterView = UIView()
@@ -46,8 +54,8 @@ class EpisodePopoverViewController: UIViewController {
         episodePopoverTableView.dataSource = self
     }
     
-    func setEpisodeTableView() {
-        if let index = currentEpisodeIndex {
+    func setEpisodeTableView(index: Int?) {
+        if let index = index {
             let indexPath = IndexPath(row: index, section: 0)
             episodePopoverTableView.scrollToRow(at: indexPath, at: .middle, animated: true)
         }
@@ -72,13 +80,12 @@ extension EpisodePopoverViewController: UITableViewDelegate, UITableViewDataSour
         episodeCell.episodeTitleLabel.text = episodeArr[indexPath.row].title
         
         // Accent text color to current episode
-        if episodeCell.episodeTitleLabel.text?.lowercased().trimmingCharacters(in: .whitespaces) ==
-            currentEpisodeTitle.lowercased().trimmingCharacters(in: .whitespaces) {
+        if episodeArr[indexPath.row].serialNumber == currentEpisode!.serialNumber {
             episodeCell.episodeTitleLabel.textColor = ColorSet.accentColor
             episodeCell.contentView.backgroundColor = ColorSet.cellSelectionColor
         } else {
             episodeCell.episodeTitleLabel.textColor = ColorSet.textColor
-            episodeCell.contentView.backgroundColor = ColorSet.backgroundColor
+            episodeCell.contentView.backgroundColor = ColorSet.transparentColor
         }
         
         return episodeCell

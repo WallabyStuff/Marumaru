@@ -7,53 +7,28 @@
 
 import UIKit
 
-import Alamofire
-import SwiftSoup
 import Toast
 import Lottie
 import CoreData
 import Hero
-import RealmSwift
 import RxSwift
 import RxCocoa
 
 class ViewController: UIViewController {
     
     // MARK: - Declarations
-    let baseUrl = "https://marumaru.cloud"
-    
-    struct UpdatedManga {
-        var title: String
-        var link: String
-        var previewImageUrl: String?
-    }
-    
-    struct RecentManga {
-        var title: String
-        var link: String
-        var previewImageUrl: String?
-        var previewImage: UIImage?
-    }
-    
-    struct TopRankManga {
-        var title: String
-        var link: String
-    }
-    
     let disposeBag = DisposeBag()
     let imageCacheHandler = ImageCacheHandler()
     let networkHandler = NetworkHandler()
     let watchHistoryHandler = WatchHistoryHandler()
-    var updatedMangaArr: [UpdatedManga] = []
+    
+    var updatedMangaArr: [Manga] = []
     var watchHistoryArr: [WatchHistory] = []
     var topRankMangaArr: [TopRankManga] = []
     
-    var isLoadingUpdatedManga = false
-    var isLoadingTopRankManga = false
+    var loadingUpdatedMangaAnimView = LoadingView()
+    var loadingToprankMangaAnimView = LoadingView()
     
-    var loadingUpdatedMangaAnimView = AnimationView()
-    var loadingToprankMangaAnimView = AnimationView()
-
     @IBOutlet weak var appbarView: AppbarView!
     @IBOutlet weak var homeIcon: UIImageView!
     @IBOutlet weak var updatesHeaderLabel: UILabel!
@@ -64,10 +39,13 @@ class ViewController: UIViewController {
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var mainScrollView: UIScrollView!
     @IBOutlet weak var watchHisotryPlaceholderLabel: UILabel!
-    
+    @IBOutlet weak var showWatchHistoryButton: UIButton!
     @IBOutlet weak var updatedMangaCollectionView: UICollectionView!
     @IBOutlet weak var watchHistoryCollectionView: UICollectionView!
     @IBOutlet weak var topRankMangaTableView: UITableView!
+    @IBOutlet weak var updatedMangaPlaceholderLabel: UILabel!
+    @IBOutlet weak var top20MangaPlaceholderLabel: UILabel!
+    @IBOutlet weak var updatesBoardView: UIView!
     
     // MARK: - LifeCycle
     override func viewDidLoad() {
@@ -75,14 +53,14 @@ class ViewController: UIViewController {
         
         initView()
         initInstance()
-        
-        setMainContents()
+        initEventListener()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
-        loadMangaHistory()
+        setMainContents()
+        setWatchHistory()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -108,7 +86,6 @@ class ViewController: UIViewController {
         
         // updatedManga CollectionView
         updatedMangaCollectionView.contentInset = UIEdgeInsets(top: 0, left: 25, bottom: 0, right: 25)
-//        updatedMangaCollectionView.layer.masksToBounds = false
         
         // recentManga CollectionView
         watchHistoryCollectionView.contentInset = UIEdgeInsets(top: 0, left: 25, bottom: 0, right: 25)
@@ -129,23 +106,19 @@ class ViewController: UIViewController {
         top20HeaderLabel.layer.masksToBounds = true
         top20HeaderLabel.layer.cornerRadius = 10
         
-        loadingUpdatedMangaAnimView = AnimationView(name: "loading_square")
-        loadingUpdatedMangaAnimView.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
-        loadingUpdatedMangaAnimView.loopMode = .loop
-        updatedMangaCollectionView.addSubview(loadingUpdatedMangaAnimView)
-        loadingUpdatedMangaAnimView.translatesAutoresizingMaskIntoConstraints = false
-        loadingUpdatedMangaAnimView.centerXAnchor.constraint(equalTo: updatedMangaCollectionView.centerXAnchor, constant: -25).isActive = true
-        loadingUpdatedMangaAnimView.centerYAnchor.constraint(equalTo: updatedMangaCollectionView.centerYAnchor).isActive = true
-        loadingUpdatedMangaAnimView.isHidden = true
+        // loading updated manga animation View
+        loadingUpdatedMangaAnimView = LoadingView(name: "loading_cat",
+                                                  loopMode: .autoReverse,
+                                                  frame: CGRect(x: 0, y: 0, width: 150, height: 150))
+        updatesBoardView.addSubview(loadingUpdatedMangaAnimView)
+        loadingUpdatedMangaAnimView.setConstraint(width: 150, targetView: updatesBoardView)
         
-        loadingToprankMangaAnimView = AnimationView(name: "loading_square")
-        loadingToprankMangaAnimView.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
-        loadingToprankMangaAnimView.loopMode = .loop
+        // loading top rank animation View
+        loadingToprankMangaAnimView = LoadingView(name: "loading_cat",
+                                                  loopMode: .autoReverse,
+                                                  frame: CGRect(x: 0, y: 0, width: 150, height: 150))
         topRankMangaTableView.addSubview(loadingToprankMangaAnimView)
-        loadingToprankMangaAnimView.translatesAutoresizingMaskIntoConstraints = false
-        loadingToprankMangaAnimView.centerXAnchor.constraint(equalTo: topRankMangaTableView.centerXAnchor).isActive = true
-        loadingToprankMangaAnimView.centerYAnchor.constraint(equalTo: topRankMangaTableView.centerYAnchor).isActive = true
-        loadingToprankMangaAnimView.isHidden = true
+        loadingToprankMangaAnimView.setConstraint(width: 150, targetView: topRankMangaTableView)
     }
     
     func initInstance() {
@@ -165,147 +138,145 @@ class ViewController: UIViewController {
         topRankMangaTableView.dataSource = self
     }
     
+    func initEventListener() {
+        // searchButton Action
+        searchButton.rx.tap
+            .asDriver()
+            .drive(onNext: { _ in
+                self.presentSearchVC()
+            })
+            .disposed(by: disposeBag)
+        
+        // show History Button Action
+        showWatchHistoryButton.rx.tap
+            .asDriver()
+            .drive(onNext: {
+                self.presentWatchHistoryVC()
+            })
+            .disposed(by: disposeBag)
+        
+        // refresh updated Manga Button Action
+        refreshUpdatedMangaButton.rx.tap
+            .debounce(.milliseconds(300), scheduler: ConcurrentMainScheduler.instance)
+            .observe(on: ConcurrentDispatchQueueScheduler.init(qos: .background))
+            .subscribe(onNext: { _ in
+                self.setUpdatedManga()
+            })
+            .disposed(by: disposeBag)
+        
+        // refresh top20 Manga Button Action
+        refreshTop20MangaButton.rx.tap
+            .debounce(.milliseconds(300), scheduler: ConcurrentMainScheduler.instance)
+            .observe(on: ConcurrentDispatchQueueScheduler.init(qos: .background))
+            .subscribe(onNext: {
+                self.setTopRankManga()
+            })
+            .disposed(by: disposeBag)
+    }
+    
     // MARK: - Methods
     func setMainContents() {
-        DispatchQueue.global(qos: .background).async {
-            self.startLoadingUpdateAnim()
-            self.setUpdated()
-        }
-        DispatchQueue.global(qos: .background).async {
-            self.startLoadingRankAnim()
-            self.setRank()
-        }
-    }
-    
-    func startLoadingUpdateAnim() {
-        DispatchQueue.main.async {
-            self.loadingUpdatedMangaAnimView.isHidden = false
-            self.loadingUpdatedMangaAnimView.play()
-        }
-    }
-    
-    func stopLoadingUpdateAnim() {
-        DispatchQueue.main.async {
-            self.loadingUpdatedMangaAnimView.isHidden = true
+        if updatedMangaArr.count == 0 {
+            self.setUpdatedManga()
+        } else {
             self.loadingUpdatedMangaAnimView.stop()
-        }
-    }
-    
-    func startLoadingRankAnim() {
-        DispatchQueue.main.async {
-            self.loadingToprankMangaAnimView.isHidden = false
-            self.loadingToprankMangaAnimView.play()
-        }
-    }
-    
-    func stopLoadingRankAnim() {
-        DispatchQueue.main.async {
-            self.loadingToprankMangaAnimView.isHidden = true
-            self.loadingToprankMangaAnimView.stop()
-        }
-    }
-    
-    func setUpdated() {
-        if isLoadingUpdatedManga == true {
-            return
+            if updatedMangaCollectionView.visibleCells.count == 0 {
+                self.updatedMangaCollectionView.reloadData()
+            }
         }
         
+        if topRankMangaArr.count == 0 {
+            self.setTopRankManga()
+        } else {
+            self.loadingToprankMangaAnimView.stop()
+            if topRankMangaTableView.visibleCells.count == 0 {
+                self.topRankMangaTableView.reloadData()
+            }
+        }
+    }
+    
+    func setUpdatedManga() {
         DispatchQueue.main.async {
-            self.isLoadingUpdatedManga = true
+            self.updatedMangaPlaceholderLabel.isHidden = true
             self.updatedMangaArr.removeAll()
             self.updatedMangaCollectionView.reloadData()
-            self.startLoadingUpdateAnim()
+            self.loadingUpdatedMangaAnimView.play()
         }
         
-        guard let baseUrl = URL(string: "https://marumaru.cloud") else { return }
-        
-        do {
-            let htmlContent = try String(contentsOf: baseUrl, encoding: .utf8)
-            let doc = try SwiftSoup.parse(htmlContent)
-            let updatedMangas = try doc.getElementsByClass("post-row")
-            
-            self.updatedMangaArr.removeAll()
-            
-            try updatedMangas.forEach { element in
-                let title = try element.select("a").text().trimmingCharacters(in: .whitespaces)
-                var imgUrl = try String(element.select("img").attr("src")).trimmingCharacters(in: .whitespaces)
-                let link = try element.select("a").attr("href").trimmingCharacters(in: .whitespaces)
-                
-                // url preset
-                if !imgUrl.contains(self.baseUrl) {
-                    imgUrl = "\(baseUrl)\(imgUrl)"
+        DispatchQueue.global(qos: .background).async {
+            self.networkHandler.getUpdatedManga { result in
+                do {
+                    let result = try result.get()
+                    self.updatedMangaArr = result
+                    
+                    // Finish to load updated manga
+                    DispatchQueue.main.async {
+                        self.loadingUpdatedMangaAnimView.stop { isDone in
+                            if isDone {
+                                self.updatedMangaCollectionView.reloadData()
+                            }
+                        }
+                    }
+                } catch {
+                    // failure state
+                    DispatchQueue.main.async {
+                        self.loadingUpdatedMangaAnimView.stop { isDone in
+                            if isDone {
+                                self.updatedMangaPlaceholderLabel.isHidden = false
+                            }
+                        }
+                    }
                 }
-                
-                self.updatedMangaArr.append(UpdatedManga(title: title, link: link, previewImageUrl: imgUrl))
             }
-            
-            // Finish to load updated manga
-            DispatchQueue.main.async {
-                self.stopLoadingUpdateAnim()
-                self.updatedMangaCollectionView.reloadData()
-                self.isLoadingUpdatedManga = false
-            }
-            
-        } catch {
-            print("Log something wend wrong")
-            print(error.localizedDescription)
         }
-        
     }
     
-    func setRank() {
-        if isLoadingTopRankManga == true {
-            return
-        }
-        
+    func setTopRankManga() {
         DispatchQueue.main.async {
-            self.isLoadingTopRankManga = true
+            self.top20MangaPlaceholderLabel.isHidden = true
             self.topRankMangaArr.removeAll()
             self.topRankMangaTableView.reloadData()
-            self.startLoadingRankAnim()
+            self.loadingToprankMangaAnimView.play()
         }
         
-        guard let baseUrl = URL(string: "https://marumaru.cloud") else { return }
-        
-        do {
-            let htmlContent = try String(contentsOf: baseUrl, encoding: .utf8)
-            let doc = try SwiftSoup.parse(htmlContent)
-            let rank = try doc.getElementsByClass("basic-post-list")
-            let rankElements = try rank.select("a")
-            
-            self.topRankMangaArr.removeAll()
-            
-            try rankElements.forEach { element in
-                let title = try element.select("a").text().trimmingCharacters(in: .whitespaces)
-                let link = try element.select("a").attr("href").trimmingCharacters(in: .whitespaces)
+        networkHandler.getTopRankedManga { result in
+            do {
+                let result = try result.get()
+                self.topRankMangaArr = result
                 
-                self.topRankMangaArr.append(TopRankManga(title: title, link: link))
+                // Finish to load TopRank Manga data
+                DispatchQueue.main.async {
+                    self.loadingToprankMangaAnimView.stop { isDone in
+                        if isDone {
+                            self.topRankMangaTableView.reloadData()
+                        }
+                    }
+                }
+            } catch {
+                // failure state
+                DispatchQueue.main.async {
+                    self.loadingToprankMangaAnimView.stop { isDone in
+                        if isDone {
+                            self.top20MangaPlaceholderLabel.isHidden = false
+                        }
+                    }
+                }
             }
-            
-            // Finish to load TopRank Manga data
-            DispatchQueue.main.async {
-                self.stopLoadingRankAnim()
-                self.topRankMangaTableView.reloadData()
-                self.isLoadingTopRankManga = false
-            }
-
-        } catch {
-            print(error.localizedDescription)
         }
     }
     
-    func loadMangaHistory() {
+    func setWatchHistory() {
         watchHistoryArr.removeAll()
-        watchHistoryCollectionView.reloadData()
+        reloadWatchHistoryCollectionView()
         
         watchHistoryHandler.fetchData()
-            .subscribe { event in
-                if let watchHistories = event.element {
+            .subscribe(onNext: { watchHistories in
+                if self.watchHistoryArr != watchHistories {
                     self.watchHistoryArr = watchHistories
                     self.reloadWatchHistoryCollectionView()
                 }
-                
-            }.disposed(by: disposeBag)
+            })
+            .disposed(by: disposeBag)
     }
     
     func reloadWatchHistoryCollectionView() {
@@ -330,34 +301,18 @@ class ViewController: UIViewController {
         present(viewMangaVC, animated: true, completion: nil)
     }
     
-    // MARK: - Actions
-    @IBAction func searchButtonAction(_ sender: Any) {
-        let destStotyboard = storyboard?.instantiateViewController(identifier: "SearchStoryboard") as! SearchViewController
-        
+    func presentSearchVC() {
+        guard let destStotyboard = storyboard?.instantiateViewController(identifier: "SearchStoryboard") as? SearchViewController else { return }
         destStotyboard.modalPresentationStyle = .fullScreen
         
         present(destStotyboard, animated: true)
     }
     
-    @IBAction func showAllHistoryButtonAction(_ sender: Any) {
+    func presentWatchHistoryVC() {
         guard let destStoryboard = storyboard?.instantiateViewController(identifier: "MangaHistoryStoryboard") as? WatchHistoryViewController else { return }
-        
-        destStoryboard.dismissDelegate = self
         destStoryboard.modalPresentationStyle = .fullScreen
         
         present(destStoryboard, animated: true)
-    }
-    
-    @IBAction func reloadUpdatedMangaButtonAction(_ sender: Any) {
-        DispatchQueue.global(qos: .background).async {
-            self.setUpdated()
-        }
-    }
-    
-    @IBAction func reloadTopRankMangaButtonAction(_ sender: Any) {
-        DispatchQueue.global(qos: .background).async {
-            self.setRank()
-        }
     }
 }
 
@@ -382,16 +337,14 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
         case updatedMangaCollectionView:
             guard let collectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: "mangaThumbnailCollectionCell", for: indexPath) as? MangaThumbnailCollectionCell else { return UICollectionViewCell() }
             
-            if indexPath.row > updatedMangaArr.count - 1 {
-                return UICollectionViewCell()
-            }
+            let currentManga = updatedMangaArr[indexPath.row]
             
-            collectionCell.titleLabel.text = updatedMangaArr[indexPath.row].title
+            collectionCell.titleLabel.text = currentManga.title
             collectionCell.thumbnailImageView.image = UIImage()
             collectionCell.thumbnailImagePlaceholderLabel.isHidden = false
-            collectionCell.thumbnailImagePlaceholderLabel.text = updatedMangaArr[indexPath.row].title
+            collectionCell.thumbnailImagePlaceholderLabel.text = currentManga.title
             
-            if let previewImageUrl = updatedMangaArr[indexPath.row].previewImageUrl {
+            if let previewImageUrl = currentManga.thumbnailImageUrl {
                 if let url = URL(string: previewImageUrl) {
                     let token = networkHandler.getImage(url) { result in
                         DispatchQueue.global(qos: .background).async {
@@ -408,14 +361,12 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
                                     }
                                 }
                             } catch {
-                                print(error.localizedDescription)
                                 DispatchQueue.main.async {
                                     collectionCell.thumbnailImagePlaceholderLabel.isHidden = false
                                 }
                             }
                         }
                     }
-                    
                     collectionCell.onReuse = {
                         if let token = token {
                             self.networkHandler.cancelLoadImage(token)
@@ -423,19 +374,16 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
                     }
                 }
             }
-            
             return collectionCell
+            
         case watchHistoryCollectionView:
             guard let collectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: "mangaThumbnailCollectionCell", for: indexPath) as? MangaThumbnailCollectionCell else { return UICollectionViewCell() }
-            
-            if indexPath.row > watchHistoryArr.count - 1 {
-                return UICollectionViewCell()
-            }
             
             let currentManga = watchHistoryArr[indexPath.row]
             // set title & place holder
             collectionCell.titleLabel.text = currentManga.mangaTitle
             collectionCell.thumbnailImagePlaceholderLabel.text = currentManga.mangaTitle
+            collectionCell.thumbnailImagePlaceholderLabel.isHidden = false
             
             if let thumbnailImageUrl = URL(string: currentManga.thumbnailImageUrl) {
                 networkHandler.getImage(thumbnailImageUrl) { result in
@@ -445,7 +393,10 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
                             collectionCell.thumbnailImageView.image = result.imageCache.image
                             collectionCell.thumbnailImageBaseView.setThumbnailShadow(with: result.imageCache.averageColor.cgColor)
                             collectionCell.thumbnailImagePlaceholderLabel.isHidden = true
-                            collectionCell.thumbnailImageView.startFadeInAnim(duration: 0.3)
+                            
+                            if result.animate {
+                                collectionCell.thumbnailImageView.startFadeInAnim(duration: 0.3)
+                            }
                         }
                     } catch {
                         DispatchQueue.main.async {
@@ -459,7 +410,6 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
                 }
             }
             
-            
             return collectionCell
         default:
             return UICollectionViewCell()
@@ -471,24 +421,16 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
         
         if collectionView == updatedMangaCollectionView {
             var mangaUrl = updatedMangaArr[indexPath.row].link
-            let mangaTitle = updatedMangaArr[indexPath.row].title
+            mangaUrl = networkHandler.getCompleteUrl(url: mangaUrl)
             
-            // check link does have baseUrl
-            if !mangaUrl.contains(baseUrl) {
-                mangaUrl = "\(baseUrl)\(mangaUrl)"
-            }
+            let mangaTitle = updatedMangaArr[indexPath.row].title
             
             presentViewMangaVC(mangaTitle, mangaUrl)
         } else {
             var mangaUrl = watchHistoryArr[indexPath.row].mangaUrl
+            mangaUrl = networkHandler.getCompleteUrl(url: mangaUrl)
+            
             let mangaTitle = watchHistoryArr[indexPath.row].mangaTitle
-//            guard var mangaUrl = watchHistoryArr[indexPath.row].mangaUrl,
-//                  let mangaTitle = watchHistoryArr[indexPath.row].mangaTitle else { return }
-//
-            // check link does have baseUrl
-            if !mangaUrl.contains(baseUrl) {
-                mangaUrl = "\(baseUrl)\(mangaUrl)"
-            }
             
             presentViewMangaVC(mangaTitle, mangaUrl)
         }
@@ -508,13 +450,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         
-        // Custom Selection Style
-        let rect = CGRect(x: 0, y: 0, width: 200, height: 200)
-        let selectedUIView = UIView(frame: rect)
-        selectedUIView.layer.cornerRadius = 10
-        selectedUIView.backgroundColor = ColorSet.cellSelectionColor
-        topRankCell.selectedBackgroundView = selectedUIView
-        
+        topRankCell.selectionStyle = .none
         topRankCell.rankLabel.text = String(indexPath.row + 1)
         topRankCell.titleLabel.text = topRankMangaArr[indexPath.row].title
         
@@ -523,18 +459,10 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         var mangaUrl = topRankMangaArr[indexPath.row].link
-        let mangaTitl = topRankMangaArr[indexPath.row].title
+        mangaUrl = networkHandler.getCompleteUrl(url: mangaUrl)
         
-        if !mangaUrl.contains(baseUrl) {
-            mangaUrl = "\(baseUrl)\(mangaUrl)"
-        }
+        let mangaTitle = topRankMangaArr[indexPath.row].title
         
-        presentViewMangaVC(mangaTitl, mangaUrl)
-    }
-}
-
-extension ViewController: DismissDelegate {
-    func refreshHistory() {
-        self.loadMangaHistory()
+        presentViewMangaVC(mangaTitle, mangaUrl)
     }
 }

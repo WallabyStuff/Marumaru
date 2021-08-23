@@ -34,33 +34,30 @@
                             <constraint firstAttribute="height" constant="70" id="QVx-XN-kmv"/>
                         </constraints>
                     </imageView>
-                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="ZtG-IX-fbt">
-                        <rect key="frame" x="140" y="12" width="197" height="74"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Episode title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yEp-ET-Kky">
-                                <rect key="frame" x="0.0" y="0.0" width="197" height="37"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <color key="textColor" name="TextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="description" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qL3-DE-96X">
-                                <rect key="frame" x="0.0" y="37" width="197" height="37"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <color key="textColor" name="SubTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                    </stackView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Episode title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yEp-ET-Kky">
+                        <rect key="frame" x="137" y="20" width="200" height="19.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                        <color key="textColor" name="TextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="description" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qL3-DE-96X">
+                        <rect key="frame" x="137" y="47.5" width="200" height="17"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" name="SubTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="ZtG-IX-fbt" firstAttribute="leading" secondItem="5be-zB-JeX" secondAttribute="trailing" constant="15" id="69n-mz-JWn"/>
-                    <constraint firstAttribute="trailing" secondItem="ZtG-IX-fbt" secondAttribute="trailing" constant="20" id="BdQ-Lr-jQt"/>
+                    <constraint firstItem="qL3-DE-96X" firstAttribute="leading" secondItem="5be-zB-JeX" secondAttribute="trailing" constant="12" id="65e-Yn-JFe"/>
+                    <constraint firstItem="yEp-ET-Kky" firstAttribute="leading" secondItem="5be-zB-JeX" secondAttribute="trailing" constant="12" id="FRu-qx-1ge"/>
                     <constraint firstItem="D4g-Pf-kYn" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="GHZ-Ke-fUK"/>
-                    <constraint firstAttribute="bottom" secondItem="ZtG-IX-fbt" secondAttribute="bottom" constant="12" id="KYa-fT-fVA"/>
                     <constraint firstItem="D4g-Pf-kYn" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="OZ4-gp-aJr"/>
                     <constraint firstItem="5be-zB-JeX" firstAttribute="leading" secondItem="D4g-Pf-kYn" secondAttribute="trailing" constant="5" id="OrL-HZ-OVM"/>
-                    <constraint firstItem="ZtG-IX-fbt" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="12" id="Ykp-fU-JWP"/>
+                    <constraint firstItem="qL3-DE-96X" firstAttribute="top" secondItem="yEp-ET-Kky" secondAttribute="bottom" constant="8" id="PiW-qQ-0WL"/>
+                    <constraint firstAttribute="trailing" secondItem="yEp-ET-Kky" secondAttribute="trailing" constant="20" id="VKt-S3-KsD"/>
+                    <constraint firstAttribute="trailing" secondItem="qL3-DE-96X" secondAttribute="trailing" constant="20" id="caB-XQ-SXe"/>
                     <constraint firstItem="5be-zB-JeX" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="lsU-by-YbC"/>
+                    <constraint firstItem="yEp-ET-Kky" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="20" id="qSX-XD-w5l"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
@@ -71,7 +68,7 @@
                 <outlet property="thumbnailImageView" destination="5be-zB-JeX" id="T0n-xb-jhS"/>
                 <outlet property="titleLabel" destination="yEp-ET-Kky" id="eJU-v8-caE"/>
             </connections>
-            <point key="canvasLocation" x="164.49275362318841" y="170.75892857142856"/>
+            <point key="canvasLocation" x="163.04347826086959" y="170.75892857142856"/>
         </tableViewCell>
     </objects>
     <resources>

@@ -157,8 +157,9 @@ class ImageCacheHandler {
                 do {
                     let realmInstnace = try Realm()
                     
+                    let objects = realmInstnace.objects(ImageCache.self)
                     try realmInstnace.write {
-                        realmInstnace.deleteAll()
+                        realmInstnace.delete(objects)
                     }
                     observable.onCompleted()
                 } catch {

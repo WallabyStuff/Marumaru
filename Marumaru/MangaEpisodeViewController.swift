@@ -7,10 +7,7 @@
 
 import UIKit
 
-import SwiftSoup
-import Toast
 import Lottie
-import CoreData
 import Hero
 import RxSwift
 import RxCocoa
@@ -18,17 +15,16 @@ import RxCocoa
 class MangaEpisodeViewController: UIViewController {
 
     // MARK: - Declarations
-    let baseUrl = "https://marumaru.cloud"
-    let baseImgUrl = "https://marumaru.cloud"
-    public var mangaSN: String?
-    var disposeBag = DisposeBag()
-    
+    var mangaSN: String?
     var currentManga: MangaInfo?
     
+    var disposeBag = DisposeBag()
+    let watchHistoryHandler = WatchHistoryHandler()
+    var watchHistoryArr = [WatchHistory]()
     let networkHandler = NetworkHandler()
     var episodeArr = [MangaEpisode]()
     
-    var loadingEpisodeAnimView = AnimationView()
+    var loadingEpisodeAnimView = LoadingView()
     
     @IBOutlet weak var appbarView: UIView!
     @IBOutlet weak var infoContentView: UIView!
@@ -47,9 +43,17 @@ class MangaEpisodeViewController: UIViewController {
 
         initView()
         initInstance()
-        initMangaInfo()
+        initEventListener()
         
-        getData()
+        setMangaInfo()
+        setMangaEpisode()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        
+        getWatchHistory()
+        mangaEpisodeTableView.reloadData()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -100,14 +104,11 @@ class MangaEpisodeViewController: UIViewController {
         scrollToBottomButton.hero.modifiers = [.translate(y: 100)]
         
         // Loading Episode AnimView
-        loadingEpisodeAnimView = AnimationView(name: "loading_square")
-        loadingEpisodeAnimView.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
-        loadingEpisodeAnimView.loopMode = .loop
-        loadingEpisodeAnimView.isHidden = true
+        loadingEpisodeAnimView = LoadingView(name: "loading_cat",
+                                             loopMode: .autoReverse,
+                                             frame: CGRect(x: 0, y: 0, width: 150, height: 150))
         self.view.addSubview(loadingEpisodeAnimView)
-        loadingEpisodeAnimView.translatesAutoresizingMaskIntoConstraints = false
-        loadingEpisodeAnimView.centerXAnchor.constraint(equalTo: mangaEpisodeTableView.centerXAnchor).isActive = true
-        loadingEpisodeAnimView.centerYAnchor.constraint(equalTo: mangaEpisodeTableView.centerYAnchor, constant: -50).isActive = true
+        loadingEpisodeAnimView.setConstraint(width: 150, targetView: mangaEpisodeTableView)
     }
     
     func initInstance() {
@@ -118,7 +119,25 @@ class MangaEpisodeViewController: UIViewController {
         mangaEpisodeTableView.dataSource = self
     }
     
-    func initMangaInfo() {
+    func initEventListener() {
+        // back Button Action
+        backButton.rx.tap
+            .asDriver()
+            .drive(onNext: {
+                self.dismiss(animated: true, completion: nil)
+            })
+            .disposed(by: disposeBag)
+        
+        // scroll to bottom Button Action
+        scrollToBottomButton.rx.tap
+            .asDriver()
+            .drive(onNext: {
+                self.scrollToBottom()
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    func setMangaInfo() {
         guard let currentManga = currentManga else {
             dismiss(animated: true, completion: nil)
             return
@@ -150,7 +169,7 @@ class MangaEpisodeViewController: UIViewController {
                                 self.thumbnailImageView.layer.borderColor = UIColor(hexString: result.imageCache.imageAvgColorHex).cgColor
                             }
                         } catch {
-                            print(error)
+                            // fail to get representative Image State
                         }
                     }
                 }
@@ -159,101 +178,36 @@ class MangaEpisodeViewController: UIViewController {
     }
     
     // MARK: - Methods
-    func startLoadingEpisodeAnim() {
-        DispatchQueue.main.async {
-            self.loadingEpisodeAnimView.isHidden = false
-            self.loadingEpisodeAnimView.play()
-        }
-    }
-    
-    func stopLoadingEpisodeAnim() {
-        DispatchQueue.main.async {
-            self.loadingEpisodeAnimView.isHidden = true
-            self.loadingEpisodeAnimView.stop()
-        }
-    }
-    
     // get episode data from url
-    // TODO: move function to network handler
-    func getData() {
+    func setMangaEpisode() {
         if episodeArr.count > 0 {
             return
         }
         
-        startLoadingEpisodeAnim()
+        loadingEpisodeAnimView.play()
         
         DispatchQueue.global(qos: .background).async {
-            do {
-                let completeUrl = "\(self.baseUrl)/bbs/cmoic/\(self.currentManga!.mangaSN)"
-                
-                print(completeUrl)
-                guard let url = URL(string: completeUrl) else {return}
-                let htmlContent = try String(contentsOf: url, encoding: .utf8)
-                let doc = try SwiftSoup.parse(htmlContent)
-                
-                // Getting Infos
-                let headElement = try doc.getElementsByClass("list-wrap")
-                
-                if let superElement = headElement.first() {
-                    let tbody = try superElement.getElementsByTag("tbody")
-                    
-                    if let tbody = tbody.first() {
-                        let episodeElement = try tbody.getElementsByTag("tr")
-                        
-                        try episodeElement.forEach { (Element) in
-                            let title = try Element.select("a").text().trimmingCharacters(in: .whitespaces)
-                            let description = try Element.getElementsByTag("span").text()
-                            
-                            var link = String(try Element.select("a").attr("href"))
-                            if link != "" && !link.contains(self.baseUrl) {
-                                link = "\(self.baseUrl)\(link)"
-                            }
-                            
-                            var previewImageUrl = String(try Element.select("img").attr("src"))
-                            if !previewImageUrl.isEmpty && !previewImageUrl.contains(self.baseImgUrl) {
-                                previewImageUrl = "\(self.baseImgUrl)\(previewImageUrl)"
-                            }
-                            
-                            self.episodeArr.append(MangaEpisode(title: title, description: description, thumbnailImageURL: previewImageUrl, mangaURL: link))
-                        }
-                    }
+            self.networkHandler.getEpisode(serialNumber: self.currentManga!.mangaSN) { result in
+                do {
+                    let result = try result.get()
+                    self.episodeArr = result
                     
                     DispatchQueue.main.async {
-                        self.mangaEpisodeTableView.reloadData()
-                        self.episodeSizeLabel.text = "총 \(self.episodeArr.count)화"
-                        
-                        self.stopLoadingEpisodeAnim()
+                        self.loadingEpisodeAnimView.stop { isDone in
+                            if isDone {
+                                self.mangaEpisodeTableView.reloadData()
+                                self.episodeSizeLabel.text = "총 \(self.episodeArr.count)화"
+                            }
+                        }
                     }
-                    
-                } else {
-                    // no episodes
-                    self.stopLoadingEpisodeAnim()
+                } catch {
+                    // failure state
+                    DispatchQueue.main.async {
+                        self.loadingEpisodeAnimView.stop()
+                    }
                 }
-                
-            } catch {
-                print(error.localizedDescription)
             }
         }
-    }
-        
-    // https://stackoverflow.com/questions/48576329/ios-urlstring-not-working-always
-    func transformURLString(_ string: String) -> URLComponents? {
-        guard let urlPath = string.components(separatedBy: "?").first else {
-            return nil
-        }
-        var components = URLComponents(string: urlPath)
-        if let queryString = string.components(separatedBy: "?").last {
-            components?.queryItems = []
-            let queryItems = queryString.components(separatedBy: "&")
-            for queryItem in queryItems {
-                guard let itemName = queryItem.components(separatedBy: "=").first,
-                      let itemValue = queryItem.components(separatedBy: "=").last else {
-                        continue
-                }
-                components?.queryItems?.append(URLQueryItem(name: itemName, value: itemValue))
-            }
-        }
-        return components!
     }
     
     func fadeScrollToBottomButton(bool: Bool) {
@@ -270,6 +224,14 @@ class MangaEpisodeViewController: UIViewController {
         }
     }
     
+    func scrollToBottom() {
+        if self.mangaEpisodeTableView.contentSize.height > 0 {
+            let indexPath = IndexPath(row: self.episodeArr.count - 1, section: 0)
+            
+            self.mangaEpisodeTableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+        }
+    }
+    
     func presentViewMangaVC(_ mangaTitle: String, _ mangaUrl: String) {
         guard let viewMangaVC = storyboard?.instantiateViewController(identifier: "ViewMangaStoryboard") as? ViewMangaViewController else { return }
         viewMangaVC.modalPresentationStyle = .fullScreen
@@ -280,22 +242,25 @@ class MangaEpisodeViewController: UIViewController {
         present(viewMangaVC, animated: true, completion: nil)
     }
     
-    // MARK: - Actions
-    @IBAction func scrollToBottomButtonAction(_ sender: Any) {
-        DispatchQueue.main.async {
-
-            if self.mangaEpisodeTableView.contentSize.height > 0 {
-                let indexPath = IndexPath(row: self.episodeArr.count - 1, section: 0)
-                
-                self.mangaEpisodeTableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+    func isAlreadyWatched(url: String) -> Bool {
+        var isWatched = false
+        watchHistoryArr.forEach { watchHistory in
+            if watchHistory.mangaUrl.trimmingCharacters(in: .whitespaces) == url.trimmingCharacters(in: .whitespaces) {
+                isWatched = true
             }
         }
+        
+        return isWatched
     }
     
-    @IBAction func backButtonAction(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
+    func getWatchHistory() {
+        watchHistoryArr.removeAll()
+        
+        watchHistoryHandler.fetchData()
+            .subscribe(onNext: { watchHistories in
+                self.watchHistoryArr = watchHistories
+            }).disposed(by: disposeBag)
     }
-    
 }
 
 // MARK: - Extenstions
@@ -311,12 +276,20 @@ extension MangaEpisodeViewController: UITableViewDelegate, UITableViewDataSource
             return UITableViewCell()
         }
         
-        episodeCell.titleLabel.text = episodeArr[indexPath.row].title
-        episodeCell.descriptionLabel.text = episodeArr[indexPath.row].description
+        let currentEpisode = episodeArr[indexPath.row]
+        
+        episodeCell.titleLabel.text = currentEpisode.title
+        episodeCell.descriptionLabel.text = currentEpisode.description
         episodeCell.indexLabel.text = String(episodeArr.count - indexPath.row)
         episodeCell.thumbnailImageView.image = nil
         
-        if let previewImageUrl = episodeArr[indexPath.row].thumbnailImageURL {
+        if isAlreadyWatched(url: currentEpisode.mangaURL) {
+            episodeCell.setWatched()
+        } else {
+            episodeCell.setNotWatched()
+        }
+        
+        if let previewImageUrl = currentEpisode.thumbnailImageURL {
             if let url = URL(string: previewImageUrl) {
                 let token = self.networkHandler.getImage(url) { result in
                     DispatchQueue.global(qos: .background).async {
@@ -331,7 +304,7 @@ extension MangaEpisodeViewController: UITableViewDelegate, UITableViewDataSource
                                 }
                             }
                         } catch {
-                            print(error.localizedDescription)
+                            // fail to get episode thumbnail Image State
                         }
                     }
                 }
@@ -352,11 +325,9 @@ extension MangaEpisodeViewController: UITableViewDelegate, UITableViewDataSource
         
         if episodeArr.count > indexPath.row {
             var mangaUrl = episodeArr[indexPath.row].mangaURL
-            let mangaTitle = episodeArr[indexPath.row].title.trimmingCharacters(in: .whitespaces)
+            mangaUrl = networkHandler.getCompleteUrl(url: mangaUrl)
             
-            if !mangaUrl.contains(baseUrl) {
-                mangaUrl = "\(baseUrl)\(mangaUrl)"
-            }
+            let mangaTitle = episodeArr[indexPath.row].title.trimmingCharacters(in: .whitespaces)
             
             presentViewMangaVC(mangaTitle, mangaUrl)
         }

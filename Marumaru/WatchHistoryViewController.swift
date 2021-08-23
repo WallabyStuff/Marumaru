@@ -7,26 +7,24 @@
 
 import UIKit
 
-import CoreData
 import Hero
 import RxSwift
 import RxCocoa
 
 // MARK: - Protocol
-protocol DismissDelegate: AnyObject {
+protocol WatchHistoryDelegate: AnyObject {
     func refreshHistory()
 }
 
 class WatchHistoryViewController: UIViewController {
     
     // MARK: - Declarations
-    weak var dismissDelegate: DismissDelegate?
+    weak var dismissDelegate: WatchHistoryDelegate?
     
     var disposeBag = DisposeBag()
     let networkHandler = NetworkHandler()
     let watchHistoryHandler = WatchHistoryHandler()
     var watchHistoryArr = [WatchHistory]()
-    let baseUrl = "https://marumaru.cloud"
 
     @IBOutlet weak var appbarView: UIView!
     @IBOutlet weak var watchHistoryPlaceholderLabel: UILabel!
@@ -40,12 +38,13 @@ class WatchHistoryViewController: UIViewController {
     
         initView()
         initInstance()
+        initEventListener()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
-        loadMangaHistory()
+        setWatchHistory()
     }
 
     // MARK: - Overrides
@@ -92,19 +91,36 @@ class WatchHistoryViewController: UIViewController {
         watchHistoryCollectionView.dataSource = self
     }
     
+    func initEventListener() {
+        // clearHistory Button Action
+        clearHistoryButton.rx.tap
+            .asDriver()
+            .drive(onNext: {
+                self.presentClearHistoryActionSheet()
+            })
+            .disposed(by: disposeBag)
+        
+        // back Button Action
+        backButton.rx.tap
+            .asDriver()
+            .drive(onNext: {
+                self.dismiss(animated: true, completion: nil)
+            })
+            .disposed(by: disposeBag)
+    }
+    
     // MARK: - Methods
-    func loadMangaHistory() {
+    func setWatchHistory() {
         watchHistoryArr.removeAll()
         
         self.watchHistoryHandler.fetchData()
-            .debug()
             .subscribe(onNext: { watchHistories in
                 self.watchHistoryArr = watchHistories
                 self.reloadWatchHistoryCollectionView()
             }).disposed(by: self.disposeBag)
     }
     
-    func showClearHistoryActionSheet() {
+    func presentClearHistoryActionSheet() {
         let deleteMenu = UIAlertController(title: "Clear History", message: "Press delete button to clear all the watch histories", preferredStyle: .actionSheet)
         
         let clearAction = UIAlertAction(title: "Clear History", style: .destructive) { (_) in
@@ -122,6 +138,9 @@ class WatchHistoryViewController: UIViewController {
     }
     
     func clearHistory() {
+        self.watchHistoryArr.removeAll()
+        self.reloadWatchHistoryCollectionView()
+        
         watchHistoryHandler.deleteAll()
             .subscribe(onNext: { isDeleted in
                 if isDeleted {
@@ -142,24 +161,13 @@ class WatchHistoryViewController: UIViewController {
     }
     
     func reloadWatchHistoryCollectionView() {
-        DispatchQueue.main.async {
-            if self.watchHistoryArr.count == 0 {
-                self.watchHistoryPlaceholderLabel.startFadeInAnim(duration: 0.5)
-            } else {
-                self.watchHistoryPlaceholderLabel.startFadeOutAnim(duration: 0.5)
-            }
-            
-            self.watchHistoryCollectionView.reloadData()
+        if self.watchHistoryArr.count == 0 {
+            self.watchHistoryPlaceholderLabel.startFadeInAnim(duration: 0.5)
+        } else {
+            self.watchHistoryPlaceholderLabel.startFadeOutAnim(duration: 0.5)
         }
-    }
-    
-    // MARK: - Actions
-    @IBAction func clearHistoryButtonAction(_ sender: Any) {
-        showClearHistoryActionSheet()
-    }
-    
-    @IBAction func backButtonAction(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
+        
+        self.watchHistoryCollectionView.reloadData()
     }
 }
 
@@ -188,7 +196,10 @@ extension WatchHistoryViewController: UICollectionViewDelegate, UICollectionView
                         collectionCell.thumbnailImageView.image = result.imageCache.image
                         collectionCell.thumbnailImageBaseView.setThumbnailShadow(with: result.imageCache.averageColor.cgColor)
                         collectionCell.thumbnailImagePlaceholderLabel.isHidden = true
-                        collectionCell.thumbnailImageView.startFadeInAnim(duration: 0.3)
+                        
+                        if result.animate {
+                            collectionCell.thumbnailImageView.startFadeInAnim(duration: 0.3)
+                        }
                     }
                 } catch {
                     DispatchQueue.main.async {
@@ -202,22 +213,16 @@ extension WatchHistoryViewController: UICollectionViewDelegate, UICollectionView
             }
         }
         
-        collectionCell.hero.modifiers = [.fade, .scale(0.5)]
-        
         return collectionCell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if watchHistoryArr.count > indexPath.row {
             var mangaUrl = watchHistoryArr[indexPath.row].mangaUrl
-            let mangaTitle = watchHistoryArr[indexPath.row].mangaTitle
-//            guard var mangaUrl = watchHistoryArr[indexPath.row].mangaUrl,
-//                  let mangaTitle = watchHistoryArr[indexPath.row].mangaTitle else { return }
-//
-            if !mangaUrl.contains(baseUrl) {
-                mangaUrl = "\(baseUrl)\(mangaUrl)"
-            }
+            mangaUrl = networkHandler.getCompleteUrl(url: mangaUrl)
             
+            let mangaTitle = watchHistoryArr[indexPath.row].mangaTitle
+
             presentViewMangaVC(mangaTitle, mangaUrl)
         }
     }

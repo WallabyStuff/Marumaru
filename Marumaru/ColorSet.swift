@@ -21,7 +21,7 @@ enum ColorSet {
     static let imageBorderColor             = UIColor(named: "ImageBorderColor")
     static let labelEffectBackgroundColor   = UIColor(named: "LabelEffectBackgroundColor")
     static let labelEffectForegroundColor   = UIColor(named: "LabelEffectForegroundColor")
-    static let placeHolderTextColor         = UIColor(named: "PlaceHoldeTextColor")
+    static let placeHolderTextColor         = UIColor(named: "PlaceHolderTextColor")
     static let shadowColor                  = UIColor(named: "ShadowColor")
     static let subTextColor                 = UIColor(named: "SubTextColor")
     static let textColor                    = UIColor(named: "TextColor")
