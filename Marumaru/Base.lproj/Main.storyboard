@@ -1219,11 +1219,11 @@ or check your internet connection</string>
                         <outlet property="appbarView" destination="miC-cB-Gp8" id="R0e-Eh-usC"/>
                         <outlet property="backButton" destination="jwY-XD-u9d" id="F03-eh-hMu"/>
                         <outlet property="bottomIndicatorView" destination="hhh-J1-nX3" id="h6q-JM-PZx"/>
-                        <outlet property="mangaScrollContentView" destination="k67-ye-UTq" id="BgB-18-fE8"/>
                         <outlet property="mangaTitleLabel" destination="5hY-ZZ-2dm" id="L4c-x8-Vv7"/>
                         <outlet property="nextEpisodeButton" destination="8x2-bT-JIn" id="l0g-LQ-6DR"/>
                         <outlet property="previousEpisodeButton" destination="6Im-73-8L9" id="C0H-qr-9QE"/>
-                        <outlet property="sceneScrollView" destination="AwG-7w-ItO" id="WfN-yG-wno"/>
+                        <outlet property="sceneScrollContentView" destination="k67-ye-UTq" id="3FP-dD-FAa"/>
+                        <outlet property="sceneScrollView" destination="AwG-7w-ItO" id="jBU-QE-LKJ"/>
                         <outlet property="sceneTableView" destination="Duv-Xs-srZ" id="eql-b9-6gw"/>
                         <outlet property="showEpisodeListButton" destination="HUQ-iN-dT4" id="R9U-DZ-aRd"/>
                     </connections>

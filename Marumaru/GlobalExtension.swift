@@ -12,4 +12,8 @@ public extension Date {
     static var timeStamp: Int64 {
         Int64(Date().timeIntervalSince1970)
     }
+    
+    static var milliTimeStamp: Int64 {
+        Int64(Date().timeIntervalSince1970 * 1000)
+    }
 }

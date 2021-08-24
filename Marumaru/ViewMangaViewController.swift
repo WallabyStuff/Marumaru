@@ -30,6 +30,7 @@ class ViewMangaViewController: UIViewController {
     var sceneArr = [MangaScene]()
     var cellHeightDictionary: NSMutableDictionary = [:]
     let safeAreaInsets = UIApplication.shared.windows[0].safeAreaInsets
+    var isSceneZoomed = false
     
     var loadingSceneAnimView = AnimationView()
     var detailInfoView = UIView()
@@ -43,9 +44,9 @@ class ViewMangaViewController: UIViewController {
     @IBOutlet weak var appbarView: UIView!
     @IBOutlet weak var bottomIndicatorView: UIView!
     @IBOutlet weak var mangaTitleLabel: UILabel!
-    @IBOutlet weak var sceneTableView: UITableView!
     @IBOutlet weak var sceneScrollView: UIScrollView!
-    @IBOutlet weak var mangaScrollContentView: UIView!
+    @IBOutlet weak var sceneScrollContentView: UIView!
+    @IBOutlet weak var sceneTableView: UITableView!
     @IBOutlet weak var backButton: UIButton!
     
     // MARK: - LifeCycle
@@ -120,6 +121,10 @@ class ViewMangaViewController: UIViewController {
         ])
         detailInfoView.alpha = 0
         
+        // scene ScrollView
+        sceneScrollView.minimumZoomScale = 1
+        sceneScrollView.maximumZoomScale = 3
+        
         // back Button
         backButton.layer.cornerRadius = 13
         backButton.imageEdgeInsets(with: 10)
@@ -189,15 +194,13 @@ class ViewMangaViewController: UIViewController {
         sceneTableView.delegate = self
         sceneTableView.dataSource = self
         
-        // manga scene ScrollView
-        sceneScrollView.delegate = self
-        sceneScrollView.maximumZoomScale = 3.0
-        sceneScrollView.minimumZoomScale = 1.0
-        
         // detail info episode TableView
         detailInfoEpisodeTableView.register(MangaEpisodePopoverCell.self, forCellReuseIdentifier: "EpisodeCell")
         detailInfoEpisodeTableView.dataSource = self
         detailInfoEpisodeTableView.delegate = self
+        
+        // scene ScrollView
+        sceneScrollView.delegate = self
     }
     
     func initEventListener() {
@@ -250,8 +253,25 @@ class ViewMangaViewController: UIViewController {
             })
             .disposed(by: disposeBag)
         
-        // scene ScrollView Tap Action
-        sceneScrollView.rx.tapGesture()
+        // Scene Double Tap Action
+        let sceneDoubleTapGestureRecognizer = UITapGestureRecognizer()
+        sceneDoubleTapGestureRecognizer.numberOfTapsRequired = 2
+        sceneTableView.addGestureRecognizer(sceneDoubleTapGestureRecognizer)
+        sceneTableView.rx
+            .gesture(sceneDoubleTapGestureRecognizer)
+            .when(.recognized)
+            .subscribe(onNext: { recognizer in
+                let tapPoint = recognizer.location(in: self.view)
+                self.zoom(point: tapPoint)
+            })
+            .disposed(by: disposeBag)
+
+        // Scene Single Tap Action
+        let sceneTapGestureRocognizer = UITapGestureRecognizer()
+        sceneTapGestureRocognizer.numberOfTapsRequired = 1
+        sceneTapGestureRocognizer.require(toFail: sceneDoubleTapGestureRecognizer)
+        sceneTableView.rx
+            .gesture(sceneTapGestureRocognizer)
             .when(.recognized)
             .subscribe(onNext: { _ in
                 if self.appbarView.alpha == 0 {
@@ -284,39 +304,6 @@ class ViewMangaViewController: UIViewController {
                 self.hideNavigationBar()
             })
             .disposed(by: disposeBag)
-        
-        // scene TableView double tap to zoom in
-//        sceneTableView.rx.tapGesture()
-//            .when(.recognized)
-//            .subscribe(onNext: { _ in
-//
-//            })
-//            .disposed(by: disposeBag)
-        
-//        let scenePanEnded = sceneTableView.rx.panGesture()
-//            .when(.ended)
-//            .map { _ in return Date.timeStamp }
-//            .subscribe(onNext: { timeStamp in
-//                print("pan ended", timeStamp)
-//            }).disposed(by: disposeBag)
-        
-//        let sceneTapBegan = sceneScrollView.rx.tapGesture()
-//            .when(.began)
-//            .map { _ in return Date.timeStamp }
-//            .subscribe(onNext: { timeStamp in
-//                print("tap began", timeStamp)
-//            }).disposed(by: disposeBag)
-        
-//        let sceneTapBegan = sceneScrollView.rx.anyGesture(.longPress())
-//            .when(.began)
-//            .subscribe(onNext: { gestureREcognizer in
-//
-//            }).disposed(by: disposeBag)
-        
-//        Observable.combineLatest(scenePanEnded, sceneTapBegan)
-//            .subscribe(onNext: { lsh, rsh in
-//                print(abs(lsh - rsh))
-//            }).disposed(by: disposeBag)
     }
     
     // MARK: - Methods
@@ -570,6 +557,39 @@ class ViewMangaViewController: UIViewController {
             bottomIndicatorView.startFadeOutAnim(duration: 0.3)
         }
     }
+    
+    func zoom(point: CGPoint) {
+        if isSceneZoomed {
+            // zoom out
+            showNavigationBar()
+            sceneScrollView.zoom(to: CGRect(x: point.x, y: point.y, width: self.view.frame.width, height: self.view.frame.height), animated: true)
+            isSceneZoomed = false
+        } else {
+            // zoom in
+            hideNavigationBar()
+            sceneScrollView.zoom(to: CGRect(x: point.x, y: point.y, width: self.view.frame.width / 2, height: self.view.frame.height / 2), animated: true)
+            isSceneZoomed = true
+        }
+    }
+    
+    @objc
+    func didTapScene(_ sender: UITapGestureRecognizer) {
+        if sender.state == .recognized {
+            if self.appbarView.alpha == 0 {
+                self.showNavigationBar()
+            } else {
+                self.hideNavigationBar()
+            }
+        }
+    }
+    
+    @objc
+    func didDoubleTapScene(_ sender: UITapGestureRecognizer) {
+        if sender.state == .recognized {
+            let tapPoint = sender.location(in: self.view)
+            self.zoom(point: tapPoint)
+        }
+    }
 }
 
 // MARK: - Extensions
@@ -694,9 +714,9 @@ extension ViewMangaViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension ViewMangaViewController: UIScrollViewDelegate {
     
-    // Set scrollview zoomable
+    // Set scene scrollview zoomable
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return self.mangaScrollContentView
+        return self.sceneScrollContentView
     }
 }
 
