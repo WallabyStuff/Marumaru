@@ -37,7 +37,7 @@ class MangaThumbnailCollectionCell: UICollectionViewCell {
         
         // selection View
         let selectionView = UIView(frame: self.frame)
-        selectionView.layer.cornerRadius = 12
+        selectionView.layer.cornerRadius = 16
         selectionView.backgroundColor = ColorSet.cellSelectionColor
         self.selectedBackgroundView = selectionView
         
