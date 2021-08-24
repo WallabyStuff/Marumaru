@@ -20,27 +20,22 @@ class WatchHistoryHandler {
                  thumbnailImageUrl: String) -> Observable<Bool> {
         
         return Observable.create { observable in
-            self.isExists(url: mangaUrl)
-                .subscribe(onNext: { isExists in
-                    if !isExists {
-                        do {
-                            let realmInstance = try Realm()
-                            let watchHistory = WatchHistory(mangaUrl: mangaUrl,
-                                                                 mangaTitle: mangaTitle,
-                                                                 thumbnailImageUrl: thumbnailImageUrl)
-                            try realmInstance.write {
-                                realmInstance.add(watchHistory)
-                                observable.onNext(true)
-                                return
-                            }
-                            return
-                        } catch {
-                            observable.onError(error)
-                            return
-                        }
-                    }
-                }).disposed(by: self.disposeBag)
-            return Disposables.create()
+            do {
+                let realmInstance = try Realm()
+                let watchHistory = WatchHistory(mangaUrl: mangaUrl,
+                                                     mangaTitle: mangaTitle,
+                                                     thumbnailImageUrl: thumbnailImageUrl)
+                try realmInstance.write {
+                    realmInstance.add(watchHistory, update: .modified)
+                    observable.onNext(true)
+                    observable.onCompleted()
+                    return
+                }
+                return Disposables.create()
+            } catch {
+                observable.onError(error)
+                return Disposables.create()
+            }
         }
     }
     
@@ -75,7 +70,7 @@ class WatchHistoryHandler {
             do {
                 let realmInstance = try Realm()
                 var watchHistories = Array(realmInstance.objects(WatchHistory.self))
-                watchHistories.sort { $0.mangaUrl < $1.mangaUrl }
+                watchHistories.sort { $0.timeStamp > $1.timeStamp }
                 
                 observable.onNext(watchHistories)
                 observable.onCompleted()

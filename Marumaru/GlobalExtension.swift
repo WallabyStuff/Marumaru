@@ -10,6 +10,6 @@ import UIKit
 public extension Date {
     
     static var timeStamp: Int64 {
-        Int64(Date().timeIntervalSince1970 * 1000)
+        Int64(Date().timeIntervalSince1970)
     }
 }

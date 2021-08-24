@@ -14,6 +14,7 @@ class WatchHistory: Object {
     @objc dynamic var mangaUrl: String = ""
     @objc dynamic var mangaTitle: String = ""
     @objc dynamic var thumbnailImageUrl: String = ""
+    @objc dynamic var timeStamp: Int64 = 0
     
     // MARK: - Initialization
     convenience init(mangaUrl: String,
@@ -24,6 +25,7 @@ class WatchHistory: Object {
         self.mangaUrl = mangaUrl
         self.mangaTitle = mangaTitle
         self.thumbnailImageUrl = thumbnailImageUrl
+        self.timeStamp = Date.timeStamp
     }
     
     // MARK: - Override
