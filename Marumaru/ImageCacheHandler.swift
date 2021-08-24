@@ -29,30 +29,21 @@ class ImageCacheHandler {
                  imageAvgColor: UIColor) -> Observable<Any> {
         
         return Observable.create { observable in
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                
-                self.isAlreadyExists(url: url)
-                    .subscribe { isExists in
-                        if !isExists {
-                            do {
-                                let realmInstance = try Realm()
-                                
-                                let imageCache = ImageCache(url: url,
-                                                            image: image,
-                                                            imageAvgColor: imageAvgColor)
-                                
-                                try realmInstance.write {
-                                    realmInstance.add(imageCache)
-                                }
-                                observable.onCompleted()
-                            } catch {
-                                observable.onError(error)
-                            }
-                        }
-                    } onError: { error in
-                        observable.onError(error)
-                    }.disposed(by: self.disposeBag)
+            DispatchQueue.main.async {
+                do {
+                    let realmInstance = try Realm()
+                    
+                    let imageCache = ImageCache(url: url,
+                                                image: image,
+                                                imageAvgColor: imageAvgColor)
+                    
+                    try realmInstance.write {
+                        realmInstance.add(imageCache, update: .modified)
+                    }
+                    observable.onCompleted()
+                } catch {
+                    observable.onError(error)
+                }
             }
             
             return Disposables.create()

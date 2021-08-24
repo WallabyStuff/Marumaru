@@ -222,7 +222,6 @@ class NetworkHandler {
                                                             thumbnailImageURL: thumbnailImageUrl,
                                                             mangaURL: link)
                             episodeArr.append(mangaEpisode)
-                            print(link)
                         }
                         completion(.success(episodeArr))
                     }
