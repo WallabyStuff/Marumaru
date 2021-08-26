@@ -32,11 +32,12 @@ class ViewMangaViewController: UIViewController {
     let safeAreaInsets = UIApplication.shared.windows[0].safeAreaInsets
     var isSceneZoomed = false
     
-    var loadingSceneAnimView = AnimationView()
+    var loadingSceneAnimView = LoadingView()
     var detailInfoView = UIView()
     var detailInfoTitleLabel = UILabel()
     var detailInfoEpisodeSizeLabel = UILabel()
     var detailInfoEpisodeTableView = UITableView()
+    var sceneScrollView = SceneScrollView()
     
     @IBOutlet weak var showEpisodeListButton: UIButton!
     @IBOutlet weak var nextEpisodeButton: UIButton!
@@ -44,9 +45,6 @@ class ViewMangaViewController: UIViewController {
     @IBOutlet weak var appbarView: UIView!
     @IBOutlet weak var bottomIndicatorView: UIView!
     @IBOutlet weak var mangaTitleLabel: UILabel!
-    @IBOutlet weak var sceneScrollView: UIScrollView!
-    @IBOutlet weak var sceneScrollContentView: UIView!
-    @IBOutlet weak var sceneTableView: UITableView!
     @IBOutlet weak var backButton: UIButton!
     
     // MARK: - LifeCycle
@@ -87,15 +85,22 @@ class ViewMangaViewController: UIViewController {
         // hero enable
         self.hero.isEnabled = true
         
+        // scene ScrollView
+        sceneScrollView = SceneScrollView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
+        sceneScrollView.minimumZoomScale = 1
+        sceneScrollView.maximumZoomScale = 3
+        view.insertSubview(sceneScrollView, at: 0)
+        sceneScrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        sceneScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        sceneScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        sceneScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
         // loading scene AnimView
-        loadingSceneAnimView = AnimationView(name: "loading_square")
-        loadingSceneAnimView.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
-        loadingSceneAnimView.loopMode = .loop
+        loadingSceneAnimView = LoadingView(name: "loading_cat",
+                                           loopMode: .loop,
+                                           frame: CGRect(x: 0, y: 0, width: 150, height: 150))
         view.addSubview(loadingSceneAnimView)
-        loadingSceneAnimView.translatesAutoresizingMaskIntoConstraints = false
-        loadingSceneAnimView.centerXAnchor.constraint(equalTo: sceneTableView.centerXAnchor).isActive = true
-        loadingSceneAnimView.centerYAnchor.constraint(equalTo: sceneTableView.centerYAnchor).isActive = true
-        loadingSceneAnimView.isHidden = true
+        loadingSceneAnimView.setConstraint(width: 150, targetView: view)
         
         // appbar View
         appbarView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
@@ -120,10 +125,6 @@ class ViewMangaViewController: UIViewController {
             detailInfoView.widthAnchor.constraint(equalTo: view.widthAnchor)
         ])
         detailInfoView.alpha = 0
-        
-        // scene ScrollView
-        sceneScrollView.minimumZoomScale = 1
-        sceneScrollView.maximumZoomScale = 3
         
         // back Button
         backButton.layer.cornerRadius = 13
@@ -191,8 +192,10 @@ class ViewMangaViewController: UIViewController {
     
     func initInstance() {
         // manga Scene TableView
-        sceneTableView.delegate = self
-        sceneTableView.dataSource = self
+//        let sceneCellNib = UINib(nibName: "SceneTableViewCell", bundle: nil)
+//        sceneTableView.register(sceneCellNib, forCellReuseIdentifier: "sceneTableCell")
+//        sceneTableView.delegate = self
+//        sceneTableView.dataSource = self
         
         // detail info episode TableView
         detailInfoEpisodeTableView.register(MangaEpisodePopoverCell.self, forCellReuseIdentifier: "EpisodeCell")
@@ -256,12 +259,12 @@ class ViewMangaViewController: UIViewController {
         // Scene Double Tap Action
         let sceneDoubleTapGestureRecognizer = UITapGestureRecognizer()
         sceneDoubleTapGestureRecognizer.numberOfTapsRequired = 2
-        sceneTableView.addGestureRecognizer(sceneDoubleTapGestureRecognizer)
-        sceneTableView.rx
+        sceneScrollView.addGestureRecognizer(sceneDoubleTapGestureRecognizer)
+        sceneScrollView.rx
             .gesture(sceneDoubleTapGestureRecognizer)
             .when(.recognized)
             .subscribe(onNext: { recognizer in
-                let tapPoint = recognizer.location(in: self.view)
+                let tapPoint = recognizer.location(in: self.sceneScrollView.contentView)
                 self.zoom(point: tapPoint)
             })
             .disposed(by: disposeBag)
@@ -270,7 +273,7 @@ class ViewMangaViewController: UIViewController {
         let sceneTapGestureRocognizer = UITapGestureRecognizer()
         sceneTapGestureRocognizer.numberOfTapsRequired = 1
         sceneTapGestureRocognizer.require(toFail: sceneDoubleTapGestureRecognizer)
-        sceneTableView.rx
+        sceneScrollView.rx
             .gesture(sceneTapGestureRocognizer)
             .when(.recognized)
             .subscribe(onNext: { _ in
@@ -283,22 +286,23 @@ class ViewMangaViewController: UIViewController {
             .disposed(by: disposeBag)
         
         // when scene TableView reached the bottom & top
-        sceneTableView.rx.contentOffset
+        sceneScrollView.rx.contentOffset
             .subscribe(onNext: { offset in
+                let overPanThreshold: CGFloat = 50
                 // reached the top
-                if offset.y < -50 {
+                if offset.y < -overPanThreshold {
                     self.showNavigationBar()
                 }
                 
                 // reached the bottom
-                if offset.y + 700 > self.sceneTableView.contentSize.height {
+                if offset.y > self.sceneScrollView.contentSize.height - self.view.frame.height + overPanThreshold {
                     self.showNavigationBar()
                 }
             })
             .disposed(by: disposeBag)
         
         // scene TableView start Scrolling
-        sceneTableView.rx.panGesture()
+        sceneScrollView.rx.panGesture()
             .when(.began)
             .subscribe(onNext: { _ in
                 self.hideNavigationBar()
@@ -324,8 +328,8 @@ class ViewMangaViewController: UIViewController {
     func setMangaScene(_ mangaUrl: String) {
         startLoadingSceneAnim()
         sceneArr.removeAll()
-        sceneTableView.reloadData()
         indicatorState(false)
+        sceneScrollView.clearReloadData()
         
         DispatchQueue.global(qos: .background).async {
             self.networkHandler.getDocument(urlString: mangaUrl) { result in
@@ -340,7 +344,6 @@ class ViewMangaViewController: UIViewController {
                             
                             DispatchQueue.main.sync {
                                 self.stopLoadingSceneAnim()
-                                self.sceneTableView.reloadData()
                                 self.saveToHistory()
                                 self.prepareMangaScene()
                                 self.setMangaEpisode()
@@ -394,6 +397,10 @@ class ViewMangaViewController: UIViewController {
                 // shared document is nil State
             }
         }
+        
+        sceneScrollView.sceneArr.removeAll()
+        sceneScrollView.sceneArr = sceneArr
+        sceneScrollView.reloadData()
     }
     
     func saveToHistory() {
@@ -596,8 +603,8 @@ class ViewMangaViewController: UIViewController {
 extension ViewMangaViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch tableView {
-        case sceneTableView:
-            return sceneArr.count
+//        case sceneTableView:
+//            return sceneArr.count
         case detailInfoEpisodeTableView:
             return episodeArr.count
         default:
@@ -607,53 +614,51 @@ extension ViewMangaViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch tableView {
-        case sceneTableView:
-            guard let sceneCell = tableView.dequeueReusableCell(withIdentifier: "MangaSceneCell") as? MangaSceneCell else { return UITableViewCell() }
-            
-            sceneCell.selectionStyle = .none
-            
-            // save cell height
-            cellHeightDictionary.setObject(sceneCell.frame.height, forKey: indexPath as NSCopying)
-            
-            if indexPath.row > sceneArr.count - 1 {
-                return UITableViewCell()
-            }
-            
-            // set background tile
-            let tileImage = UIImage(named: "Tile")!
-            let patternBackground = UIColor(patternImage: tileImage)
-            sceneCell.backgroundColor = patternBackground
-            sceneCell.sceneDividerView.backgroundColor = patternBackground
-            sceneCell.sceneImageView.image = UIImage()
-            
-            // set scene
-            if let url = URL(string: sceneArr[indexPath.row].sceneImageUrl) {
-                let token = networkHandler.getImage(url) { result in
-                    DispatchQueue.global(qos: .background).async {
-                        do {
-                            let result = try result.get()
-                            DispatchQueue.main.async {
-                                sceneCell.sceneImageView.image = result.imageCache.image
-                                sceneCell.backgroundColor = ColorSet.backgroundColor
-                                sceneCell.sceneDividerView.backgroundColor = ColorSet.backgroundColor
-                            }
-                        } catch {
-                            DispatchQueue.main.async {
-                                sceneCell.backgroundColor = patternBackground
-                            }
-                            print(error)
-                        }
-                    }
-                }
-                
-                sceneCell.onReuse = {
-                    if let token = token {
-                        self.networkHandler.cancelLoadImage(token)
-                    }
-                }
-            }
-            
-            return sceneCell
+//        case sceneTableView:
+//            guard let sceneCell = tableView.dequeueReusableCell(withIdentifier: "sceneTableCell") as? SceneTableCell else { return UITableViewCell() }
+//
+//            sceneCell.selectionStyle = .none
+//
+//            // save cell height
+//            cellHeightDictionary.setObject(sceneCell.frame.height, forKey: indexPath as NSCopying)
+//
+//            if indexPath.row > sceneArr.count - 1 {
+//                return UITableViewCell()
+//            }
+//
+//            // set background tile
+//            let tileImage = UIImage(named: "Tile")!
+//            let patternBackground = UIColor(patternImage: tileImage)
+//            sceneCell.backgroundColor = patternBackground
+//            sceneCell.sceneImageView.image = UIImage()
+//
+//            // set scene
+//            if let url = URL(string: sceneArr[indexPath.row].sceneImageUrl) {
+//                let token = networkHandler.getImage(url) { result in
+//                    DispatchQueue.global(qos: .background).async {
+//                        do {
+//                            let result = try result.get()
+//                            DispatchQueue.main.async {
+//                                sceneCell.backgroundColor = ColorSet.backgroundColor
+//                                sceneCell.setImage(result.imageCache.image)
+//                            }
+//                        } catch {
+//                            DispatchQueue.main.async {
+//                                sceneCell.backgroundColor = patternBackground
+//                            }
+//                            print(error)
+//                        }
+//                    }
+//                }
+//
+//                sceneCell.onReuse = {
+//                    if let token = token {
+//                        self.networkHandler.cancelLoadImage(token)
+//                    }
+//                }
+//            }
+//
+//            return sceneCell
         case detailInfoEpisodeTableView:
             guard let episodeCell = tableView.dequeueReusableCell(withIdentifier: "EpisodeCell") as? MangaEpisodePopoverCell else { return UITableViewCell() }
             
@@ -716,7 +721,7 @@ extension ViewMangaViewController: UIScrollViewDelegate {
     
     // Set scene scrollview zoomable
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return self.sceneScrollContentView
+        return self.sceneScrollView.contentView
     }
 }
 

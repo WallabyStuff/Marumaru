@@ -140,4 +140,10 @@ public extension UIColor {
             }
             self.init(red: CGFloat(r) / 255, green: CGFloat(g) / 255, blue: CGFloat(b) / 255, alpha: CGFloat(a) / 255)
         }
+    
+    static var patternedColor: UIColor {
+        let tileImage = UIImage(named: "Tile")!
+        let patternBackground = UIColor(patternImage: tileImage)
+        return patternBackground
+    }
 }
