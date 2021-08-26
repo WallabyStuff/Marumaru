@@ -26,6 +26,7 @@ class ViewMangaViewController: UIViewController {
     var sharedDoc: Document?
     var mangaTitle: String = ""
     var mangaUrl: String = ""
+    
     var episodeArr = [Episode]()
     var sceneArr = [MangaScene]()
     var cellHeightDictionary: NSMutableDictionary = [:]
@@ -191,12 +192,6 @@ class ViewMangaViewController: UIViewController {
     }
     
     func initInstance() {
-        // manga Scene TableView
-//        let sceneCellNib = UINib(nibName: "SceneTableViewCell", bundle: nil)
-//        sceneTableView.register(sceneCellNib, forCellReuseIdentifier: "sceneTableCell")
-//        sceneTableView.delegate = self
-//        sceneTableView.dataSource = self
-        
         // detail info episode TableView
         detailInfoEpisodeTableView.register(MangaEpisodePopoverCell.self, forCellReuseIdentifier: "EpisodeCell")
         detailInfoEpisodeTableView.dataSource = self
@@ -264,6 +259,7 @@ class ViewMangaViewController: UIViewController {
             .gesture(sceneDoubleTapGestureRecognizer)
             .when(.recognized)
             .subscribe(onNext: { recognizer in
+                print(self.sceneScrollView.contentView.frame)
                 let tapPoint = recognizer.location(in: self.sceneScrollView.contentView)
                 self.zoom(point: tapPoint)
             })
@@ -313,6 +309,7 @@ class ViewMangaViewController: UIViewController {
     // MARK: - Methods
     func startLoadingSceneAnim() {
         DispatchQueue.main.async {
+            self.sceneScrollView.disableZoom()
             self.loadingSceneAnimView.isHidden = false
             self.loadingSceneAnimView.play()
         }
@@ -344,9 +341,10 @@ class ViewMangaViewController: UIViewController {
                             
                             DispatchQueue.main.sync {
                                 self.stopLoadingSceneAnim()
+                                self.reloadScene()
                                 self.saveToHistory()
-                                self.prepareMangaScene()
                                 self.setMangaEpisode()
+                                self.prepareMangaScene()
                             }
                         } catch {
                             // failure State
@@ -397,10 +395,6 @@ class ViewMangaViewController: UIViewController {
                 // shared document is nil State
             }
         }
-        
-        sceneScrollView.sceneArr.removeAll()
-        sceneScrollView.sceneArr = sceneArr
-        sceneScrollView.reloadData()
     }
     
     func saveToHistory() {
@@ -568,7 +562,6 @@ class ViewMangaViewController: UIViewController {
     func zoom(point: CGPoint) {
         if isSceneZoomed {
             // zoom out
-            showNavigationBar()
             sceneScrollView.zoom(to: CGRect(x: point.x, y: point.y, width: self.view.frame.width, height: self.view.frame.height), animated: true)
             isSceneZoomed = false
         } else {
@@ -579,118 +572,48 @@ class ViewMangaViewController: UIViewController {
         }
     }
     
-    @objc
-    func didTapScene(_ sender: UITapGestureRecognizer) {
-        if sender.state == .recognized {
-            if self.appbarView.alpha == 0 {
-                self.showNavigationBar()
-            } else {
-                self.hideNavigationBar()
-            }
-        }
-    }
-    
-    @objc
-    func didDoubleTapScene(_ sender: UITapGestureRecognizer) {
-        if sender.state == .recognized {
-            let tapPoint = sender.location(in: self.view)
-            self.zoom(point: tapPoint)
-        }
+    func reloadScene() {
+        sceneScrollView.sceneArr.removeAll()
+        sceneScrollView.sceneArr = sceneArr
+        sceneScrollView.reloadData()
     }
 }
 
 // MARK: - Extensions
 extension ViewMangaViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch tableView {
-//        case sceneTableView:
-//            return sceneArr.count
-        case detailInfoEpisodeTableView:
-            return episodeArr.count
-        default:
-            return 0
-        }
+        
+        return episodeArr.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch tableView {
-//        case sceneTableView:
-//            guard let sceneCell = tableView.dequeueReusableCell(withIdentifier: "sceneTableCell") as? SceneTableCell else { return UITableViewCell() }
-//
-//            sceneCell.selectionStyle = .none
-//
-//            // save cell height
-//            cellHeightDictionary.setObject(sceneCell.frame.height, forKey: indexPath as NSCopying)
-//
-//            if indexPath.row > sceneArr.count - 1 {
-//                return UITableViewCell()
-//            }
-//
-//            // set background tile
-//            let tileImage = UIImage(named: "Tile")!
-//            let patternBackground = UIColor(patternImage: tileImage)
-//            sceneCell.backgroundColor = patternBackground
-//            sceneCell.sceneImageView.image = UIImage()
-//
-//            // set scene
-//            if let url = URL(string: sceneArr[indexPath.row].sceneImageUrl) {
-//                let token = networkHandler.getImage(url) { result in
-//                    DispatchQueue.global(qos: .background).async {
-//                        do {
-//                            let result = try result.get()
-//                            DispatchQueue.main.async {
-//                                sceneCell.backgroundColor = ColorSet.backgroundColor
-//                                sceneCell.setImage(result.imageCache.image)
-//                            }
-//                        } catch {
-//                            DispatchQueue.main.async {
-//                                sceneCell.backgroundColor = patternBackground
-//                            }
-//                            print(error)
-//                        }
-//                    }
-//                }
-//
-//                sceneCell.onReuse = {
-//                    if let token = token {
-//                        self.networkHandler.cancelLoadImage(token)
-//                    }
-//                }
-//            }
-//
-//            return sceneCell
-        case detailInfoEpisodeTableView:
-            guard let episodeCell = tableView.dequeueReusableCell(withIdentifier: "EpisodeCell") as? MangaEpisodePopoverCell else { return UITableViewCell() }
-            
-            if indexPath.row > episodeArr.count - 1 {
-                return UITableViewCell()
-            }
-            
-            // Accent text color to current episode
-            if let currentEpisodeIndex = currentEpisodeIndex {
-                if episodeArr[indexPath.row].title.lowercased().trimmingCharacters(in: .whitespaces) == episodeArr[currentEpisodeIndex].title.lowercased().trimmingCharacters(in: .whitespaces) {
-                    episodeCell.textLabel?.textColor = ColorSet.accentColor
-                } else {
-                    episodeCell.textLabel?.textColor = ColorSet.textColor
-                }
-            }
-            
-            // selection View
-            let selectionView = UIView(frame: episodeCell.frame)
-            selectionView.backgroundColor = ColorSet.cellSelectionColor?.withAlphaComponent(0.5)
-            selectionView.layer.cornerRadius = 12
-            episodeCell.selectedBackgroundView = selectionView
-            
-            episodeCell.textLabel?.text = episodeArr[indexPath.row].title
-            episodeCell.textLabel?.lineBreakMode = .byTruncatingMiddle
-            episodeCell.backgroundColor = ColorSet.transparentColor
-            episodeCell.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
-            
-            return episodeCell
-        default:
+        guard let episodeCell = tableView.dequeueReusableCell(withIdentifier: "EpisodeCell") as? MangaEpisodePopoverCell else { return UITableViewCell() }
+        
+        if indexPath.row > episodeArr.count - 1 {
             return UITableViewCell()
         }
         
+        // Accent text color to current episode
+        if let currentEpisodeIndex = currentEpisodeIndex {
+            if episodeArr[indexPath.row].title.lowercased().trimmingCharacters(in: .whitespaces) == episodeArr[currentEpisodeIndex].title.lowercased().trimmingCharacters(in: .whitespaces) {
+                episodeCell.textLabel?.textColor = ColorSet.accentColor
+            } else {
+                episodeCell.textLabel?.textColor = ColorSet.textColor
+            }
+        }
+        
+        // selection View
+        let selectionView = UIView(frame: episodeCell.frame)
+        selectionView.backgroundColor = ColorSet.cellSelectionColor?.withAlphaComponent(0.5)
+        selectionView.layer.cornerRadius = 12
+        episodeCell.selectedBackgroundView = selectionView
+        
+        episodeCell.textLabel?.text = episodeArr[indexPath.row].title
+        episodeCell.textLabel?.lineBreakMode = .byTruncatingMiddle
+        episodeCell.backgroundColor = ColorSet.transparentColor
+        episodeCell.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+        
+        return episodeCell
     }
     
     // Scroll to current position when orientation changed

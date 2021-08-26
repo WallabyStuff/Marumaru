@@ -42,12 +42,6 @@ class SceneScrollView: UIScrollView {
         disposeBag = DisposeBag()
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-//        resizeCell()
-    }
-    
     private func setUpScrollView() {
         translatesAutoresizingMaskIntoConstraints = false
         
@@ -72,6 +66,7 @@ class SceneScrollView: UIScrollView {
     
     private func prepareForImage() {
         for (index, _) in sceneArr.enumerated() {
+            // baseView for sceneImageView
             let sceneBaseView = UIView(frame: CGRect(x: 0, y: 0,
                                                            width: self.frame.width,
                                                            height: self.frame.height))
@@ -79,13 +74,11 @@ class SceneScrollView: UIScrollView {
             
             if index == 0 {
                 // index image
-                print("Log.i index image")
                 sceneBaseView.frame = CGRect(x: 0, y: 0,
                                              width: self.frame.width,
                                              height: self.frame.height)
                 contentView.addSubview(sceneBaseView)
             } else {
-                print("Log.i \(index)")
                 DispatchQueue.main.async {
                     let previousCell = self.sceneViewArr[index - 1].baseView
                     let offsetY = previousCell.frame.origin.y + previousCell.frame.height
@@ -102,10 +95,12 @@ class SceneScrollView: UIScrollView {
             contentViewHeightConstraint.constant += sceneBaseView.frame.height
             contentViewHeightConstraint.isActive = true
             
+            // Scene ImageView
             let sceneImageView = UIImageView()
             sceneImageView.backgroundColor = .clear
             sceneImageView.image = UIImage()
             sceneImageView.contentMode = .scaleAspectFit
+            
             sceneBaseView.addSubview(sceneImageView)
             sceneImageView.translatesAutoresizingMaskIntoConstraints = false
             sceneImageView.topAnchor.constraint(equalTo: sceneBaseView.topAnchor).isActive = true
@@ -159,26 +154,30 @@ class SceneScrollView: UIScrollView {
         if index == 0 {
             sceneViewArr[index].baseView.center.x = self.contentView.center.x
             sceneViewArr[index].baseView.frame.origin.y = 0
-            sceneViewArr[index].baseView.frame.size.width = self.contentView.frame.width
+            sceneViewArr[index].baseView.frame.size.width = self.frame.width
+            enableZoom()
         } else {
             let previousCell = sceneViewArr[index - 1].baseView
             let offsetY = previousCell.frame.origin.y + previousCell.frame.height + self.spacing
             
             sceneViewArr[index].baseView.center.x = self.contentView.center.x
             sceneViewArr[index].baseView.frame.origin.y = offsetY
-            sceneViewArr[index].baseView.frame.size.width = self.contentView.frame.width
+            sceneViewArr[index].baseView.frame.size.width = self.frame.width
             
             self.contentViewHeightConstraint.constant += accurateCellHeight
             self.contentViewHeightConstraint.isActive = true
             
             if index == sceneViewArr.count - 1 {
-                self.contentViewHeightConstraint.constant = offsetY + accurateCellHeight
-                self.contentViewHeightConstraint.isActive = true
+                contentViewHeightConstraint.constant = offsetY + accurateCellHeight
+                contentViewHeightConstraint.isActive = true
+                resizeCell()
             }
         }
     }
     
-    private func resizeCell() {
+    func resizeCell() {
+        disableZoom()
+        
         contentViewHeightConstraint.constant = 0
         contentViewHeightConstraint.isActive = true
         
@@ -211,7 +210,7 @@ class SceneScrollView: UIScrollView {
                         let accurateCellHeight = self.contentView.frame.width * heightProportion
 
                         sceneView.baseView.frame.origin.y = offsetY
-                        sceneView.baseView.frame.size.width = self.contentView.frame.width
+                        sceneView.baseView.frame.size.width = self.frame.width
                         sceneView.baseView.frame.size.height = accurateCellHeight
                         sceneView.baseView.center.x = self.contentView.center.x
                         
@@ -222,6 +221,7 @@ class SceneScrollView: UIScrollView {
                         if index == (self.sceneViewArr.count - 1) {
                             self.contentViewHeightConstraint.constant = offsetY + accurateCellHeight
                             self.contentViewHeightConstraint.isActive = true
+                            self.enableZoom()
                         }
                     }
                 }
@@ -230,6 +230,8 @@ class SceneScrollView: UIScrollView {
     }
     
     func reloadData() {
+        disableZoom()
+        
         // ScrollView Size to original
         self.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
         contentViewHeightConstraint.constant = self.frame.height
@@ -254,6 +256,17 @@ class SceneScrollView: UIScrollView {
     
     func clearReloadData() {
         sceneArr.removeAll()
+        sceneViewArr.removeAll()
         reloadData()
+    }
+    
+    func enableZoom() {
+        minimumZoomScale = 1
+        maximumZoomScale = 3
+    }
+    
+    func disableZoom() {
+        minimumZoomScale = 1
+        maximumZoomScale = 1
     }
 }
