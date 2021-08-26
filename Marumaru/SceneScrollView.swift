@@ -70,7 +70,7 @@ class SceneScrollView: UIScrollView {
             let sceneBaseView = UIView(frame: CGRect(x: 0, y: 0,
                                                            width: self.frame.width,
                                                            height: self.frame.height))
-            sceneBaseView.backgroundColor = ColorSet.patternedColor
+            sceneBaseView.backgroundColor = .clear
             
             if index == 0 {
                 // index image

@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		25DC1760743198B2E105755B /* Pods_Marumaru.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC97D9F61B78C3A245765AD0 /* Pods_Marumaru.framework */; };
-		49C63E4226D58570004E576F /* SceneTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49C63E4026D58570004E576F /* SceneTableViewCell.xib */; };
 		49C63E4426D59202004E576F /* SceneScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C63E4326D59202004E576F /* SceneScrollView.swift */; };
 		7641C3AF2646826100A79A79 /* MangaEpisodePopoverCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641C3AE2646826100A79A79 /* MangaEpisodePopoverCell.swift */; };
 		7641C3B1264682B900A79A79 /* EpisodePopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641C3B0264682B900A79A79 /* EpisodePopoverViewController.swift */; };
@@ -32,7 +31,6 @@
 		765C8C68261F05BD0056C83B /* MangaEpisodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8C67261F05BD0056C83B /* MangaEpisodeViewController.swift */; };
 		765C8C6D261F16880056C83B /* ViewMangaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8C6C261F16880056C83B /* ViewMangaViewController.swift */; };
 		765C8C78261F192C0056C83B /* MangaEpisodeTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8C77261F192C0056C83B /* MangaEpisodeTableCell.swift */; };
-		765C8C7D261F1A2C0056C83B /* SceneTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8C7C261F1A2C0056C83B /* SceneTableCell.swift */; };
 		7684F3D026C590B80012BD8E /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 7684F3CF26C590B80012BD8E /* .swiftlint.yml */; };
 		7684F3D226C61B890012BD8E /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7684F3D126C61B890012BD8E /* ImageCache.swift */; };
 		7684F3D526C61D8B0012BD8E /* ImageCacheHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7684F3D426C61D8B0012BD8E /* ImageCacheHandler.swift */; };
@@ -82,7 +80,6 @@
 /* Begin PBXFileReference section */
 		126E8CFFDBAB5E1FD71F5E72 /* Pods_MarumaruTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MarumaruTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3925B14F68149B1629884F25 /* Pods-MarumaruTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MarumaruTests.debug.xcconfig"; path = "Target Support Files/Pods-MarumaruTests/Pods-MarumaruTests.debug.xcconfig"; sourceTree = "<group>"; };
-		49C63E4026D58570004E576F /* SceneTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SceneTableViewCell.xib; sourceTree = "<group>"; };
 		49C63E4326D59202004E576F /* SceneScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneScrollView.swift; sourceTree = "<group>"; };
 		58240542AA5CA7844CF16C3D /* Pods_Marumaru_MarumaruUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Marumaru_MarumaruUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BFD5A219795B15822DC53BE /* Pods-Marumaru-MarumaruUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Marumaru-MarumaruUITests.debug.xcconfig"; path = "Target Support Files/Pods-Marumaru-MarumaruUITests/Pods-Marumaru-MarumaruUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -114,7 +111,6 @@
 		765C8C67261F05BD0056C83B /* MangaEpisodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MangaEpisodeViewController.swift; sourceTree = "<group>"; };
 		765C8C6C261F16880056C83B /* ViewMangaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewMangaViewController.swift; sourceTree = "<group>"; };
 		765C8C77261F192C0056C83B /* MangaEpisodeTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MangaEpisodeTableCell.swift; sourceTree = "<group>"; };
-		765C8C7C261F1A2C0056C83B /* SceneTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneTableCell.swift; sourceTree = "<group>"; };
 		7684F3CF26C590B80012BD8E /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		7684F3D126C61B890012BD8E /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		7684F3D426C61D8B0012BD8E /* ImageCacheHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheHandler.swift; sourceTree = "<group>"; };
@@ -269,7 +265,6 @@
 				7684F3E026CAA49F0012BD8E /* MangaThumbnailCollectionViewCell.xib */,
 				7684F3E426CABB2C0012BD8E /* MangaThumbnailTableViewCell.xib */,
 				7684F3E826CB5F6A0012BD8E /* MangaEpisodeTableViewCell.xib */,
-				49C63E4026D58570004E576F /* SceneTableViewCell.xib */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -290,7 +285,6 @@
 				765C8C3B261DBADF0056C83B /* MangaThumbnailCollectionCell.swift */,
 				765C8C4A261DBC960056C83B /* TopRankMangaCell.swift */,
 				765C8C77261F192C0056C83B /* MangaEpisodeTableCell.swift */,
-				765C8C7C261F1A2C0056C83B /* SceneTableCell.swift */,
 				76BEEBAF2624B64E00642001 /* MangaThumbnailTableCell.swift */,
 				7641C3AE2646826100A79A79 /* MangaEpisodePopoverCell.swift */,
 			);
@@ -467,7 +461,6 @@
 				765C8B38261CA2C50056C83B /* LaunchScreen.storyboard in Resources */,
 				765A0FF726C16629005DDD8B /* loading_square.json in Resources */,
 				765C8B35261CA2C50056C83B /* Assets.xcassets in Resources */,
-				49C63E4226D58570004E576F /* SceneTableViewCell.xib in Resources */,
 				76F912F726D2070600B39BE7 /* not_found.json in Resources */,
 				76F912F326D1604000B39BE7 /* loading_cat.json in Resources */,
 				7684F3D026C590B80012BD8E /* .swiftlint.yml in Resources */,
@@ -652,7 +645,6 @@
 				49C63E4426D59202004E576F /* SceneScrollView.swift in Sources */,
 				76F912FD26D2B70D00B39BE7 /* GlobalExtension.swift in Sources */,
 				765C8B33261CA2C30056C83B /* Marumaru.xcdatamodeld in Sources */,
-				765C8C7D261F1A2C0056C83B /* SceneTableCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
