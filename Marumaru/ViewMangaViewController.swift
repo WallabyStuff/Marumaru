@@ -587,11 +587,12 @@ extension ViewMangaViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let episodeCell = tableView.dequeueReusableCell(withIdentifier: "EpisodeCell") as? MangaEpisodePopoverCell else { return UITableViewCell() }
+        guard let episodeCell = tableView.dequeueReusableCell(withIdentifier: "EpisodeCell") else { return UITableViewCell() }
         
-        if indexPath.row > episodeArr.count - 1 {
-            return UITableViewCell()
-        }
+        episodeCell.textLabel?.text = episodeArr[indexPath.row].title
+        episodeCell.textLabel?.highlightedTextColor = ColorSet.backgroundColor
+        episodeCell.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+        episodeCell.backgroundColor = .clear
         
         // Accent text color to current episode
         if let currentEpisodeIndex = currentEpisodeIndex {
@@ -604,14 +605,9 @@ extension ViewMangaViewController: UITableViewDelegate, UITableViewDataSource {
         
         // selection View
         let selectionView = UIView(frame: episodeCell.frame)
-        selectionView.backgroundColor = ColorSet.cellSelectionColor?.withAlphaComponent(0.5)
+        selectionView.backgroundColor = ColorSet.accentColor
         selectionView.layer.cornerRadius = 12
         episodeCell.selectedBackgroundView = selectionView
-        
-        episodeCell.textLabel?.text = episodeArr[indexPath.row].title
-        episodeCell.textLabel?.lineBreakMode = .byTruncatingMiddle
-        episodeCell.backgroundColor = ColorSet.transparentColor
-        episodeCell.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
         
         return episodeCell
     }

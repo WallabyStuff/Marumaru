@@ -27,5 +27,4 @@ enum ColorSet {
     static let textColor                    = UIColor(named: "TextColor")
     static let thumbnailBorderColor         = UIColor(named: "ThumbnailBorderColor")
     static let transparentColor             = UIColor(named: "Transparent")
-    static let patternedColor               = UIColor.patternedColor
 }

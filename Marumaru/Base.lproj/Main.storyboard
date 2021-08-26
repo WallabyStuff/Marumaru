@@ -673,7 +673,7 @@ or check your internet connection</string>
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="총 --화" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ekE-NH-46s">
-                                <rect key="frame" x="30" y="248.99999999999997" width="49" height="20.666666666666657"/>
+                                <rect key="frame" x="30" y="248.99999999999997" width="330" height="20.666666666666657"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" name="SubTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -716,7 +716,7 @@ or check your internet connection</string>
                                             <constraint firstAttribute="width" constant="90" id="tuE-hg-LJe"/>
                                         </constraints>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="updateCycle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="08a-nK-0TT">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="updateCycle" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="08a-nK-0TT">
                                         <rect key="frame" x="93.666666666666657" y="84.666666666666657" width="91.333333333333343" height="28"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="28" id="sm4-DD-KjK"/>
@@ -757,6 +757,7 @@ or check your internet connection</string>
                             <constraint firstItem="ekE-NH-46s" firstAttribute="leading" secondItem="8ni-z9-mkU" secondAttribute="leading" constant="30" id="UNb-XO-PSj"/>
                             <constraint firstItem="c5p-FA-Xn4" firstAttribute="top" secondItem="rf2-5L-145" secondAttribute="top" id="bn2-Sj-WrA"/>
                             <constraint firstItem="ekE-NH-46s" firstAttribute="top" secondItem="Gaa-P6-XUJ" secondAttribute="bottom" constant="20" id="btG-RM-gRg"/>
+                            <constraint firstItem="8ni-z9-mkU" firstAttribute="trailing" secondItem="ekE-NH-46s" secondAttribute="trailing" constant="30" id="eKP-mQ-P4u"/>
                             <constraint firstAttribute="bottom" secondItem="ubJ-hJ-ACR" secondAttribute="bottom" constant="30" id="kJJ-CB-BGf"/>
                             <constraint firstAttribute="trailing" secondItem="c5p-FA-Xn4" secondAttribute="trailing" id="sez-HX-CCa"/>
                             <constraint firstItem="7Au-2g-nvi" firstAttribute="leading" secondItem="8ni-z9-mkU" secondAttribute="leading" id="v6p-B5-6Zs"/>
