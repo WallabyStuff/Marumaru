@@ -79,7 +79,6 @@ class LoadingView: UIView {
     
     func stop(_ completion: @escaping (Bool) -> Void) {
         UIView.animate(withDuration: 0.3) {
-            print("disappeared")
             self.animationView.alpha = 0
         } completion: { isDone in
             completion(isDone)

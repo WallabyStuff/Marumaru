@@ -7,7 +7,6 @@
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -807,110 +806,6 @@ or check your internet connection</string>
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HxK-ZS-3yQ">
-                                <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
-                                <subviews>
-                                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AwG-7w-ItO">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
-                                        <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k67-ye-UTq">
-                                                <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
-                                                <subviews>
-                                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Duv-Xs-srZ">
-                                                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
-                                                        <color key="backgroundColor" name="BackgroundColor"/>
-                                                        <prototypes>
-                                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="MangaSceneCell" id="4WS-dp-ZNM" customClass="MangaSceneCell" customModule="Marumaru" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="24.333333969116211" width="390" height="589.66668701171875"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="4WS-dp-ZNM" id="iHC-B6-Rif">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="390" height="589.66668701171875"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
-                                                                    <subviews>
-                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1Ed-jB-2Qs">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="390" height="559.66666666666663"/>
-                                                                            <constraints>
-                                                                                <constraint firstAttribute="width" secondItem="1Ed-jB-2Qs" secondAttribute="height" multiplier="209:300" id="svt-fM-anl"/>
-                                                                            </constraints>
-                                                                        </imageView>
-                                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aEd-3G-hQt" userLabel="SceneDividerView">
-                                                                            <rect key="frame" x="0.0" y="559.66666666666663" width="390" height="30"/>
-                                                                            <color key="backgroundColor" name="BackgroundColor"/>
-                                                                            <constraints>
-                                                                                <constraint firstAttribute="height" constant="30" id="4NF-X4-i88"/>
-                                                                            </constraints>
-                                                                        </view>
-                                                                    </subviews>
-                                                                    <constraints>
-                                                                        <constraint firstItem="1Ed-jB-2Qs" firstAttribute="width" secondItem="iHC-B6-Rif" secondAttribute="width" multiplier="0.6" id="FkH-K6-4X4"/>
-                                                                        <constraint firstAttribute="bottom" secondItem="aEd-3G-hQt" secondAttribute="bottom" id="Gho-Yd-hCO"/>
-                                                                        <constraint firstItem="1Ed-jB-2Qs" firstAttribute="top" secondItem="iHC-B6-Rif" secondAttribute="top" id="Gk8-3G-nJi"/>
-                                                                        <constraint firstItem="1Ed-jB-2Qs" firstAttribute="leading" secondItem="iHC-B6-Rif" secondAttribute="leading" id="GkW-da-KZF"/>
-                                                                        <constraint firstAttribute="trailing" secondItem="aEd-3G-hQt" secondAttribute="trailing" id="HPx-Jl-ghB"/>
-                                                                        <constraint firstItem="aEd-3G-hQt" firstAttribute="leading" secondItem="iHC-B6-Rif" secondAttribute="leading" id="RCg-fE-gft"/>
-                                                                        <constraint firstAttribute="trailing" secondItem="1Ed-jB-2Qs" secondAttribute="trailing" id="iMm-6N-sFH"/>
-                                                                        <constraint firstItem="aEd-3G-hQt" firstAttribute="top" secondItem="1Ed-jB-2Qs" secondAttribute="bottom" id="l5S-Vo-x5b"/>
-                                                                        <constraint firstItem="1Ed-jB-2Qs" firstAttribute="centerX" secondItem="iHC-B6-Rif" secondAttribute="centerX" id="nl1-1C-2V6"/>
-                                                                    </constraints>
-                                                                    <variation key="default">
-                                                                        <mask key="constraints">
-                                                                            <exclude reference="FkH-K6-4X4"/>
-                                                                            <exclude reference="nl1-1C-2V6"/>
-                                                                        </mask>
-                                                                    </variation>
-                                                                    <variation key="heightClass=regular-widthClass=regular">
-                                                                        <mask key="constraints">
-                                                                            <include reference="FkH-K6-4X4"/>
-                                                                            <exclude reference="GkW-da-KZF"/>
-                                                                            <exclude reference="iMm-6N-sFH"/>
-                                                                            <include reference="nl1-1C-2V6"/>
-                                                                        </mask>
-                                                                    </variation>
-                                                                </tableViewCellContentView>
-                                                                <color key="backgroundColor" name="BackgroundColor"/>
-                                                                <connections>
-                                                                    <outlet property="sceneDividerView" destination="aEd-3G-hQt" id="zpZ-Be-UY7"/>
-                                                                    <outlet property="sceneImageView" destination="1Ed-jB-2Qs" id="rEz-ZZ-o2O"/>
-                                                                </connections>
-                                                            </tableViewCell>
-                                                        </prototypes>
-                                                    </tableView>
-                                                </subviews>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                                <constraints>
-                                                    <constraint firstItem="Duv-Xs-srZ" firstAttribute="top" secondItem="k67-ye-UTq" secondAttribute="top" id="ODp-dG-Rrp"/>
-                                                    <constraint firstItem="Duv-Xs-srZ" firstAttribute="leading" secondItem="k67-ye-UTq" secondAttribute="leading" id="VMf-f9-OQ9"/>
-                                                    <constraint firstAttribute="bottom" secondItem="Duv-Xs-srZ" secondAttribute="bottom" id="VfK-yp-1Oi"/>
-                                                    <constraint firstAttribute="trailing" secondItem="Duv-Xs-srZ" secondAttribute="trailing" id="dIq-4u-wGK"/>
-                                                    <constraint firstAttribute="trailing" secondItem="Duv-Xs-srZ" secondAttribute="trailing" id="kk8-AF-pda"/>
-                                                    <constraint firstItem="Duv-Xs-srZ" firstAttribute="leading" secondItem="k67-ye-UTq" secondAttribute="leading" id="lBr-gX-61Q"/>
-                                                </constraints>
-                                                <variation key="heightClass=compact-widthClass=regular">
-                                                    <mask key="constraints">
-                                                        <exclude reference="VMf-f9-OQ9"/>
-                                                        <exclude reference="kk8-AF-pda"/>
-                                                    </mask>
-                                                </variation>
-                                            </view>
-                                        </subviews>
-                                        <constraints>
-                                            <constraint firstItem="k67-ye-UTq" firstAttribute="top" secondItem="AwG-7w-ItO" secondAttribute="top" id="4Cs-ou-nc1"/>
-                                            <constraint firstAttribute="bottom" secondItem="k67-ye-UTq" secondAttribute="bottom" id="9vH-vz-uJ6"/>
-                                            <constraint firstAttribute="trailing" secondItem="k67-ye-UTq" secondAttribute="trailing" id="EsS-ch-Ilf"/>
-                                            <constraint firstItem="k67-ye-UTq" firstAttribute="width" secondItem="AwG-7w-ItO" secondAttribute="width" id="FtF-9B-eNQ"/>
-                                            <constraint firstItem="k67-ye-UTq" firstAttribute="leading" secondItem="AwG-7w-ItO" secondAttribute="leading" id="IIn-cv-N8Z"/>
-                                            <constraint firstItem="k67-ye-UTq" firstAttribute="height" secondItem="AwG-7w-ItO" secondAttribute="height" id="yWc-1h-ihv"/>
-                                        </constraints>
-                                    </scrollView>
-                                </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="AwG-7w-ItO" secondAttribute="trailing" id="2no-7p-tL7"/>
-                                    <constraint firstItem="AwG-7w-ItO" firstAttribute="top" secondItem="HxK-ZS-3yQ" secondAttribute="top" id="GRb-Jb-cLm"/>
-                                    <constraint firstItem="AwG-7w-ItO" firstAttribute="leading" secondItem="HxK-ZS-3yQ" secondAttribute="leading" id="t12-lP-AtW"/>
-                                    <constraint firstAttribute="bottom" secondItem="AwG-7w-ItO" secondAttribute="bottom" id="uHf-r0-WXx"/>
-                                </constraints>
-                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="miC-cB-Gp8">
                                 <rect key="frame" x="0.0" y="0.0" width="390" height="144"/>
                                 <subviews>
@@ -1173,14 +1068,10 @@ or check your internet connection</string>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="miC-cB-Gp8" secondAttribute="trailing" id="87e-Db-jja"/>
                             <constraint firstItem="hhh-J1-nX3" firstAttribute="trailing" secondItem="j27-LF-bUm" secondAttribute="trailing" id="8kX-5v-Oon"/>
-                            <constraint firstItem="HxK-ZS-3yQ" firstAttribute="leading" secondItem="j27-LF-bUm" secondAttribute="leading" id="MSq-s4-bE0"/>
                             <constraint firstAttribute="trailing" secondItem="miC-cB-Gp8" secondAttribute="trailing" id="MsX-XN-dRA"/>
                             <constraint firstItem="miC-cB-Gp8" firstAttribute="leading" secondItem="s13-Uy-9I7" secondAttribute="leading" id="XJQ-PZ-lRb"/>
-                            <constraint firstAttribute="bottom" secondItem="HxK-ZS-3yQ" secondAttribute="bottom" id="b5N-dq-BL7"/>
-                            <constraint firstItem="j27-LF-bUm" firstAttribute="trailing" secondItem="HxK-ZS-3yQ" secondAttribute="trailing" id="cVN-mT-Een"/>
                             <constraint firstItem="miC-cB-Gp8" firstAttribute="trailing" secondItem="j27-LF-bUm" secondAttribute="trailing" id="f2y-4e-Kho"/>
                             <constraint firstAttribute="bottom" secondItem="hhh-J1-nX3" secondAttribute="bottom" id="fRP-oE-bgd"/>
-                            <constraint firstItem="HxK-ZS-3yQ" firstAttribute="top" secondItem="s13-Uy-9I7" secondAttribute="top" id="hgD-cJ-Nr0"/>
                             <constraint firstItem="miC-cB-Gp8" firstAttribute="leading" secondItem="j27-LF-bUm" secondAttribute="leading" id="hvj-IQ-X68"/>
                             <constraint firstItem="hhh-J1-nX3" firstAttribute="leading" secondItem="j27-LF-bUm" secondAttribute="leading" id="jVV-jM-ks5"/>
                             <constraint firstItem="hhh-J1-nX3" firstAttribute="leading" secondItem="s13-Uy-9I7" secondAttribute="leading" id="uyh-oo-Qb7"/>
@@ -1222,9 +1113,6 @@ or check your internet connection</string>
                         <outlet property="mangaTitleLabel" destination="5hY-ZZ-2dm" id="L4c-x8-Vv7"/>
                         <outlet property="nextEpisodeButton" destination="8x2-bT-JIn" id="l0g-LQ-6DR"/>
                         <outlet property="previousEpisodeButton" destination="6Im-73-8L9" id="C0H-qr-9QE"/>
-                        <outlet property="sceneScrollContentView" destination="k67-ye-UTq" id="3FP-dD-FAa"/>
-                        <outlet property="sceneScrollView" destination="AwG-7w-ItO" id="jBU-QE-LKJ"/>
-                        <outlet property="sceneTableView" destination="Duv-Xs-srZ" id="eql-b9-6gw"/>
                         <outlet property="showEpisodeListButton" destination="HUQ-iN-dT4" id="R9U-DZ-aRd"/>
                     </connections>
                 </viewController>
@@ -1472,8 +1360,5 @@ or check your internet connection</string>
         <namedColor name="TextFieldPlaceHolderColor">
             <color red="0.63168418226820044" green="0.63168418226820044" blue="0.63168418226820044" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
     </resources>
 </document>
