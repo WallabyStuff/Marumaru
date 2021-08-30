@@ -95,16 +95,16 @@ class WatchHistoryViewController: UIViewController {
         // clearHistory Button Action
         clearHistoryButton.rx.tap
             .asDriver()
-            .drive(onNext: {
-                self.presentClearHistoryActionSheet()
+            .drive(onNext: { [weak self] in
+                self?.presentClearHistoryActionSheet()
             })
             .disposed(by: disposeBag)
         
         // back Button Action
         backButton.rx.tap
             .asDriver()
-            .drive(onNext: {
-                self.dismiss(animated: true, completion: nil)
+            .drive(onNext: { [weak self] in
+                self?.dismiss(animated: true, completion: nil)
             })
             .disposed(by: disposeBag)
     }
@@ -114,10 +114,10 @@ class WatchHistoryViewController: UIViewController {
         watchHistoryArr.removeAll()
         
         self.watchHistoryHandler.fetchData()
-            .subscribe(onNext: { watchHistories in
-                self.watchHistoryArr = watchHistories
-                self.reloadWatchHistoryCollectionView()
-            }).disposed(by: self.disposeBag)
+            .subscribe(onNext: { [weak self] watchHistories in
+                self?.watchHistoryArr = watchHistories
+                self?.reloadWatchHistoryCollectionView()
+            }).disposed(by: disposeBag)
     }
     
     func presentClearHistoryActionSheet() {
@@ -142,10 +142,10 @@ class WatchHistoryViewController: UIViewController {
         self.reloadWatchHistoryCollectionView()
         
         watchHistoryHandler.deleteAll()
-            .subscribe(onNext: { isDeleted in
+            .subscribe(onNext: { [weak self] isDeleted in
                 if isDeleted {
-                    self.watchHistoryArr.removeAll()
-                    self.reloadWatchHistoryCollectionView()
+                    self?.watchHistoryArr.removeAll()
+                    self?.reloadWatchHistoryCollectionView()
                 }
             }).disposed(by: disposeBag)
     }

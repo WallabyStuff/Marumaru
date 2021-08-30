@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 public extension Date {
     
@@ -15,5 +16,16 @@ public extension Date {
     
     static var milliTimeStamp: Int64 {
         Int64(Date().timeIntervalSince1970 * 1000)
+    }
+}
+
+extension Realm {
+    /// prevent write while writing
+    public func safeWrite(_ block: (() throws -> Void)) throws {
+        if isInWriteTransaction {
+            try block()
+        } else {
+            try write(block)
+        }
     }
 }

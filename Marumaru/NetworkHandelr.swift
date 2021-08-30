@@ -59,7 +59,8 @@ class NetworkHandler {
     
     func getUpdatedManga(_ completion: @escaping (Result<[Manga], Error>) -> Void) {
         
-        getDocument(urlString: basePath) { result in
+        getDocument(urlString: basePath) { [weak self] result in
+            guard let self = self else { return }
             do {
                 let doc = try result.get()
                 let elements = try doc.getElementsByClass("post-row")
@@ -87,7 +88,9 @@ class NetworkHandler {
     
     func getTopRankedManga(_ completion: @escaping (Result<[TopRankManga], Error>) -> Void) {
         
-        getDocument(urlString: basePath) { result in
+        getDocument(urlString: basePath) { [weak self] result in
+            guard let self = self else { return }
+            
             do {
                 let doc = try result.get()
                 let rankElement = try doc.getElementsByClass("basic-post-list")
@@ -116,7 +119,9 @@ class NetworkHandler {
         let completeUrl = self.transformURLString(fullPath)
         
         if let url = completeUrl?.string {
-            getDocument(urlString: url) { result in
+            getDocument(urlString: url) { [weak self] result in
+                guard let self = self else { return }
+                
                 do {
                     let doc = try result.get()
                     let elements = try doc.getElementsByClass("media")
@@ -192,7 +197,9 @@ class NetworkHandler {
         
         let completeUrl = "\(self.basePath)/bbs/cmoic/\(serialNumber)"
         
-        getDocument(urlString: completeUrl) { result in
+        getDocument(urlString: completeUrl) { [weak self] result in
+            guard let self = self else { return }
+            
             do {
                 let doc = try result.get()
                 let headElement = try doc.getElementsByClass("list-wrap")
@@ -234,7 +241,9 @@ class NetworkHandler {
     
     func getMangaScene(url: String, _ completion: @escaping (Result<[MangaScene], Error>) -> Void) {
         
-        getDocument(urlString: url) { result in
+        getDocument(urlString: url) { [weak self] result in
+            guard let self = self else { return }
+            
             do {
                 let doc = try result.get()
                 self.getMangaScene(doc: doc) { result in
@@ -293,7 +302,9 @@ class NetworkHandler {
         let uuid = UUID()
         
         // if image is not existing on Cache data download from url
-        let task = URLSession.shared.dataTask(with: url) { data, _, error in
+        let task = URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
+            guard let self = self else { return }
+            
             defer {self.runningRequest.removeValue(forKey: uuid)}
             
             if let data = data, let image = UIImage(data: data) {
@@ -308,7 +319,8 @@ class NetworkHandler {
                 // save image to CacheData
                 self.imageCacheHandler.addData(imageCache)
                     .subscribe(on: MainScheduler.instance)
-                    .subscribe { _ in
+                    .subscribe { [weak self] _ in
+                        guard let self = self else { return }
                         // Success saving image to cache data STATE
                         self.imageCacheArr.append(imageCache)
                     }
@@ -342,7 +354,9 @@ class NetworkHandler {
     private func fetchImageCaches() {
         imageCacheArr.removeAll()
         imageCacheHandler.fetchData()
-            .subscribe { event in
+            .subscribe { [weak self] event in
+                guard let self = self else { return }
+                
                 if let imageCaches = event.element {
                     self.imageCacheArr = imageCaches
                 }
