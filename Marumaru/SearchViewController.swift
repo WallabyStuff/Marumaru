@@ -48,10 +48,6 @@ class SearchViewController: UIViewController {
         super.viewWillDisappear(true)
     }
     
-    deinit {
-        print("Log searchVC deinitialized")
-    }
-    
     // MARK: - Overrides
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .darkContent
