@@ -139,18 +139,16 @@ class ImageCacheHandler {
     func deleteAll() -> Observable<Any> {
         
         return Observable.create { observable in
-            DispatchQueue.main.async {
-                do {
-                    let realmInstnace = try Realm()
-                    
-                    let objects = realmInstnace.objects(ImageCache.self)
-                    try realmInstnace.safeWrite {
-                        realmInstnace.delete(objects)
-                    }
-                    observable.onCompleted()
-                } catch {
-                    observable.onError(error)
+            do {
+                let realmInstnace = try Realm()
+                
+                let objects = realmInstnace.objects(ImageCache.self)
+                try realmInstnace.safeWrite {
+                    realmInstnace.delete(objects)
                 }
+                observable.onCompleted()
+            } catch {
+                observable.onError(error)
             }
             
             return Disposables.create()

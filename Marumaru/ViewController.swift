@@ -21,6 +21,7 @@ class ViewController: UIViewController {
     let imageCacheHandler = ImageCacheHandler()
     let networkHandler = NetworkHandler()
     let watchHistoryHandler = WatchHistoryHandler()
+    let userDefaultsHandler = UserDefaultsHandler()
     
     var updatedMangaArr: [Manga] = []
     var watchHistoryArr: [WatchHistory] = []
@@ -51,6 +52,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        userDefaultsHandler.checkCacheNeedsCleanUp()
         initView()
         initInstance()
         initEventListener()
