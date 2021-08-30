@@ -25,7 +25,7 @@ class WatchHistoryHandler {
                 let watchHistory = WatchHistory(mangaUrl: mangaUrl,
                                                      mangaTitle: mangaTitle,
                                                      thumbnailImageUrl: thumbnailImageUrl)
-                try realmInstance.write {
+                try realmInstance.safeWrite {
                     realmInstance.add(watchHistory, update: .modified)
                     observable.onNext(true)
                     observable.onCompleted()
@@ -48,7 +48,7 @@ class WatchHistoryHandler {
                         do {
                             let realmInstance = try Realm()
                             
-                            try realmInstance.write {
+                            try realmInstance.safeWrite {
                                 realmInstance.add(watchHistory)
                                 observable.onNext(true)
                                 return
@@ -89,7 +89,7 @@ class WatchHistoryHandler {
                 let realmInstance = try Realm()
                 
                 let objects = realmInstance.objects(WatchHistory.self)
-                try realmInstance.write {
+                try realmInstance.safeWrite {
                     realmInstance.delete(objects)
                     observable.onNext(true)
                     observable.onCompleted()

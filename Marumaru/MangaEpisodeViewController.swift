@@ -123,16 +123,16 @@ class MangaEpisodeViewController: UIViewController {
         // back Button Action
         backButton.rx.tap
             .asDriver()
-            .drive(onNext: {
-                self.dismiss(animated: true, completion: nil)
+            .drive(onNext: { [weak self] in
+                self?.dismiss(animated: true, completion: nil)
             })
             .disposed(by: disposeBag)
         
         // scroll to bottom Button Action
         scrollToBottomButton.rx.tap
             .asDriver()
-            .drive(onNext: {
-                self.scrollToBottom()
+            .drive(onNext: { [weak self] in
+                self?.scrollToBottom()
             })
             .disposed(by: disposeBag)
     }
@@ -160,10 +160,11 @@ class MangaEpisodeViewController: UIViewController {
             // if thumbnail image was not passed from search result cell
             if let thumbnailImageURL = currentManga.thumbnailImageURL {
                 if let url = URL(string: thumbnailImageURL) {
-                    networkHandler.getImage(url) { result in
+                    networkHandler.getImage(url) { [weak self] result in
                         do {
                             let result = try result.get()
-                            DispatchQueue.main.async {
+                            DispatchQueue.main.async { [weak self] in
+                                guard let self = self else { return }
                                 self.thumbnailImageView.image = result.imageCache.image
                                 self.thumbnailImageView.startFadeInAnim(duration: 0.3)
                                 self.thumbnailImageView.layer.borderColor = UIColor(hexString: result.imageCache.imageAvgColorHex).cgColor
@@ -186,14 +187,18 @@ class MangaEpisodeViewController: UIViewController {
         
         loadingEpisodeAnimView.play()
         
-        DispatchQueue.global(qos: .background).async {
-            self.networkHandler.getEpisode(serialNumber: self.currentManga!.mangaSN) { result in
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            guard let self = self else { return }
+            self.networkHandler.getEpisode(serialNumber: self.currentManga!.mangaSN) { [weak self] result in
+                guard let self = self else { return }
+                
                 do {
                     let result = try result.get()
                     self.episodeArr = result
                     
-                    DispatchQueue.main.async {
-                        self.loadingEpisodeAnimView.stop { isDone in
+                    DispatchQueue.main.async { [weak self] in
+                        self?.loadingEpisodeAnimView.stop { [weak self] isDone in
+                            guard let self = self else { return }
                             if isDone {
                                 self.mangaEpisodeTableView.reloadData()
                                 self.episodeSizeLabel.text = "총 \(self.episodeArr.count)화"
@@ -202,8 +207,8 @@ class MangaEpisodeViewController: UIViewController {
                     }
                 } catch {
                     // failure state
-                    DispatchQueue.main.async {
-                        self.loadingEpisodeAnimView.stop()
+                    DispatchQueue.main.async { [weak self] in
+                        self?.loadingEpisodeAnimView.stop()
                     }
                 }
             }
@@ -257,8 +262,8 @@ class MangaEpisodeViewController: UIViewController {
         watchHistoryArr.removeAll()
         
         watchHistoryHandler.fetchData()
-            .subscribe(onNext: { watchHistories in
-                self.watchHistoryArr = watchHistories
+            .subscribe(onNext: { [weak self] watchHistories in
+                self?.watchHistoryArr = watchHistories
             }).disposed(by: disposeBag)
     }
 }
@@ -310,9 +315,9 @@ extension MangaEpisodeViewController: UITableViewDelegate, UITableViewDataSource
                 }
                 
                 // stop loading image on reuse State
-                episodeCell.onReuse = {
+                episodeCell.onReuse = { [weak self] in
                     if let token = token {
-                        self.networkHandler.cancelLoadImage(token)
+                        self?.networkHandler.cancelLoadImage(token)
                     }
                 }
             }

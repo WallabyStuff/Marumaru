@@ -142,16 +142,16 @@ class ViewController: UIViewController {
         // searchButton Action
         searchButton.rx.tap
             .asDriver()
-            .drive(onNext: { _ in
-                self.presentSearchVC()
+            .drive(onNext: { [weak self] _ in
+                self?.presentSearchVC()
             })
             .disposed(by: disposeBag)
         
         // show History Button Action
         showWatchHistoryButton.rx.tap
             .asDriver()
-            .drive(onNext: {
-                self.presentWatchHistoryVC()
+            .drive(onNext: { [weak self] _ in
+                self?.presentWatchHistoryVC()
             })
             .disposed(by: disposeBag)
         
@@ -159,8 +159,8 @@ class ViewController: UIViewController {
         refreshUpdatedMangaButton.rx.tap
             .debounce(.milliseconds(300), scheduler: ConcurrentMainScheduler.instance)
             .observe(on: ConcurrentDispatchQueueScheduler.init(qos: .background))
-            .subscribe(onNext: { _ in
-                self.setUpdatedManga()
+            .subscribe(onNext: { [weak self] _ in
+                self?.setUpdatedManga()
             })
             .disposed(by: disposeBag)
         
@@ -168,8 +168,8 @@ class ViewController: UIViewController {
         refreshTop20MangaButton.rx.tap
             .debounce(.milliseconds(300), scheduler: ConcurrentMainScheduler.instance)
             .observe(on: ConcurrentDispatchQueueScheduler.init(qos: .background))
-            .subscribe(onNext: {
-                self.setTopRankManga()
+            .subscribe(onNext: { [weak self] in
+                self?.setTopRankManga()
             })
             .disposed(by: disposeBag)
     }
@@ -177,40 +177,43 @@ class ViewController: UIViewController {
     // MARK: - Methods
     func setMainContents() {
         if updatedMangaArr.count == 0 {
-            self.setUpdatedManga()
+            setUpdatedManga()
         } else {
-            self.loadingUpdatedMangaAnimView.stop()
+            loadingUpdatedMangaAnimView.stop()
             if updatedMangaCollectionView.visibleCells.count == 0 {
-                self.updatedMangaCollectionView.reloadData()
+                updatedMangaCollectionView.reloadData()
             }
         }
         
         if topRankMangaArr.count == 0 {
-            self.setTopRankManga()
+            setTopRankManga()
         } else {
-            self.loadingToprankMangaAnimView.stop()
+            loadingToprankMangaAnimView.stop()
             if topRankMangaTableView.visibleCells.count == 0 {
-                self.topRankMangaTableView.reloadData()
+                topRankMangaTableView.reloadData()
             }
         }
     }
     
     func setUpdatedManga() {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.updatedMangaPlaceholderLabel.isHidden = true
             self.updatedMangaArr.removeAll()
             self.updatedMangaCollectionView.reloadData()
             self.loadingUpdatedMangaAnimView.play()
         }
         
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            guard let self = self else { return }
             self.networkHandler.getUpdatedManga { result in
                 do {
                     let result = try result.get()
                     self.updatedMangaArr = result
                     
                     // Finish to load updated manga
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.loadingUpdatedMangaAnimView.stop { isDone in
                             if isDone {
                                 self.updatedMangaCollectionView.reloadData()
@@ -219,7 +222,8 @@ class ViewController: UIViewController {
                     }
                 } catch {
                     // failure state
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.loadingUpdatedMangaAnimView.stop { isDone in
                             if isDone {
                                 self.updatedMangaPlaceholderLabel.isHidden = false
@@ -232,20 +236,23 @@ class ViewController: UIViewController {
     }
     
     func setTopRankManga() {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.top20MangaPlaceholderLabel.isHidden = true
             self.topRankMangaArr.removeAll()
             self.topRankMangaTableView.reloadData()
             self.loadingToprankMangaAnimView.play()
         }
         
-        networkHandler.getTopRankedManga { result in
+        networkHandler.getTopRankedManga { [weak self] result in
+            guard let self = self else { return }
             do {
                 let result = try result.get()
                 self.topRankMangaArr = result
                 
                 // Finish to load TopRank Manga data
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.loadingToprankMangaAnimView.stop { isDone in
                         if isDone {
                             self.topRankMangaTableView.reloadData()
@@ -254,7 +261,8 @@ class ViewController: UIViewController {
                 }
             } catch {
                 // failure state
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.loadingToprankMangaAnimView.stop { isDone in
                         if isDone {
                             self.top20MangaPlaceholderLabel.isHidden = false
@@ -280,7 +288,8 @@ class ViewController: UIViewController {
     }
     
     func reloadWatchHistoryCollectionView() {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.watchHistoryCollectionView.reloadData()
             
             if self.watchHistoryArr.count == 0 {

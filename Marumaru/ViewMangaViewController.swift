@@ -19,8 +19,8 @@ class ViewMangaViewController: UIViewController {
     
     // MARK: - Declarations
     var disposeBag = DisposeBag()
-    let networkHandler = NetworkHandler()
-    let watchHistoryHandler = WatchHistoryHandler()
+    var networkHandler = NetworkHandler()
+    var watchHistoryHandler = WatchHistoryHandler()
     
     var currentEpisodeIndex: Int?
     var sharedDoc: Document?
@@ -90,6 +90,7 @@ class ViewMangaViewController: UIViewController {
         sceneScrollView = SceneScrollView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
         sceneScrollView.minimumZoomScale = 1
         sceneScrollView.maximumZoomScale = 3
+        sceneScrollView.contentInset = UIEdgeInsets(top: appbarView.frame.height, left: 0, bottom: bottomIndicatorView.frame.height, right: 0)
         view.insertSubview(sceneScrollView, at: 0)
         sceneScrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         sceneScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
@@ -205,49 +206,49 @@ class ViewMangaViewController: UIViewController {
         // appbar tap gesture
         appbarView.rx.tapGesture()
             .when(.recognized)
-            .subscribe(onNext: { _ in
-                self.showDetailInfoView()
+            .subscribe(onNext: { [weak self] _ in
+                self?.showDetailInfoView()
             })
             .disposed(by: disposeBag)
         
         // detail info View tap gesture
         detailInfoView.rx.tapGesture()
             .when(.recognized)
-            .subscribe(onNext: { gestureRecognizer in
+            .subscribe(onNext: { [weak self] gestureRecognizer in
                 gestureRecognizer.delegate = self
-                self.hideDetailInfoView()
+                self?.hideDetailInfoView()
             })
             .disposed(by: disposeBag)
         
         // back Button Action
         backButton.rx.tap
             .asDriver()
-            .drive(onNext: {
-                self.dismiss(animated: true, completion: nil)
+            .drive(onNext: { [weak self] in
+                self?.dismiss(animated: true, completion: nil)
             })
             .disposed(by: disposeBag)
         
         // previousEpisode Butotn Action
         previousEpisodeButton.rx.tap
             .asDriver()
-            .drive(onNext: {
-                self.loadPreviousEpisode()
+            .drive(onNext: { [weak self] in
+                self?.loadPreviousEpisode()
             })
             .disposed(by: disposeBag)
         
         // nextEpisode Button Action
         nextEpisodeButton.rx.tap
             .asDriver()
-            .drive(onNext: {
-                self.loadNextEpisode()
+            .drive(onNext: { [weak self] in
+                self?.loadNextEpisode()
             })
             .disposed(by: disposeBag)
         
         // showEpisode List Button Action
         showEpisodeListButton.rx.tap
             .asDriver()
-            .drive(onNext: {
-                self.presentEpisodePopoverVC()
+            .drive(onNext: { [weak self] in
+                self?.presentEpisodePopoverVC()
             })
             .disposed(by: disposeBag)
         
@@ -258,10 +259,9 @@ class ViewMangaViewController: UIViewController {
         sceneScrollView.rx
             .gesture(sceneDoubleTapGestureRecognizer)
             .when(.recognized)
-            .subscribe(onNext: { recognizer in
-                print(self.sceneScrollView.contentView.frame)
-                let tapPoint = recognizer.location(in: self.sceneScrollView.contentView)
-                self.zoom(point: tapPoint)
+            .subscribe(onNext: { [weak self] recognizer in
+                let tapPoint = recognizer.location(in: self?.sceneScrollView.contentView)
+                self?.zoom(point: tapPoint)
             })
             .disposed(by: disposeBag)
 
@@ -272,26 +272,28 @@ class ViewMangaViewController: UIViewController {
         sceneScrollView.rx
             .gesture(sceneTapGestureRocognizer)
             .when(.recognized)
-            .subscribe(onNext: { _ in
-                if self.appbarView.alpha == 0 {
-                    self.showNavigationBar()
+            .subscribe(onNext: { [weak self] _ in
+                if self?.appbarView.alpha == 0 {
+                    self?.showNavigationBar()
                 } else {
-                    self.hideNavigationBar()
+                    self?.hideNavigationBar()
                 }
             })
             .disposed(by: disposeBag)
         
         // when scene TableView reached the bottom & top
         sceneScrollView.rx.contentOffset
-            .subscribe(onNext: { offset in
+            .subscribe(onNext: { [weak self] offset in
+                guard let self = self else { return }
+                
                 let overPanThreshold: CGFloat = 50
                 // reached the top
-                if offset.y < -overPanThreshold {
+                if offset.y < -(overPanThreshold + self.appbarView.frame.height) {
                     self.showNavigationBar()
                 }
                 
                 // reached the bottom
-                if offset.y > self.sceneScrollView.contentSize.height - self.view.frame.height + overPanThreshold {
+                if offset.y > self.sceneScrollView.contentSize.height - self.view.frame.height + overPanThreshold + self.bottomIndicatorView.frame.height {
                     self.showNavigationBar()
                 }
             })
@@ -300,8 +302,8 @@ class ViewMangaViewController: UIViewController {
         // scene TableView start Scrolling
         sceneScrollView.rx.panGesture()
             .when(.began)
-            .subscribe(onNext: { _ in
-                self.hideNavigationBar()
+            .subscribe(onNext: { [weak self] _ in
+                self?.hideNavigationBar()
             })
             .disposed(by: disposeBag)
     }
@@ -323,23 +325,28 @@ class ViewMangaViewController: UIViewController {
     }
     
     func setMangaScene(_ mangaUrl: String) {
+        
         startLoadingSceneAnim()
         sceneArr.removeAll()
         indicatorState(false)
         sceneScrollView.clearReloadData()
         
-        DispatchQueue.global(qos: .background).async {
-            self.networkHandler.getDocument(urlString: mangaUrl) { result in
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            self?.networkHandler.getDocument(urlString: mangaUrl) { result in
                 do {
                     let doc = try result.get()
-                    self.sharedDoc = doc
+                    self?.sharedDoc = doc
                     
-                    self.networkHandler.getMangaScene(doc: doc) { result in
+                    self?.networkHandler.getMangaScene(doc: doc) { [weak self] result in
+                        guard let self = self else { return }
+                        
                         do {
                             let result = try result.get()
                             self.sceneArr = result
                             
-                            DispatchQueue.main.sync {
+                            DispatchQueue.main.sync { [weak self] in
+                                guard let self = self else { return }
+                                
                                 self.stopLoadingSceneAnim()
                                 self.reloadScene()
                                 self.saveToHistory()
@@ -361,9 +368,10 @@ class ViewMangaViewController: UIViewController {
     func setMangaEpisode() {
         episodeArr.removeAll()
         
-        DispatchQueue.global(qos: .background).async {
-            if let doc = self.sharedDoc {
-                self.networkHandler.getEpisode(doc: doc) { result in
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            if let doc = self?.sharedDoc {
+                self?.networkHandler.getEpisode(doc: doc) { [weak self] result in
+                    guard let self = self else { return }
                     do {
                         let episodeArr = try result.get()
                         self.episodeArr = episodeArr
@@ -374,13 +382,14 @@ class ViewMangaViewController: UIViewController {
                                 self.mangaTitle = episode.title
                                 self.currentEpisodeIndex = index
                                 // replace with full manga title
-                                DispatchQueue.main.async {
-                                    self.mangaTitleLabel.text = episode.title
+                                DispatchQueue.main.async { [weak self] in
+                                    self?.mangaTitleLabel.text = episode.title
                                 }
                             }
                         }
                         
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
                             self.indicatorState(true)
                             self.detailInfoEpisodeTableView.reloadData()
                             self.detailInfoEpisodeSizeLabel.text = "총 \(self.episodeArr.count)화"

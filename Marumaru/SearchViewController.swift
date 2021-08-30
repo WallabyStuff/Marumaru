@@ -16,7 +16,7 @@ class SearchViewController: UIViewController {
     
     // MARK: - Declarations
     var disposeBag = DisposeBag()
-    let networkHandler = NetworkHandler()
+    var networkHandler = NetworkHandler()
     
     var searchResultMangaArr: [MangaInfo] = []
     var loadingSearchAnimView = LoadingView()
@@ -42,6 +42,14 @@ class SearchViewController: UIViewController {
         super.viewDidAppear(true)
         
         focusToSearchTextField()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+    }
+    
+    deinit {
+        print("Log searchVC deinitialized")
     }
     
     // MARK: - Overrides
@@ -96,6 +104,9 @@ class SearchViewController: UIViewController {
     }
     
     func initInstance() {
+        /// Network Handler
+        networkHandler = NetworkHandler()
+        
         // result manga TableView
         let searchResultMangaTableCellNib = UINib(nibName: "MangaThumbnailTableViewCell", bundle: nil)
         searchResultMangaTableView.register(searchResultMangaTableCellNib, forCellReuseIdentifier: "mangaThumbnailTableCell")
@@ -108,8 +119,8 @@ class SearchViewController: UIViewController {
         // back Button Action
         backButton.rx.tap
             .asDriver()
-            .drive(onNext: {
-                self.dismiss(animated: true)
+            .drive(onNext: { [weak self] in
+                self?.dismiss(animated: true)
             })
             .disposed(by: disposeBag)
     }
@@ -133,8 +144,12 @@ class SearchViewController: UIViewController {
             return
         }
         
-        DispatchQueue.global(qos: .background).async {
-            self.networkHandler.getSearchResult(title: title) { result in
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            guard let self = self else { return }
+            
+            self.networkHandler.getSearchResult(title: title) { [weak self] result in
+                guard let self = self else { return }
+                
                 do {
                     let result = try result.get()
                     self.searchResultMangaArr = result
@@ -162,7 +177,9 @@ class SearchViewController: UIViewController {
     }
     
     func reloadResultTableView() {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
             self.searchResultMangaTableView.reloadData()
             self.isSearching = false
             
@@ -223,35 +240,37 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
             cell.setUpdateCycleLabelBackgroundTint()
         }
         
-        if let previewImageUrl = searchResultMangaArr[indexPath.row].thumbnailImageURL {
-            if let url = URL(string: previewImageUrl) {
-                let token = networkHandler.getImage(url) { result in
-                    DispatchQueue.global(qos: .background).async {
-                        do {
-                            let result = try result.get()
-                            DispatchQueue.main.async {
-                                // image loaded
-                                cell.thumbnailImageView.image = result.imageCache.image
-                                cell.thumbnailImagePlaceholderLabel.isHidden = true
-                                cell.thumbnailImageBaseView.setThumbnailShadow(with: result.imageCache.averageColor.cgColor)
-                                self.searchResultMangaArr[indexPath.row].thumbnailImage = result.imageCache.image
-                                
-                                if result.animate {
-                                    cell.thumbnailImageView.startFadeInAnim(duration: 0.5)
-                                }
+        if let previewImageUrl = searchResultMangaArr[indexPath.row].thumbnailImageURL,
+           let url = URL(string: previewImageUrl) {
+            
+            let token = networkHandler.getImage(url) { [weak self] result in
+                DispatchQueue.global(qos: .background).async { [weak self] in
+                    do {
+                        let result = try result.get()
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
+
+                            // image loaded
+                            cell.thumbnailImageView.image = result.imageCache.image
+                            cell.thumbnailImagePlaceholderLabel.isHidden = true
+                            cell.thumbnailImageBaseView.setThumbnailShadow(with: result.imageCache.averageColor.cgColor)
+                            self.searchResultMangaArr[indexPath.row].thumbnailImage = result.imageCache.image
+
+                            if result.animate {
+                                cell.thumbnailImageView.startFadeInAnim(duration: 0.5)
                             }
-                        } catch {
-                            DispatchQueue.main.async {
-                                cell.thumbnailImagePlaceholderLabel.isHidden = false
-                            }
+                        }
+                    } catch {
+                        DispatchQueue.main.async {
+                            cell.thumbnailImagePlaceholderLabel.isHidden = false
                         }
                     }
                 }
-                
-                cell.onReuse = {
-                    if let token = token {
-                        self.networkHandler.cancelLoadImage(token)
-                    }
+            }
+
+            cell.onReuse = { [weak self] in
+                if let token = token {
+                    self?.networkHandler.cancelLoadImage(token)
                 }
             }
         }

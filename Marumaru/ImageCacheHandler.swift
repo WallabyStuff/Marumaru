@@ -18,11 +18,6 @@ enum ImageCacheHandlingError: String, Error {
 class ImageCacheHandler {
     
     var disposeBag = DisposeBag()
-    
-    deinit {
-        // clear observables
-        disposeBag = DisposeBag()
-    }
 
     func addData(url: String,
                  image: UIImage,
@@ -37,7 +32,7 @@ class ImageCacheHandler {
                                                 image: image,
                                                 imageAvgColor: imageAvgColor)
                     
-                    try realmInstance.write {
+                    try realmInstance.safeWrite {
                         realmInstance.add(imageCache, update: .modified)
                     }
                     observable.onCompleted()
@@ -63,7 +58,7 @@ class ImageCacheHandler {
                             do {
                                 let realmInstance = try Realm()
                                 
-                                try realmInstance.write {
+                                try realmInstance.safeWrite {
                                     realmInstance.add(imageCache)
                                 }
                                 
@@ -149,7 +144,7 @@ class ImageCacheHandler {
                     let realmInstnace = try Realm()
                     
                     let objects = realmInstnace.objects(ImageCache.self)
-                    try realmInstnace.write {
+                    try realmInstnace.safeWrite {
                         realmInstnace.delete(objects)
                     }
                     observable.onCompleted()
@@ -159,6 +154,16 @@ class ImageCacheHandler {
             }
             
             return Disposables.create()
+        }
+    }
+    
+    func fetchIfsExists(url: String) -> ImageCache? {
+        do {
+            let realmInstance = try Realm()
+            return realmInstance.object(ofType: ImageCache.self, forPrimaryKey: url)
+        } catch {
+            print(error)
+            return nil
         }
     }
 }

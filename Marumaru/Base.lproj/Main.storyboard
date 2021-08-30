@@ -505,7 +505,7 @@ or check your internet connection</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-200.80000000000001" y="54.679802955665025"/>
+            <point key="canvasLocation" x="25" y="54"/>
         </scene>
         <!--Watch History View Controller-->
         <scene sceneID="Qa5-3C-qBP">
@@ -716,7 +716,7 @@ or check your internet connection</string>
                                             <constraint firstAttribute="width" constant="90" id="tuE-hg-LJe"/>
                                         </constraints>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="updateCycle" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="08a-nK-0TT">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="updateCycle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="08a-nK-0TT">
                                         <rect key="frame" x="93.666666666666657" y="84.666666666666657" width="91.333333333333343" height="28"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="28" id="sm4-DD-KjK"/>
