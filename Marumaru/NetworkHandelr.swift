@@ -18,7 +18,7 @@ struct ImageResult {
 
 class NetworkHandler {
 
-    let basePath = "https://marumaru201.com"
+    var basePath: String?
     let searchPath = "/bbs/search.php?url=%2Fbbs%2Fsearch.php&stx="
     
     var disposeBag = DisposeBag()
@@ -29,6 +29,30 @@ class NetworkHandler {
     
     init() {
         fetchImageCaches()
+        initBasePath()
+    }
+    
+    func updateBasePath() {
+        let remotePath = "https://raw.githubusercontent.com/Avocado34/Marumaru/develop/Basepath.rtf"
+        if let url = URL(string: remotePath) {
+            do {
+                var remoteBasePath = try String(contentsOf: url, encoding: .utf8)
+                remoteBasePath = remoteBasePath.trimmingCharacters(in: .newlines)
+                UserDefaults.standard.setValue(remoteBasePath, forKey: "remoteBasePath")
+            } catch {
+                UserDefaults.standard.setValue("https://marumaru202.com", forKey: "remoteBasePath")
+                print(error)
+            }
+        }
+    }
+    
+    private func initBasePath() {
+        let remoteBasePath = UserDefaults.standard.string(forKey: "remoteBasePath")
+        if let remoteBasePath = remoteBasePath {
+            basePath = remoteBasePath
+        } else {
+            basePath = "https://marumaru202.com"
+        }
     }
     
     func getDocument(urlString: String, completion: @escaping (Result<Document, Error>) -> Void) {
@@ -48,6 +72,7 @@ class NetworkHandler {
     }
     
     func getCompleteUrl(url: String) -> String {
+        guard let basePath = basePath else { return "" }
         
         if !url.contains(basePath) {
             let completeUrl = "\(basePath)\(url)"
@@ -58,6 +83,7 @@ class NetworkHandler {
     }
     
     func getUpdatedManga(_ completion: @escaping (Result<[Manga], Error>) -> Void) {
+        guard let basePath = basePath else { return }
         
         getDocument(urlString: basePath) { [weak self] result in
             guard let self = self else { return }
@@ -87,6 +113,7 @@ class NetworkHandler {
     }
     
     func getTopRankedManga(_ completion: @escaping (Result<[TopRankManga], Error>) -> Void) {
+        guard let basePath = basePath else { return }
         
         getDocument(urlString: basePath) { [weak self] result in
             guard let self = self else { return }
@@ -114,8 +141,10 @@ class NetworkHandler {
     }
     
     func getSearchResult(title: String, _ completion: @escaping (Result<[MangaInfo], Error>) -> Void) {
+        guard let basePath = basePath else { return }
+        
         let modifiedTitle = title.replacingOccurrences(of: " ", with: "+")
-        let fullPath = "\(self.basePath)\(self.searchPath)\(modifiedTitle)"
+        let fullPath = "\(basePath)\(self.searchPath)\(modifiedTitle)"
         let completeUrl = self.transformURLString(fullPath)
         
         if let url = completeUrl?.string {
@@ -194,8 +223,8 @@ class NetworkHandler {
     }
     
     func getEpisode(serialNumber: String, _ completion: @escaping (Result<[MangaEpisode], Error>) -> Void) {
-        
-        let completeUrl = "\(self.basePath)/bbs/cmoic/\(serialNumber)"
+        guard let basePath = basePath else { return }
+        let completeUrl = "\(basePath)/bbs/cmoic/\(serialNumber)"
         
         getDocument(urlString: completeUrl) { [weak self] result in
             guard let self = self else { return }
@@ -368,6 +397,7 @@ class NetworkHandler {
         guard let urlPath = string.components(separatedBy: "?").first else {
             return nil
         }
+        
         var components = URLComponents(string: urlPath)
         if let queryString = string.components(separatedBy: "?").last {
             components?.queryItems = []

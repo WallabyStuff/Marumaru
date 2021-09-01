@@ -32,7 +32,7 @@ class LoadingView: UIView {
         
         animationView = AnimationView(name: name)
         animationView.frame = self.frame
-        animationView.loopMode = .loop
+        animationView.loopMode = loopMode
         animationView.contentMode = .scaleAspectFit
         animationView.center = self.center
         animationView.alpha = 0

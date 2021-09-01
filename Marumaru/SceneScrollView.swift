@@ -41,6 +41,12 @@ class SceneScrollView: UIScrollView {
         }
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        
+    }
+    
     private func initEventListener() {
         /// detect oriantation changed and resize the cells
         NotificationCenter.default.rx.notification(UIDevice.orientationDidChangeNotification)
