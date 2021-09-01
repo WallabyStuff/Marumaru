@@ -90,7 +90,7 @@ class ViewMangaViewController: UIViewController {
         sceneScrollView = SceneScrollView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
         sceneScrollView.minimumZoomScale = 1
         sceneScrollView.maximumZoomScale = 3
-        sceneScrollView.contentInset = UIEdgeInsets(top: appbarView.frame.height, left: 0, bottom: bottomIndicatorView.frame.height, right: 0)
+        sceneScrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: bottomIndicatorView.frame.height, right: 0)
         view.insertSubview(sceneScrollView, at: 0)
         sceneScrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         sceneScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
@@ -288,7 +288,7 @@ class ViewMangaViewController: UIViewController {
                 
                 let overPanThreshold: CGFloat = 50
                 // reached the top
-                if offset.y < -(overPanThreshold + self.appbarView.frame.height) {
+                if offset.y < -(overPanThreshold + overPanThreshold) {
                     self.showNavigationBar()
                 }
                 

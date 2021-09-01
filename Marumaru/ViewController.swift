@@ -52,7 +52,12 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Clean cache datas
         userDefaultsHandler.checkCacheNeedsCleanUp()
+        
+        // Update basePath
+        networkHandler.updateBasePath()
+        
         initView()
         initInstance()
         initEventListener()
