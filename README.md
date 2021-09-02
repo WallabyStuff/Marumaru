@@ -57,6 +57,10 @@
 [💾도큐먼트 캐싱](https://cautious-smash-7a0.notion.site/fb0cdf7a04484a129e92d11a1a3e991c) <br>
 
 <br><br>
+## Download 🛍
+https://testflight.apple.com/join/VQjYWvvm
+
+<br><br>
 ## Used Tools 🛠
 
 - **Appicon** - figma
