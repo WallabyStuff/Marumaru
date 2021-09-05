@@ -1,6 +1,8 @@
-<img src="https://user-images.githubusercontent.com/63496607/131101666-02dca9a8-bdf9-4427-8799-c7a8d806f61e.png" width="100">
+<div align="center">
+ <img src="https://user-images.githubusercontent.com/63496607/131101666-02dca9a8-bdf9-4427-8799-c7a8d806f61e.png" width="100">
+ <h1>MaruMaru</h1>
+</div>
 
-# MaruMaru
 
 <br><br>
 ## Screenshots 📱
