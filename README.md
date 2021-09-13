@@ -7,23 +7,19 @@
 <br><br>
 ## Screenshots 📱
 
-### iPhone
-
-![Marumaru iPhone.png](https://user-images.githubusercontent.com/63496607/131101688-ed771edc-73a1-41f7-8c39-2923874898c5.png)
-
 ### iPad
+![Marumaru iPhone.png](https://user-images.githubusercontent.com/63496607/133063058-126362bf-cb05-44d7-98d3-7f19476f63b2.png)
 
-![Frame 2-2.png](https://user-images.githubusercontent.com/63496607/131101740-39164939-1f19-4497-bc81-59a81fa3b4d7.png)
+### iPhone
+![Marumaru iPad.png](https://user-images.githubusercontent.com/63496607/133063086-be0087b5-37f8-453f-abaa-cdc6060e1210.png)
 
 ### gif
-
 <img src="https://github.com/Avocado34/Marumaru/blob/develop/RunningGif/Main.gif" width="150"></img> ~
 <img src="https://github.com/Avocado34/Marumaru/blob/develop/RunningGif/Search.gif" width="150"></img> ~
 <img src="https://github.com/Avocado34/Marumaru/blob/develop/RunningGif/Episode.gif" width="150"></img> ~
 <img src="https://github.com/Avocado34/Marumaru/blob/develop/RunningGif/View.gif" width="150"></img>
 
 [🎨디자인 변천사](https://www.notion.so/ffed3289a9024ae8a58dbb7614dd553a)
-
 ---
 
 <br><br>
