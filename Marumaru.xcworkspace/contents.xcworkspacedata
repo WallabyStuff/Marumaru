@@ -4,6 +4,20 @@
    <FileRef
       location = "group:Marumaru.xcodeproj">
    </FileRef>
+   <Group
+      location = "group:Marumaru"
+      name = "Resources">
+      <FileRef
+         location = "group:Marumaru/Assets.xcassets">
+      </FileRef>
+   </Group>
+   <Group
+      location = "group:Marumaru"
+      name = "SupportingFiles">
+      <FileRef
+         location = "group:Marumaru/Info.plist">
+      </FileRef>
+   </Group>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
    </FileRef>
