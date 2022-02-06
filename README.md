@@ -8,7 +8,6 @@
 ![PreviewImage for iPad](https://user-images.githubusercontent.com/63496607/152677097-c036f0d8-7a1d-4916-8643-a952e060ce6f.png)
 
 ##### [🎨디자인 변천사](https://www.notion.so/ffed3289a9024ae8a58dbb7614dd553a)
----
 
 <br><br>
 ## Why I made this 🤔
