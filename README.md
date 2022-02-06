@@ -4,14 +4,8 @@
 </div>
 
 
-<br><br>
-## Screenshots 📱
-
-### iPad
-![Marumaru iPhone.png](https://user-images.githubusercontent.com/63496607/133063058-126362bf-cb05-44d7-98d3-7f19476f63b2.png)
-
-### iPhone
-![Marumaru iPad.png](https://user-images.githubusercontent.com/63496607/133063086-be0087b5-37f8-453f-abaa-cdc6060e1210.png)
+![Previewimage for iPhone](https://user-images.githubusercontent.com/63496607/152677110-c16e6c2e-99af-44c8-80bb-fb867ca052e6.png)
+![PreviewImage for iPad](https://user-images.githubusercontent.com/63496607/152677097-c036f0d8-7a1d-4916-8643-a952e060ce6f.png)
 
 ### gif
 <img src="https://github.com/Avocado34/Marumaru/blob/develop/RunningGif/Main.gif" width="150"></img> ~
