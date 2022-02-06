@@ -15,33 +15,29 @@ import RxCocoa
 class SearchViewController: UIViewController {
     
     // MARK: - Declarations
-    var disposeBag = DisposeBag()
-    var networkHandler = NetworkHandler()
-    
-    var searchResultMangaArr: [MangaInfo] = []
-    var loadingSearchAnimView = LoadingView()
-    var isSearching = false
-    
     @IBOutlet weak var appbarView: UIView!
     @IBOutlet weak var searchTextField: UITextField!
-    @IBOutlet weak var searchResultMangaTableView: UITableView!
-    @IBOutlet weak var noResultsLabel: UILabel!
+    @IBOutlet weak var searchResultTableView: UITableView!
     @IBOutlet weak var backButton: UIButton!
-    @IBOutlet weak var searchResultPlaceholderLabel: UILabel!
+    
+    private let viewModel = SearchViewModel()
+    private var disposeBag = DisposeBag()
+    private var searchLoadingAnimationView = LottieAnimationView()
+    private var isSearching = false
+    private var searchResultPlaceholderLabel = StickyPlaceholderLabel()
     
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        initView()
-        initInstance()
-        initEventListener()
+        setup()
+        bind()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
-        focusToSearchTextField()
+        focusSearchTextField()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -53,138 +49,124 @@ class SearchViewController: UIViewController {
         return .darkContent
     }
     
-    // MARK: - Initializations
-    func initView() {
-        // hero enable
+    // MARK: - Setup
+    private func setup() {
+        setupView()
+    }
+    
+    private func setupView() {
+        setupHero()
+        setupAppbarView()
+        setupSearchTextField()
+        setupBackButton()
+        setupSearchResultTableView()
+    }
+    
+    private func setupHero() {
         self.hero.isEnabled = true
-        
-        // appbarView
+    }
+    
+    private func setupAppbarView() {
         appbarView.hero.id = "appbar"
-        appbarView.layer.cornerRadius = 40
+        appbarView.layer.cornerRadius = 24
         appbarView.layer.maskedCorners = CACornerMask([.layerMaxXMaxYCorner, .layerMinXMaxYCorner])
-        
-        // search TextField
-        searchTextField.layer.cornerRadius = 15
+    }
+    
+    private func setupSearchTextField() {
+        searchTextField.layer.cornerRadius = 16
         searchTextField.layer.borderWidth = 2
-        searchTextField.layer.borderColor = ColorSet.accentColor?.cgColor
+        searchTextField.layer.borderColor = R.color.accentGreen()?.cgColor
         
-        // Add padding to search textfield
         let paddingView = UIView(frame: CGRect(x: 0,
                                                y: 0,
                                                width: 15,
-                                               height: self.searchTextField.frame.height))
+                                               height: searchTextField.frame.height))
         searchTextField.leftView = paddingView
         searchTextField.leftViewMode = .always
         
-        // Textfield keyboard return type to search
         searchTextField.returnKeyType = .search
         searchTextField.delegate = self
-        
-        // back Button
+        searchTextField.becomeFirstResponder()
+    }
+    
+    private func setupBackButton() {
         backButton.hero.id = "appbarButton"
         backButton.imageEdgeInsets(with: 10)
         backButton.layer.masksToBounds = true
-        backButton.layer.cornerRadius = 13
+        backButton.layer.cornerRadius = 12
+    }
+    
+    private func setupSearchResultTableView() {
+        let nibName = UINib(nibName: "SearchResultTableViewCell", bundle: nil)
+        searchResultTableView.register(nibName, forCellReuseIdentifier: SearchResultTableViewCell.identifier)
+        searchResultTableView.delegate = self
+        searchResultTableView.dataSource = self
+        searchResultTableView.keyboardDismissMode = .onDrag
         
-        // search loading AnimView
-        loadingSearchAnimView = LoadingView(name: "loading_cat_radial",
-                                            frame: CGRect(x: 0, y: 0, width: 100, height: 100))
-        view.addSubview(self.loadingSearchAnimView)
-        loadingSearchAnimView.setConstraint(width: 100, targetView: view)
-        
-        // result manga Tableview
-        searchResultMangaTableView.contentInset = UIEdgeInsets(top: 60,
+        searchResultTableView.contentInset = UIEdgeInsets(top: 56,
                                                                left: 0,
                                                                bottom: 40,
                                                                right: 0)
-    }
-    
-    func initInstance() {
-        /// Network Handler
-        networkHandler = NetworkHandler()
         
-        // result manga TableView
-        let searchResultMangaTableCellNib = UINib(nibName: "MangaThumbnailTableViewCell", bundle: nil)
-        searchResultMangaTableView.register(searchResultMangaTableCellNib, forCellReuseIdentifier: "mangaThumbnailTableCell")
-        searchResultMangaTableView.delegate = self
-        searchResultMangaTableView.dataSource = self
-        searchResultMangaTableView.keyboardDismissMode = .onDrag
+        viewModel.reloadSearchResultTableView = { [weak self] in
+            self?.searchResultTableView.reloadData()
+        }
     }
     
-    func initEventListener() {
-        // back Button Action
+    // MARK: - Bind
+    private func bind() {
+        bindBackButton()
+        bindSearchResultCell()
+        bindSearchResultTableViewScroll()
+    }
+    
+    private func bindBackButton() {
         backButton.rx.tap
             .asDriver()
             .drive(onNext: { [weak self] in
-                self?.dismiss(animated: true)
-            })
-            .disposed(by: disposeBag)
+                self?.dismiss(animated: true, completion: nil)
+            }).disposed(by: disposeBag)
+    }
+    
+    private func bindSearchResultCell() {
+        searchResultTableView.rx.itemSelected
+            .asDriver()
+            .drive(with: self, onNext: { vc, indexPath in
+                let mangaInfo = vc.viewModel.cellItemForRow(at: indexPath)
+                vc.presentEpisdoeVC(mangaInfo)
+            }).disposed(by: disposeBag)
+    }
+    
+    private func bindSearchResultTableViewScroll() {
+        searchResultTableView.rx.willBeginDragging
+            .asDriver()
+            .drive(onNext: { [weak self] in
+                self?.view.endEditing(true)
+            }).disposed(by: disposeBag)
     }
     
     // MARK: - Methods
-    func setSearchResult(title: String) {
-        
-        searchResultMangaArr.removeAll()
-        searchResultMangaTableView.reloadData()
-        noResultsLabel.isHidden = true
-        searchResultPlaceholderLabel.isHidden = true
-        loadingSearchAnimView.play()
-        isSearching = true
-        view.endEditing(true)
-        
+    private func setSearchResult(title: String) {
         if title.count < 1 {
-            loadingSearchAnimView.stop()
-            noResultsLabel.isHidden = false
+            searchLoadingAnimationView.stop()
             self.view.makeToast("최소 한 글자 이상의 단어로 검색해주세요")
-            
             return
         }
         
-        DispatchQueue.global(qos: .background).async { [weak self] in
-            guard let self = self else { return }
-            
-            self.networkHandler.getSearchResult(title: title) { [weak self] result in
-                guard let self = self else { return }
-                
-                do {
-                    let result = try result.get()
-                    self.searchResultMangaArr = result
-                    
-                    DispatchQueue.main.async {
-                        self.loadingSearchAnimView.stop()
-                        self.reloadResultTableView()
-                    }
-                } catch {
-                    // failure state
-                    DispatchQueue.main.async {
-                        self.searchResultPlaceholderLabel.isHidden = false
-                        self.loadingSearchAnimView.stop()
-                    }
+        isSearching = true
+        playSearchLoadingAnimation()
+        searchResultPlaceholderLabel.detatchLabel()
+        view.endEditing(true)
+        
+        viewModel.getSearchResult(title)
+            .subscribe(with: self, onError: { vc, error in
+                if let error = error as? SearchViewError {
+                    vc.searchResultPlaceholderLabel.attatchLabel(text: error.message, to: vc.view)
                 }
-            }
-        }
-    }
-    
-    func focusToSearchTextField() {
-        // focus to search textField and show up the keyboard
-        if searchResultMangaArr.count == 0 {
-            searchTextField.becomeFirstResponder()
-        }
-    }
-    
-    func reloadResultTableView() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            
-            self.searchResultMangaTableView.reloadData()
-            self.isSearching = false
-            
-            if self.searchResultMangaArr.count == 0 {
-                self.noResultsLabel.isHidden = false
-            } else {
-                self.noResultsLabel.isHidden = true
-            }
-        }
+            }, onDisposed: { vc in
+                vc.searchLoadingAnimationView.stop()
+                vc.isSearching = false
+            }).disposed(by: disposeBag)
     }
     
     private func presentEpisdoeVC(_ mangaInfo: MangaInfo) {
@@ -195,20 +177,29 @@ class SearchViewController: UIViewController {
         
         present(episodeVC, animated: true, completion: nil)
     }
+    
+    private func playSearchLoadingAnimation() {
+        searchLoadingAnimationView.play(name: "loading_cat_radial",
+                                        size: CGSize(width: 100, height: 100),
+                                        to: view)
+    }
+    
+    private func focusSearchTextField() {
+        searchTextField.becomeFirstResponder()
+    }
 }
 
 // MARK: - Extensions
 extension SearchViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
         // Seach action on keyboard
         if let title = textField.text?.trimmingCharacters(in: .whitespaces) {
             if isSearching {
-                self.view.makeToast("please wait for searching")
+                self.view.makeToast("검색중입니다.")
                 return true
+            } else {
+                setSearchResult(title: title)
             }
-            
-            setSearchResult(title: title)
         }
         
         return true
@@ -217,80 +208,54 @@ extension SearchViewController: UITextFieldDelegate {
 
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return searchResultMangaArr.count
+        return viewModel.numberOfRowsIn(section: 0)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "mangaThumbnailTableCell") as? MangaThumbnailTableCell else { return UITableViewCell() }
+        guard let searchResultCell = tableView.dequeueReusableCell(withIdentifier: SearchResultTableViewCell.identifier) as? SearchResultTableViewCell else { return UITableViewCell() }
         
-        if indexPath.row > searchResultMangaArr.count - 1 {
-            return UITableViewCell()
+        let mangaInfo = viewModel.cellItemForRow(at: indexPath)
+        
+        searchResultCell.titleLabel.text = mangaInfo.title
+        searchResultCell.thumbnailImagePlaceholderLabel.text = mangaInfo.title
+        searchResultCell.descriptionLabel.text = mangaInfo.author.isEmpty ? "작가정보 없음" : mangaInfo.author
+        searchResultCell.updateCycleLabel.text = mangaInfo.updateCycle
+        
+        if mangaInfo.updateCycle.contains("미분류") {
+            searchResultCell.updateCycleLabel.setBackgroundHighlight(with: R.color.accentGray() ?? .clear,
+                                                                     textColor: R.color.textWhite() ?? .black)
+        } else {
+            searchResultCell.updateCycleLabel.setBackgroundHighlight(with: R.color.accentBlue() ?? .clear,
+                                                                     textColor: R.color.textWhite() ?? .black)
         }
         
-        cell.titleLabel.text = searchResultMangaArr[indexPath.row].title
-        cell.thumbnailImagePlaceholderLabel.text = searchResultMangaArr[indexPath.row].title
-        cell.authorLabel.text = searchResultMangaArr[indexPath.row].author
-        cell.updateCycleLabel.text = searchResultMangaArr[indexPath.row].updateCycle
-        
-        if !searchResultMangaArr[indexPath.row].updateCycle.contains("미분류") {
-            cell.setUpdateCycleLabelBackgroundTint()
-        }
-        
-        if let previewImageUrl = searchResultMangaArr[indexPath.row].thumbnailImageURL,
-           let url = URL(string: previewImageUrl) {
-            
-            let token = networkHandler.getImage(url) { [weak self] result in
-                DispatchQueue.global(qos: .background).async { [weak self] in
-                    do {
-                        let result = try result.get()
-                        DispatchQueue.main.async { [weak self] in
-                            guard let self = self else { return }
-
-                            // image loaded
-                            cell.thumbnailImageView.image = result.imageCache.image
-                            cell.thumbnailImagePlaceholderLabel.isHidden = true
-                            cell.thumbnailImageBaseView.setThumbnailShadow(with: result.imageCache.averageColor.cgColor)
-                            self.searchResultMangaArr[indexPath.row].thumbnailImage = result.imageCache.image
-
-                            if result.animate {
-                                cell.thumbnailImageView.startFadeInAnim(duration: 0.5)
-                            }
+        if let thumbnailImageUrl = mangaInfo.thumbnailImageURL {
+            let token = viewModel.requestImage(thumbnailImageUrl) { result in
+                do {
+                    let resultImage = try result.get()
+                    DispatchQueue.main.async {
+                        searchResultCell.thumbnailImagePlaceholderLabel.isHidden = true
+                        searchResultCell.thumbnailImageView.image = resultImage.imageCache.image
+                        searchResultCell.thumbnailImageBaseView.setThumbnailShadow(with: resultImage.imageCache.averageColor.cgColor)
+                        
+                        if resultImage.animate {
+                            searchResultCell.thumbnailImageView.startFadeInAnimation(duration: 0.3)
                         }
-                    } catch {
-                        DispatchQueue.main.async {
-                            cell.thumbnailImagePlaceholderLabel.isHidden = false
-                        }
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        searchResultCell.thumbnailImagePlaceholderLabel.isHidden = false
                     }
                 }
             }
-
-            cell.onReuse = { [weak self] in
+            
+            searchResultCell.onReuse = { [weak self] in
                 if let token = token {
-                    self?.networkHandler.cancelLoadImage(token)
+                    self?.viewModel.cancelImageRequest(token)
                 }
             }
         }
         
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        let manga = searchResultMangaArr[indexPath.row]
-        
-        let mangaInfo = MangaInfo(title: manga.title,
-                                  author: manga.author,
-                                  updateCycle: manga.updateCycle,
-                                  thumbnailImage: manga.thumbnailImage,
-                                  thumbnailImageURL: manga.thumbnailImageURL,
-                                  mangaSN: manga.mangaSN)
-        
-        presentEpisdoeVC(mangaInfo)
-    }
-}
-
-extension SearchViewController: UIScrollViewDelegate {
-    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-        self.view.endEditing(true)
+        return searchResultCell
     }
 }

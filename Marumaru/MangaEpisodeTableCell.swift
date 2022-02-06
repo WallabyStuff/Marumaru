@@ -14,10 +14,11 @@ class MangaEpisodeTableCell: UITableViewCell {
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var indexLabel: UILabel!
     
+    static let identifier = "mangaEpisodeTableCell"
     var onReuse: () -> Void = {}
     
     override func awakeFromNib() {
-        initView()
+        setupView()
     }
     
     override func prepareForReuse() {
@@ -30,29 +31,40 @@ class MangaEpisodeTableCell: UITableViewCell {
         indexLabel.text = ""
     }
     
-    private func initView() {
-        // selection View
-        let selectionView = UIView(frame: self.frame)
-        selectionView.layer.cornerRadius = 16
-        selectionView.backgroundColor = ColorSet.cellSelectionColor
-        self.selectedBackgroundView = selectionView
-        
-        // preview Image
-        thumbnailImageView.layer.cornerRadius = 10
+    private func setup() {
+        setupView()
+    }
+    
+    private func setupView() {
+        setupThumbnailImageView()
+        setupSelectedView()
+    }
+    
+    private func setupThumbnailImageView() {
+        thumbnailImageView.layer.cornerRadius = 8
         thumbnailImageView.layer.masksToBounds = true
         thumbnailImageView.layer.borderWidth = 1
-        thumbnailImageView.layer.borderColor = ColorSet.thumbnailBorderColor?.cgColor
+        thumbnailImageView.layer.borderColor = R.color.lineGrayLighter()?.cgColor
     }
     
+    private func setupSelectedView() {
+        let selectionView = UIView(frame: self.frame)
+        selectionView.layer.cornerRadius = 16
+        selectionView.backgroundColor = R.color.accentBlueLightest()
+        self.selectedBackgroundView = selectionView
+    }
+}
+
+extension MangaEpisodeTableCell {
     func setWatched() {
-        titleLabel.textColor = ColorSet.placeHolderTextColor
-        descriptionLabel.textColor = ColorSet.placeHolderTextColor
-        backgroundColor = ColorSet.cellSelectionColor
+        titleLabel.textColor = R.color.textBlackLightest()
+        descriptionLabel.textColor = R.color.textBlackLightest()
+        backgroundColor = R.color.accentBlueLightest()
     }
     
-    func setNotWatched() {
-        titleLabel.textColor = ColorSet.textColor
-        descriptionLabel.textColor = ColorSet.subTextColor
-        backgroundColor = ColorSet.backgroundColor
+    func setUnWatched() {
+        titleLabel.textColor = R.color.textBlack()
+        descriptionLabel.textColor = R.color.textBlackLighter()
+        backgroundColor = R.color.backgroundWhite()
     }
 }
