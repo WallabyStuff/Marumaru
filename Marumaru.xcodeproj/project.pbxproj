@@ -97,8 +97,6 @@
 		1670E6387F0998E4210922C1 /* Pods-Marumaru.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Marumaru.release.xcconfig"; path = "Target Support Files/Pods-Marumaru/Pods-Marumaru.release.xcconfig"; sourceTree = "<group>"; };
 		46E5C818D0E8246037AD2656 /* Pods_Marumaru_MarumaruUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Marumaru_MarumaruUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		49561FB826DCE0AC00FEE026 /* FlexibleSceneScrollViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlexibleSceneScrollViewCell.swift; sourceTree = "<group>"; };
-		49561FBC26DD39C600FEE026 /* ko-KR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ko-KR"; path = "ko-KR.lproj/Main.strings"; sourceTree = "<group>"; };
-		49561FBD26DD39C600FEE026 /* ko-KR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ko-KR"; path = "ko-KR.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		49C63E4326D59202004E576F /* FlexibleSceneScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexibleSceneScrollView.swift; sourceTree = "<group>"; };
 		7641C3AE2646826100A79A79 /* PopOverEpisodeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopOverEpisodeCell.swift; sourceTree = "<group>"; };
 		7641C3B0264682B900A79A79 /* EpisodePopOverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodePopOverViewController.swift; sourceTree = "<group>"; };
@@ -508,7 +506,6 @@
 			knownRegions = (
 				en,
 				Base,
-				"ko-KR",
 			);
 			mainGroup = 765C8B1C261CA2C30056C83B;
 			productRefGroup = 765C8B26261CA2C30056C83B /* Products */;
@@ -791,7 +788,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				765C8B2F261CA2C30056C83B /* Base */,
-				49561FBC26DD39C600FEE026 /* ko-KR */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -800,7 +796,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				765C8B37261CA2C50056C83B /* Base */,
-				49561FBD26DD39C600FEE026 /* ko-KR */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
