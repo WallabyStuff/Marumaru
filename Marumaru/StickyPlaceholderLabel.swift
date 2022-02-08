@@ -19,6 +19,10 @@ class StickyPlaceholderLabel: UILabel {
     }
     
     private func setup() {
+        setupDefaultAppearances()
+    }
+    
+    private func setupDefaultAppearances() {
         textColor = R.color.textBlackLightest()
         font = UIFont.systemFont(ofSize: 17)
         textAlignment = .center

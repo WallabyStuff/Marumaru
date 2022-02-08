@@ -32,7 +32,7 @@ extension WatchHistoryManager {
         }
     }
     
-    func addData(watchHistory: WatchHistory) -> Completable {
+    public func addData(watchHistory: WatchHistory) -> Completable {
         return Completable.create { observer in
             do {
                 let realmInstance = try Realm()
@@ -77,5 +77,25 @@ extension WatchHistoryManager {
             
             return Disposables.create()
         }
+    }
+}
+
+extension Realm {
+    func safeWrite(_ block: (() throws -> Void)) throws {
+        if isInWriteTransaction {
+            try block()
+        } else {
+            try write(block)
+        }
+    }
+}
+
+extension Date {
+    static var timeStamp: Int64 {
+        Int64(Date().timeIntervalSince1970)
+    }
+    
+    static var milliTimeStamp: Int64 {
+        Int64(Date().timeIntervalSince1970 * 1000)
     }
 }

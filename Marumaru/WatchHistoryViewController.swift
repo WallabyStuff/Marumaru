@@ -31,7 +31,6 @@ class WatchHistoryViewController: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-    
         setup()
         bind()
         setupData()
