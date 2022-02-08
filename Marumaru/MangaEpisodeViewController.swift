@@ -36,7 +36,6 @@ class MangaEpisodeViewController: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setup()
         bind()
     }

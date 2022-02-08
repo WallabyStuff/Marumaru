@@ -41,7 +41,6 @@ class ImageCacheManager {
     func addData(url: String,
                  image: UIImage,
                  imageAvgColor: UIColor) -> Observable<Any> {
-        
         return Observable.create { observable in
             DispatchQueue.main.async {
                 do {
@@ -65,7 +64,6 @@ class ImageCacheManager {
     }
     
     func addData(_ imageCache: ImageCache) -> Observable<Any> {
-        
         return Observable.create { observable in
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
@@ -96,7 +94,6 @@ class ImageCacheManager {
     }
     
     func fetchData() -> Observable<[ImageCache]> {
-        
         return Observable.create { observable in
             DispatchQueue.main.async {
                 do {
@@ -115,7 +112,6 @@ class ImageCacheManager {
     }
     
     func fetchData(url: String) -> Observable<ImageCache> {
-        
         return Observable.create { observable in
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
@@ -138,7 +134,6 @@ class ImageCacheManager {
     }
     
     func isAlreadyExists(url: String) -> Observable<Bool> {
-        
         return Observable.create { observable in
             DispatchQueue.main.async {
                 do {
@@ -156,7 +151,6 @@ class ImageCacheManager {
     }
     
     func deleteAll() -> Observable<Any> {
-        
         return Observable.create { observable in
             do {
                 let realmInstnace = try Realm()

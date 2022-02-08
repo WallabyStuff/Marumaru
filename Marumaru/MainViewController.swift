@@ -19,7 +19,6 @@ class MainViewController: UIViewController {
     
     // MARK: - Declarations
     @IBOutlet weak var appbarView: AppbarView!
-    @IBOutlet weak var homeIcon: UIImageView!
     @IBOutlet weak var updatesHeaderLabel: UILabel!
     @IBOutlet weak var recentsHeaderLabel: UILabel!
     @IBOutlet weak var top20HeaderLabel: UILabel!
@@ -42,7 +41,6 @@ class MainViewController: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setup()
         bind()
     }
