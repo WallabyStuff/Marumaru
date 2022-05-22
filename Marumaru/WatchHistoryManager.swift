@@ -1,5 +1,5 @@
 //
-//  SaveToWatchHistory.swift
+//  WatchHistoryManager.swift
 //  Marumaru
 //
 //  Created by 이승기 on 2021/04/26.
@@ -16,10 +16,12 @@ class WatchHistoryManager {
 }
 
 extension WatchHistoryManager {
-    public func addData(mangaUrl: String, mangaTitle: String, thumbnailImageUrl: String) -> Completable {
+    public func addData(comicURL: String, comicTitle: String, thumbnailImageUrl: String) -> Completable {
         return Completable.create { [weak self] observer in
             guard let self = self else { return Disposables.create() }
-            let watchHistory = WatchHistory(mangaUrl: mangaUrl, mangaTitle: mangaTitle, thumbnailImageUrl: thumbnailImageUrl)
+            let watchHistory = WatchHistory(comicURL: comicURL,
+                                            comicTitle: comicTitle,
+                                            thumbnailImageUrl: thumbnailImageUrl)
             
             self.addData(watchHistory: watchHistory)
                 .subscribe(onCompleted: {

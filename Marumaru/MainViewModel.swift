@@ -29,7 +29,7 @@ class MainViewModel: MarumaruApiServiceViewModel {
     public var reloadWatchHistoryCollectionView: (() -> Void)?
     public var reloadTopRankTableView: (() -> Void)?
     
-    private var updatedContents = [Manga]() {
+    private var newUpdateComics = [Comic]() {
         didSet {
             self.reloadUpdatedContentCollectionView?()
         }
@@ -39,7 +39,7 @@ class MainViewModel: MarumaruApiServiceViewModel {
             self.reloadWatchHistoryCollectionView?()
         }
     }
-    private var topRankedMangas = [TopRankedManga]() {
+    private var topRankedComics = [TopRankedComic]() {
         didSet {
             self.reloadTopRankTableView?()
         }
@@ -56,14 +56,14 @@ extension MainViewModel {
     public func getUpdatedContents() -> Completable {
         return Completable.create { [weak self] observer in
             guard let self = self else { return Disposables.create() }
-            self.updatedContents.removeAll()
+            self.newUpdateComics.removeAll()
             
             self.marumaruApiService
-                .getUpdatedMangas()
+                .getNewUpdateComic()
                 .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
                 .observe(on: MainScheduler.instance)
                 .subscribe(with: self, onNext: { strongSelf, updatedContents in
-                    strongSelf.updatedContents = updatedContents
+                    strongSelf.newUpdateComics = updatedContents
                     observer(.completed)
                 }, onError: { _, error  in
                     observer(.error(error))
@@ -96,17 +96,17 @@ extension MainViewModel {
         }
     }
     
-    public func getTopRankedMangas() -> Completable {
+    public func getTopRankedComics() -> Completable {
         return Completable.create { [weak self] observer in
             guard let self = self else { return Disposables.create() }
-            self.topRankedMangas.removeAll()
+            self.topRankedComics.removeAll()
             
             self.marumaruApiService
-                .getTopRankedMangas()
+                .getTopRankComic()
                 .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .background))
                 .observe(on: MainScheduler.instance)
-                .subscribe(with: self, onNext: { strongSelf, topRankedMangas in
-                    strongSelf.topRankedMangas = topRankedMangas
+                .subscribe(with: self, onNext: { strongSelf, comics in
+                    strongSelf.topRankedComics = comics
                     observer(.completed)
                 }).disposed(by: self.disposeBag)
             
@@ -118,12 +118,14 @@ extension MainViewModel {
 // MARK: - CollectionView
 extension MainViewModel {
     var updatedContentsNumberOfItem: Int {
-        return updatedContents.count
+        return newUpdateComics.count
     }
     
-    func updatedContentCellItemForRow(at indexPath: IndexPath) -> MangaInfoViewModel {
-        let updatedManga = updatedContents[indexPath.row]
-        return MangaInfoViewModel(title: updatedManga.title, link: updatedManga.link, thumbnailImageUrl: updatedManga.thumbnailImageUrl)
+    func updatedContentCellItemForRow(at indexPath: IndexPath) -> ComicInfoViewModel {
+        let updatedComics = newUpdateComics[indexPath.row]
+        return ComicInfoViewModel(title: updatedComics.title,
+                                  link: updatedComics.link,
+                                  thumbnailImageUrl: updatedComics.thumbnailImageUrl)
     }
 }
 
@@ -132,15 +134,17 @@ extension MainViewModel {
         return min(15, watchHistories.count)
     }
     
-    func watchHistoryCellItemForRow(at indexPath: IndexPath) -> MangaInfoViewModel {
+    func watchHistoryCellItemForRow(at indexPath: IndexPath) -> ComicInfoViewModel {
         let watchHistory = watchHistories[indexPath.row]
-        let thumbnailImageUrl = watchHistory.thumbnailImageUrl.isEmpty ? nil : watchHistory.thumbnailImageUrl
-        return MangaInfoViewModel(title: watchHistory.mangaTitle, link: watchHistory.mangaUrl, thumbnailImageUrl: thumbnailImageUrl)
+        let thumbnailImageUrl = watchHistory.thumbnailImageURL.isEmpty ? nil : watchHistory.thumbnailImageURL
+        return ComicInfoViewModel(title: watchHistory.comicTitle,
+                                  link: watchHistory.comicURL,
+                                  thumbnailImageUrl: thumbnailImageUrl)
     }
 }
 
 extension MainViewModel {
-    struct MangaInfoViewModel {
+    struct ComicInfoViewModel {
         var title: String
         var link: String
         var thumbnailImageUrl: String?
@@ -154,11 +158,11 @@ extension MainViewModel {
     }
     
     func topRankNumberOfItemsInSection(section: Int) -> Int {
-        return topRankedMangas.count
+        return topRankedComics.count
     }
     
-    func topRankCellItemForRow(at: IndexPath) -> TopRankedManga {
-        return topRankedMangas[at.row]
+    func topRankCellItemForRow(at: IndexPath) -> TopRankedComic {
+        return topRankedComics[at.row]
     }
     
     func topRankCellRank(indexPath: IndexPath) -> Int {

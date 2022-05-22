@@ -1,5 +1,5 @@
 //
-//  SceneScrollView.swift
+//  FlexibleSceneScrollView.swift
 //  Marumaru
 //
 //  Created by 이승기 on 2021/08/25.
@@ -16,7 +16,7 @@ class FlexibleSceneScrollView: UIScrollView {
     private var contentViewHeightConstraint = NSLayoutConstraint()
     
     private var disposeBag = DisposeBag()
-    var sceneArr = [MangaScene]()
+    var sceneArr = [ComicStripScene]()
     var cellList = [FlexibleSceneScrollViewCell]()
     
     // MARK: - Initialization

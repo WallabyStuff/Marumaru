@@ -1,5 +1,5 @@
 //
-//  MangaEpisodeViewModel.swift
+//  ComicDetailViewModel.swift
 //  Marumaru
 //
 //  Created by 이승기 on 2022/02/03.
@@ -9,18 +9,18 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class MangaEpisodeViewModel: MarumaruApiServiceViewModel {
+class ComicDetailViewModel: MarumaruApiServiceViewModel {
     private var disposeBag = DisposeBag()
     private let marumaruApiService = MarumaruApiService()
     private let watchHistoryHandler = WatchHistoryManager()
     private var watchHistories = [String: String]()
-    public var reloadMangaEpisodeTableView: (() -> Void)?
+    public var reloadComicEpisodeTableView: (() -> Void)?
     
-    private var mangaEpisodes = [MangaEpisode]() {
+    private var comicEpisodes = [ComicEpisode]() {
         didSet {
             getWatchHistories()
                 .subscribe(onCompleted: { [weak self] in
-                    self?.reloadMangaEpisodeTableView?()
+                    self?.reloadComicEpisodeTableView?()
                 }, onError: { error in
                     print(error.localizedDescription)
                 }).disposed(by: disposeBag)
@@ -28,8 +28,8 @@ class MangaEpisodeViewModel: MarumaruApiServiceViewModel {
     }
 }
 
-extension MangaEpisodeViewModel {
-    public func getMangaEpisodes(_ serialNumber: String) -> Completable {
+extension ComicDetailViewModel {
+    public func getComicEpisodes(_ serialNumber: String) -> Completable {
         return Completable.create { [weak self] observer in
             guard let self = self else { return Disposables.create()}
             
@@ -37,7 +37,7 @@ extension MangaEpisodeViewModel {
                 .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
                 .observe(on: MainScheduler.instance)
                 .subscribe(with: self, onNext: { strongSelf, episodes in
-                    strongSelf.mangaEpisodes = episodes
+                    strongSelf.comicEpisodes = episodes
                     observer(.completed)
                 }, onError: { _, error in
                     observer(.error(error))
@@ -48,22 +48,22 @@ extension MangaEpisodeViewModel {
     }
     
     public var totalEpisodeCountText: String {
-        return "총 \(mangaEpisodes.count)화"
+        return "총 \(comicEpisodes.count)화"
     }
     
     public var totalEpisodeCount: Int {
-        return mangaEpisodes.count
+        return comicEpisodes.count
     }
 }
 
-extension MangaEpisodeViewModel {
+extension ComicDetailViewModel {
     public func getWatchHistories() -> Completable {
         return Completable.create { [weak self] observer in
             guard let self = self else { return Disposables.create() }
             
             self.watchHistoryHandler.fetchData()
                 .subscribe(onSuccess: { [weak self] watchHistories in
-                    self?.watchHistories =  Dictionary(uniqueKeysWithValues: watchHistories.map { ($0.mangaUrl, $0.mangaUrl) })
+                    self?.watchHistories =  Dictionary(uniqueKeysWithValues: watchHistories.map { ($0.comicURL, $0.comicURL) })
                     observer(.completed)
                 }, onFailure: { error in
                     observer(.error(error))
@@ -75,20 +75,20 @@ extension MangaEpisodeViewModel {
     
     public func ifAlreadyWatched(at indexPath: IndexPath) -> Bool {
         
-        return watchHistories[mangaEpisodes[indexPath.row].mangaURL] == nil ? false : true
+        return watchHistories[comicEpisodes[indexPath.row].comicURL] == nil ? false : true
     }
 }
 
-extension MangaEpisodeViewModel {
+extension ComicDetailViewModel {
     public func numberOfRowsIn(section: Int) -> Int {
         if section == 0 {
-            return mangaEpisodes.count
+            return comicEpisodes.count
         } else {
             return 0
         }
     }
     
-    public func cellItemForRow(at indexPath: IndexPath) -> MangaEpisode {
-        return mangaEpisodes[indexPath.row]
+    public func cellItemForRow(at indexPath: IndexPath) -> ComicEpisode {
+        return comicEpisodes[indexPath.row]
     }
 }

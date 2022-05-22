@@ -1,5 +1,5 @@
 //
-//  MangaContentViewController.swift
+//  ComicDetailViewController.swift
 //  Marumaru
 //
 //  Created by 이승기 on 2021/04/08.
@@ -12,28 +12,54 @@ import Hero
 import RxSwift
 import RxCocoa
 
-class MangaEpisodeViewController: UIViewController {
-
-    // MARK: - Declarations
+class ComicDetailViewController: UIViewController, ViewModelInjectable {
+    
+    
+    // MARK: - Properties
+    
+    typealias ViewModel = ComicDetailViewModel
+    
     @IBOutlet weak var appbarView: UIView!
     @IBOutlet weak var infoContentView: UIView!
     @IBOutlet weak var thumbnailImageView: UIImageView!
-    @IBOutlet weak var mangaTitleLabel: UILabel!
+    @IBOutlet weak var comicTitleLabel: UILabel!
     @IBOutlet weak var authorLabel: UILabel!
     @IBOutlet weak var updateCycleLabel: UILabel!
-    @IBOutlet weak var episodeSizeLabel: UILabel!
+    @IBOutlet weak var episodeAmountLabel: UILabel!
     @IBOutlet weak var scrollToBottomButton: UIButton!
-    @IBOutlet weak var mangaEpisodeTableView: UITableView!
+    @IBOutlet weak var comicEpisodeTableView: UITableView!
     @IBOutlet weak var backButton: UIButton!
     
-    private let viewModel = MangaEpisodeViewModel()
-    public var mangaSN: String?
-    public var currentManga: MangaInfo?
-    private var disposeBag = DisposeBag()
+    static let identifier = R.storyboard.comicDetail.comicDetailStoryboard.identifier
+    var viewModel: ViewModel
+    var disposeBag = DisposeBag()
+    public var comicSN: String?
+    public var currentComic: ComicInfo?
     private var episodeLoadingAnimationView = LottieAnimationView()
     private var cancelRequestImage: (() -> Void)?
-
+    
+    
+    // MARK: - Initializers
+    
+    required init(_ viewModel: ComicDetailViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+        dismiss(animated: true)
+    }
+    
+    required init?(_ coder: NSCoder, _ viewModel: ComicDetailViewModel) {
+        self.viewModel = viewModel
+        super.init(coder: coder)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    
     // MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -42,7 +68,6 @@ class MangaEpisodeViewController: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        
         cancelRequestImage?()
     }
     
@@ -50,45 +75,46 @@ class MangaEpisodeViewController: UIViewController {
         return .darkContent
     }
     
+    
     // MARK: - Setup
+    
     private func setup() {
         setupView()
         setupData()
     }
     
-    // MARK: - SetupData
     private func setupData() {
-        setupMangaInfoData()
-        setupMangaEpisodeData()
+        setupComicInfoData()
+        setupComicEpisodeData()
     }
     
-    private func setupMangaInfoData() {
-        guard let currentManga = currentManga else {
+    private func setupComicInfoData() {
+        guard let currentComic = currentComic else {
             dismiss(animated: true, completion: nil)
             return
         }
         
-        mangaTitleLabel.text = currentManga.title
-        authorLabel.text = currentManga.author
-        updateCycleLabel.text = currentManga.updateCycle
+        comicTitleLabel.text = currentComic.title
+        authorLabel.text = currentComic.author
+        updateCycleLabel.text = currentComic.updateCycle
         
         thumbnailImageView.layer.cornerRadius = 8
         thumbnailImageView.layer.borderColor = R.color.lineGrayLighter()?.cgColor
         thumbnailImageView.layer.borderWidth = 1
         
-        if currentManga.updateCycle.contains("미분류") {
+        if currentComic.updateCycle.contains("미분류") {
             updateCycleLabel.setBackgroundHighlight(with: R.color.accentGray() ?? .clear,
-                                                                     textColor: R.color.textWhite() ?? .black)
+                                                    textColor: R.color.textWhite() ?? .black)
         } else {
             updateCycleLabel.setBackgroundHighlight(with: R.color.accentBlue() ?? .clear,
-                                                                     textColor: R.color.textWhite() ?? .black)
+                                                    textColor: R.color.textWhite() ?? .black)
         }
         
-        if currentManga.thumbnailImage != nil {
-            thumbnailImageView.image = currentManga.thumbnailImage
-            thumbnailImageView.layer.borderColor = currentManga.thumbnailImage?.averageColor?.cgColor
+        if currentComic.thumbnailImage != nil {
+            thumbnailImageView.image = currentComic.thumbnailImage
+            thumbnailImageView.layer.borderColor = currentComic.thumbnailImage?.averageColor?.cgColor
         } else {
-            if let thumbnailImageUrl = currentManga.thumbnailImageURL {
+            if let thumbnailImageUrl = currentComic.thumbnailImageURL {
                 let token = viewModel.requestImage(thumbnailImageUrl) { result in
                     do {
                         let resultImage = try result.get()
@@ -112,22 +138,21 @@ class MangaEpisodeViewController: UIViewController {
         }
     }
     
-    private func setupMangaEpisodeData() {
-        playMangaEpisodeLoadingAnimation()
+    private func setupComicEpisodeData() {
+        playComicEpisodeLoadingAnimation()
         
-        viewModel.getMangaEpisodes(currentManga!.mangaSN)
+        viewModel.getComicEpisodes(currentComic!.comicSN)
             .subscribe(onCompleted: { [weak self] in
                 self?.episodeLoadingAnimationView.stop()
             })
             .disposed(by: disposeBag)
     }
     
-    // MARK: - SetupView
     private func setupView() {
         setupHero()
         setupAppbarView()
-        setupMangaInfoView()
-        setupMangaTitleLabel()
+        setupComicInfoView()
+        setupComicTitleLabel()
         setupBackButton()
         setupEpisodeSizeLable()
         setupEpisodeTableView()
@@ -144,8 +169,8 @@ class MangaEpisodeViewController: UIViewController {
         appbarView.layer.maskedCorners = [.layerMinXMaxYCorner]
     }
     
-    private func setupMangaTitleLabel() {
-        mangaTitleLabel.hero.id = "mangaTitleLabel"
+    private func setupComicTitleLabel() {
+        comicTitleLabel.hero.id = "mangaTitleLabel"
     }
     
     private func setupBackButton() {
@@ -156,10 +181,10 @@ class MangaEpisodeViewController: UIViewController {
     }
     
     private func setupEpisodeSizeLable() {
-        episodeSizeLabel.hero.modifiers = [.translate(x: -150)]
+        episodeAmountLabel.hero.modifiers = [.translate(x: -150)]
     }
     
-    private func setupMangaInfoView() {
+    private func setupComicInfoView() {
         infoContentView.hero.id = "infoContentView"
         infoContentView.layer.cornerRadius = 16
         infoContentView.layer.shadowColor = R.color.shadowGray()?.cgColor
@@ -178,14 +203,14 @@ class MangaEpisodeViewController: UIViewController {
     }
     
     private func setupEpisodeTableView() {
-        let nibName = UINib(nibName: "MangaEpisodeTableViewCell", bundle: nil)
-        mangaEpisodeTableView.register(nibName, forCellReuseIdentifier: "mangaEpisodeTableCell")
-        mangaEpisodeTableView.delegate = self
-        mangaEpisodeTableView.dataSource = self
+        let nibName = UINib(nibName: ComicEpisodeThumbnailTableCell.identifier, bundle: nil)
+        comicEpisodeTableView.register(nibName, forCellReuseIdentifier: ComicEpisodeThumbnailTableCell.identifier)
+        comicEpisodeTableView.delegate = self
+        comicEpisodeTableView.dataSource = self
         
-        viewModel.reloadMangaEpisodeTableView = { [weak self] in
-            self?.mangaEpisodeTableView.reloadData()
-            self?.episodeSizeLabel.text = self?.viewModel.totalEpisodeCountText
+        viewModel.reloadComicEpisodeTableView = { [weak self] in
+            self?.comicEpisodeTableView.reloadData()
+            self?.episodeAmountLabel.text = self?.viewModel.totalEpisodeCountText
         }
     }
     
@@ -195,11 +220,13 @@ class MangaEpisodeViewController: UIViewController {
         scrollToBottomButton.hero.modifiers = [.translate(y: 100)]
     }
     
+    
     // MARK: - Bind
+    
     private func bind() {
         bindBackButton()
         bindScrollToBottomButton()
-        bindMangaEpisodeCell()
+        bindComicEpisodeCell()
     }
     
     private func bindBackButton() {
@@ -220,16 +247,18 @@ class MangaEpisodeViewController: UIViewController {
             .disposed(by: disposeBag)
     }
     
-    private func bindMangaEpisodeCell() {
-        mangaEpisodeTableView.rx.itemSelected
+    private func bindComicEpisodeCell() {
+        comicEpisodeTableView.rx.itemSelected
             .asDriver()
             .drive(with: self, onNext: { vc, indexPath in
-                let mangaInfo = vc.viewModel.cellItemForRow(at: indexPath)
-                vc.presentPlayMangaVC(mangaInfo.title, mangaInfo.mangaURL)
+                let comicInfo = vc.viewModel.cellItemForRow(at: indexPath)
+                vc.presentComicStripVC(comicInfo.title, comicInfo.comicURL)
             }).disposed(by: disposeBag)
     }
-
-    // MARK: - Method
+    
+    
+    // MARK: - Methods
+    
     private func fadeScrollToBottomButton(bool: Bool) {
         if bool {
             // fade out
@@ -245,47 +274,50 @@ class MangaEpisodeViewController: UIViewController {
     }
     
     private func scrollToBottom() {
-        if mangaEpisodeTableView.contentSize.height > 0 {
+        if comicEpisodeTableView.contentSize.height > 0 {
             let indexPath = IndexPath(row: viewModel.totalEpisodeCount - 1, section: 0)
-            mangaEpisodeTableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+            comicEpisodeTableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
         }
     }
     
-    private func presentPlayMangaVC(_ mangaTitle: String, _ mangaUrl: String) {
-        let viewModel = PlayMangaViewModel(mangaTitle: mangaTitle, link: mangaUrl)
+    private func presentComicStripVC(_ comicTitle: String, _ comicURL: String) {
+        let storyboard = UIStoryboard(name: R.storyboard.comicStrip.name, bundle: nil)
+        let comicStripVC = storyboard.instantiateViewController(identifier: ComicStripViewController.identifier,
+                                                                creator: { coder -> ComicStripViewController in
+            let viewModel = ComicStripViewModel(comicTitle: comicTitle, comicURL: comicURL)
+            return .init(coder, viewModel) ?? ComicStripViewController(.init(comicTitle: "", comicURL: ""))
+        })
         
-        guard let playMangaVC = storyboard?.instantiateViewController(identifier: "ViewMangaStoryboard", creator: { coder in
-            PlayMangaViewController(
-                coder: coder, viewModel: viewModel)
-        }) else { return }
-                
-        playMangaVC.delegate = self
-        playMangaVC.modalPresentationStyle = .fullScreen
-        present(playMangaVC, animated: true, completion: nil)
+        comicStripVC.delegate = self
+        comicStripVC.modalPresentationStyle = .fullScreen
+        present(comicStripVC, animated: true, completion: nil)
     }
     
-    private func playMangaEpisodeLoadingAnimation() {
+    private func playComicEpisodeLoadingAnimation() {
         episodeLoadingAnimationView.play(name: "loading_cat",
                                          size: CGSize(width: 148, height: 148),
-                                         to: mangaEpisodeTableView)
+                                         to: comicEpisodeTableView)
     }
 }
 
+
 // MARK: - Extenstions
-extension MangaEpisodeViewController: UITableViewDelegate, UITableViewDataSource {
+
+extension ComicDetailViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.numberOfRowsIn(section: 0)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let episodeCell = tableView.dequeueReusableCell(withIdentifier: MangaEpisodeTableCell.identifier) as? MangaEpisodeTableCell else {
+        guard let episodeCell = tableView.dequeueReusableCell(withIdentifier: ComicEpisodeThumbnailTableCell.identifier)
+                as? ComicEpisodeThumbnailTableCell else {
             return UITableViewCell()
         }
         
-        let mangaInfo = viewModel.cellItemForRow(at: indexPath)
+        let comicInfo = viewModel.cellItemForRow(at: indexPath)
         
-        episodeCell.titleLabel.text = mangaInfo.title
-        episodeCell.descriptionLabel.text = mangaInfo.description
+        episodeCell.titleLabel.text = comicInfo.title
+        episodeCell.descriptionLabel.text = comicInfo.description
         episodeCell.indexLabel.text = (viewModel.totalEpisodeCount - indexPath.row).description
         episodeCell.thumbnailImageView.image = nil
         
@@ -295,7 +327,7 @@ extension MangaEpisodeViewController: UITableViewDelegate, UITableViewDataSource
             episodeCell.setUnWatched()
         }
         
-        if let thumbnailImageUrl = mangaInfo.thumbnailImageURL {
+        if let thumbnailImageUrl = comicInfo.thumbnailImageURL {
             let token = viewModel.requestImage(thumbnailImageUrl) { result in
                 do {
                     let resultImage = try result.get()
@@ -322,7 +354,7 @@ extension MangaEpisodeViewController: UITableViewDelegate, UITableViewDataSource
     }
 }
 
-extension MangaEpisodeViewController: UIScrollViewDelegate {
+extension ComicDetailViewController: UIScrollViewDelegate {
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
         let actualPosition = scrollView.panGestureRecognizer.translation(in: scrollView.superview)
         
@@ -334,8 +366,8 @@ extension MangaEpisodeViewController: UIScrollViewDelegate {
     }
 }
 
-extension MangaEpisodeViewController: PlayMangaViewDelegate {
+extension ComicDetailViewController: ComicStripViewDelegate {
     func didWatchHistoryUpdated() {
-        setupMangaEpisodeData()
+        setupComicEpisodeData()
     }
 }

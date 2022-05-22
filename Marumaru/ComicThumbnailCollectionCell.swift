@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  ComicThumbnailCollectionCell.swift
 //  Marumaru
 //
 //  Created by 이승기 on 2021/04/06.
@@ -8,14 +8,14 @@
 import UIKit
 import Hero
 
-class MangaThumbnailCollectionCell: UICollectionViewCell {
+class ComicThumbnailCollectionCell: UICollectionViewCell {
     
     @IBOutlet weak var thumbnailImageBaseView: ThumbnailView!
     @IBOutlet weak var thumbnailImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var thumbnailImagePlaceholderLabel: UILabel!
     
-    static let identifier = "mangaThumbnailCell"
+    static let identifier = R.reuseIdentifier.comicThumbnailCollectionCell.identifier
     public var onReuse: () -> Void = {}
     
     override func awakeFromNib() {

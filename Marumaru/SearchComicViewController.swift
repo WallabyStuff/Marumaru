@@ -1,5 +1,5 @@
 //
-//  SearchViewController.swift
+//  SearchComicViewController.swift
 //  Marumaru
 //
 //  Created by 이승기 on 2021/04/12.
@@ -12,21 +12,46 @@ import Hero
 import RxSwift
 import RxCocoa
 
-class SearchViewController: UIViewController {
+class SearchComicViewController: UIViewController, ViewModelInjectable {
+        
     
-    // MARK: - Declarations
+    // MARK: - Properties
+    
+    typealias ViewModel = SearchComicViewModel
+    
     @IBOutlet weak var appbarView: UIView!
     @IBOutlet weak var searchTextField: UITextField!
     @IBOutlet weak var searchResultTableView: UITableView!
     @IBOutlet weak var backButton: UIButton!
     
-    private let viewModel = SearchViewModel()
-    private var disposeBag = DisposeBag()
+    static let identifier = R.storyboard.searchComic.searchComicStoryboard.identifier
+    var viewModel: ViewModel
+    var disposeBag = DisposeBag()
     private var searchLoadingAnimationView = LottieAnimationView()
     private var isSearching = false
     private var searchResultPlaceholderLabel = StickyPlaceholderLabel()
     
+    
+    // MARK: - Initializers
+    
+    required init(_ viewModel: SearchComicViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+        dismiss(animated: true)
+    }
+    
+    required init?(_ coder: NSCoder, _ viewModel: SearchComicViewModel) {
+        self.viewModel = viewModel
+        super.init(coder: coder)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
     // MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -35,7 +60,6 @@ class SearchViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        
         focusSearchTextField()
     }
     
@@ -43,12 +67,16 @@ class SearchViewController: UIViewController {
         super.viewWillDisappear(true)
     }
     
+    
     // MARK: - Overrides
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .darkContent
     }
     
+    
     // MARK: - Setup
+    
     private func setup() {
         setupView()
     }
@@ -96,8 +124,8 @@ class SearchViewController: UIViewController {
     }
     
     private func setupSearchResultTableView() {
-        let nibName = UINib(nibName: "SearchResultTableViewCell", bundle: nil)
-        searchResultTableView.register(nibName, forCellReuseIdentifier: SearchResultTableViewCell.identifier)
+        let nibName = UINib(nibName: SearchResultComicTableCell.identifier, bundle: nil)
+        searchResultTableView.register(nibName, forCellReuseIdentifier: SearchResultComicTableCell.identifier)
         searchResultTableView.delegate = self
         searchResultTableView.dataSource = self
         searchResultTableView.keyboardDismissMode = .onDrag
@@ -112,7 +140,9 @@ class SearchViewController: UIViewController {
         }
     }
     
+    
     // MARK: - Bind
+    
     private func bind() {
         bindBackButton()
         bindSearchResultCell()
@@ -131,8 +161,8 @@ class SearchViewController: UIViewController {
         searchResultTableView.rx.itemSelected
             .asDriver()
             .drive(with: self, onNext: { vc, indexPath in
-                let mangaInfo = vc.viewModel.cellItemForRow(at: indexPath)
-                vc.presentEpisdoeVC(mangaInfo)
+                let comicInfo = vc.viewModel.cellItemForRow(at: indexPath)
+                vc.presentComicDetailVC(comicInfo)
             }).disposed(by: disposeBag)
     }
     
@@ -144,7 +174,9 @@ class SearchViewController: UIViewController {
             }).disposed(by: disposeBag)
     }
     
+    
     // MARK: - Methods
+    
     private func setSearchResult(title: String) {
         if title.count < 1 {
             searchLoadingAnimationView.stop()
@@ -168,13 +200,17 @@ class SearchViewController: UIViewController {
             }).disposed(by: disposeBag)
     }
     
-    private func presentEpisdoeVC(_ mangaInfo: MangaInfo) {
-        guard let episodeVC = storyboard?.instantiateViewController(identifier: "MangaEpisodeStoryboard") as? MangaEpisodeViewController else { return }
+    private func presentComicDetailVC(_ comicInfo: ComicInfo) {
+        let storyboard = UIStoryboard(name: R.storyboard.comicDetail.name, bundle: nil)
+        let comicDetailVC = storyboard.instantiateViewController(identifier: ComicDetailViewController.identifier,
+                                                             creator: { coder -> ComicDetailViewController in
+            let viewModel = ComicDetailViewModel()
+            return .init(coder, viewModel) ?? ComicDetailViewController(.init())
+        })
         
-        episodeVC.modalPresentationStyle = .fullScreen
-        episodeVC.currentManga = mangaInfo
-        
-        present(episodeVC, animated: true, completion: nil)
+        comicDetailVC.modalPresentationStyle = .fullScreen
+        comicDetailVC.currentComic = comicInfo
+        present(comicDetailVC, animated: true, completion: nil)
     }
     
     private func playSearchLoadingAnimation() {
@@ -188,8 +224,10 @@ class SearchViewController: UIViewController {
     }
 }
 
+
 // MARK: - Extensions
-extension SearchViewController: UITextFieldDelegate {
+
+extension SearchComicViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         // Seach action on keyboard
         if let title = textField.text?.trimmingCharacters(in: .whitespaces) {
@@ -205,22 +243,22 @@ extension SearchViewController: UITextFieldDelegate {
     }
 }
 
-extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
+extension SearchComicViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.numberOfRowsIn(section: 0)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let searchResultCell = tableView.dequeueReusableCell(withIdentifier: SearchResultTableViewCell.identifier) as? SearchResultTableViewCell else { return UITableViewCell() }
+        guard let searchResultCell = tableView.dequeueReusableCell(withIdentifier: SearchResultComicTableCell.identifier) as? SearchResultComicTableCell else { return UITableViewCell() }
         
-        let mangaInfo = viewModel.cellItemForRow(at: indexPath)
+        let comicInfo = viewModel.cellItemForRow(at: indexPath)
         
-        searchResultCell.titleLabel.text = mangaInfo.title
-        searchResultCell.thumbnailImagePlaceholderLabel.text = mangaInfo.title
-        searchResultCell.descriptionLabel.text = mangaInfo.author.isEmpty ? "작가정보 없음" : mangaInfo.author
-        searchResultCell.updateCycleLabel.text = mangaInfo.updateCycle
+        searchResultCell.titleLabel.text = comicInfo.title
+        searchResultCell.thumbnailImagePlaceholderLabel.text = comicInfo.title
+        searchResultCell.descriptionLabel.text = comicInfo.author.isEmpty ? "작가정보 없음" : comicInfo.author
+        searchResultCell.updateCycleLabel.text = comicInfo.updateCycle
         
-        if mangaInfo.updateCycle.contains("미분류") {
+        if comicInfo.updateCycle.contains("미분류") {
             searchResultCell.updateCycleLabel.setBackgroundHighlight(with: R.color.accentGray() ?? .clear,
                                                                      textColor: R.color.textWhite() ?? .black)
         } else {
@@ -228,7 +266,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
                                                                      textColor: R.color.textWhite() ?? .black)
         }
         
-        if let thumbnailImageUrl = mangaInfo.thumbnailImageURL {
+        if let thumbnailImageUrl = comicInfo.thumbnailImageURL {
             let token = viewModel.requestImage(thumbnailImageUrl) { result in
                 do {
                     let resultImage = try result.get()

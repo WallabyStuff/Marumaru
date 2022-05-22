@@ -1,5 +1,5 @@
 //
-//  EpisodePopoverViewController.swift
+//  ComicEpisodePopOverViewController.swift
 //  Marumaru
 //
 //  Created by 이승기 on 2021/05/08.
@@ -10,23 +10,33 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-@objc protocol EpisodePopOverViewDelegate: AnyObject {
+@objc protocol PopOverComicEpisodeViewDelegate: AnyObject {
     @objc optional func didEpisodeSelected(_ serialNumber: String)
 }
 
-class EpisodePopOverViewController: UIViewController {
+class PopOverComicEpisodeViewController: UIViewController, ViewModelInjectable {
     
-    // MARK: - Declarations
+    
+    // MARK: - Properties
+    typealias ViewModel = ComicEpisodePopOverViewModel
+    
     @IBOutlet weak var episodeTableView: UITableView!
     
-    weak var delegate: EpisodePopOverViewDelegate?
-    private var viewModel: EpisodePopOverViewModel
-    private var disposeBag = DisposeBag()
+    static let identifier = R.storyboard.popOverComicEpisode.popOverComicEpisodeStoryboard.identifier
+    weak var delegate: PopOverComicEpisodeViewDelegate?
+    var viewModel: ComicEpisodePopOverViewModel
+    var disposeBag = DisposeBag()
     
-    init?(
-        coder: NSCoder,
-        viewModel: EpisodePopOverViewModel
-    ) {
+    
+    // MARK: - Initializers
+    
+    required init(_ viewModel: ViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+        dismiss(animated: true)
+    }
+    
+    required init?(_ coder: NSCoder, _ viewModel: ViewModel) {
         self.viewModel = viewModel
         super.init(coder: coder)
     }
@@ -35,7 +45,9 @@ class EpisodePopOverViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
     // MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -46,12 +58,13 @@ class EpisodePopOverViewController: UIViewController {
         scrollToCurrentEpisode()
     }
     
-    // MARK: - Setup
+    
+    // MARK: - Setups
+    
     private func setup() {
         setupView()
     }
     
-    // MARK: - Setup View
     private func setupView() {
         setupEpisodeTableView()
     }
@@ -64,12 +77,18 @@ class EpisodePopOverViewController: UIViewController {
         episodeTableView.dataSource = self
     }
     
+    
     // MARK: - Bind
+    
     private func bind() {
         setupEpisodeTableViewCell()
     }
     
     private func setupEpisodeTableViewCell() {
+        let nibName = UINib(nibName: R.nib.popOverComicEpisodeTableCell.identifier,
+                            bundle: nil)
+        episodeTableView.register(nibName, forCellReuseIdentifier: PopOverComicEpisodeTableCell.identifier)
+        
         episodeTableView.rx.itemSelected
             .asDriver()
             .drive(with: self, onNext: { vc, indexPath in
@@ -87,26 +106,31 @@ class EpisodePopOverViewController: UIViewController {
     }
 }
 
+
 // MARK: - Extensions
-extension EpisodePopOverViewController: UITableViewDelegate, UITableViewDataSource {
+
+extension PopOverComicEpisodeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.numberOfRowsInSection(section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let episodeCell = tableView.dequeueReusableCell(withIdentifier: "popoverEpisodeCell") as? PopOverEpisodeCell else { return UITableViewCell() }
-        
-        let episode = viewModel.cellItemForRow(at: indexPath)
-        episodeCell.episodeTitleLabel.text = episode.title
-        
-        if episode.serialNumber == viewModel.serialNumber {
-            episodeCell.episodeTitleLabel.textColor = R.color.accentGreen()
-            episodeCell.contentView.backgroundColor = R.color.accentBlueLightest()
-        } else {
-            episodeCell.episodeTitleLabel.textColor = R.color.textBlack()
-            episodeCell.contentView.backgroundColor = R.color.backgroundWhite()
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PopOverComicEpisodeTableCell.identifier)
+                as? PopOverComicEpisodeTableCell else {
+            return UITableViewCell()
         }
         
-        return episodeCell
+        let episode = viewModel.cellItemForRow(at: indexPath)
+        cell.episodeTitleLabel.text = episode.title
+        
+        if episode.serialNumber == viewModel.serialNumber {
+            cell.episodeTitleLabel.textColor = R.color.accentGreen()
+            cell.contentView.backgroundColor = R.color.accentBlueLightest()
+        } else {
+            cell.episodeTitleLabel.textColor = R.color.textBlack()
+            cell.contentView.backgroundColor = R.color.backgroundWhite()
+        }
+        
+        return cell
     }
 }

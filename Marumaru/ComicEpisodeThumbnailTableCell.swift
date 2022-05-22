@@ -1,5 +1,5 @@
 //
-//  MangaEpisodeCell.swift
+//  ComicEpisodeThumbnailTableCell.swift
 //  Marumaru
 //
 //  Created by 이승기 on 2021/04/08.
@@ -7,14 +7,14 @@
 
 import UIKit
 
-class MangaEpisodeTableCell: UITableViewCell {
+class ComicEpisodeThumbnailTableCell: UITableViewCell {
     
     @IBOutlet weak var thumbnailImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var indexLabel: UILabel!
     
-    static let identifier = "mangaEpisodeTableCell"
+    static let identifier = R.reuseIdentifier.comicEpisodeThumbnailTableCell.identifier
     var onReuse: () -> Void = {}
     
     override func awakeFromNib() {
@@ -55,7 +55,7 @@ class MangaEpisodeTableCell: UITableViewCell {
     }
 }
 
-extension MangaEpisodeTableCell {
+extension ComicEpisodeThumbnailTableCell {
     func setWatched() {
         titleLabel.textColor = R.color.textBlackLightest()
         descriptionLabel.textColor = R.color.textBlackLightest()

@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MainViewController.swift
 //  Marumaru
 //
 //  Created by 이승기 on 2021/04/06.
@@ -15,30 +15,56 @@ import RxSwift
 import RxCocoa
 import RealmSwift
 
-class MainViewController: UIViewController {
+class MainViewController: UIViewController, ViewModelInjectable {
     
-    // MARK: - Declarations
+    
+    // MARK: - Properties
+    
+    typealias ViewModel = MainViewModel
+    
     @IBOutlet weak var appbarView: AppbarView!
-    @IBOutlet weak var updatesHeaderLabel: UILabel!
-    @IBOutlet weak var recentsHeaderLabel: UILabel!
-    @IBOutlet weak var top20HeaderLabel: UILabel!
-    @IBOutlet weak var refreshUpdatedMangaButton: UIButton!
-    @IBOutlet weak var refreshMangaRankButton: UIButton!
-    @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var mainScrollView: UIScrollView!
-    @IBOutlet weak var showWatchHistoryButton: UIButton!
-    @IBOutlet weak var updatedContentsCollectionView: UICollectionView!
+    @IBOutlet weak var searchButton: UIButton!
+    @IBOutlet weak var newUpdateComicContentsView: UIView!
+    @IBOutlet weak var newUpdateComicHeaderLabel: UILabel!
+    @IBOutlet weak var newUpdateComicCollectionView: UICollectionView!
+    @IBOutlet weak var refreshNewUpdateComicButton: UIButton!
+    @IBOutlet weak var watchHistoryHeaderLabel: UILabel!
     @IBOutlet weak var watchHistoryCollectionView: UICollectionView!
-    @IBOutlet weak var mangaRankTableView: UITableView!
-    @IBOutlet weak var updatedContentsBoardView: UIView!
+    @IBOutlet weak var showWatchHistoryButton: UIButton!
+    @IBOutlet weak var comicRankHeaderLabel: UILabel!
+    @IBOutlet weak var comicRankTableView: UITableView!
+    @IBOutlet weak var refreshComicRankButton: UIButton!
     
-    private let disposeBag = DisposeBag()
-    private let viewModel = MainViewModel()
+    static let identifier = R.storyboard.main.mainStoryboard.identifier
+    var viewModel: ViewModel
+    var disposeBag = DisposeBag()
     private var loadingUpdatedMangaAnimView = LottieAnimationView()
     private var loadingMangaRankAnimView = LottieAnimationView()
     private var watchHistoryPlaceholderLabel = StickyPlaceholderLabel()
     
+    
+    // MARK: - Initializers
+    
+    required init(_ viewModel: MainViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+        dismiss(animated: true)
+    }
+    
+    required init?(_ coder: NSCoder, _ viewModel: MainViewModel) {
+        self.viewModel = viewModel
+        super.init(coder: coder)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    
     // MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -48,8 +74,10 @@ class MainViewController: UIViewController {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .darkContent
     }
+
     
-    // MARK: - Setup
+    // MARK: - Setups
+    
     private func setup() {
         setupView()
         setupData()
@@ -58,22 +86,22 @@ class MainViewController: UIViewController {
     private func setupData() {
         viewModel.cleanCacheIfNeeded()
         
-        reloadUpdatedContents()
-        reloadWatchHistories()
-        reloadMangaRank()
+        reloadUpdatedComic()
+        reloadWatchHistory()
+        reloadComicRank()
     }
     
     private func setupView() {
         setupHero()
         setupAppbarView()
         setupSearchButton()
-        setupRefreshUpdatedMangaButton()
-        setupUpdatedMangaCollectionView()
+        setupRefreshNewUpdatedComicButton()
+        setupUpdatedComicCollectionView()
         setupWatchHistoryCollectionView()
-        setupTopRankMangaTableView()
-        setupUpdatesHeaderLabel()
-        setupRecentsHeaderLabel()
-        setupTop20HeaderLabel()
+        setupTopRankComicTableView()
+        setupNewComicHeaderLabel()
+        setupWatchHistoryHeaderLabel()
+        setupComicRankHeaderLabel()
     }
     
     private func setupHero() {
@@ -90,29 +118,29 @@ class MainViewController: UIViewController {
         searchButton.layer.cornerRadius = 12
     }
     
-    private func setupRefreshUpdatedMangaButton() {
-        refreshUpdatedMangaButton.imageEdgeInsets(with: 6)
-        refreshMangaRankButton.imageEdgeInsets(with: 6)
+    private func setupRefreshNewUpdatedComicButton() {
+        refreshNewUpdateComicButton.imageEdgeInsets(with: 6)
+        refreshComicRankButton.imageEdgeInsets(with: 6)
     }
     
-    private func setupUpdatedMangaCollectionView() {
-        let nibName = UINib(nibName: "MangaThumbnailCollectionViewCell", bundle: nil)
-        updatedContentsCollectionView.register(nibName, forCellWithReuseIdentifier: MangaThumbnailCollectionCell.identifier)
-        updatedContentsCollectionView.clipsToBounds = false
-        updatedContentsCollectionView.delegate = self
-        updatedContentsCollectionView.dataSource = self
-        updatedContentsCollectionView.contentInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
+    private func setupUpdatedComicCollectionView() {
+        let nibName = UINib(nibName: ComicThumbnailCollectionCell.identifier, bundle: nil)
+        newUpdateComicCollectionView.register(nibName, forCellWithReuseIdentifier: ComicThumbnailCollectionCell.identifier)
+        newUpdateComicCollectionView.clipsToBounds = false
+        newUpdateComicCollectionView.delegate = self
+        newUpdateComicCollectionView.dataSource = self
+        newUpdateComicCollectionView.contentInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
         
         viewModel.reloadUpdatedContentCollectionView = { [weak self] in
             DispatchQueue.main.async {
-                self?.updatedContentsCollectionView.reloadData()
+                self?.newUpdateComicCollectionView.reloadData()
             }
         }
     }
     
     private func setupWatchHistoryCollectionView() {
-        let nibName = UINib(nibName: "MangaThumbnailCollectionViewCell", bundle: nil)
-        watchHistoryCollectionView.register(nibName, forCellWithReuseIdentifier: MangaThumbnailCollectionCell.identifier)
+        let nibName = UINib(nibName: ComicThumbnailCollectionCell.identifier, bundle: nil)
+        watchHistoryCollectionView.register(nibName, forCellWithReuseIdentifier: ComicThumbnailCollectionCell.identifier)
         watchHistoryCollectionView.clipsToBounds = false
         watchHistoryCollectionView.delegate = self
         watchHistoryCollectionView.dataSource = self
@@ -125,52 +153,54 @@ class MainViewController: UIViewController {
         }
     }
     
-    private func setupTopRankMangaTableView() {
-        let nibName = UINib(nibName: "MangaRankTableViewCell", bundle: nil)
-        mangaRankTableView.register(nibName, forCellReuseIdentifier: MangaRankTableViewCell.identifier)
+    private func setupTopRankComicTableView() {
+        let nibName = UINib(nibName: ComicRankTableCell.identifier, bundle: nil)
+        comicRankTableView.register(nibName, forCellReuseIdentifier: ComicRankTableCell.identifier)
         
-        mangaRankTableView.layer.cornerRadius = 12
-        mangaRankTableView.layer.masksToBounds = true
+        comicRankTableView.layer.cornerRadius = 12
+        comicRankTableView.layer.masksToBounds = true
         
-        mangaRankTableView.delegate = self
-        mangaRankTableView.dataSource = self
+        comicRankTableView.delegate = self
+        comicRankTableView.dataSource = self
         
         viewModel.reloadTopRankTableView = { [weak self] in
             DispatchQueue.main.async {
-                self?.mangaRankTableView.reloadData()
+                self?.comicRankTableView.reloadData()
             }
         }
     }
     
-    private func setupUpdatesHeaderLabel() {
-        updatesHeaderLabel.layer.masksToBounds = true
-        updatesHeaderLabel.layer.cornerRadius = 10
+    private func setupNewComicHeaderLabel() {
+        newUpdateComicHeaderLabel.layer.masksToBounds = true
+        newUpdateComicHeaderLabel.layer.cornerRadius = 10
     }
     
-    private func setupRecentsHeaderLabel() {
-        recentsHeaderLabel.layer.masksToBounds = true
-        recentsHeaderLabel.layer.cornerRadius = 10
+    private func setupWatchHistoryHeaderLabel() {
+        watchHistoryHeaderLabel.layer.masksToBounds = true
+        watchHistoryHeaderLabel.layer.cornerRadius = 10
     }
     
-    private func setupTop20HeaderLabel() {
-        top20HeaderLabel.layer.masksToBounds = true
-        top20HeaderLabel.layer.cornerRadius = 10
+    private func setupComicRankHeaderLabel() {
+        comicRankHeaderLabel.layer.masksToBounds = true
+        comicRankHeaderLabel.layer.cornerRadius = 10
     }
+    
     
     // MARK: - Binds
+    
     private func bind() {
         bindSearchButton()
         bindRefreshUpdatedContentButton()
         bindShowWatchHistoryButton()
-        bindRefreshMangaRankButton()
-        bindTopRankedMangaCell()
+        bindRefreshComicRankButton()
+        bindComicRankCell()
     }
     
     private func bindSearchButton() {
         searchButton.rx.tap
             .asDriver()
             .drive(onNext: { [weak self] _ in
-                self?.presentSearchVC()
+                self?.presentSearchComicVC()
             })
             .disposed(by: disposeBag)
     }
@@ -185,36 +215,38 @@ class MainViewController: UIViewController {
     }
     
     private func bindRefreshUpdatedContentButton() {
-        refreshUpdatedMangaButton.rx.tap
+        refreshNewUpdateComicButton.rx.tap
             .asDriver()
             .debounce(.milliseconds(300))
             .drive(with: self, onNext: { vc, _  in
-                vc.reloadUpdatedContents()
+                vc.reloadUpdatedComic()
             })
             .disposed(by: disposeBag)
     }
     
-    private func bindRefreshMangaRankButton() {
-        refreshMangaRankButton.rx.tap
+    private func bindRefreshComicRankButton() {
+        refreshComicRankButton.rx.tap
             .asDriver()
             .debounce(.milliseconds(300))
             .drive(with: self, onNext: { vc, _ in
-                vc.reloadMangaRank()
+                vc.reloadComicRank()
             })
             .disposed(by: disposeBag)
     }
     
-    private func bindTopRankedMangaCell() {
-        mangaRankTableView.rx.itemSelected
+    private func bindComicRankCell() {
+        comicRankTableView.rx.itemSelected
             .asDriver()
             .drive(with: self, onNext: { vc, indexPath in
                 let mangaInfo = vc.viewModel.topRankCellItemForRow(at: indexPath)
-                vc.presentPlayMangaVC(mangaInfo.title, mangaInfo.link)
+                vc.presentComicStripVC(mangaInfo.title, mangaInfo.link)
             }).disposed(by: disposeBag)
     }
     
+    
     // MARK: - Methods
-    func reloadUpdatedContents() {
+    
+    func reloadUpdatedComic() {
         playUpdatedMangaLoadingAnimation()
         
         viewModel.getUpdatedContents()
@@ -223,7 +255,7 @@ class MainViewController: UIViewController {
             }).disposed(by: disposeBag)
     }
     
-    func reloadWatchHistories() {
+    func reloadWatchHistory() {
         watchHistoryPlaceholderLabel.detatchLabel()
         
         viewModel.getWatchHistories()
@@ -235,61 +267,73 @@ class MainViewController: UIViewController {
             .disposed(by: disposeBag)
     }
     
-    func reloadMangaRank() {
+    func reloadComicRank() {
         playMangaRankLoadingAnimation()
         
-        viewModel.getTopRankedMangas()
+        viewModel.getTopRankedComics()
             .subscribe(with: self, onCompleted: { vc in
                 vc.loadingMangaRankAnimView.stop()
             }).disposed(by: disposeBag)
     }
     
-    func presentPlayMangaVC(_ mangaTitle: String, _ mangaUrl: String) {
-        let viewModel = PlayMangaViewModel(mangaTitle: mangaTitle, link: mangaUrl)
+    func presentComicStripVC(_ mangaTitle: String, _ mangaUrl: String) {
+        let storyboard = UIStoryboard(name: R.storyboard.comicStrip.name, bundle: nil)
+        let comicStripVC = storyboard.instantiateViewController(identifier: ComicStripViewController.identifier,
+                                                                creator: { coder -> ComicStripViewController in
+            let viewModel = ComicStripViewModel(comicTitle: mangaTitle, comicURL: mangaUrl)
+            return .init(coder, viewModel) ?? ComicStripViewController(.init(comicTitle: "", comicURL: ""))
+        })
         
-        guard let playMangaVC = storyboard?.instantiateViewController(identifier: "ViewMangaStoryboard", creator: { coder in
-            PlayMangaViewController(
-                coder: coder, viewModel: viewModel)
-        }) else { return }
-        
-        playMangaVC.delegate = self
-        playMangaVC.modalPresentationStyle = .fullScreen
-        present(playMangaVC, animated: true, completion: nil)
+        comicStripVC.delegate = self
+        comicStripVC.modalPresentationStyle = .fullScreen
+        present(comicStripVC, animated: true, completion: nil)
     }
     
-    func presentSearchVC() {
-        guard let searchVC = storyboard?.instantiateViewController(identifier: "SearchStoryboard") as? SearchViewController else { return }
-        searchVC.modalPresentationStyle = .fullScreen
+    func presentSearchComicVC() {
+        let storyboard = UIStoryboard(name: R.storyboard.searchComic.name, bundle: nil)
+        let searchComicVC = storyboard.instantiateViewController(identifier: SearchComicViewController.identifier,
+                                                                 creator: { coder -> SearchComicViewController in
+            let viewModel = SearchComicViewModel()
+            return .init(coder, viewModel) ?? SearchComicViewController(.init())
+        })
         
-        present(searchVC, animated: true)
+        searchComicVC.modalPresentationStyle = .fullScreen
+        present(searchComicVC, animated: true)
     }
     
     func presentWatchHistoryVC() {
-        guard let watchHistoryVC = storyboard?.instantiateViewController(identifier: "MangaHistoryStoryboard") as? WatchHistoryViewController else { return }
+        let storyboard = UIStoryboard(name: R.storyboard.watchHistory.name, bundle: nil)
+        let watchHistoryVC = storyboard.instantiateViewController(identifier: WatchHistoryViewController.identifier,
+                                                                  creator: { coder -> WatchHistoryViewController in
+            let viewModel = WatchHistoryViewModel()
+            return .init(coder, viewModel) ?? WatchHistoryViewController(.init())
+        })
+        
         watchHistoryVC.delegate = self
         watchHistoryVC.modalPresentationStyle = .fullScreen
-        
         present(watchHistoryVC, animated: true)
     }
     
     private func playUpdatedMangaLoadingAnimation() {
         loadingUpdatedMangaAnimView.play(name: "loading_cat",
                                          size: CGSize(width: 148, height: 148),
-                                         to: updatedContentsBoardView)
+                                         to: newUpdateComicContentsView)
     }
     
     private func playMangaRankLoadingAnimation() {
         loadingMangaRankAnimView.play(name: "loading_cat",
                                       size: CGSize(width: 148, height: 148),
-                                      to: mangaRankTableView)
+                                      to: comicRankTableView)
     }
 }
 
+
 // MARK: - Extensions
+
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if collectionView == updatedContentsCollectionView {
+        if collectionView == newUpdateComicCollectionView {
             return viewModel.updatedContentsNumberOfItem
         } else {
             return viewModel.watchHistoriesNumberOfItem
@@ -297,9 +341,9 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let mangaCollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: MangaThumbnailCollectionCell.identifier, for: indexPath) as? MangaThumbnailCollectionCell else { return UICollectionViewCell() }
+        guard let mangaCollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: ComicThumbnailCollectionCell.identifier, for: indexPath) as? ComicThumbnailCollectionCell else { return UICollectionViewCell() }
         
-        let mangaInfo = collectionView == updatedContentsCollectionView ? viewModel.updatedContentCellItemForRow(at: indexPath) : viewModel.watchHistoryCellItemForRow(at: indexPath)
+        let mangaInfo = collectionView == newUpdateComicCollectionView ? viewModel.updatedContentCellItemForRow(at: indexPath) : viewModel.watchHistoryCellItemForRow(at: indexPath)
         
         mangaCollectionCell.titleLabel.text = mangaInfo.title
         mangaCollectionCell.thumbnailImagePlaceholderLabel.text = mangaInfo.title
@@ -333,9 +377,9 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let mangaInfo = collectionView == updatedContentsCollectionView ? viewModel.updatedContentCellItemForRow(at: indexPath) : viewModel.watchHistoryCellItemForRow(at: indexPath)
+        let mangaInfo = collectionView == newUpdateComicCollectionView ? viewModel.updatedContentCellItemForRow(at: indexPath) : viewModel.watchHistoryCellItemForRow(at: indexPath)
         
-        presentPlayMangaVC(mangaInfo.title, mangaInfo.link)
+        presentComicStripVC(mangaInfo.title, mangaInfo.link)
     }
 }
 
@@ -345,7 +389,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let rankCell = tableView.dequeueReusableCell(withIdentifier: MangaRankTableViewCell.identifier, for: indexPath) as? MangaRankTableViewCell else { return UITableViewCell() }
+        guard let rankCell = tableView.dequeueReusableCell(withIdentifier: ComicRankTableCell.identifier, for: indexPath) as? ComicRankTableCell else { return UITableViewCell() }
         
         let mangaInfo = viewModel.topRankCellItemForRow(at: indexPath)
         rankCell.titleLabel.text = mangaInfo.title
@@ -355,8 +399,8 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-extension MainViewController: WatchHistoryViewDelegate, PlayMangaViewDelegate {
+extension MainViewController: WatchHistoryViewDelegate, ComicStripViewDelegate {
     func didWatchHistoryUpdated() {
-        reloadWatchHistories()
+        reloadWatchHistory()
     }
 }
