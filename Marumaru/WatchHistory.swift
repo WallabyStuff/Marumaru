@@ -1,5 +1,5 @@
 //
-//  WatchiHistoryRealm.swift
+//  WatchHistory.swift
 //  Marumaru
 //
 //  Created by 이승기 on 2021/08/20.
@@ -11,24 +11,24 @@ import RealmSwift
 class WatchHistory: Object {
     
     // MARK: - Declaration
-    @objc dynamic var mangaUrl: String = ""
-    @objc dynamic var mangaTitle: String = ""
-    @objc dynamic var thumbnailImageUrl: String = ""
+    @objc dynamic var comicURL: String = ""
+    @objc dynamic var comicTitle: String = ""
+    @objc dynamic var thumbnailImageURL: String = ""
     @objc dynamic var timeStamp: Int64 = 0
     
     // MARK: - Initializer
-    convenience init(mangaUrl: String,
-                     mangaTitle: String,
+    convenience init(comicURL: String,
+                     comicTitle: String,
                      thumbnailImageUrl: String) {
         self.init()
-        self.mangaUrl = mangaUrl
-        self.mangaTitle = mangaTitle
-        self.thumbnailImageUrl = thumbnailImageUrl
+        self.comicURL = comicURL
+        self.comicTitle = comicTitle
+        self.thumbnailImageURL = thumbnailImageUrl
         self.timeStamp = Date.timeStamp
     }
     
     override class func primaryKey() -> String? {
-        return "mangaUrl"
+        return "comicURL"
     }
 }
 

@@ -1,5 +1,5 @@
 //
-//  ViewMangaViewController.swift
+//  ComicStripViewController.swift
 //  Marumaru
 //
 //  Created by 이승기 on 2021/04/08.
@@ -15,55 +15,46 @@ import RxSwift
 import RxCocoa
 import RxGesture
 
-@objc protocol PlayMangaViewDelegate: AnyObject {
+@objc protocol ComicStripViewDelegate: AnyObject {
     @objc optional func didWatchHistoryUpdated()
 }
 
-class PlayMangaViewController: UIViewController {
+class ComicStripViewController: UIViewController, ViewModelInjectable {
     
-    // MARK: - Declarations
+    
+    // MARK: - Properties
+    
+    typealias ViewModel = ComicStripViewModel
+    
     @IBOutlet weak var showEpisodeListButton: UIButton!
     @IBOutlet weak var nextEpisodeButton: UIButton!
     @IBOutlet weak var previousEpisodeButton: UIButton!
     @IBOutlet weak var appbarView: UIView!
     @IBOutlet weak var bottomIndicatorView: UIView!
-    @IBOutlet weak var mangaTitleLabel: UILabel!
+    @IBOutlet weak var comicTitleLabel: UILabel!
     @IBOutlet weak var backButton: UIButton!
     
-    public weak var delegate: PlayMangaViewDelegate?
-    private var viewModel: PlayMangaViewModel
-    private var disposeBag = DisposeBag()
+    static let identifier = R.storyboard.comicStrip.comicStripStroyboard.identifier
+    public weak var delegate: ComicStripViewDelegate?
+    var viewModel: ViewModel
+    var disposeBag = DisposeBag()
     
     private var cellHeightDictionary: NSMutableDictionary = [:]
     private let safeAreaInsets = UIApplication.shared.windows[0].safeAreaInsets
     private var isSceneZoomed = false
-    
     private var sceneLoadingAnimationView = LottieAnimationView()
     private var sceneScrollView = FlexibleSceneScrollView()
     
-    // MARK: - LifeCycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setup()
-        bind()
-        playManga()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        self.delegate?.didWatchHistoryUpdated?()
-    }
-    
-    // MARK: - Overrides
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .darkContent
-    }
     
     // MARK: - Initializers
-    init?(
-        coder: NSCoder,
-        viewModel: PlayMangaViewModel
-    ) {
+    
+    required init(_ viewModel: ViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+        dismiss(animated: true)
+    }
+    
+    required init?(_ coder: NSCoder, _ viewModel: ViewModel) {
         self.viewModel = viewModel
         super.init(coder: coder)
     }
@@ -72,12 +63,35 @@ class PlayMangaViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Setup
+    
+    // MARK: - LifeCycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setup()
+        bind()
+        renderEpisode()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.delegate?.didWatchHistoryUpdated?()
+    }
+    
+    
+    // MARK: - Overrides
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .darkContent
+    }
+
+    
+    // MARK: - Setups
+    
     private func setup() {
         setupView()
     }
     
-    // MARK: - SetupView
     private func setupView() {
         setupHero()
         setupAppbarView()
@@ -88,7 +102,7 @@ class PlayMangaViewController: UIViewController {
         setupPreviousEpisodeButton()
         setupShowEpisodeListButton()
         setupNextEpisodeButton()
-        setupMangaTitleLabel()
+        setupComicTitleLabel()
     }
     
     private func setupHero() {
@@ -154,15 +168,17 @@ class PlayMangaViewController: UIViewController {
         showEpisodeListButton.imageEdgeInsets(with: 8)
     }
     
-    private func setupMangaTitleLabel() {
-        mangaTitleLabel.text = viewModel.currentEpisodeTitle
+    private func setupComicTitleLabel() {
+        comicTitleLabel.text = viewModel.currentEpisodeTitle
         
-        viewModel.updateMangaTitleLabel = { [weak self] in
-            self?.mangaTitleLabel.text = self?.viewModel.currentEpisodeTitle
+        viewModel.updateComicTitleLabel = { [weak self] in
+            self?.comicTitleLabel.text = self?.viewModel.currentEpisodeTitle
         }
     }
     
+    
     // MARK: - Bind
+    
     private func bind() {
         bindBackButton()
         bindNextEpisodeButton()
@@ -186,7 +202,7 @@ class PlayMangaViewController: UIViewController {
         nextEpisodeButton.rx.tap
             .asDriver()
             .drive(onNext: { [weak self] in
-                self?.playNextManga()
+                self?.renderNextEpisode()
             })
             .disposed(by: disposeBag)
     }
@@ -195,7 +211,7 @@ class PlayMangaViewController: UIViewController {
         previousEpisodeButton.rx.tap
             .asDriver()
             .drive(onNext: { [weak self] in
-                self?.playPreviousManga()
+                self?.renderPrevEpisode()
             })
             .disposed(by: disposeBag)
     }
@@ -204,7 +220,7 @@ class PlayMangaViewController: UIViewController {
         showEpisodeListButton.rx.tap
             .asDriver()
             .drive(onNext: { [weak self] in
-                self?.presentEpisodePopoverVC()
+                self?.presentComicEpisodePopoverVC()
             })
             .disposed(by: disposeBag)
     }
@@ -266,43 +282,50 @@ class PlayMangaViewController: UIViewController {
             .disposed(by: disposeBag)
     }
     
+    
     // MARK: - Methods
-    private func playManga() {
-        viewModel.playCurrentManga()
+    
+    private func renderEpisode() {
+        viewModel.renderCurrentEpisodeScene()
             .subscribe(onCompleted: { [weak self] in
                 self?.sceneLoadingAnimationView.stop()
                 self?.enableIndicatorButtons()
             }).disposed(by: disposeBag)
     }
     
-    private func playManga(serialNumber: String) {
-        viewModel.playManga(serialNumber)
+    private func renderEpisode(serialNumber: String) {
+        viewModel.renderComicStripScene(serialNumber)
             .subscribe(onCompleted: { [weak self] in
                 self?.sceneLoadingAnimationView.stop()
                 self?.enableIndicatorButtons()
             }).disposed(by: disposeBag)
     }
     
-    private func presentEpisodePopoverVC() {
-        let viewModel = EpisodePopOverViewModel(viewModel.getSerialNumberFromUrl(), viewModel.currentMangaEpisoeds)
+    private func presentComicEpisodePopoverVC() {
+        let storyboard = UIStoryboard(name: R.storyboard.popOverComicEpisode.name, bundle: nil)
+        let comicEpisodePopOverVC = storyboard.instantiateViewController(identifier: PopOverComicEpisodeViewController.identifier,
+                                                                         creator: { [weak self] coder -> PopOverComicEpisodeViewController in
+            let dumpVC = PopOverComicEpisodeViewController(.init("", []))
+            guard let self = self else { return dumpVC }
+            let viewModel = ComicEpisodePopOverViewModel(self.viewModel.getSerialNumberFromUrl(), self.viewModel.currentComicEpisode)
+            return .init(coder, viewModel) ?? dumpVC
+        })
         
-        guard let episodePopoverVC = storyboard?.instantiateViewController(identifier: "EpisodePopoverStoryboard", creator: { coder in
-            EpisodePopOverViewController(coder: coder, viewModel: viewModel)
-        }) else { return }
-
-        episodePopoverVC.modalPresentationStyle = .popover
-        episodePopoverVC.preferredContentSize = CGSize(width: 200, height: 300)
-        episodePopoverVC.popoverPresentationController?.permittedArrowDirections = .down
-        episodePopoverVC.popoverPresentationController?.sourceRect = showEpisodeListButton.bounds
-        episodePopoverVC.popoverPresentationController?.sourceView = showEpisodeListButton
-        episodePopoverVC.presentationController?.delegate = self
-        episodePopoverVC.delegate = self
-        
-        present(episodePopoverVC, animated: true, completion: nil)
+        comicEpisodePopOverVC.modalPresentationStyle = .popover
+        comicEpisodePopOverVC.preferredContentSize = CGSize(width: 200, height: 300)
+        comicEpisodePopOverVC.popoverPresentationController?.permittedArrowDirections = .down
+        comicEpisodePopOverVC.popoverPresentationController?.sourceRect = showEpisodeListButton.bounds
+        comicEpisodePopOverVC.popoverPresentationController?.sourceView = showEpisodeListButton
+        comicEpisodePopOverVC.presentationController?.delegate = self
+        comicEpisodePopOverVC.delegate = self
+        present(comicEpisodePopOverVC, animated: true, completion: nil)
     }
 }
 
-extension PlayMangaViewController {
+
+// MARK: - Extensions
+
+extension ComicStripViewController {
     private func playSceneLoadingAnimation() {
         sceneLoadingAnimationView.play(name: "loading_cat",
                                        size: CGSize(width: 148, height: 148),
@@ -310,48 +333,56 @@ extension PlayMangaViewController {
     }
 }
 
-extension PlayMangaViewController {
-    func playNextManga() {
-        viewModel.playNextManga()
+extension ComicStripViewController {
+    func renderNextEpisode() {
+        viewModel.renderNextEpisodeScene()
             .subscribe(onCompleted: { [weak self] in
                 self?.sceneLoadingAnimationView.stop()
                 self?.enableIndicatorButtons()
             }, onError: { [weak self] error in
-                if let error = error as? PlayMangaViewError {
+                if let error = error as? ComicStripViewError {
                     self?.view.makeToast(error.message)
                 }
             }).disposed(by: disposeBag)
     }
     
-    func playPreviousManga() {
-        viewModel.playPreviousManga()
+    func renderPrevEpisode() {
+        viewModel.renderPreviousEpisodeScene()
             .subscribe(onCompleted: { [weak self] in
                 self?.sceneLoadingAnimationView.stop()
                 self?.enableIndicatorButtons()
             }, onError: { [weak self] error in
-                if let error = error as? PlayMangaViewError {
+                if let error = error as? ComicStripViewError {
                     self?.view.makeToast(error.message)
                 }
             }).disposed(by: disposeBag)
     }
 }
 
-extension PlayMangaViewController {
+extension ComicStripViewController {
     func zoom(point: CGPoint) {
         if isSceneZoomed {
             // zoom out
-            sceneScrollView.zoom(to: CGRect(x: point.x, y: point.y, width: self.view.frame.width, height: self.view.frame.height), animated: true)
+            sceneScrollView.zoom(to: CGRect(x: point.x,
+                                            y: point.y,
+                                            width: self.view.frame.width,
+                                            height: self.view.frame.height),
+                                 animated: true)
             isSceneZoomed = false
         } else {
             // zoom in
             hideNavigationBar()
-            sceneScrollView.zoom(to: CGRect(x: point.x, y: point.y, width: self.view.frame.width / 2, height: self.view.frame.height / 2), animated: true)
+            sceneScrollView.zoom(to: CGRect(x: point.x,
+                                            y: point.y,
+                                            width: self.view.frame.width / 2,
+                                            height: self.view.frame.height / 2),
+                                 animated: true)
             isSceneZoomed = true
         }
     }
 }
 
-extension PlayMangaViewController {
+extension ComicStripViewController {
     private func enableIndicatorButtons() {
         toggleIndicatorButtons(true)
     }
@@ -367,7 +398,7 @@ extension PlayMangaViewController {
     }
 }
 
-extension PlayMangaViewController {
+extension ComicStripViewController {
     func showNavigationBar() {
         if appbarView.alpha == 0 {
             appbarView.startFadeInAnimation(duration: 0.3)
@@ -383,7 +414,7 @@ extension PlayMangaViewController {
     }
 }
 
-extension PlayMangaViewController: UIScrollViewDelegate {
+extension ComicStripViewController: UIScrollViewDelegate {
     // Set scene scrollview zoomable
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return self.sceneScrollView.contentView
@@ -391,13 +422,14 @@ extension PlayMangaViewController: UIScrollViewDelegate {
 }
 
 extension UIViewController: UIPopoverPresentationControllerDelegate {
-    public func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+    public func adaptivePresentationStyle(for controller: UIPresentationController,
+                                          traitCollection: UITraitCollection) -> UIModalPresentationStyle {
         return .none
     }
 }
 
-extension PlayMangaViewController: EpisodePopOverViewDelegate {
+extension ComicStripViewController: PopOverComicEpisodeViewDelegate {
     func didEpisodeSelected(_ serialNumber: String) {
-        playManga(serialNumber: serialNumber)
+        renderEpisode(serialNumber: serialNumber)
     }
 }

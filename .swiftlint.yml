@@ -9,6 +9,7 @@ disabled_rules:
 - type_name
 - file_length
 - syntactic_sugar
+- vertical_whitespace
 
 excluded:
 - Carthage

@@ -1,5 +1,5 @@
 //
-//  MangaRankTableViewCell.swift
+//  ComicRankTableCell.swift
 //  Marumaru
 //
 //  Created by 이승기 on 2022/02/02.
@@ -7,13 +7,13 @@
 
 import UIKit
 
-class MangaRankTableViewCell: UITableViewCell {
+class ComicRankTableCell: UITableViewCell {
 
     @IBOutlet weak var cellContentView: UIView!
     @IBOutlet weak var rankLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
     
-    static let identifier = "mangaRankTableCell"
+    static let identifier = R.reuseIdentifier.comicRankTableCell.identifier
     
     override func awakeFromNib() {
         super.awakeFromNib()

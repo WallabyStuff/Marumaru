@@ -1,5 +1,5 @@
 //
-//  EpisodePopoverViewModle.swift
+//  ComicEpisodePopOverViewModel.swift
 //  Marumaru
 //
 //  Created by 이승기 on 2022/02/05.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class EpisodePopOverViewModel {
+class ComicEpisodePopOverViewModel {
     private var currentSerialNumber: String
     private var episodes: [Episode]
     private var currentEpisode: Episode?
@@ -18,7 +18,7 @@ class EpisodePopOverViewModel {
     }
 }
 
-extension EpisodePopOverViewModel {
+extension ComicEpisodePopOverViewModel {
     public func numberOfRowsInSection(_ section: Int) -> Int {
         if section == 0 {
             return episodes.count
@@ -32,7 +32,7 @@ extension EpisodePopOverViewModel {
     }
 }
 
-extension EpisodePopOverViewModel {
+extension ComicEpisodePopOverViewModel {
     public var currentEpisodeIndex: Int? {
         for (index, episode) in episodes.enumerated() where episode.serialNumber == currentSerialNumber {
             return index

@@ -1,5 +1,5 @@
 //
-//  NetworkHandelr.swift
+//  MarumaruApiErrorMessage.swift
 //  Marumaru
 //
 //  Created by 이승기 on 2021/04/22.
@@ -56,7 +56,7 @@ class MarumaruApiService {
                 remoteBasePath = remoteBasePath.trimmingCharacters(in: .newlines)
                 UserDefaults.standard.setValue(remoteBasePath, forKey: "remoteBasePath")
             } catch {
-                UserDefaults.standard.setValue("https://marumaru233.com", forKey: "remoteBasePath")
+                UserDefaults.standard.setValue("https://marumaru259.com", forKey: "remoteBasePath")
                 print(error)
             }
         }
@@ -64,7 +64,7 @@ class MarumaruApiService {
     
     // TODO: - Fetch updated path
     private func setupBasePath() {
-        basePath = "https://marumaru233.com"
+        basePath = "https://marumaru259.com"
 //        let remoteBasePath = UserDefaults.standard.string(forKey: "remoteBasePath")
 //        if let remoteBasePath = remoteBasePath {
 //            basePath = remoteBasePath
@@ -92,9 +92,9 @@ class MarumaruApiService {
     }
 }
 
-// MARK: - Updated Manga
+// MARK: - Updated Comic
 extension MarumaruApiService {
-    public func getUpdatedMangas() -> Observable<[Manga]> {
+    public func getNewUpdateComic() -> Observable<[Comic]> {
         return Observable.create { [weak self] observer in
             guard let self = self else { return Disposables.create() }
             
@@ -106,8 +106,8 @@ extension MarumaruApiService {
             self.getDocument(basePath)
                 .subscribe(onNext: { document in
                     do {
-                        let updatedMangas = try self.parseUpdatedMangas(with: document)
-                        observer.onNext(updatedMangas)
+                        let comics = try self.parseNewUpdateComic(with: document)
+                        observer.onNext(comics)
                     } catch {
                         observer.onError(error)
                     }
@@ -119,24 +119,24 @@ extension MarumaruApiService {
         }
     }
     
-    private func parseUpdatedMangas(with document: Document) throws -> [Manga] {
+    private func parseNewUpdateComic(with document: Document) throws -> [Comic] {
         do {
-            var updatedMangas = [Manga]()
+            var newUpdateComic = [Comic]()
             
             let elements = try document.getElementsByClass("post-row")
             try elements.forEach { element in
-                let mangaTitle = try element.select("a").text().trimmingCharacters(in: .whitespaces)
-                let mangaUrl = try element .select("a").attr("href").trimmingCharacters(in: .whitespaces)
+                let comicTitle = try element.select("a").text().trimmingCharacters(in: .whitespaces)
+                let comicURL = try element .select("a").attr("href").trimmingCharacters(in: .whitespaces)
                 var thumbnailImageUrl = try element.select("img").attr("src").trimmingCharacters(in: .whitespaces)
                 thumbnailImageUrl = getEndPoint(url: thumbnailImageUrl)
                 
-                let manga = Manga(title: mangaTitle,
-                                  link: mangaUrl,
+                let comic = Comic(title: comicTitle,
+                                  link: comicURL,
                                   thumbnailImageUrl: thumbnailImageUrl)
-                updatedMangas.append(manga)
+                newUpdateComic.append(comic)
             }
             
-            return updatedMangas
+            return newUpdateComic
         } catch {
             throw MarumaruApiErrorMessage.failToParseHtml
         }
@@ -145,7 +145,7 @@ extension MarumaruApiService {
 
 // MARK: - Top Ranked Managa
 extension MarumaruApiService {
-    public func getTopRankedMangas() -> Observable<[TopRankedManga]> {
+    public func getTopRankComic() -> Observable<[TopRankedComic]> {
         return Observable.create { [weak self] observer in
             
             guard let self = self else { return Disposables.create() }
@@ -158,8 +158,8 @@ extension MarumaruApiService {
             self.getDocument(basePath)
                 .subscribe(onNext: { document in
                     do {
-                        let topRankedMangas = try self.parseTopRankedMangas(with: document)
-                        observer.onNext(topRankedMangas)
+                        let topRankComic = try self.parseTopRankComic(with: document)
+                        observer.onNext(topRankComic)
                     } catch {
                         observer.onError(error)
                     }
@@ -171,23 +171,22 @@ extension MarumaruApiService {
         }
     }
     
-    private func parseTopRankedMangas(with document: Document) throws -> [TopRankedManga] {
+    private func parseTopRankComic(with document: Document) throws -> [TopRankedComic] {
         do {
-            var topRankedMangas = [TopRankedManga]()
+            var topRankComics = [TopRankedComic]()
             
             let elements = try document.getElementsByClass("basic-post-list")
             let topRankedList = try elements.first()?.getElementsByTag("tr")
             
-            try topRankedList?.forEach({ topRankedManga in
-                let mangaTitle = try topRankedManga.select("a").text().trimmingCharacters(in: .whitespaces)
-                let mangaUrl = try topRankedManga.select("a").attr("href").trimmingCharacters(in: .whitespaces)
+            try topRankedList?.forEach({ comic in
+                let comicTitle = try comic.select("a").text().trimmingCharacters(in: .whitespaces)
+                let comicURL = try comic.select("a").attr("href").trimmingCharacters(in: .whitespaces)
                 
-                let manga = TopRankedManga(title: mangaTitle,
-                                           link: mangaUrl)
-                topRankedMangas.append(manga)
+                let topRankComic = TopRankedComic(title: comicTitle, link: comicURL)
+                topRankComics.append(topRankComic)
             })
             
-            return topRankedMangas
+            return topRankComics
         } catch {
             throw MarumaruApiErrorMessage.failToParseHtml
         }
@@ -196,7 +195,7 @@ extension MarumaruApiService {
 
 // MARK: - Search Result
 extension MarumaruApiService {
-    public func getSearchResult(title: String) -> Observable<[MangaInfo]> {
+    public func getSearchResult(title: String) -> Observable<[ComicInfo]> {
         return Observable.create { [weak self] observer in
             guard let self = self else { return Disposables.create() }
             
@@ -222,13 +221,13 @@ extension MarumaruApiService {
         }
     }
     
-    private func parseSearchResult(with document: Document) throws -> [MangaInfo] {
+    private func parseSearchResult(with document: Document) throws -> [ComicInfo] {
         do {
-            var searchResult = [MangaInfo]()
+            var searchResult = [ComicInfo]()
             
             let contents = try document.getElementsByClass("media")
             try contents.forEach { content in
-                let mangaTitle = try content.getElementsByClass("media-heading").text().trimmingCharacters(in: .whitespaces)
+                let comicTitle = try content.getElementsByClass("media-heading").text().trimmingCharacters(in: .whitespaces)
                 var thumbnailImageUrl = try content.select("img").attr("src")
                 thumbnailImageUrl = self.getEndPoint(url: thumbnailImageUrl)
                 
@@ -251,13 +250,13 @@ extension MarumaruApiService {
                     }
                 }
                 
-                let manga = MangaInfo(title: mangaTitle,
+                let conicInfo = ComicInfo(title: comicTitle,
                                             author: descriptions[0],
                                             updateCycle: descriptions[1],
                                             thumbnailImage: nil,
                                             thumbnailImageURL: thumbnailImageUrl,
-                                            mangaSN: serialNumber)
-                searchResult.append(manga)
+                                            comicSN: serialNumber)
+                searchResult.append(conicInfo)
             }
             
             return searchResult
@@ -269,7 +268,7 @@ extension MarumaruApiService {
 
 // MARK: - Episode
 extension MarumaruApiService {
-    public func getEpisodes(_ serialNumber: String) -> Observable<[MangaEpisode]> {
+    public func getEpisodes(_ serialNumber: String) -> Observable<[ComicEpisode]> {
         return Observable.create { [weak self] observer in
             guard let self = self else { return Disposables.create() }
             
@@ -290,9 +289,9 @@ extension MarumaruApiService {
         }
     }
     
-    private func parseEpisode(with document: Document) throws -> [MangaEpisode] {
+    private func parseEpisode(with document: Document) throws -> [ComicEpisode] {
         do {
-            var mangaEpisodes = [MangaEpisode]()
+            var comicEpisodes = [ComicEpisode]()
             
             let headElement = try document.getElementsByClass("list-wrap")
             if let superElement = headElement.first() {
@@ -311,17 +310,17 @@ extension MarumaruApiService {
                         
                         thumbnailImageUrl = self.getEndPoint(url: thumbnailImageUrl)
                         
-                        let mangaEpisode = MangaEpisode(title: episodeTitle,
+                        let comicEpisode = ComicEpisode(title: episodeTitle,
                                                         description: description,
                                                         thumbnailImageURL: thumbnailImageUrl,
-                                                        mangaURL: link)
+                                                        comicURL: link)
                         
-                        mangaEpisodes.append(mangaEpisode)
+                        comicEpisodes.append(comicEpisode)
                     }
                 }
             }
             
-            return mangaEpisodes
+            return comicEpisodes
         } catch {
             throw MarumaruApiErrorMessage.failToParseHtml
         }
@@ -329,7 +328,6 @@ extension MarumaruApiService {
 }
 
 extension MarumaruApiService {
-    /// use it if you want to fetch episodes in playMangaView
     public func getEpisodesInPlay() -> Single<[Episode]> {
         return Single.create { [weak self] observer in
             guard let self = self else { return Disposables.create() }
@@ -370,9 +368,9 @@ extension MarumaruApiService {
     }
 }
 
-// MARK: - Manga Scene
+// MARK: - Comic storp scene
 extension MarumaruApiService {
-    public func getMangaScenes(_ url: String) -> Observable<[MangaScene]> {
+    public func getComicStripScenes(_ url: String) -> Observable<[ComicStripScene]> {
         return Observable.create { [weak self] observer in
             guard let self = self else { return Disposables.create() }
             
@@ -380,8 +378,8 @@ extension MarumaruApiService {
             self.getDocument(endPoint)
                 .subscribe(with: self, onNext: { strongSelf, document in
                     do {
-                        let mangaScenes = try strongSelf.parseMangaScenes(with: document)
-                        observer.onNext(mangaScenes)
+                        let comicStripScenes = try strongSelf.parseComicScenes(with: document)
+                        observer.onNext(comicStripScenes)
                     } catch {
                         observer.onError(error)
                     }
@@ -393,18 +391,18 @@ extension MarumaruApiService {
         }
     }
     
-    private func parseMangaScenes(with document: Document) throws -> [MangaScene] {
+    private func parseComicScenes(with document: Document) throws -> [ComicStripScene] {
         do {
             sharedDoc = document
-            var scenes = [MangaScene]()
+            var scenes = [ComicStripScene]()
             
             let elements = try document.getElementsByClass("img-tag")
             try elements.forEach { element in
                 var imageUrl = try element.select("img").attr("src")
                 imageUrl = getEndPoint(url: imageUrl)
                 
-                let mangaScene = MangaScene(sceneImage: nil, sceneImageUrl: imageUrl)
-                scenes.append(mangaScene)
+                let comicScene = ComicStripScene(sceneImage: nil, sceneImageUrl: imageUrl)
+                scenes.append(comicScene)
             }
             
             return scenes

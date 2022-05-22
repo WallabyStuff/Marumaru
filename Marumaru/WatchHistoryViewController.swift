@@ -1,5 +1,5 @@
 //
-//  HistoryMangaViewController.swift
+//  WatchHistoryViewController.swift
 //  Marumaru
 //
 //  Created by 이승기 on 2021/04/19.
@@ -15,28 +15,55 @@ import RxCocoa
     @objc optional func didWatchHistoryUpdated()
 }
 
-class WatchHistoryViewController: UIViewController {
+class WatchHistoryViewController: UIViewController, ViewModelInjectable {
+        
     
-    // MARK: - Declarations
+    // MARK: - Properties
+    
+    typealias ViewModel = WatchHistoryViewModel
+    
     @IBOutlet weak var appbarView: UIView!
     @IBOutlet weak var watchHistoryCollectionView: UICollectionView!
     @IBOutlet weak var clearHistoryButton: UIButton!
     @IBOutlet weak var backButton: UIButton!
     
-    private let viewModel = WatchHistoryViewModel()
+    static let identifier = R.storyboard.watchHistory.watchHistoryStoryboard.identifier
     weak var delegate: WatchHistoryViewDelegate?
-    private var disposeBag = DisposeBag()
+    var viewModel: ViewModel
+    var disposeBag = DisposeBag()
     private var watchHistoryPlaceholderLabel = StickyPlaceholderLabel()
     
+    
+    // MARK: - Initializers
+    
+    required init(_ viewModel: WatchHistoryViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+        dismiss(animated: true)
+    }
+    
+    required init?(_ coder: NSCoder, _ viewModel: WatchHistoryViewModel) {
+        self.viewModel = viewModel
+        super.init(coder: coder)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
     // MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
         bind()
         setupData()
     }
-
+    
+    
     // MARK: - Overrides
+    
     override func viewDidDisappear(_ animated: Bool) {
         delegate?.didWatchHistoryUpdated?()
     }
@@ -45,12 +72,13 @@ class WatchHistoryViewController: UIViewController {
         return .darkContent
     }
     
-    // MARK: - Setup
+    
+    // MARK: - Setups
+    
     private func setup() {
         setupView()
     }
     
-    // MARK: - SetupView
     private func setupView() {
         setupHero()
         setupAppbarView()
@@ -70,8 +98,8 @@ class WatchHistoryViewController: UIViewController {
     }
     
     private func setupWatchHistoryCollectionView() {
-        let nibName = UINib(nibName: "MangaThumbnailCollectionViewCell", bundle: nil)
-        watchHistoryCollectionView.register(nibName, forCellWithReuseIdentifier: MangaThumbnailCollectionCell.identifier)
+        let nibName = UINib(nibName: ComicThumbnailCollectionCell.identifier, bundle: nil)
+        watchHistoryCollectionView.register(nibName, forCellWithReuseIdentifier: ComicThumbnailCollectionCell.identifier)
         
         watchHistoryCollectionView.register(WatchHistoryCollectionReusableView.self,
                                             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: WatchHistoryCollectionReusableView.identifier)
@@ -98,7 +126,9 @@ class WatchHistoryViewController: UIViewController {
         backButton.layer.cornerRadius = 12
     }
     
+    
     // MARK: - Bind
+    
     private func bind() {
         bindClearHistoryButton()
         bindBackButton()
@@ -128,7 +158,7 @@ class WatchHistoryViewController: UIViewController {
             .asDriver()
             .drive(with: self, onNext: { vc, indexPath in
                 let watchHistory = vc.viewModel.watchHistoryCellItemForRow(at: indexPath)
-                vc.presentPlayMangaVC(watchHistory.mangaTitle, watchHistory.mangaUrl)
+                vc.presentComicStripVC(watchHistory.comicTitle, watchHistory.comicURL)
             }).disposed(by: disposeBag)
     }
     
@@ -136,7 +166,9 @@ class WatchHistoryViewController: UIViewController {
         reloadWatchHistories()
     }
     
+    
     // MARK: - Methods
+    
     private func reloadWatchHistories() {
         watchHistoryPlaceholderLabel.detatchLabel()
         
@@ -169,21 +201,23 @@ class WatchHistoryViewController: UIViewController {
         self.present(deleteMenu, animated: true)
     }
     
-    private func presentPlayMangaVC(_ mangaTitle: String, _ mangaUrl: String) {
-        let viewModel = PlayMangaViewModel(mangaTitle: mangaTitle, link: mangaUrl)
+    private func presentComicStripVC(_ comicTitle: String, _ comicURL: String) {
+        let storyboard = UIStoryboard(name: R.storyboard.watchHistory.name, bundle: nil)
+        let comicStripVC = storyboard.instantiateViewController(identifier: ComicStripViewController.identifier,
+                                                                creator: { coder -> ComicStripViewController in
+            let viewModel = ComicStripViewModel(comicTitle: comicTitle, comicURL: comicURL)
+            return .init(coder, viewModel) ?? ComicStripViewController(.init(comicTitle: "", comicURL: ""))
+        })
         
-        guard let playMangaVC = storyboard?.instantiateViewController(identifier: "ViewMangaStoryboard", creator: { coder in
-            PlayMangaViewController(
-                coder: coder, viewModel: viewModel)
-        }) else { return }
-                
-        playMangaVC.delegate = self
-        playMangaVC.modalPresentationStyle = .fullScreen
-        present(playMangaVC, animated: true, completion: nil)
+        comicStripVC.delegate = self
+        comicStripVC.modalPresentationStyle = .fullScreen
+        present(comicStripVC, animated: true, completion: nil)
     }
 }
 
+
 // MARK: - Extensions
+
 extension WatchHistoryViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return viewModel.numberOfSection
@@ -194,36 +228,39 @@ extension WatchHistoryViewController: UICollectionViewDelegate, UICollectionView
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let mangaCollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: MangaThumbnailCollectionCell.identifier, for: indexPath) as? MangaThumbnailCollectionCell else { return UICollectionViewCell() }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ComicThumbnailCollectionCell.identifier,
+                                                            for: indexPath)
+                as? ComicThumbnailCollectionCell else {
+            return UICollectionViewCell()
+        }
         
-        let mangaInfo = viewModel.watchHistoryCellItemForRow(at: indexPath)
-        
-        mangaCollectionCell.titleLabel.text = mangaInfo.mangaTitle
-        mangaCollectionCell.thumbnailImagePlaceholderLabel.text = mangaInfo.mangaTitle
+        let comicInfo = viewModel.watchHistoryCellItemForRow(at: indexPath)
+        cell.titleLabel.text = comicInfo.comicTitle
+        cell.thumbnailImagePlaceholderLabel.text = comicInfo.comicTitle
 
-        let token = viewModel.requestImage(mangaInfo.thumbnailImageUrl) { result in
+        let token = viewModel.requestImage(comicInfo.thumbnailImageURL) { result in
             do {
                 let imageResult = try result.get()
 
                 DispatchQueue.main.async {
-                    mangaCollectionCell.thumbnailImagePlaceholderLabel.isHidden = true
-                    mangaCollectionCell.thumbnailImageView.image = imageResult.imageCache.image
-                    mangaCollectionCell.thumbnailImageView.startFadeInAnimation(duration: 0.3)
+                    cell.thumbnailImagePlaceholderLabel.isHidden = true
+                    cell.thumbnailImageView.image = imageResult.imageCache.image
+                    cell.thumbnailImageView.startFadeInAnimation(duration: 0.3)
                 }
             } catch {
                 DispatchQueue.main.async {
-                    mangaCollectionCell.thumbnailImagePlaceholderLabel.isHidden = false
+                    cell.thumbnailImagePlaceholderLabel.isHidden = false
                 }
             }
         }
         
-        mangaCollectionCell.onReuse = { [weak self] in
+        cell.onReuse = { [weak self] in
             if let token = token {
                 self?.viewModel.cancelImageRequest(token)
             }
         }
         
-        return mangaCollectionCell
+        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -269,7 +306,7 @@ extension WatchHistoryViewController {
     }
 }
 
-extension WatchHistoryViewController: PlayMangaViewDelegate {
+extension WatchHistoryViewController: ComicStripViewDelegate {
     func didWatchHistoryUpdated() {
         reloadWatchHistories()
     }

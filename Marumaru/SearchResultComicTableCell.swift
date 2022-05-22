@@ -1,5 +1,5 @@
 //
-//  ResultMangaCell.swift
+//  SearchResultComicTableCell.swift
 //  Marumaru
 //
 //  Created by 이승기 on 2021/04/13.
@@ -8,7 +8,7 @@
 import UIKit
 import Hero
 
-class SearchResultTableViewCell: UITableViewCell {
+class SearchResultComicTableCell: UITableViewCell {
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var updateCycleLabel: TagLabel!
@@ -17,7 +17,7 @@ class SearchResultTableViewCell: UITableViewCell {
     @IBOutlet weak var thumbnailImageView: UIImageView!
     @IBOutlet weak var thumbnailImagePlaceholderLabel: UILabel!
     
-    static var identifier = "searchResultTableCell"
+    static var identifier = R.reuseIdentifier.searchResultComicTableCell.identifier
     public var onReuse: () -> Void = {}
     
     override func awakeFromNib() {
@@ -86,7 +86,7 @@ class SearchResultTableViewCell: UITableViewCell {
     }
 }
 
-extension SearchResultTableViewCell {
+extension SearchResultComicTableCell {
     public func setUpdatedCycleLabelBackground() {
         updateCycleLabel.makeRoundedBackground(cornerRadius: 8,
                                                backgroundColor: R.color.accentBlue() ?? .clear,

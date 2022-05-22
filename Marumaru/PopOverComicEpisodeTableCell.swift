@@ -1,5 +1,5 @@
 //
-//  MangaEpisodePopoverCell.swift
+//  PopOverComicEpisodeTableCell.swift
 //  Marumaru
 //
 //  Created by 이승기 on 2021/05/08.
@@ -7,9 +7,10 @@
 
 import UIKit
 
-class PopOverEpisodeCell: UITableViewCell {
+class PopOverComicEpisodeTableCell: UITableViewCell {
     
     @IBOutlet weak var episodeTitleLabel: UILabel!
+    static let identifier = R.reuseIdentifier.popOverComicEpisodeTableCell.identifier
     
     override func awakeFromNib() {
         super.awakeFromNib()

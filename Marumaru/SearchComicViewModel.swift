@@ -1,5 +1,5 @@
 //
-//  SearchViewModel.swift
+//  SearchComicViewModel.swift
 //  Marumaru
 //
 //  Created by 이승기 on 2022/02/02.
@@ -20,34 +20,34 @@ enum SearchViewError: Error {
     }
 }
 
-class SearchViewModel: MarumaruApiServiceViewModel {
+class SearchComicViewModel: MarumaruApiServiceViewModel {
     
     private var disposeBag = DisposeBag()
     private var marumaruApiService = MarumaruApiService()
     public var reloadSearchResultTableView: (() -> Void)?
     
-    private var searchResultMangas: [MangaInfo] = [] {
+    private var searchResultComics: [ComicInfo] = [] {
         didSet {
             self.reloadSearchResultTableView?()
         }
     }
 }
 
-extension SearchViewModel {
+extension SearchComicViewModel {
     public func getSearchResult(_ title: String) -> Completable {
         return Completable.create { [weak self] observer in
             guard let self = self else { return Disposables.create() }
             
-            self.searchResultMangas.removeAll()
+            self.searchResultComics.removeAll()
             
             self.marumaruApiService.getSearchResult(title: title)
                 .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .background))
                 .observe(on: MainScheduler.instance)
-                .subscribe(with: self, onNext: { strongSelf, searchResultMangas in
-                    if searchResultMangas.count == 0 {
+                .subscribe(with: self, onNext: { strongSelf, comics in
+                    if comics.count == 0 {
                         observer(.error(SearchViewError.emptySearchResult))
                     } else {
-                        strongSelf.searchResultMangas = searchResultMangas
+                        strongSelf.searchResultComics = comics
                         observer(.completed)
                     }
                 }, onError: { _, error in
@@ -59,16 +59,16 @@ extension SearchViewModel {
     }
 }
 
-extension SearchViewModel {
+extension SearchComicViewModel {
     public func numberOfRowsIn(section: Int) -> Int {
         if section == 0 {
-            return searchResultMangas.count
+            return searchResultComics.count
         } else {
             return 0
         }
     }
     
-    public func cellItemForRow(at indexPath: IndexPath) -> MangaInfo {
-        return searchResultMangas[indexPath.row]
+    public func cellItemForRow(at indexPath: IndexPath) -> ComicInfo {
+        return searchResultComics[indexPath.row]
     }
 }
