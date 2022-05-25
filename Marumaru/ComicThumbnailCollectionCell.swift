@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Hero
 
 class ComicThumbnailCollectionCell: UICollectionViewCell {
     
@@ -36,15 +35,10 @@ class ComicThumbnailCollectionCell: UICollectionViewCell {
     }
     
     private func setupView() {
-        setupHero()
         setupContentView()
         setupThumbnailImageView()
         setupThumbnailImageBaseView()
         setupSelectedView()
-    }
-    
-    private func setupHero() {
-        self.hero.isEnabled = true
     }
     
     private func setupContentView() {
@@ -64,7 +58,7 @@ class ComicThumbnailCollectionCell: UICollectionViewCell {
     private func setupSelectedView() {
         let selectionView = UIView(frame: self.frame)
         selectionView.layer.cornerRadius = 16
-        selectionView.backgroundColor = R.color.accentBlueLightest()
+//        selectionView.backgroundColor = R.color.accentBlueLightest()
         self.selectedBackgroundView = selectionView
     }
 }

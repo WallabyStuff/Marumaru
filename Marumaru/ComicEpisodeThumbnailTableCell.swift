@@ -9,16 +9,23 @@ import UIKit
 
 class ComicEpisodeThumbnailTableCell: UITableViewCell {
     
-    @IBOutlet weak var thumbnailImageView: UIImageView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var descriptionLabel: UILabel!
-    @IBOutlet weak var indexLabel: UILabel!
+    
+    // MARK: - Properties
     
     static let identifier = R.reuseIdentifier.comicEpisodeThumbnailTableCell.identifier
+    
+    @IBOutlet weak var thumbnailImageView: UIImageView!
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var authorLabel: UILabel!
+    @IBOutlet weak var indexLabel: UILabel!
+    
     var onReuse: () -> Void = {}
     
+    
+    // MARK: - LifeCycle
+    
     override func awakeFromNib() {
-        setupView()
+        setup()
     }
     
     override func prepareForReuse() {
@@ -27,44 +34,43 @@ class ComicEpisodeThumbnailTableCell: UITableViewCell {
         
         thumbnailImageView.image = nil
         titleLabel.text = ""
-        descriptionLabel.text = ""
+        authorLabel.text = ""
         indexLabel.text = ""
     }
     
+    
+    // MARK: - Setups
+    
     private func setup() {
+        setupContentView()
         setupView()
     }
     
     private func setupView() {
         setupThumbnailImageView()
-        setupSelectedView()
+    }
+    
+    private func setupContentView() {
+        selectionStyle = .none
+        selectedBackgroundView = UIView()
     }
     
     private func setupThumbnailImageView() {
-        thumbnailImageView.layer.cornerRadius = 8
+        thumbnailImageView.layer.cornerRadius = 6
         thumbnailImageView.layer.masksToBounds = true
-        thumbnailImageView.layer.borderWidth = 1
-        thumbnailImageView.layer.borderColor = R.color.lineGrayLighter()?.cgColor
-    }
-    
-    private func setupSelectedView() {
-        let selectionView = UIView(frame: self.frame)
-        selectionView.layer.cornerRadius = 16
-        selectionView.backgroundColor = R.color.accentBlueLightest()
-        self.selectedBackgroundView = selectionView
     }
 }
 
 extension ComicEpisodeThumbnailTableCell {
     func setWatched() {
-        titleLabel.textColor = R.color.textBlackLightest()
-        descriptionLabel.textColor = R.color.textBlackLightest()
-        backgroundColor = R.color.accentBlueLightest()
+        indexLabel.textColor = R.color.textBlackLighter()
+        titleLabel.textColor = R.color.textBlackLighter()
+        backgroundColor = R.color.backgroundWhiteLighter()
     }
     
     func setUnWatched() {
+        indexLabel.textColor = R.color.textBlack()
         titleLabel.textColor = R.color.textBlack()
-        descriptionLabel.textColor = R.color.textBlackLighter()
         backgroundColor = R.color.backgroundWhite()
     }
 }

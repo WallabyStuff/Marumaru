@@ -14,7 +14,7 @@ import RxCocoa
     @objc optional func didEpisodeSelected(_ serialNumber: String)
 }
 
-class PopOverComicEpisodeViewController: UIViewController, ViewModelInjectable {
+class PopOverComicEpisodeViewController: BaseViewController, ViewModelInjectable {
     
     
     // MARK: - Properties
@@ -25,7 +25,6 @@ class PopOverComicEpisodeViewController: UIViewController, ViewModelInjectable {
     static let identifier = R.storyboard.popOverComicEpisode.popOverComicEpisodeStoryboard.identifier
     weak var delegate: PopOverComicEpisodeViewDelegate?
     var viewModel: ComicEpisodePopOverViewModel
-    var disposeBag = DisposeBag()
     
     
     // MARK: - Initializers
@@ -124,11 +123,9 @@ extension PopOverComicEpisodeViewController: UITableViewDelegate, UITableViewDat
         cell.episodeTitleLabel.text = episode.title
         
         if episode.serialNumber == viewModel.serialNumber {
-            cell.episodeTitleLabel.textColor = R.color.accentGreen()
-            cell.contentView.backgroundColor = R.color.accentBlueLightest()
+            cell.setHighlighted()
         } else {
-            cell.episodeTitleLabel.textColor = R.color.textBlack()
-            cell.contentView.backgroundColor = R.color.backgroundWhite()
+            cell.setUnHighlighted()
         }
         
         return cell

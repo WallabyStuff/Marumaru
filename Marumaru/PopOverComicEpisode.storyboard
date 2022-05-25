@@ -19,11 +19,11 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="9RR-Ut-7My">
                                 <rect key="frame" x="0.0" y="0.0" width="300" height="400"/>
-                                <color key="backgroundColor" name="background-white"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="V0c-hC-5pN"/>
-                        <color key="backgroundColor" name="background-white"/>
+                        <color key="backgroundColor" name="BackgroundWhite"/>
                         <constraints>
                             <constraint firstItem="9RR-Ut-7My" firstAttribute="leading" secondItem="V0c-hC-5pN" secondAttribute="leading" id="2pS-hq-vwq"/>
                             <constraint firstItem="9RR-Ut-7My" firstAttribute="top" secondItem="Z6A-Is-JWu" secondAttribute="top" id="NV6-1l-rNT"/>
@@ -42,7 +42,7 @@
         </scene>
     </scenes>
     <resources>
-        <namedColor name="background-white">
+        <namedColor name="BackgroundWhite">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>

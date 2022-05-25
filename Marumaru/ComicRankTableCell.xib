@@ -22,29 +22,29 @@
                         <rect key="frame" x="0.0" y="6" width="320" height="42"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CtJ-JB-pnU">
-                                <rect key="frame" x="20" y="0.0" width="44" height="42"/>
+                                <rect key="frame" x="8" y="0.0" width="42" height="42"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="rank" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K1T-Ve-hQ6">
-                                        <rect key="frame" x="0.0" y="12" width="44" height="18"/>
-                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
-                                        <color key="textColor" name="text-black"/>
+                                        <rect key="frame" x="0.0" y="12.5" width="42" height="17"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                                        <color key="textColor" name="TextBlack"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="44" id="SQv-Bb-elr"/>
                                     <constraint firstItem="K1T-Ve-hQ6" firstAttribute="centerY" secondItem="CtJ-JB-pnU" secondAttribute="centerY" id="fDq-QV-0ML"/>
+                                    <constraint firstAttribute="width" secondItem="CtJ-JB-pnU" secondAttribute="height" multiplier="1:1" id="gFQ-NL-STB"/>
                                     <constraint firstItem="K1T-Ve-hQ6" firstAttribute="leading" secondItem="CtJ-JB-pnU" secondAttribute="leading" id="pHN-xK-g4z"/>
                                     <constraint firstAttribute="trailing" secondItem="K1T-Ve-hQ6" secondAttribute="trailing" id="vBv-9m-vuq"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1dA-Wu-EEF">
-                                <rect key="frame" x="64" y="0.0" width="236" height="42"/>
+                                <rect key="frame" x="50" y="0.0" width="258" height="42"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DlT-qI-1lm">
-                                        <rect key="frame" x="12" y="13" width="212" height="16"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
-                                        <color key="textColor" name="text-black"/>
+                                        <rect key="frame" x="12" y="12.5" width="234" height="17"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" name="TextBlack"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
@@ -55,15 +55,15 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" name="background-gray-lightest"/>
+                        <color key="backgroundColor" name="BackgroundWhite-lighter"/>
                         <constraints>
                             <constraint firstItem="1dA-Wu-EEF" firstAttribute="leading" secondItem="CtJ-JB-pnU" secondAttribute="trailing" id="DhC-gc-8op"/>
                             <constraint firstAttribute="bottom" secondItem="CtJ-JB-pnU" secondAttribute="bottom" id="OCy-ro-qln"/>
                             <constraint firstItem="CtJ-JB-pnU" firstAttribute="top" secondItem="nxO-kI-8EL" secondAttribute="top" id="SdM-iy-ynw"/>
                             <constraint firstAttribute="bottom" secondItem="1dA-Wu-EEF" secondAttribute="bottom" id="fOP-1F-070"/>
                             <constraint firstItem="1dA-Wu-EEF" firstAttribute="top" secondItem="nxO-kI-8EL" secondAttribute="top" id="gOU-QE-Vyi"/>
-                            <constraint firstItem="CtJ-JB-pnU" firstAttribute="leading" secondItem="nxO-kI-8EL" secondAttribute="leading" constant="20" id="u3A-GI-VlA"/>
-                            <constraint firstAttribute="trailing" secondItem="1dA-Wu-EEF" secondAttribute="trailing" constant="20" id="xoq-UI-2gQ"/>
+                            <constraint firstItem="CtJ-JB-pnU" firstAttribute="leading" secondItem="nxO-kI-8EL" secondAttribute="leading" constant="8" id="u3A-GI-VlA"/>
+                            <constraint firstAttribute="trailing" secondItem="1dA-Wu-EEF" secondAttribute="trailing" constant="12" id="xoq-UI-2gQ"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -85,11 +85,11 @@
         </tableViewCell>
     </objects>
     <resources>
-        <namedColor name="background-gray-lightest">
-            <color red="0.96100002527236938" green="0.96100002527236938" blue="0.96100002527236938" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <namedColor name="BackgroundWhite-lighter">
+            <color red="0.9649999737739563" green="0.9649999737739563" blue="0.9649999737739563" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="text-black">
-            <color red="0.13300000131130219" green="0.14100000262260437" blue="0.16500000655651093" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <namedColor name="TextBlack">
+            <color red="0.13300000131130219" green="0.15700000524520874" blue="0.16500000655651093" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

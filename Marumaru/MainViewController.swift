@@ -10,35 +10,31 @@ import UIKit
 import Toast
 import Lottie
 import CoreData
-import Hero
 import RxSwift
 import RxCocoa
 import RealmSwift
 
-class MainViewController: UIViewController, ViewModelInjectable {
+class MainViewController: BaseViewController, ViewModelInjectable {
     
     
     // MARK: - Properties
     
     typealias ViewModel = MainViewModel
     
-    @IBOutlet weak var appbarView: AppbarView!
+    @IBOutlet weak var appbarView: UIVisualEffectView!
+    @IBOutlet weak var appbarViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var mainScrollView: UIScrollView!
-    @IBOutlet weak var searchButton: UIButton!
+    @IBOutlet weak var searchBarView: UIView!
     @IBOutlet weak var newUpdateComicContentsView: UIView!
-    @IBOutlet weak var newUpdateComicHeaderLabel: UILabel!
     @IBOutlet weak var newUpdateComicCollectionView: UICollectionView!
     @IBOutlet weak var refreshNewUpdateComicButton: UIButton!
-    @IBOutlet weak var watchHistoryHeaderLabel: UILabel!
     @IBOutlet weak var watchHistoryCollectionView: UICollectionView!
     @IBOutlet weak var showWatchHistoryButton: UIButton!
-    @IBOutlet weak var comicRankHeaderLabel: UILabel!
     @IBOutlet weak var comicRankTableView: UITableView!
     @IBOutlet weak var refreshComicRankButton: UIButton!
     
     static let identifier = R.storyboard.main.mainStoryboard.identifier
     var viewModel: ViewModel
-    var disposeBag = DisposeBag()
     private var loadingUpdatedMangaAnimView = LottieAnimationView()
     private var loadingMangaRankAnimView = LottieAnimationView()
     private var watchHistoryPlaceholderLabel = StickyPlaceholderLabel()
@@ -62,6 +58,14 @@ class MainViewController: UIViewController, ViewModelInjectable {
     }
     
     
+    // MARK: - Overrides
+    
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
+        configureAppbarViewConstraints()
+        configureMainContentViewInsets()
+    }
+    
     
     // MARK: - LifeCycle
     
@@ -71,51 +75,36 @@ class MainViewController: UIViewController, ViewModelInjectable {
         bind()
     }
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .darkContent
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = true
     }
-
+    
     
     // MARK: - Setups
     
     private func setup() {
-        setupView()
         setupData()
+        setupView()
     }
     
     private func setupData() {
         viewModel.cleanCacheIfNeeded()
-        
         reloadUpdatedComic()
         reloadWatchHistory()
         reloadComicRank()
     }
     
     private func setupView() {
-        setupHero()
-        setupAppbarView()
-        setupSearchButton()
+        setupSearchBarView()
         setupRefreshNewUpdatedComicButton()
         setupUpdatedComicCollectionView()
         setupWatchHistoryCollectionView()
         setupTopRankComicTableView()
-        setupNewComicHeaderLabel()
-        setupWatchHistoryHeaderLabel()
-        setupComicRankHeaderLabel()
     }
     
-    private func setupHero() {
-        self.hero.isEnabled = true
-    }
-    
-    private func setupAppbarView() {
-        appbarView.configure(frame: appbarView.frame, cornerRadius: 24, roundCorners: [.bottomRight])
-    }
-    
-    private func setupSearchButton() {
-        searchButton.hero.id = "appbarButton"
-        searchButton.imageEdgeInsets(with: 10)
-        searchButton.layer.cornerRadius = 12
+    private func setupSearchBarView() {
+        searchBarView.layer.cornerRadius = 12
     }
     
     private func setupRefreshNewUpdatedComicButton() {
@@ -170,19 +159,18 @@ class MainViewController: UIViewController, ViewModelInjectable {
         }
     }
     
-    private func setupNewComicHeaderLabel() {
-        newUpdateComicHeaderLabel.layer.masksToBounds = true
-        newUpdateComicHeaderLabel.layer.cornerRadius = 10
+        
+    // MARK: - Constraints
+    
+    private func configureAppbarViewConstraints() {
+        appbarViewHeightConstraint.constant = view.safeAreaInsets.top + regularAppbarHeight
     }
     
-    private func setupWatchHistoryHeaderLabel() {
-        watchHistoryHeaderLabel.layer.masksToBounds = true
-        watchHistoryHeaderLabel.layer.cornerRadius = 10
-    }
-    
-    private func setupComicRankHeaderLabel() {
-        comicRankHeaderLabel.layer.masksToBounds = true
-        comicRankHeaderLabel.layer.cornerRadius = 10
+    private func configureMainContentViewInsets() {
+        mainScrollView.contentInset = UIEdgeInsets(top: regularAppbarHeight + 24,
+                                                   left: 0,
+                                                   bottom: 0,
+                                                   right: 0)
     }
     
     
@@ -197,9 +185,9 @@ class MainViewController: UIViewController, ViewModelInjectable {
     }
     
     private func bindSearchButton() {
-        searchButton.rx.tap
-            .asDriver()
-            .drive(onNext: { [weak self] _ in
+        searchBarView.rx.tapGesture()
+            .when(.recognized)
+            .subscribe(onNext: { [weak self] _ in
                 self?.presentSearchComicVC()
             })
             .disposed(by: disposeBag)
@@ -261,7 +249,8 @@ class MainViewController: UIViewController, ViewModelInjectable {
         viewModel.getWatchHistories()
             .subscribe(with: self, onError: { vc, error in
                 if let error = error as? MainViewError {
-                    vc.watchHistoryPlaceholderLabel.attatchLabel(text: error.message, to: vc.watchHistoryCollectionView)
+                    vc.watchHistoryPlaceholderLabel.attatchLabel(text: error.message,
+                                                                 to: vc.watchHistoryCollectionView)
                 }
             })
             .disposed(by: disposeBag)
@@ -286,7 +275,7 @@ class MainViewController: UIViewController, ViewModelInjectable {
         
         comicStripVC.delegate = self
         comicStripVC.modalPresentationStyle = .fullScreen
-        present(comicStripVC, animated: true, completion: nil)
+        navigationController?.pushViewController(comicStripVC, animated: true)
     }
     
     func presentSearchComicVC() {
@@ -298,7 +287,7 @@ class MainViewController: UIViewController, ViewModelInjectable {
         })
         
         searchComicVC.modalPresentationStyle = .fullScreen
-        present(searchComicVC, animated: true)
+        navigationController?.pushViewController(searchComicVC, animated: true)
     }
     
     func presentWatchHistoryVC() {
@@ -311,7 +300,7 @@ class MainViewController: UIViewController, ViewModelInjectable {
         
         watchHistoryVC.delegate = self
         watchHistoryVC.modalPresentationStyle = .fullScreen
-        present(watchHistoryVC, animated: true)
+        navigationController?.pushViewController(watchHistoryVC, animated: true)
     }
     
     private func playUpdatedMangaLoadingAnimation() {
@@ -341,7 +330,10 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let mangaCollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: ComicThumbnailCollectionCell.identifier, for: indexPath) as? ComicThumbnailCollectionCell else { return UICollectionViewCell() }
+        guard let mangaCollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: ComicThumbnailCollectionCell.identifier,
+                                                                           for: indexPath) as? ComicThumbnailCollectionCell else {
+            return UICollectionViewCell()
+        }
         
         let mangaInfo = collectionView == newUpdateComicCollectionView ? viewModel.updatedContentCellItemForRow(at: indexPath) : viewModel.watchHistoryCellItemForRow(at: indexPath)
         
@@ -391,10 +383,9 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let rankCell = tableView.dequeueReusableCell(withIdentifier: ComicRankTableCell.identifier, for: indexPath) as? ComicRankTableCell else { return UITableViewCell() }
         
-        let mangaInfo = viewModel.topRankCellItemForRow(at: indexPath)
-        rankCell.titleLabel.text = mangaInfo.title
+        let comicInfo = viewModel.topRankCellItemForRow(at: indexPath)
+        rankCell.titleLabel.text = comicInfo.title
         rankCell.rankLabel.text = viewModel.topRankCellRank(indexPath: indexPath).description
-        
         return rankCell
     }
 }

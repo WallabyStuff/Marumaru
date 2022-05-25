@@ -15,7 +15,9 @@ import RxSwift
 
 class FlexibleSceneScrollViewCell: UIView {
     
-    // MARK: - Declaration
+    
+    // MARK: - Properties
+    
     private let viewModel = FlexibleSceneScrollViewCellModel()
     
     /// scrollView for superView
@@ -42,7 +44,9 @@ class FlexibleSceneScrollViewCell: UIView {
     private var imageRequestToken: UUID?
     private var cancelIamgeRequest: (() -> Void)?
     
-    // MARK: - Initialization
+    
+    // MARK: - Initialiers
+    
     convenience init(parentContentView: UIView, imageUrl: String) {
         self.init(frame: .zero)
         
@@ -68,7 +72,9 @@ class FlexibleSceneScrollViewCell: UIView {
         }
     }
     
+    
     // MARK: - Methods
+    
     /// prepareForCell for image loading (Placeholder Cell)
     public func prepareForCell(index: Int, previousCell: FlexibleSceneScrollViewCell?) {
         guard let parentContentView = parentContentView else { return }

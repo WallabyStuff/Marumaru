@@ -9,7 +9,6 @@ target 'Marumaru' do
   pod 'SwiftSoup'
   pod 'SwiftLint'
   pod 'lottie-ios'
-  pod 'Hero'
   pod 'RealmSwift'
   pod 'RxSwift'
   pod 'RxCocoa'

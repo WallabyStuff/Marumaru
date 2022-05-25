@@ -10,7 +10,6 @@ import UIKit
 import SwiftSoup
 import Lottie
 import Toast
-import Hero
 import RxSwift
 import RxCocoa
 import RxGesture
@@ -19,31 +18,31 @@ import RxGesture
     @objc optional func didWatchHistoryUpdated()
 }
 
-class ComicStripViewController: UIViewController, ViewModelInjectable {
+class ComicStripViewController: BaseViewController, ViewModelInjectable {
     
     
     // MARK: - Properties
     
     typealias ViewModel = ComicStripViewModel
     
+    @IBOutlet weak var appbarView: UIVisualEffectView!
+    @IBOutlet weak var comicTitleLabel: UILabel!
+    @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var showEpisodeListButton: UIButton!
     @IBOutlet weak var nextEpisodeButton: UIButton!
     @IBOutlet weak var previousEpisodeButton: UIButton!
-    @IBOutlet weak var appbarView: UIView!
     @IBOutlet weak var bottomIndicatorView: UIView!
-    @IBOutlet weak var comicTitleLabel: UILabel!
-    @IBOutlet weak var backButton: UIButton!
+    @IBOutlet weak var appbarViewHieghtConstraint: NSLayoutConstraint!
     
     static let identifier = R.storyboard.comicStrip.comicStripStroyboard.identifier
     public weak var delegate: ComicStripViewDelegate?
     var viewModel: ViewModel
-    var disposeBag = DisposeBag()
-    
     private var cellHeightDictionary: NSMutableDictionary = [:]
     private let safeAreaInsets = UIApplication.shared.windows[0].safeAreaInsets
     private var isSceneZoomed = false
     private var sceneLoadingAnimationView = LottieAnimationView()
     private var sceneScrollView = FlexibleSceneScrollView()
+    private var sceneDoubleTapGestureRecognizer = UITapGestureRecognizer()
     
     
     // MARK: - Initializers
@@ -81,8 +80,9 @@ class ComicStripViewController: UIViewController, ViewModelInjectable {
     
     // MARK: - Overrides
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .darkContent
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
+        configureAppbarViewConstraints()
     }
 
     
@@ -93,20 +93,12 @@ class ComicStripViewController: UIViewController, ViewModelInjectable {
     }
     
     private func setupView() {
-        setupHero()
-        setupAppbarView()
         setupSceneScrollView()
-        setupAppbarView()
-        setupBackButton()
+        setupNavigationTitle()
         setupBottomIndicatorView()
         setupPreviousEpisodeButton()
         setupShowEpisodeListButton()
         setupNextEpisodeButton()
-        setupComicTitleLabel()
-    }
-    
-    private func setupHero() {
-        self.hero.isEnabled = true
     }
     
     private func setupSceneScrollView() {
@@ -134,46 +126,36 @@ class ComicStripViewController: UIViewController, ViewModelInjectable {
         }
     }
     
-    private func setupAppbarView() {
-        appbarView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        appbarView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        appbarView.layer.cornerRadius = 24
-        appbarView.layer.maskedCorners = CACornerMask([.layerMinXMaxYCorner])
-        appbarView.hero.modifiers = [.translate(y: -appbarView.frame.height)]
-    }
-    
-    private func setupBackButton() {
-        backButton.layer.cornerRadius = 12
-        backButton.imageEdgeInsets(with: 10)
-    }
-    
-    private func setupBottomIndicatorView() {
-        bottomIndicatorView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        bottomIndicatorView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        bottomIndicatorView.hero.modifiers = [.translate(y: bottomIndicatorView.frame.height)]
-    }
-    
-    private func setupNextEpisodeButton() {
-        nextEpisodeButton.layer.cornerRadius = 10
-        nextEpisodeButton.imageEdgeInsets(with: 8)
-    }
-    
-    private func setupPreviousEpisodeButton() {
-        previousEpisodeButton.layer.cornerRadius = 10
-        previousEpisodeButton.imageEdgeInsets(with: 8)
-    }
-    
-    private func setupShowEpisodeListButton() {
-        showEpisodeListButton.layer.cornerRadius = 10
-        showEpisodeListButton.imageEdgeInsets(with: 8)
-    }
-    
-    private func setupComicTitleLabel() {
+    private func setupNavigationTitle() {
         comicTitleLabel.text = viewModel.currentEpisodeTitle
         
         viewModel.updateComicTitleLabel = { [weak self] in
             self?.comicTitleLabel.text = self?.viewModel.currentEpisodeTitle
         }
+    }
+    
+    private func setupBottomIndicatorView() {
+        bottomIndicatorView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        bottomIndicatorView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+    }
+    
+    private func setupNextEpisodeButton() {
+        nextEpisodeButton.imageEdgeInsets(with: 8)
+    }
+    
+    private func setupPreviousEpisodeButton() {
+        previousEpisodeButton.imageEdgeInsets(with: 8)
+    }
+    
+    private func setupShowEpisodeListButton() {
+        showEpisodeListButton.imageEdgeInsets(with: 8)
+    }
+    
+    
+    // MARK: - Constraints
+    
+    private func configureAppbarViewConstraints() {
+        appbarViewHieghtConstraint.constant = view.safeAreaInsets.top + compactAppbarHeight
     }
     
     
@@ -193,7 +175,8 @@ class ComicStripViewController: UIViewController, ViewModelInjectable {
         backButton.rx.tap
             .asDriver()
             .drive(onNext: { [weak self] in
-                self?.dismiss(animated: true, completion: nil)
+                self?.navigationController?.popViewController(animated: true)
+                self?.dismiss(animated: true)
             })
             .disposed(by: disposeBag)
     }
@@ -228,7 +211,7 @@ class ComicStripViewController: UIViewController, ViewModelInjectable {
     private func bindSceneSingleTapGesture() {
         let sceneTapGestureRocognizer = UITapGestureRecognizer()
         sceneTapGestureRocognizer.numberOfTapsRequired = 1
-//        sceneTapGestureRocognizer.require(toFail: sceneDoubleTapGestureRecognizer)
+        sceneTapGestureRocognizer.require(toFail: sceneDoubleTapGestureRecognizer)
         sceneScrollView.rx
             .gesture(sceneTapGestureRocognizer)
             .when(.recognized)
@@ -243,7 +226,7 @@ class ComicStripViewController: UIViewController, ViewModelInjectable {
     }
     
     private func bindSceneDoubleTapGesture() {
-        let sceneDoubleTapGestureRecognizer = UITapGestureRecognizer()
+        sceneDoubleTapGestureRecognizer = UITapGestureRecognizer()
         sceneDoubleTapGestureRecognizer.numberOfTapsRequired = 2
         sceneScrollView.addGestureRecognizer(sceneDoubleTapGestureRecognizer)
         sceneScrollView.rx
@@ -399,17 +382,19 @@ extension ComicStripViewController {
 }
 
 extension ComicStripViewController {
-    func showNavigationBar() {
+    private func showNavigationBar() {
         if appbarView.alpha == 0 {
-            appbarView.startFadeInAnimation(duration: 0.3)
-            bottomIndicatorView.startFadeInAnimation(duration: 0.3)
+            appbarView.startFadeInAnimation(duration: 0.2)
+            bottomIndicatorView.startFadeInAnimation(duration: 0.2)
+            isStatusBarHidden = false
         }
     }
     
-    func hideNavigationBar() {
+    private func hideNavigationBar() {
         if appbarView.alpha == 1 {
-            appbarView.startFadeOutAnimation(duration: 0.3)
-            bottomIndicatorView.startFadeOutAnimation(duration: 0.3)
+            appbarView.startFadeOutAnimation(duration: 0.2)
+            bottomIndicatorView.startFadeOutAnimation(duration: 0.2)
+            isStatusBarHidden = true
         }
     }
 }
