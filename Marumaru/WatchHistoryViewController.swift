@@ -7,7 +7,6 @@
 
 import UIKit
 
-import Hero
 import RxSwift
 import RxCocoa
 
@@ -111,7 +110,6 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
     private func setupClearHistoryButton() {
         clearHistoryButton.layer.masksToBounds = true
         clearHistoryButton.layer.cornerRadius = 8
-        clearHistoryButton.hero.modifiers = [.scale(0)]
     }
     
     

@@ -10,7 +10,6 @@ import UIKit
 import SwiftSoup
 import Lottie
 import Toast
-import Hero
 import RxSwift
 import RxCocoa
 import RxGesture
@@ -138,7 +137,6 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     private func setupBottomIndicatorView() {
         bottomIndicatorView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         bottomIndicatorView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        bottomIndicatorView.hero.modifiers = [.translate(y: bottomIndicatorView.frame.height)]
     }
     
     private func setupNextEpisodeButton() {

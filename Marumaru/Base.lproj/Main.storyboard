@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qFj-Hk-3q0">
-    <device id="retina6_7" orientation="portrait" appearance="dark"/>
+    <device id="ipad12_9rounded" orientation="portrait" layout="fullscreen" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
@@ -14,20 +14,20 @@
             <objects>
                 <viewController storyboardIdentifier="MainStoryboard" id="BYZ-38-t0r" customClass="MainViewController" customModule="Marumaru" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IQz-28-dsB">
-                                <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                                <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FUc-n8-T3p" userLabel="ContentView">
-                                        <rect key="frame" x="0.0" y="0.0" width="428" height="1300"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="1024" height="860"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2nU-15-P3x" userLabel="RecentsBoard">
-                                                <rect key="frame" x="0.0" y="326" width="428" height="340"/>
+                                                <rect key="frame" x="0.0" y="314" width="639" height="340"/>
                                                 <subviews>
                                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="2a4-xp-lFc">
-                                                        <rect key="frame" x="0.0" y="44" width="428" height="260"/>
+                                                        <rect key="frame" x="0.0" y="44" width="639" height="260"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="260" id="DXK-Mn-LZk"/>
@@ -41,16 +41,16 @@
                                                         <cells/>
                                                     </collectionView>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1f3-bu-wWS">
-                                                        <rect key="frame" x="0.0" y="0.0" width="428" height="44"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="639" height="44"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="👀 최근 시청" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IrE-Wq-03b">
-                                                                <rect key="frame" x="20" y="10" width="276" height="24"/>
+                                                                <rect key="frame" x="20" y="10" width="487" height="24"/>
                                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                                 <color key="textColor" name="TextBlack"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YUD-Kh-FRd">
-                                                                <rect key="frame" x="308" y="5.6666666666666856" width="100" height="33"/>
+                                                                <rect key="frame" x="519" y="5.5" width="100" height="33"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="100" id="7AJ-ty-Fyg"/>
                                                                 </constraints>
@@ -84,10 +84,10 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VBH-nw-8Kn" userLabel="UpdatesBoard">
-                                                <rect key="frame" x="0.0" y="0.0" width="428" height="306"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="639" height="294"/>
                                                 <subviews>
                                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Zal-TW-flL">
-                                                        <rect key="frame" x="0.0" y="44" width="428" height="262"/>
+                                                        <rect key="frame" x="0.0" y="44" width="639" height="250"/>
                                                         <color key="backgroundColor" name="BackgroundWhite"/>
                                                         <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="4" minimumInteritemSpacing="0.0" id="xBD-5O-hec">
                                                             <size key="itemSize" width="136" height="236"/>
@@ -98,7 +98,7 @@
                                                         <cells/>
                                                     </collectionView>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xhy-XZ-xsH">
-                                                        <rect key="frame" x="0.0" y="0.0" width="428" height="44"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="639" height="44"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🔥 최신 업데이트" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SWt-26-VJr">
                                                                 <rect key="frame" x="20" y="10" width="138" height="24"/>
@@ -140,23 +140,23 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hzq-ru-sea" userLabel="TopBoard">
-                                                <rect key="frame" x="0.0" y="686" width="428" height="400"/>
+                                                <rect key="frame" x="654" y="0.0" width="350" height="650"/>
                                                 <subviews>
                                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="56" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="QoE-Qg-aZ4">
-                                                        <rect key="frame" x="20" y="108" width="388" height="282"/>
+                                                        <rect key="frame" x="20" y="108" width="310" height="532"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </tableView>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TjI-BP-cX7">
-                                                        <rect key="frame" x="0.0" y="0.0" width="428" height="44"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="350" height="44"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Top 20" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5aR-U2-tkF">
-                                                                <rect key="frame" x="20" y="10" width="64.666666666666671" height="24"/>
+                                                                <rect key="frame" x="20" y="10" width="64.5" height="24"/>
                                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                                 <color key="textColor" name="TextBlack"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kdC-L7-ipV">
-                                                                <rect key="frame" x="96.666666666666671" y="6" width="32.000000000000014" height="32"/>
+                                                                <rect key="frame" x="96.5" y="6" width="32" height="32"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="32" id="ADt-96-zgh"/>
                                                                     <constraint firstAttribute="width" constant="32" id="OUJ-Tt-A8e"/>
@@ -175,10 +175,10 @@
                                                         </constraints>
                                                     </view>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lG1-9W-Kbb">
-                                                        <rect key="frame" x="20" y="52" width="388" height="44"/>
+                                                        <rect key="frame" x="20" y="52" width="310" height="44"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="제목" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vv8-8c-bPJ">
-                                                                <rect key="frame" x="52" y="0.0" width="324" height="44"/>
+                                                                <rect key="frame" x="52" y="0.0" width="246" height="44"/>
                                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                                 <color key="textColor" name="TextBlack"/>
                                                                 <nil key="highlightedColor"/>
@@ -243,7 +243,7 @@
                                                 </variation>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Copyright © LeeSeunggi All Right Reserved" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mtM-uX-GwY">
-                                                <rect key="frame" x="40" y="1224" width="348" height="16"/>
+                                                <rect key="frame" x="40" y="784" width="944" height="16"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <color key="textColor" name="TextBlack-lighter"/>
                                                 <nil key="highlightedColor"/>
@@ -337,22 +337,22 @@
                                 </constraints>
                             </scrollView>
                             <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MfK-Lr-soA">
-                                <rect key="frame" x="0.0" y="0.0" width="428" height="80"/>
+                                <rect key="frame" x="0.0" y="0.0" width="1024" height="80"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="jxk-o0-BDn">
-                                    <rect key="frame" x="0.0" y="0.0" width="428" height="80"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="1024" height="80"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vHw-eb-i9G">
-                                            <rect key="frame" x="20" y="20" width="388" height="52"/>
+                                            <rect key="frame" x="20" y="20" width="984" height="52"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="어떤 만화를 보고싶으신가요?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sfx-5a-mKM">
-                                                    <rect key="frame" x="16" y="17.666666666666664" width="324" height="17"/>
+                                                    <rect key="frame" x="16" y="17.5" width="920" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
                                                     <color key="textColor" name="TextBlack-lighter"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="magnifying-glass-filled" translatesAutoresizingMaskIntoConstraints="NO" id="d7k-x0-smd">
-                                                    <rect key="frame" x="352" y="16" width="20" height="20"/>
+                                                    <rect key="frame" x="948" y="16" width="20" height="20"/>
                                                     <color key="tintColor" name="IconBlack-lighter"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="20" id="niu-3T-Eak"/>
@@ -425,7 +425,7 @@
                     <tabBarItem key="tabBarItem" title="홈" id="pVU-zk-q8U"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="yjI-je-POB">
-                        <rect key="frame" x="0.0" y="44" width="428" height="44"/>
+                        <rect key="frame" x="0.0" y="24" width="1024" height="50"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -440,7 +440,7 @@
     </scenes>
     <resources>
         <image name="arrow.clockwise" catalog="system" width="115" height="128"/>
-        <image name="magnifying-glass-filled" width="75" height="75"/>
+        <image name="magnifying-glass-filled" width="50" height="50"/>
         <namedColor name="BackgroundWhite">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

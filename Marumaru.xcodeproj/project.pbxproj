@@ -34,7 +34,6 @@
 		7684F3EA26CB5F6A0012BD8E /* ComicEpisodeThumbnailTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7684F3E826CB5F6A0012BD8E /* ComicEpisodeThumbnailTableCell.xib */; };
 		7684F3EC26CB6BBA0012BD8E /* ComicInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7684F3EB26CB6BBA0012BD8E /* ComicInfo.swift */; };
 		7684F3EE26CB6CC40012BD8E /* ComicEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7684F3ED26CB6CC40012BD8E /* ComicEpisode.swift */; };
-		76B60D3C26C5785700533562 /* AppbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B60D3B26C5785700533562 /* AppbarView.swift */; };
 		76BEEBA926248A1600642001 /* SearchComicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BEEBA826248A1600642001 /* SearchComicViewController.swift */; };
 		76BEEBB02624B64E00642001 /* ComicThumbnailCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BEEBAF2624B64E00642001 /* ComicThumbnailCollectionCell.swift */; };
 		76BEEBB12624B64E00642001 /* ComicThumbnailCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BEEBAF2624B64E00642001 /* ComicThumbnailCollectionCell.swift */; };
@@ -137,7 +136,6 @@
 		7684F3E826CB5F6A0012BD8E /* ComicEpisodeThumbnailTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ComicEpisodeThumbnailTableCell.xib; sourceTree = "<group>"; };
 		7684F3EB26CB6BBA0012BD8E /* ComicInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicInfo.swift; sourceTree = "<group>"; };
 		7684F3ED26CB6CC40012BD8E /* ComicEpisode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicEpisode.swift; sourceTree = "<group>"; };
-		76B60D3B26C5785700533562 /* AppbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppbarView.swift; sourceTree = "<group>"; };
 		76BEEBA826248A1600642001 /* SearchComicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchComicViewController.swift; sourceTree = "<group>"; };
 		76BEEBAF2624B64E00642001 /* ComicThumbnailCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicThumbnailCollectionCell.swift; sourceTree = "<group>"; };
 		76C9A1B82631BC7F000F801C /* MarumaruApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarumaruApiService.swift; sourceTree = "<group>"; };
@@ -339,7 +337,6 @@
 		76937C592657925300D36C45 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				76B60D3B26C5785700533562 /* AppbarView.swift */,
 				76F912F026D15A1C00B39BE7 /* LottieAnimationView.swift */,
 				49C63E4326D59202004E576F /* FlexibleSceneScrollView.swift */,
 				8E3A896527AB9FB00014303D /* TagLabel.swift */,
@@ -752,7 +749,6 @@
 				8ED56F3027ADACD000E78A8A /* ComicEpisodePopOverViewModel.swift in Sources */,
 				76BEEBA926248A1600642001 /* SearchComicViewController.swift in Sources */,
 				76F912F126D15A1C00B39BE7 /* LottieAnimationView.swift in Sources */,
-				76B60D3C26C5785700533562 /* AppbarView.swift in Sources */,
 				8E87CE6227ACEAD0008CD9C9 /* WatchHistoryCollectionReusableView.swift in Sources */,
 				7684F3EE26CB6CC40012BD8E /* ComicEpisode.swift in Sources */,
 				8ED56F3627AEFCB300E78A8A /* UIColor+HEX.swift in Sources */,

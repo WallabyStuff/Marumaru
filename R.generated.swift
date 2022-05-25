@@ -1197,8 +1197,8 @@ struct _R: Rswift.Validatable {
           if UIKit.UIColor(named: "BackgroundWhite-lighter", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'BackgroundWhite-lighter' is used in storyboard 'Main', but couldn't be loaded.") }
           if UIKit.UIColor(named: "IconBlack-lighter", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'IconBlack-lighter' is used in storyboard 'Main', but couldn't be loaded.") }
           if UIKit.UIColor(named: "TextBlack", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'TextBlack' is used in storyboard 'Main', but couldn't be loaded.") }
+          if UIKit.UIColor(named: "TextBlack-light", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'TextBlack-light' is used in storyboard 'Main', but couldn't be loaded.") }
           if UIKit.UIColor(named: "TextBlack-lighter", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'TextBlack-lighter' is used in storyboard 'Main', but couldn't be loaded.") }
-          if UIKit.UIColor(named: "text-black-light", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'text-black-light' is used in storyboard 'Main', but couldn't be loaded.") }
         }
         if _R.storyboard.main().mainStoryboard() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'mainStoryboard' could not be loaded from storyboard 'Main' as 'MainViewController'.") }
       }
@@ -1278,7 +1278,6 @@ struct _R: Rswift.Validatable {
           if UIKit.UIColor(named: "BackgroundWhite-lighter", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'BackgroundWhite-lighter' is used in storyboard 'WatchHistory', but couldn't be loaded.") }
           if UIKit.UIColor(named: "IconBlack", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'IconBlack' is used in storyboard 'WatchHistory', but couldn't be loaded.") }
           if UIKit.UIColor(named: "TextBlack", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'TextBlack' is used in storyboard 'WatchHistory', but couldn't be loaded.") }
-          if UIKit.UIColor(named: "text-white", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'text-white' is used in storyboard 'WatchHistory', but couldn't be loaded.") }
         }
         if _R.storyboard.watchHistory().watchHistoryStoryboard() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'watchHistoryStoryboard' could not be loaded from storyboard 'WatchHistory' as 'WatchHistoryViewController'.") }
       }

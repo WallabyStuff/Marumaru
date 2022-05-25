@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Hero
 
 class ComicThumbnailCollectionCell: UICollectionViewCell {
     
@@ -36,15 +35,10 @@ class ComicThumbnailCollectionCell: UICollectionViewCell {
     }
     
     private func setupView() {
-        setupHero()
         setupContentView()
         setupThumbnailImageView()
         setupThumbnailImageBaseView()
         setupSelectedView()
-    }
-    
-    private func setupHero() {
-        self.hero.isEnabled = true
     }
     
     private func setupContentView() {
