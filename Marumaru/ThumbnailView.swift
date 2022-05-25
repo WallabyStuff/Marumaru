@@ -19,7 +19,7 @@ class ThumbnailView: UIView {
 
 extension ThumbnailView {
     func setThubmailShadow() {
-        self.layer.shadowColor = R.color.shadowGray()?.cgColor
+        self.layer.shadowColor = UIColor.gray.cgColor
         self.layer.shadowOffset = CGSize(width: 0, height: 4)
         self.layer.shadowRadius = 12
         self.layer.shadowOpacity = 0.3

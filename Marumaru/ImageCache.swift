@@ -20,7 +20,7 @@ class ImageCache: Object {
     // MARK: - Properties
     @objc dynamic var url: String = ""
     @objc dynamic var imageData: Data = Data()
-    @objc dynamic var imageAvgColorHex: String = R.color.shadowGray()!.toHexString()
+    @objc dynamic var imageAvgColorHex: String = UIColor.gray.toHexString()
     
     // MARK: - Initializations
     convenience init(url: String,

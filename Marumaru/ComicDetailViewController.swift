@@ -8,19 +8,17 @@
 import UIKit
 
 import Lottie
-import Hero
 import RxSwift
 import RxCocoa
 
-class ComicDetailViewController: UIViewController, ViewModelInjectable {
+class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     
     
     // MARK: - Properties
     
     typealias ViewModel = ComicDetailViewModel
     
-    @IBOutlet weak var appbarView: UIView!
-    @IBOutlet weak var infoContentView: UIView!
+    @IBOutlet weak var thumbnailImagePlaceholderView: ThumbnailView!
     @IBOutlet weak var thumbnailImageView: UIImageView!
     @IBOutlet weak var comicTitleLabel: UILabel!
     @IBOutlet weak var authorLabel: UILabel!
@@ -28,11 +26,9 @@ class ComicDetailViewController: UIViewController, ViewModelInjectable {
     @IBOutlet weak var episodeAmountLabel: UILabel!
     @IBOutlet weak var scrollToBottomButton: UIButton!
     @IBOutlet weak var comicEpisodeTableView: UITableView!
-    @IBOutlet weak var backButton: UIButton!
     
     static let identifier = R.storyboard.comicDetail.comicDetailStoryboard.identifier
     var viewModel: ViewModel
-    var disposeBag = DisposeBag()
     public var comicSN: String?
     public var currentComic: ComicInfo?
     private var episodeLoadingAnimationView = LottieAnimationView()
@@ -79,8 +75,8 @@ class ComicDetailViewController: UIViewController, ViewModelInjectable {
     // MARK: - Setup
     
     private func setup() {
-        setupView()
         setupData()
+        setupView()
     }
     
     private func setupData() {
@@ -97,17 +93,14 @@ class ComicDetailViewController: UIViewController, ViewModelInjectable {
         comicTitleLabel.text = currentComic.title
         authorLabel.text = currentComic.author
         updateCycleLabel.text = currentComic.updateCycle
-        
         thumbnailImageView.layer.cornerRadius = 8
-        thumbnailImageView.layer.borderColor = R.color.lineGrayLighter()?.cgColor
-        thumbnailImageView.layer.borderWidth = 1
         
         if currentComic.updateCycle.contains("미분류") {
-            updateCycleLabel.setBackgroundHighlight(with: R.color.accentGray() ?? .clear,
-                                                    textColor: R.color.textWhite() ?? .black)
+            updateCycleLabel.setBackgroundHighlight(with: .systemTeal,
+                                                    textColor: .white)
         } else {
-            updateCycleLabel.setBackgroundHighlight(with: R.color.accentBlue() ?? .clear,
-                                                    textColor: R.color.textWhite() ?? .black)
+            updateCycleLabel.setBackgroundHighlight(with: .systemTeal,
+                                                    textColor: .white)
         }
         
         if currentComic.thumbnailImage != nil {
@@ -122,7 +115,7 @@ class ComicDetailViewController: UIViewController, ViewModelInjectable {
                         DispatchQueue.main.async {
                             self.thumbnailImageView.image = resultImage.imageCache.image
                             self.thumbnailImageView.startFadeInAnimation(duration: 0.3, nil)
-                            self.thumbnailImageView.layer.borderColor = UIColor(hexString: resultImage.imageCache.imageAvgColorHex).cgColor
+                            self.thumbnailImagePlaceholderView.setThumbnailShadow(with: resultImage.imageCache.averageColor.cgColor)
                         }
                     } catch {
                         print(error.localizedDescription)
@@ -149,57 +142,18 @@ class ComicDetailViewController: UIViewController, ViewModelInjectable {
     }
     
     private func setupView() {
-        setupHero()
-        setupAppbarView()
-        setupComicInfoView()
-        setupComicTitleLabel()
-        setupBackButton()
-        setupEpisodeSizeLable()
+        setupThumbnailImagePlaceholderView()
         setupEpisodeTableView()
         setupScrollToBottomButton()
     }
     
-    private func setupHero() {
-        self.hero.isEnabled = true
+    private func setupThumbnailImagePlaceholderView() {
+        thumbnailImagePlaceholderView.layer.cornerRadius = 8
     }
-    
-    private func setupAppbarView() {
-        appbarView.hero.id = "appbar"
-        appbarView.layer.cornerRadius = 24
-        appbarView.layer.maskedCorners = [.layerMinXMaxYCorner]
-    }
-    
-    private func setupComicTitleLabel() {
-        comicTitleLabel.hero.id = "mangaTitleLabel"
-    }
-    
-    private func setupBackButton() {
-        backButton.hero.id = "appbarButton"
-        backButton.imageEdgeInsets(with: 10)
-        backButton.layer.masksToBounds = true
-        backButton.layer.cornerRadius = 13
-    }
-    
-    private func setupEpisodeSizeLable() {
-        episodeAmountLabel.hero.modifiers = [.translate(x: -150)]
-    }
-    
-    private func setupComicInfoView() {
-        infoContentView.hero.id = "infoContentView"
-        infoContentView.layer.cornerRadius = 16
-        infoContentView.layer.shadowColor = R.color.shadowGray()?.cgColor
-        infoContentView.layer.shadowOffset = CGSize(width: 4, height: 0)
-        infoContentView.layer.shadowRadius = 20
-        infoContentView.layer.shadowOpacity = 0.2
-    }
-    
+
     private func setupThumbnailImageView() {
-        thumbnailImageView.hero.id = "previewImage"
         thumbnailImageView.layer.masksToBounds = true
-        thumbnailImageView.layer.cornerRadius = 12
-        thumbnailImageView.layer.borderWidth = 1
-        thumbnailImageView.layer.borderColor = R.color.backgroundGrayLightest()?.cgColor
-        thumbnailImageView.backgroundColor = R.color.backgroundGrayLightest()
+        thumbnailImageView.layer.cornerRadius = 8
     }
     
     private func setupEpisodeTableView() {
@@ -217,25 +171,14 @@ class ComicDetailViewController: UIViewController, ViewModelInjectable {
     private func setupScrollToBottomButton() {
         scrollToBottomButton.layer.cornerRadius = 12
         scrollToBottomButton.imageEdgeInsets(with: 10)
-        scrollToBottomButton.hero.modifiers = [.translate(y: 100)]
     }
     
     
     // MARK: - Bind
     
     private func bind() {
-        bindBackButton()
         bindScrollToBottomButton()
         bindComicEpisodeCell()
-    }
-    
-    private func bindBackButton() {
-        backButton.rx.tap
-            .asDriver()
-            .drive(onNext: { [weak self] in
-                self?.dismiss(animated: true, completion: nil)
-            })
-            .disposed(by: disposeBag)
     }
     
     private func bindScrollToBottomButton() {
@@ -290,7 +233,7 @@ class ComicDetailViewController: UIViewController, ViewModelInjectable {
         
         comicStripVC.delegate = self
         comicStripVC.modalPresentationStyle = .fullScreen
-        present(comicStripVC, animated: true, completion: nil)
+        present(comicStripVC, animated: true)
     }
     
     private func playComicEpisodeLoadingAnimation() {
@@ -317,7 +260,7 @@ extension ComicDetailViewController: UITableViewDelegate, UITableViewDataSource 
         let comicInfo = viewModel.cellItemForRow(at: indexPath)
         
         episodeCell.titleLabel.text = comicInfo.title
-        episodeCell.descriptionLabel.text = comicInfo.description
+        episodeCell.authorLabel.text = comicInfo.description
         episodeCell.indexLabel.text = (viewModel.totalEpisodeCount - indexPath.row).description
         episodeCell.thumbnailImageView.image = nil
         

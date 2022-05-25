@@ -443,7 +443,7 @@ extension MarumaruApiService {
             if let data = data, let image = UIImage(data: data) {
                 let imageCache = ImageCache(url: url.path,
                                             image: image,
-                                            imageAvgColor: image.averageColor ?? R.color.shadowGray()!)
+                                            imageAvgColor: image.averageColor ?? UIColor.gray)
                 
                 // Image load from url & save to Cache
                 let result = ImageResult(imageCache: imageCache, animate: true)

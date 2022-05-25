@@ -21,14 +21,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let _ = (scene as? UIWindowScene) else { return }
     }
     
-    func instantiateMainViewController() -> MainViewController {
-        let storyboard = UIStoryboard(name: R.storyboard.main.name, bundle: nil)
-        let viewController = storyboard.instantiateViewController(identifier: MainViewController.identifier,
-                                             creator: { coder -> MainViewController in
-            let viewModel = MainViewModel()
-            return .init(coder, viewModel) ?? MainViewController(.init())
-        })
-        
-        return viewController
+    func instantiateMainViewController() -> UINavigationController {
+        let tabBarController = MainTabBarController()
+        let navigationController = UINavigationController(rootViewController: tabBarController)
+        return navigationController
     }
 }

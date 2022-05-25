@@ -13,8 +13,6 @@ protocol ViewModelInjectable: AnyObject {
     
     var viewModel: ViewModel { get set }
     
-    var disposeBag: DisposeBag { get set }
-    
     init(_ viewModel: ViewModel)
     
     init?(_ coder: NSCoder,

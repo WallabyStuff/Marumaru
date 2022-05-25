@@ -9,8 +9,14 @@ import UIKit
 
 class PopOverComicEpisodeTableCell: UITableViewCell {
     
-    @IBOutlet weak var episodeTitleLabel: UILabel!
+    
+    // MARK: - Properties
+    
     static let identifier = R.reuseIdentifier.popOverComicEpisodeTableCell.identifier
+    @IBOutlet weak var episodeTitleLabel: UILabel!
+    
+    
+    // MARK: - LifeCycle
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -20,6 +26,20 @@ class PopOverComicEpisodeTableCell: UITableViewCell {
     override func prepareForReuse() {
         episodeTitleLabel.text = ""
     }
+    
+    
+    // MARK: - Overrides
+    
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        if highlighted {
+            contentView.backgroundColor = R.color.backgroundWhiteLight()
+        } else {
+            contentView.backgroundColor = R.color.backgroundWhite()
+        }
+    }
+    
+    
+    // MARK: - Setups
     
     private func setup() {
         setupView()
@@ -40,11 +60,14 @@ class PopOverComicEpisodeTableCell: UITableViewCell {
         episodeTitleLabel.textColor = R.color.textBlack()
     }
     
-    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        if highlighted {
-            contentView.backgroundColor = R.color.accentBlueLightest()
-        } else {
-            contentView.backgroundColor = R.color.backgroundWhite()
-        }
+    
+    // MARK: - Methods
+    
+    func setHighlighted() {
+        episodeTitleLabel.textColor = R.color.accentGreen()
+    }
+    
+    func setUnHighlighted() {
+        episodeTitleLabel.textColor = R.color.textBlack()
     }
 }

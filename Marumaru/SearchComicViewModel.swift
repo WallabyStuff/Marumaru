@@ -60,6 +60,10 @@ extension SearchComicViewModel {
 }
 
 extension SearchComicViewModel {
+    public var numberOfSection: Int {
+        return 1
+    }
+    
     public func numberOfRowsIn(section: Int) -> Int {
         if section == 0 {
             return searchResultComics.count

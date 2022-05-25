@@ -64,7 +64,7 @@ class ComicThumbnailCollectionCell: UICollectionViewCell {
     private func setupSelectedView() {
         let selectionView = UIView(frame: self.frame)
         selectionView.layer.cornerRadius = 16
-        selectionView.backgroundColor = R.color.accentBlueLightest()
+//        selectionView.backgroundColor = R.color.accentBlueLightest()
         self.selectedBackgroundView = selectionView
     }
 }

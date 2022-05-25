@@ -15,22 +15,21 @@ import RxCocoa
     @objc optional func didWatchHistoryUpdated()
 }
 
-class WatchHistoryViewController: UIViewController, ViewModelInjectable {
+class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
         
     
     // MARK: - Properties
     
     typealias ViewModel = WatchHistoryViewModel
     
-    @IBOutlet weak var appbarView: UIView!
+    @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var watchHistoryCollectionView: UICollectionView!
     @IBOutlet weak var clearHistoryButton: UIButton!
-    @IBOutlet weak var backButton: UIButton!
+    @IBOutlet weak var appbarViewHeightConstraint: NSLayoutConstraint!
     
     static let identifier = R.storyboard.watchHistory.watchHistoryStoryboard.identifier
     weak var delegate: WatchHistoryViewDelegate?
     var viewModel: ViewModel
-    var disposeBag = DisposeBag()
     private var watchHistoryPlaceholderLabel = StickyPlaceholderLabel()
     
     
@@ -61,6 +60,11 @@ class WatchHistoryViewController: UIViewController, ViewModelInjectable {
         setupData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = true
+    }
+    
     
     // MARK: - Overrides
     
@@ -68,8 +72,9 @@ class WatchHistoryViewController: UIViewController, ViewModelInjectable {
         delegate?.didWatchHistoryUpdated?()
     }
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .darkContent
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
+        configureAppbarViewConstraints()
     }
     
     
@@ -80,21 +85,8 @@ class WatchHistoryViewController: UIViewController, ViewModelInjectable {
     }
     
     private func setupView() {
-        setupHero()
-        setupAppbarView()
         setupWatchHistoryCollectionView()
         setupClearHistoryButton()
-        setupBackButton()
-    }
-    
-    private func setupHero() {
-        self.hero.isEnabled = true
-    }
-    
-    private func setupAppbarView() {
-        appbarView.hero.id = "appbar"
-        appbarView.layer.cornerRadius = 24
-        appbarView.layer.maskedCorners = CACornerMask([.layerMinXMaxYCorner])
     }
     
     private func setupWatchHistoryCollectionView() {
@@ -102,10 +94,12 @@ class WatchHistoryViewController: UIViewController, ViewModelInjectable {
         watchHistoryCollectionView.register(nibName, forCellWithReuseIdentifier: ComicThumbnailCollectionCell.identifier)
         
         watchHistoryCollectionView.register(WatchHistoryCollectionReusableView.self,
-                                            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: WatchHistoryCollectionReusableView.identifier)
+                                            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                            withReuseIdentifier: WatchHistoryCollectionReusableView.identifier)
         
         watchHistoryCollectionView.collectionViewLayout = watchHistoryCollectionViewLayout()
-        watchHistoryCollectionView.contentInset = UIEdgeInsets(top: 28, left: 0, bottom: 0, right: 0)
+        watchHistoryCollectionView.contentInset = UIEdgeInsets(top: compactAppbarHeight + view.safeAreaInsets.top + 24,
+                                                               left: 0, bottom: 0, right: 0)
         watchHistoryCollectionView.delegate = self
         watchHistoryCollectionView.dataSource = self
         
@@ -120,19 +114,28 @@ class WatchHistoryViewController: UIViewController, ViewModelInjectable {
         clearHistoryButton.hero.modifiers = [.scale(0)]
     }
     
-    private func setupBackButton() {
-        backButton.hero.id = "appbarButton"
-        backButton.imageEdgeInsets(with: 10)
-        backButton.layer.cornerRadius = 12
+    
+    // MARK: - Configurations
+    
+    private func configureAppbarViewConstraints() {
+        appbarViewHeightConstraint.constant = view.safeAreaInsets.top + compactAppbarHeight
     }
     
     
     // MARK: - Bind
     
     private func bind() {
-        bindClearHistoryButton()
         bindBackButton()
+        bindClearHistoryButton()
         bindWatchHistoryCell()
+    }
+    
+    private func bindBackButton() {
+        backButton.rx.tap
+            .asDriver()
+            .drive(onNext: { [weak self] in
+                self?.navigationController?.popViewController(animated: true)
+            }).disposed(by: disposeBag)
     }
     
     private func bindClearHistoryButton() {
@@ -140,15 +143,6 @@ class WatchHistoryViewController: UIViewController, ViewModelInjectable {
             .asDriver()
             .drive(onNext: { [weak self] in
                 self?.presentClearHistoryActionSheet()
-            })
-            .disposed(by: disposeBag)
-    }
-    
-    private func bindBackButton() {
-        backButton.rx.tap
-            .asDriver()
-            .drive(onNext: { [weak self] in
-                self?.dismiss(animated: true, completion: nil)
             })
             .disposed(by: disposeBag)
     }
@@ -202,7 +196,7 @@ class WatchHistoryViewController: UIViewController, ViewModelInjectable {
     }
     
     private func presentComicStripVC(_ comicTitle: String, _ comicURL: String) {
-        let storyboard = UIStoryboard(name: R.storyboard.watchHistory.name, bundle: nil)
+        let storyboard = UIStoryboard(name: R.storyboard.comicStrip.name, bundle: nil)
         let comicStripVC = storyboard.instantiateViewController(identifier: ComicStripViewController.identifier,
                                                                 creator: { coder -> ComicStripViewController in
             let viewModel = ComicStripViewModel(comicTitle: comicTitle, comicURL: comicURL)
@@ -211,7 +205,7 @@ class WatchHistoryViewController: UIViewController, ViewModelInjectable {
         
         comicStripVC.delegate = self
         comicStripVC.modalPresentationStyle = .fullScreen
-        present(comicStripVC, animated: true, completion: nil)
+        navigationController?.pushViewController(comicStripVC, animated: true)
     }
 }
 
