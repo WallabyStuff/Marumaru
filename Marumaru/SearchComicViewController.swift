@@ -26,7 +26,6 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
     
     static let identifier = R.storyboard.searchComic.searchComicStoryboard.identifier
     var viewModel: ViewModel
-    private var searchLoadingAnimationView = LottieAnimationView()
     private var isSearching = false
     private var searchResultPlaceholderLabel = StickyPlaceholderLabel()
     
@@ -45,7 +44,7 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError("ViewModel has not been implemented")
     }
     
     
@@ -196,14 +195,14 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
     
     private func setSearchResult(title: String) {
         if title.count < 1 {
-            searchLoadingAnimationView.stop()
+            self.view.stopLottie()
             self.view.makeToast("최소 한 글자 이상의 단어로 검색해주세요")
             return
         }
         
         isSearching = true
-        playSearchLoadingAnimation()
         searchResultPlaceholderLabel.detatchLabel()
+        self.view.playLottie(animation: .loading_cat_radial)
         view.endEditing(true)
         
         viewModel.getSearchResult(title)
@@ -212,7 +211,7 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
                     vc.searchResultPlaceholderLabel.attatchLabel(text: error.message, to: vc.view)
                 }
             }, onDisposed: { vc in
-                vc.searchLoadingAnimationView.stop()
+                self.view.stopLottie()
                 vc.isSearching = false
             }).disposed(by: disposeBag)
     }
@@ -227,12 +226,6 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
         
         comicDetailVC.currentComic = comicInfo
         present(comicDetailVC, animated: true, completion: nil)
-    }
-    
-    private func playSearchLoadingAnimation() {
-        searchLoadingAnimationView.play(name: "loading_cat_radial",
-                                        size: CGSize(width: 100, height: 100),
-                                        to: view)
     }
     
     private func focusSearchTextField() {
@@ -252,7 +245,6 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
                 tabBarController.selectedIndex = 0
             }
         } else {
-            print("State 3")
             dismiss(animated: animated)
         }
     }
@@ -268,60 +260,7 @@ extension SearchComicViewController: UITextFieldDelegate {
         return true
     }
 }
-//
-//extension SearchComicViewController: UITableViewDelegate, UITableViewDataSource {
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return viewModel.numberOfRowsIn(section: 0)
-//    }
-//
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        guard let searchResultCell = tableView.dequeueReusableCell(withIdentifier: SearchResultComicTableCell.identifier) as? SearchResultComicTableCell else { return UITableViewCell() }
-//
-//        let comicInfo = viewModel.cellItemForRow(at: indexPath)
-//
-//        searchResultCell.titleLabel.text = comicInfo.title
-//        searchResultCell.thumbnailImagePlaceholderLabel.text = comicInfo.title
-//        searchResultCell.descriptionLabel.text = comicInfo.author.isEmpty ? "작가정보 없음" : comicInfo.author
-//        searchResultCell.updateCycleLabel.text = comicInfo.updateCycle
-//
-//        if comicInfo.updateCycle.contains("미분류") {
-//            searchResultCell.updateCycleLabel.setBackgroundHighlight(with: R.color.accentGreen() ?? .clear,
-//                                                                     textColor: R.color.textWhite() ?? .black)
-//        } else {
-//            searchResultCell.updateCycleLabel.setBackgroundHighlight(with: R.color.accentGreen() ?? .clear,
-//                                                                     textColor: R.color.textWhite() ?? .black)
-//        }
-//
-//        if let thumbnailImageUrl = comicInfo.thumbnailImageURL {
-//            let token = viewModel.requestImage(thumbnailImageUrl) { result in
-//                do {
-//                    let resultImage = try result.get()
-//                    DispatchQueue.main.async {
-//                        searchResultCell.thumbnailImagePlaceholderLabel.isHidden = true
-//                        searchResultCell.thumbnailImageView.image = resultImage.imageCache.image
-//                        searchResultCell.thumbnailImageBaseView.setThumbnailShadow(with: resultImage.imageCache.averageColor.cgColor)
-//
-//                        if resultImage.animate {
-//                            searchResultCell.thumbnailImageView.startFadeInAnimation(duration: 0.3)
-//                        }
-//                    }
-//                } catch {
-//                    DispatchQueue.main.async {
-//                        searchResultCell.thumbnailImagePlaceholderLabel.isHidden = false
-//                    }
-//                }
-//            }
-//
-//            searchResultCell.onReuse = { [weak self] in
-//                if let token = token {
-//                    self?.viewModel.cancelImageRequest(token)
-//                }
-//            }
-//        }
-//
-//        return searchResultCell
-//    }
-//}
+
 
 extension SearchComicViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func numberOfSections(in collectionView: UICollectionView) -> Int {

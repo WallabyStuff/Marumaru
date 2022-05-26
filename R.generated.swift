@@ -570,12 +570,12 @@ struct R: Rswift.Validatable {
     static let swiftlintYml = Rswift.FileResource(bundle: R.hostingBundle, name: ".swiftlint", pathExtension: "yml")
     /// Resource file `loading_cat.json`.
     static let loading_catJson = Rswift.FileResource(bundle: R.hostingBundle, name: "loading_cat", pathExtension: "json")
+    /// Resource file `loading_cat_black.json`.
+    static let loading_cat_blackJson = Rswift.FileResource(bundle: R.hostingBundle, name: "loading_cat_black", pathExtension: "json")
     /// Resource file `loading_cat_radial.json`.
     static let loading_cat_radialJson = Rswift.FileResource(bundle: R.hostingBundle, name: "loading_cat_radial", pathExtension: "json")
-    /// Resource file `loading_square.json`.
-    static let loading_squareJson = Rswift.FileResource(bundle: R.hostingBundle, name: "loading_square", pathExtension: "json")
-    /// Resource file `not_found.json`.
-    static let not_foundJson = Rswift.FileResource(bundle: R.hostingBundle, name: "not_found", pathExtension: "json")
+    /// Resource file `rainbow_cat.json`.
+    static let rainbow_catJson = Rswift.FileResource(bundle: R.hostingBundle, name: "rainbow_cat", pathExtension: "json")
 
     /// `bundle.url(forResource: ".swiftlint", withExtension: "yml")`
     static func swiftlintYml(_: Void = ()) -> Foundation.URL? {
@@ -589,21 +589,21 @@ struct R: Rswift.Validatable {
       return fileResource.bundle.url(forResource: fileResource)
     }
 
+    /// `bundle.url(forResource: "loading_cat_black", withExtension: "json")`
+    static func loading_cat_blackJson(_: Void = ()) -> Foundation.URL? {
+      let fileResource = R.file.loading_cat_blackJson
+      return fileResource.bundle.url(forResource: fileResource)
+    }
+
     /// `bundle.url(forResource: "loading_cat_radial", withExtension: "json")`
     static func loading_cat_radialJson(_: Void = ()) -> Foundation.URL? {
       let fileResource = R.file.loading_cat_radialJson
       return fileResource.bundle.url(forResource: fileResource)
     }
 
-    /// `bundle.url(forResource: "loading_square", withExtension: "json")`
-    static func loading_squareJson(_: Void = ()) -> Foundation.URL? {
-      let fileResource = R.file.loading_squareJson
-      return fileResource.bundle.url(forResource: fileResource)
-    }
-
-    /// `bundle.url(forResource: "not_found", withExtension: "json")`
-    static func not_foundJson(_: Void = ()) -> Foundation.URL? {
-      let fileResource = R.file.not_foundJson
+    /// `bundle.url(forResource: "rainbow_cat", withExtension: "json")`
+    static func rainbow_catJson(_: Void = ()) -> Foundation.URL? {
+      let fileResource = R.file.rainbow_catJson
       return fileResource.bundle.url(forResource: fileResource)
     }
 

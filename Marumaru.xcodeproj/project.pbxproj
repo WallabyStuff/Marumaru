@@ -15,7 +15,6 @@
 		7641C3B1264682B900A79A79 /* PopOverComicEpisodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641C3B0264682B900A79A79 /* PopOverComicEpisodeViewController.swift */; };
 		7641C3B32646874300A79A79 /* Episode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641C3B22646874300A79A79 /* Episode.swift */; };
 		764AE0E2262DA971000F490D /* WatchHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764AE0E1262DA971000F490D /* WatchHistoryViewController.swift */; };
-		765A0FF726C16629005DDD8B /* loading_square.json in Resources */ = {isa = PBXBuildFile; fileRef = 765A0FF526C16629005DDD8B /* loading_square.json */; };
 		765C8B29261CA2C30056C83B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8B28261CA2C30056C83B /* AppDelegate.swift */; };
 		765C8B2B261CA2C30056C83B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8B2A261CA2C30056C83B /* SceneDelegate.swift */; };
 		765C8B2D261CA2C30056C83B /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8B2C261CA2C30056C83B /* MainViewController.swift */; };
@@ -44,10 +43,8 @@
 		76F912E726CFDF7700B39BE7 /* TopRankedComic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F912E626CFDF7700B39BE7 /* TopRankedComic.swift */; };
 		76F912E926CFDFA100B39BE7 /* Comic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F912E826CFDFA000B39BE7 /* Comic.swift */; };
 		76F912EB26CFFE9700B39BE7 /* ComicStripScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F912EA26CFFE9700B39BE7 /* ComicStripScene.swift */; };
-		76F912F126D15A1C00B39BE7 /* LottieAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F912F026D15A1C00B39BE7 /* LottieAnimationView.swift */; };
 		76F912F326D1604000B39BE7 /* loading_cat.json in Resources */ = {isa = PBXBuildFile; fileRef = 76F912F226D1604000B39BE7 /* loading_cat.json */; };
 		76F912F526D160FA00B39BE7 /* loading_cat_radial.json in Resources */ = {isa = PBXBuildFile; fileRef = 76F912F426D160FA00B39BE7 /* loading_cat_radial.json */; };
-		76F912F726D2070600B39BE7 /* not_found.json in Resources */ = {isa = PBXBuildFile; fileRef = 76F912F626D2070600B39BE7 /* not_found.json */; };
 		8E3192CB283A15B900C350F9 /* PopOverComicEpisodeTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E3192C9283A15B900C350F9 /* PopOverComicEpisodeTableCell.xib */; };
 		8E319309283B540900C350F9 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E319308283B540900C350F9 /* BaseViewController.swift */; };
 		8E3A896627AB9FB00014303D /* TagLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3A896527AB9FB00014303D /* TagLabel.swift */; };
@@ -63,6 +60,9 @@
 		8E8D381B27ABA4C700E82FE2 /* ComicDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8D381A27ABA4C700E82FE2 /* ComicDetailViewModel.swift */; };
 		8E8D381D27ABD56600E82FE2 /* ComicStripViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8D381C27ABD56600E82FE2 /* ComicStripViewModel.swift */; };
 		8E9213412839491B001B33A9 /* ViewModelInjectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9213402839491B001B33A9 /* ViewModelInjectable.swift */; };
+		8E92C01A283EA3E500E0CD82 /* rainbow_cat.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E92C019283EA3E500E0CD82 /* rainbow_cat.json */; };
+		8E92C02C283F68ED00E0CD82 /* UIView+LottieAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E92C02B283F68ED00E0CD82 /* UIView+LottieAnimation.swift */; };
+		8E92C02E283F690B00E0CD82 /* loading_cat_black.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E92C02D283F690B00E0CD82 /* loading_cat_black.json */; };
 		8EA6B5B728392BA70019B590 /* ComicStrip.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8EA6B5B628392BA70019B590 /* ComicStrip.storyboard */; };
 		8EA6B5B928392BD30019B590 /* PopOverComicEpisode.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8EA6B5B828392BD30019B590 /* PopOverComicEpisode.storyboard */; };
 		8EAFD069283B78B700FD569F /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAFD068283B78B700FD569F /* MainTabBarController.swift */; };
@@ -111,7 +111,6 @@
 		7641C3B0264682B900A79A79 /* PopOverComicEpisodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopOverComicEpisodeViewController.swift; sourceTree = "<group>"; };
 		7641C3B22646874300A79A79 /* Episode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Episode.swift; sourceTree = "<group>"; };
 		764AE0E1262DA971000F490D /* WatchHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchHistoryViewController.swift; sourceTree = "<group>"; };
-		765A0FF526C16629005DDD8B /* loading_square.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading_square.json; sourceTree = "<group>"; };
 		765C8B25261CA2C30056C83B /* Marumaru.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Marumaru.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		765C8B28261CA2C30056C83B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		765C8B2A261CA2C30056C83B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -144,10 +143,8 @@
 		76F912E626CFDF7700B39BE7 /* TopRankedComic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopRankedComic.swift; sourceTree = "<group>"; };
 		76F912E826CFDFA000B39BE7 /* Comic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comic.swift; sourceTree = "<group>"; };
 		76F912EA26CFFE9700B39BE7 /* ComicStripScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicStripScene.swift; sourceTree = "<group>"; };
-		76F912F026D15A1C00B39BE7 /* LottieAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationView.swift; sourceTree = "<group>"; };
 		76F912F226D1604000B39BE7 /* loading_cat.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading_cat.json; sourceTree = "<group>"; };
 		76F912F426D160FA00B39BE7 /* loading_cat_radial.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading_cat_radial.json; sourceTree = "<group>"; };
-		76F912F626D2070600B39BE7 /* not_found.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = not_found.json; sourceTree = "<group>"; };
 		78CEFC79BA565D1E3E3479DF /* Pods-Marumaru.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Marumaru.debug.xcconfig"; path = "Target Support Files/Pods-Marumaru/Pods-Marumaru.debug.xcconfig"; sourceTree = "<group>"; };
 		8193870C9C150241C6FEBE93 /* Pods_MarumaruTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MarumaruTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E3192C9283A15B900C350F9 /* PopOverComicEpisodeTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PopOverComicEpisodeTableCell.xib; sourceTree = "<group>"; };
@@ -165,6 +162,9 @@
 		8E8D381A27ABA4C700E82FE2 /* ComicDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicDetailViewModel.swift; sourceTree = "<group>"; };
 		8E8D381C27ABD56600E82FE2 /* ComicStripViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicStripViewModel.swift; sourceTree = "<group>"; };
 		8E9213402839491B001B33A9 /* ViewModelInjectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelInjectable.swift; sourceTree = "<group>"; };
+		8E92C019283EA3E500E0CD82 /* rainbow_cat.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rainbow_cat.json; sourceTree = "<group>"; };
+		8E92C02B283F68ED00E0CD82 /* UIView+LottieAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+LottieAnimation.swift"; sourceTree = "<group>"; };
+		8E92C02D283F690B00E0CD82 /* loading_cat_black.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading_cat_black.json; sourceTree = "<group>"; };
 		8EA6B5B628392BA70019B590 /* ComicStrip.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ComicStrip.storyboard; sourceTree = "<group>"; };
 		8EA6B5B828392BD30019B590 /* PopOverComicEpisode.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PopOverComicEpisode.storyboard; sourceTree = "<group>"; };
 		8EAFD068283B78B700FD569F /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
@@ -337,7 +337,6 @@
 		76937C592657925300D36C45 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				76F912F026D15A1C00B39BE7 /* LottieAnimationView.swift */,
 				49C63E4326D59202004E576F /* FlexibleSceneScrollView.swift */,
 				8E3A896527AB9FB00014303D /* TagLabel.swift */,
 				8E87CE6127ACEAD0008CD9C9 /* WatchHistoryCollectionReusableView.swift */,
@@ -352,10 +351,10 @@
 		76BEEB4B2622D80000642001 /* LottieAnimations */ = {
 			isa = PBXGroup;
 			children = (
-				76F912F626D2070600B39BE7 /* not_found.json */,
+				8E92C02D283F690B00E0CD82 /* loading_cat_black.json */,
+				8E92C019283EA3E500E0CD82 /* rainbow_cat.json */,
 				76F912F426D160FA00B39BE7 /* loading_cat_radial.json */,
 				76F912F226D1604000B39BE7 /* loading_cat.json */,
-				765A0FF526C16629005DDD8B /* loading_square.json */,
 			);
 			name = LottieAnimations;
 			sourceTree = "<group>";
@@ -363,9 +362,9 @@
 		76C9A20426356C08000F801C /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				8EAFD068283B78B700FD569F /* MainTabBarController.swift */,
-				8E319308283B540900C350F9 /* BaseViewController.swift */,
 				8E9213402839491B001B33A9 /* ViewModelInjectable.swift */,
+				8E319308283B540900C350F9 /* BaseViewController.swift */,
+				8EAFD068283B78B700FD569F /* MainTabBarController.swift */,
 				765C8B2C261CA2C30056C83B /* MainViewController.swift */,
 				76BEEBA826248A1600642001 /* SearchComicViewController.swift */,
 				764AE0E1262DA971000F490D /* WatchHistoryViewController.swift */,
@@ -445,6 +444,7 @@
 				8E82D73E27B25701008230BE /* UIView+Insets.swift */,
 				8ED56F3127AEFA7F00E78A8A /* UIImage+AverageColor.swift */,
 				8EAFD06E283CC14300FD569F /* UILabel+BackgroundHighlighter.swift */,
+				8E92C02B283F68ED00E0CD82 /* UIView+LottieAnimation.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -562,10 +562,8 @@
 				76F912F526D160FA00B39BE7 /* loading_cat_radial.json in Resources */,
 				765C8B38261CA2C50056C83B /* LaunchScreen.storyboard in Resources */,
 				8E3192CB283A15B900C350F9 /* PopOverComicEpisodeTableCell.xib in Resources */,
-				765A0FF726C16629005DDD8B /* loading_square.json in Resources */,
 				765C8B35261CA2C50056C83B /* Assets.xcassets in Resources */,
 				8ECAB664283910F3008E531D /* SearchComic.storyboard in Resources */,
-				76F912F726D2070600B39BE7 /* not_found.json in Resources */,
 				76F912F326D1604000B39BE7 /* loading_cat.json in Resources */,
 				7684F3E226CAA49F0012BD8E /* ComicThumbnailCollectionCell.xib in Resources */,
 				8EA6B5B928392BD30019B590 /* PopOverComicEpisode.storyboard in Resources */,
@@ -573,8 +571,10 @@
 				8EA6B5B728392BA70019B590 /* ComicStrip.storyboard in Resources */,
 				8EAFD06D283CAA2500FD569F /* SearchResultComicCollectionCell.xib in Resources */,
 				765C8B30261CA2C30056C83B /* Main.storyboard in Resources */,
+				8E92C01A283EA3E500E0CD82 /* rainbow_cat.json in Resources */,
 				8ECAB666283911F3008E531D /* ComicDetail.storyboard in Resources */,
 				8EBCD0F227AAAB8300BEE157 /* ComicRankTableCell.xib in Resources */,
+				8E92C02E283F690B00E0CD82 /* loading_cat_black.json in Resources */,
 				8ECAB66228390F6B008E531D /* WatchHistory.storyboard in Resources */,
 				8E88519F27A952A900126701 /* .swiftlint.yml in Resources */,
 			);
@@ -748,7 +748,6 @@
 				765C8C68261F05BD0056C83B /* ComicDetailViewController.swift in Sources */,
 				8ED56F3027ADACD000E78A8A /* ComicEpisodePopOverViewModel.swift in Sources */,
 				76BEEBA926248A1600642001 /* SearchComicViewController.swift in Sources */,
-				76F912F126D15A1C00B39BE7 /* LottieAnimationView.swift in Sources */,
 				8E87CE6227ACEAD0008CD9C9 /* WatchHistoryCollectionReusableView.swift in Sources */,
 				7684F3EE26CB6CC40012BD8E /* ComicEpisode.swift in Sources */,
 				8ED56F3627AEFCB300E78A8A /* UIColor+HEX.swift in Sources */,
@@ -772,6 +771,7 @@
 				765C8B29261CA2C30056C83B /* AppDelegate.swift in Sources */,
 				8E662DED27AC38290048BF39 /* MarumaruApiServiceViewModel.swift in Sources */,
 				8E319309283B540900C350F9 /* BaseViewController.swift in Sources */,
+				8E92C02C283F68ED00E0CD82 /* UIView+LottieAnimation.swift in Sources */,
 				765C8B2B261CA2C30056C83B /* SceneDelegate.swift in Sources */,
 				76C9A1B92631BC7F000F801C /* MarumaruApiService.swift in Sources */,
 				8E8D381B27ABA4C700E82FE2 /* ComicDetailViewModel.swift in Sources */,

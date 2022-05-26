@@ -21,7 +21,6 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     
     typealias ViewModel = MainViewModel
     
-    @IBOutlet weak var appbarView: UIVisualEffectView!
     @IBOutlet weak var appbarViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var mainScrollView: UIScrollView!
     @IBOutlet weak var searchBarView: UIView!
@@ -35,8 +34,6 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     
     static let identifier = R.storyboard.main.mainStoryboard.identifier
     var viewModel: ViewModel
-    private var loadingUpdatedMangaAnimView = LottieAnimationView()
-    private var loadingMangaRankAnimView = LottieAnimationView()
     private var watchHistoryPlaceholderLabel = StickyPlaceholderLabel()
     
     
@@ -54,7 +51,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError("ViewModel has not been implemented")
     }
     
     
@@ -235,11 +232,11 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     // MARK: - Methods
     
     func reloadUpdatedComic() {
-        playUpdatedMangaLoadingAnimation()
+        newUpdateComicCollectionView.playLottie()
         
         viewModel.getUpdatedContents()
             .subscribe(with: self, onCompleted: { vc in
-                vc.loadingUpdatedMangaAnimView.stop()
+                vc.newUpdateComicCollectionView.stopLottie()
             }).disposed(by: disposeBag)
     }
     
@@ -257,11 +254,11 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     }
     
     func reloadComicRank() {
-        playMangaRankLoadingAnimation()
+        comicRankTableView.playLottie()
         
         viewModel.getTopRankedComics()
             .subscribe(with: self, onCompleted: { vc in
-                vc.loadingMangaRankAnimView.stop()
+                vc.comicRankTableView.stopLottie()
             }).disposed(by: disposeBag)
     }
     
@@ -301,18 +298,6 @@ class MainViewController: BaseViewController, ViewModelInjectable {
         watchHistoryVC.delegate = self
         watchHistoryVC.modalPresentationStyle = .fullScreen
         navigationController?.pushViewController(watchHistoryVC, animated: true)
-    }
-    
-    private func playUpdatedMangaLoadingAnimation() {
-        loadingUpdatedMangaAnimView.play(name: "loading_cat",
-                                         size: CGSize(width: 148, height: 148),
-                                         to: newUpdateComicContentsView)
-    }
-    
-    private func playMangaRankLoadingAnimation() {
-        loadingMangaRankAnimView.play(name: "loading_cat",
-                                      size: CGSize(width: 148, height: 148),
-                                      to: comicRankTableView)
     }
 }
 
