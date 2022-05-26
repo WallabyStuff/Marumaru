@@ -40,7 +40,6 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     private var cellHeightDictionary: NSMutableDictionary = [:]
     private let safeAreaInsets = UIApplication.shared.windows[0].safeAreaInsets
     private var isSceneZoomed = false
-    private var sceneLoadingAnimationView = LottieAnimationView()
     private var sceneScrollView = FlexibleSceneScrollView()
     private var sceneDoubleTapGestureRecognizer = UITapGestureRecognizer()
     
@@ -59,7 +58,7 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError("ViewModel has not been implemented")
     }
     
     
@@ -120,7 +119,7 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
         }
         
         viewModel.prepareForReloadSceneScrollview = { [weak self] in
-            self?.playSceneLoadingAnimation()
+            self?.sceneScrollView.playLottie()
             self?.disableIndicatorButtons()
             self?.sceneScrollView.clearAndReloadData()
         }
@@ -271,7 +270,7 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     private func renderEpisode() {
         viewModel.renderCurrentEpisodeScene()
             .subscribe(onCompleted: { [weak self] in
-                self?.sceneLoadingAnimationView.stop()
+                self?.sceneScrollView.stopLottie()
                 self?.enableIndicatorButtons()
             }).disposed(by: disposeBag)
     }
@@ -279,7 +278,7 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     private func renderEpisode(serialNumber: String) {
         viewModel.renderComicStripScene(serialNumber)
             .subscribe(onCompleted: { [weak self] in
-                self?.sceneLoadingAnimationView.stop()
+                self?.sceneScrollView.stopLottie()
                 self?.enableIndicatorButtons()
             }).disposed(by: disposeBag)
     }
@@ -309,18 +308,10 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
 // MARK: - Extensions
 
 extension ComicStripViewController {
-    private func playSceneLoadingAnimation() {
-        sceneLoadingAnimationView.play(name: "loading_cat",
-                                       size: CGSize(width: 148, height: 148),
-                                       to: view)
-    }
-}
-
-extension ComicStripViewController {
     func renderNextEpisode() {
         viewModel.renderNextEpisodeScene()
             .subscribe(onCompleted: { [weak self] in
-                self?.sceneLoadingAnimationView.stop()
+                self?.sceneScrollView.stopLottie()
                 self?.enableIndicatorButtons()
             }, onError: { [weak self] error in
                 if let error = error as? ComicStripViewError {
@@ -332,7 +323,7 @@ extension ComicStripViewController {
     func renderPrevEpisode() {
         viewModel.renderPreviousEpisodeScene()
             .subscribe(onCompleted: { [weak self] in
-                self?.sceneLoadingAnimationView.stop()
+                self?.sceneScrollView.stopLottie()
                 self?.enableIndicatorButtons()
             }, onError: { [weak self] error in
                 if let error = error as? ComicStripViewError {

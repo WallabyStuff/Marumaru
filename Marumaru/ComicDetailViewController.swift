@@ -31,7 +31,6 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     var viewModel: ViewModel
     public var comicSN: String?
     public var currentComic: ComicInfo?
-    private var episodeLoadingAnimationView = LottieAnimationView()
     private var cancelRequestImage: (() -> Void)?
     
     
@@ -49,7 +48,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError("ViewModel has not been implemented")
     }
     
     
@@ -132,11 +131,11 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func setupComicEpisodeData() {
-        playComicEpisodeLoadingAnimation()
+        comicEpisodeTableView.playLottie()
         
         viewModel.getComicEpisodes(currentComic!.comicSN)
             .subscribe(onCompleted: { [weak self] in
-                self?.episodeLoadingAnimationView.stop()
+                self?.comicEpisodeTableView.stopLottie()
             })
             .disposed(by: disposeBag)
     }
@@ -234,12 +233,6 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
         comicStripVC.delegate = self
         comicStripVC.modalPresentationStyle = .fullScreen
         present(comicStripVC, animated: true)
-    }
-    
-    private func playComicEpisodeLoadingAnimation() {
-        episodeLoadingAnimationView.play(name: "loading_cat",
-                                         size: CGSize(width: 148, height: 148),
-                                         to: comicEpisodeTableView)
     }
 }
 
