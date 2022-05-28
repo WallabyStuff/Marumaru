@@ -65,6 +65,12 @@
                             <constraint firstItem="CtJ-JB-pnU" firstAttribute="leading" secondItem="nxO-kI-8EL" secondAttribute="leading" constant="8" id="u3A-GI-VlA"/>
                             <constraint firstAttribute="trailing" secondItem="1dA-Wu-EEF" secondAttribute="trailing" constant="12" id="xoq-UI-2gQ"/>
                         </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                            <userDefinedRuntimeAttribute type="number" keyPath="skeletonCornerRadius">
+                                <real key="value" value="10"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
                     </view>
                 </subviews>
                 <constraints>
@@ -76,6 +82,9 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+            </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="cellContentView" destination="nxO-kI-8EL" id="4lY-Yr-wOb"/>
                 <outlet property="rankLabel" destination="K1T-Ve-hQ6" id="VHb-HG-XCW"/>

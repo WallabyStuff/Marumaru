@@ -159,7 +159,7 @@ struct R: Rswift.Validatable {
   }
   #endif
 
-  /// This `R.color` struct is generated, and contains static references to 21 colors.
+  /// This `R.color` struct is generated, and contains static references to 23 colors.
   struct color {
     /// Color `AccentColor`.
     static let accentColor = Rswift.ColorResource(bundle: R.hostingBundle, name: "AccentColor")
@@ -169,6 +169,8 @@ struct R: Rswift.Validatable {
     static let accentRed = Rswift.ColorResource(bundle: R.hostingBundle, name: "AccentRed")
     /// Color `AccentYellow`.
     static let accentYellow = Rswift.ColorResource(bundle: R.hostingBundle, name: "AccentYellow")
+    /// Color `BackgroundGray`.
+    static let backgroundGray = Rswift.ColorResource(bundle: R.hostingBundle, name: "BackgroundGray")
     /// Color `BackgroundWhite-light`.
     static let backgroundWhiteLight = Rswift.ColorResource(bundle: R.hostingBundle, name: "BackgroundWhite-light")
     /// Color `BackgroundWhite-lighter`.
@@ -193,6 +195,8 @@ struct R: Rswift.Validatable {
     static let lineGrayLightest = Rswift.ColorResource(bundle: R.hostingBundle, name: "LineGray-lightest")
     /// Color `LineGray`.
     static let lineGray = Rswift.ColorResource(bundle: R.hostingBundle, name: "LineGray")
+    /// Color `ShadowBlack`.
+    static let shadowBlack = Rswift.ColorResource(bundle: R.hostingBundle, name: "ShadowBlack")
     /// Color `TextBlack-light`.
     static let textBlackLight = Rswift.ColorResource(bundle: R.hostingBundle, name: "TextBlack-light")
     /// Color `TextBlack-lighter`.
@@ -237,6 +241,15 @@ struct R: Rswift.Validatable {
     @available(iOS 11.0, *)
     static func accentYellow(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
       return UIKit.UIColor(resource: R.color.accentYellow, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "BackgroundGray", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func backgroundGray(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.backgroundGray, compatibleWith: traitCollection)
     }
     #endif
 
@@ -349,6 +362,15 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "ShadowBlack", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func shadowBlack(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.shadowBlack, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
     /// `UIColor(named: "TextBlack", bundle: ..., traitCollection: ...)`
     @available(tvOS 11.0, *)
     @available(iOS 11.0, *)
@@ -422,6 +444,14 @@ struct R: Rswift.Validatable {
     @available(watchOSApplicationExtension 4.0, *)
     static func accentYellow(_: Void = ()) -> UIKit.UIColor? {
       return UIKit.UIColor(named: R.color.accentYellow.name)
+    }
+    #endif
+
+    #if os(watchOS)
+    /// `UIColor(named: "BackgroundGray", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func backgroundGray(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.backgroundGray.name)
     }
     #endif
 
@@ -522,6 +552,14 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(watchOS)
+    /// `UIColor(named: "ShadowBlack", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func shadowBlack(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.shadowBlack.name)
+    }
+    #endif
+
+    #if os(watchOS)
     /// `UIColor(named: "TextBlack", bundle: ..., traitCollection: ...)`
     @available(watchOSApplicationExtension 4.0, *)
     static func textBlack(_: Void = ()) -> UIKit.UIColor? {
@@ -564,14 +602,10 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.file` struct is generated, and contains static references to 5 files.
+  /// This `R.file` struct is generated, and contains static references to 3 files.
   struct file {
     /// Resource file `.swiftlint.yml`.
     static let swiftlintYml = Rswift.FileResource(bundle: R.hostingBundle, name: ".swiftlint", pathExtension: "yml")
-    /// Resource file `loading_cat.json`.
-    static let loading_catJson = Rswift.FileResource(bundle: R.hostingBundle, name: "loading_cat", pathExtension: "json")
-    /// Resource file `loading_cat_black.json`.
-    static let loading_cat_blackJson = Rswift.FileResource(bundle: R.hostingBundle, name: "loading_cat_black", pathExtension: "json")
     /// Resource file `loading_cat_radial.json`.
     static let loading_cat_radialJson = Rswift.FileResource(bundle: R.hostingBundle, name: "loading_cat_radial", pathExtension: "json")
     /// Resource file `rainbow_cat.json`.
@@ -580,18 +614,6 @@ struct R: Rswift.Validatable {
     /// `bundle.url(forResource: ".swiftlint", withExtension: "yml")`
     static func swiftlintYml(_: Void = ()) -> Foundation.URL? {
       let fileResource = R.file.swiftlintYml
-      return fileResource.bundle.url(forResource: fileResource)
-    }
-
-    /// `bundle.url(forResource: "loading_cat", withExtension: "json")`
-    static func loading_catJson(_: Void = ()) -> Foundation.URL? {
-      let fileResource = R.file.loading_catJson
-      return fileResource.bundle.url(forResource: fileResource)
-    }
-
-    /// `bundle.url(forResource: "loading_cat_black", withExtension: "json")`
-    static func loading_cat_blackJson(_: Void = ()) -> Foundation.URL? {
-      let fileResource = R.file.loading_cat_blackJson
       return fileResource.bundle.url(forResource: fileResource)
     }
 

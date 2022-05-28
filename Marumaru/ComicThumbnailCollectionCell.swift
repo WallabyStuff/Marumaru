@@ -9,7 +9,7 @@ import UIKit
 
 class ComicThumbnailCollectionCell: UICollectionViewCell {
     
-    @IBOutlet weak var thumbnailImageBaseView: ThumbnailView!
+    @IBOutlet weak var thumbnailImagePlaceholderView: ThumbnailView!
     @IBOutlet weak var thumbnailImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var thumbnailImagePlaceholderLabel: UILabel!
@@ -26,8 +26,7 @@ class ComicThumbnailCollectionCell: UICollectionViewCell {
         onReuse()
         
         thumbnailImageView.image = nil
-        titleLabel.text = ""
-        thumbnailImagePlaceholderLabel.text = ""
+        thumbnailImagePlaceholderView.removeThumbnailShadow()
     }
     
     private func setup() {
@@ -38,7 +37,6 @@ class ComicThumbnailCollectionCell: UICollectionViewCell {
         setupContentView()
         setupThumbnailImageView()
         setupThumbnailImageBaseView()
-        setupSelectedView()
     }
     
     private func setupContentView() {
@@ -51,14 +49,6 @@ class ComicThumbnailCollectionCell: UICollectionViewCell {
     }
     
     private func setupThumbnailImageBaseView() {
-        thumbnailImageBaseView.layer.cornerRadius = 8
-        thumbnailImageBaseView.setThubmailShadow()
-    }
-    
-    private func setupSelectedView() {
-        let selectionView = UIView(frame: self.frame)
-        selectionView.layer.cornerRadius = 16
-//        selectionView.backgroundColor = R.color.accentBlueLightest()
-        self.selectedBackgroundView = selectionView
+        thumbnailImagePlaceholderView.layer.cornerRadius = 8
     }
 }

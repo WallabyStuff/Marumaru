@@ -94,7 +94,7 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
         searchResultCollectionView.register(nibName,
                                             forCellWithReuseIdentifier: SearchResultComicCollectionCell.identifier)
         searchResultCollectionView.keyboardDismissMode = .onDrag
-        searchResultCollectionView.contentInset = UIEdgeInsets(top: compactAppbarHeight,
+        searchResultCollectionView.contentInset = UIEdgeInsets(top: 12,
                                                                left: 12,
                                                                bottom: compactAppbarHeight,
                                                                right: 12)
@@ -127,7 +127,7 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func configureSearchResultTableViewInsets() {
-        searchResultCollectionView.contentInset = UIEdgeInsets(top: regularAppbarHeight + 12,
+        searchResultCollectionView.contentInset = UIEdgeInsets(top: 12,
                                                           left: 0, bottom: 40, right: 0)
     }
     
@@ -158,6 +158,7 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
                                                           cellType: SearchResultComicCollectionCell.self)) { [weak self] _, comicInfo, cell in
                 guard let self = self else { return }
                 
+                cell.hideSkeleton()
                 cell.titleLabel.text = comicInfo.title
                 cell.thumbnailImagePlaceholderLabel.text = comicInfo.title
                 cell.authorLabel.text = comicInfo.author.isEmpty ? "작가정보 없음" : comicInfo.author
@@ -193,6 +194,7 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
                     
                     cell.onReuse = { [weak self] in
                         if let token = token {
+                            cell.thumbnailImagePlaceholderLabel.isHidden = false
                             self?.viewModel.cancelImageRequest(token)
                         }
                     }
@@ -229,10 +231,18 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
     private func bindSearchResultComicLoadingState() {
         viewModel.isLoadingSearchResultComics
             .subscribe(with: self, onNext: { vc, isLoading in
+                vc.searchResultCollectionView.layoutIfNeeded()
+                
                 if isLoading {
-                    vc.view.playLottie(animation: .loading_cat_radial)
+                    vc.searchResultCollectionView.isUserInteractionEnabled = false
+                    vc.searchResultCollectionView.visibleCells.forEach { cell in
+                        cell.showCustomSkeleton()
+                    }
                 } else {
-                    vc.view.stopLottie()
+                    vc.searchResultCollectionView.isUserInteractionEnabled = true
+                    vc.searchResultCollectionView.visibleCells.forEach { cell in
+                        cell.hideSkeleton()
+                    }
                 }
             })
             .disposed(by: disposeBag)
@@ -273,6 +283,7 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
         }
         
         view.endEditing(true)
+        searchResultCollectionView.scrollToTop(topInset: 12, animated: false)
         viewModel.updateSearchResult(searchKeyword)
     }
     

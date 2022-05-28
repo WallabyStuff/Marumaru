@@ -32,6 +32,13 @@ class SearchResultComicCollectionCell: UICollectionViewCell {
         setup()
     }
     
+    override func prepareForReuse() {
+        onReuse()
+        
+        thumbnailImageView.image = nil
+        thumbnailImagePlaceholderView.removeThumbnailShadow()
+    }
+    
     
     // MARK: - Overrides
     
@@ -94,7 +101,6 @@ class SearchResultComicCollectionCell: UICollectionViewCell {
     
     private func setupThumbnailImagePlaceholderView() {
         thumbnailImagePlaceholderView.layer.cornerRadius = 8
-        thumbnailImagePlaceholderView.setThubmailShadow()
     }
     
     private func setupThumbnailImagePlaceholderHolderLabel() {

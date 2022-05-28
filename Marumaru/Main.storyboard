@@ -335,6 +335,9 @@
                                     <constraint firstAttribute="trailing" secondItem="FUc-n8-T3p" secondAttribute="trailing" id="W7Z-dW-XZt"/>
                                     <constraint firstItem="FUc-n8-T3p" firstAttribute="leading" secondItem="IQz-28-dsB" secondAttribute="leading" id="tK7-fA-HjO"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                </userDefinedRuntimeAttributes>
                             </scrollView>
                             <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MfK-Lr-soA">
                                 <rect key="frame" x="0.0" y="0.0" width="428" height="80"/>

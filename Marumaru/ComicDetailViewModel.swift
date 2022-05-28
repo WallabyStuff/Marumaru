@@ -18,7 +18,7 @@ class ComicDetailViewModel: MarumaruApiServiceViewModel {
     private let watchHistoryHandler = WatchHistoryManager()
     
     private var comicEpisodes = [ComicEpisode]()
-    public var comicEpisodesObservable = PublishRelay<[ComicEpisode]>()
+    public var comicEpisodesObservable = BehaviorRelay<[ComicEpisode]>(value: [])
     public var isLoadingComicEpisodes = BehaviorRelay<Bool>(value: false)
     public var failedToLoadingComicEpisodes = BehaviorRelay<Bool>(value: false)
     
@@ -38,7 +38,8 @@ class ComicDetailViewModel: MarumaruApiServiceViewModel {
 
 extension ComicDetailViewModel {
     public func updateComicEpisodes() {
-        comicEpisodesObservable.accept([])
+        comicEpisodes = fakeEpisodeCells(10)
+        comicEpisodesObservable.accept(comicEpisodes)
         isLoadingComicEpisodes.accept(true)
         failedToLoadingComicEpisodes.accept(false)
         
@@ -83,5 +84,15 @@ extension ComicDetailViewModel {
     
     public var comicEpisodeAmount: Int {
         return comicEpisodes.count
+    }
+}
+
+extension ComicDetailViewModel {
+    private func fakeEpisodeCells(_ count: Int) -> [ComicEpisode] {
+        return [ComicEpisode](repeating: fakeEpisodeCell, count: count)
+    }
+    
+    private var fakeEpisodeCell: ComicEpisode {
+        return .init(title: "", description: "", episodeURL: "")
     }
 }

@@ -13,6 +13,7 @@ import CoreData
 import RxSwift
 import RxCocoa
 import RealmSwift
+import SkeletonView
 
 class MainViewController: BaseViewController, ViewModelInjectable {
     
@@ -66,6 +67,12 @@ class MainViewController: BaseViewController, ViewModelInjectable {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
         viewModel.updateWatchHistories()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        bindNewUpdateComicLoadingState()
+        bindComicRankLoadingLoadingState()
     }
     
     
@@ -152,7 +159,6 @@ class MainViewController: BaseViewController, ViewModelInjectable {
         
         bindNewUpdateComicCollectionView()
         bindNewUpdatecomicCollectionCell()
-        bindNewUpdateComicLoadingState()
         bindNewUpdateFailState()
         
         bindWatchHistoryCollectionView()
@@ -160,7 +166,6 @@ class MainViewController: BaseViewController, ViewModelInjectable {
         
         bindComicRankCollctionView()
         bindComicRankCollectionCell()
-        bindComicRankLoadingLoadingState()
         bindComicRankFailState()
     }
     
@@ -187,6 +192,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
             .asDriver()
             .debounce(.milliseconds(300))
             .drive(with: self, onNext: { vc, _ in
+                vc.newUpdateComicCollectionView.scrollToLeft(leftInset: 12, animated: false)
                 vc.viewModel.updateNewUpdatedComics()
             })
             .disposed(by: disposeBag)
@@ -197,6 +203,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
             .asDriver()
             .debounce(.milliseconds(300))
             .drive(with: self, onNext: { vc, _ in
+                vc.comicRankTableView.scrollToTop(animated: false)
                 vc.viewModel.updateComicRank()
             })
             .disposed(by: disposeBag)
@@ -208,6 +215,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
                 .items(cellIdentifier: ComicThumbnailCollectionCell.identifier, cellType: ComicThumbnailCollectionCell.self)) { [weak self] _, comic, cell in
                     guard let self = self else { return }
                     
+                    cell.hideSkeleton()
                     cell.thumbnailImagePlaceholderLabel.text = comic.title
                     cell.titleLabel.text = comic.title
                     
@@ -218,7 +226,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
                                 DispatchQueue.main.async {
                                     cell.thumbnailImageView.image = image.imageCache.image
                                     cell.thumbnailImagePlaceholderLabel.isHidden = true
-                                    cell.thumbnailImageBaseView.setThumbnailShadow(with: image.imageCache.averageColor.cgColor)
+                                    cell.thumbnailImagePlaceholderView.setThumbnailShadow(with: image.imageCache.averageColor.cgColor)
                                     
                                     if image.animate {
                                         cell.thumbnailImageView.startFadeInAnimation(duration: 0.5, nil)
@@ -231,6 +239,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
                         
                         cell.onReuse = { [weak self] in
                             if let token = token {
+                                cell.thumbnailImagePlaceholderLabel.isHidden = false
                                 self?.viewModel.cancelImageRequest(token)
                             }
                         }
@@ -250,11 +259,21 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     
     private func bindNewUpdateComicLoadingState() {
         viewModel.isLoadingNewUpdateComic
-            .subscribe(onNext: { [weak self] isLoading in
+            .subscribe(with: self, onNext: { vc, isLoading in
+                vc.newUpdateComicCollectionView.layoutIfNeeded()
+                
                 if isLoading {
-                    self?.newUpdateComicCollectionView.playLottie()
+                    vc.newUpdateComicCollectionView.isUserInteractionEnabled = false
+                    vc.newUpdateComicCollectionView.visibleCells
+                        .forEach({ cell in
+                            cell.showCustomSkeleton()
+                        })
                 } else {
-                    self?.newUpdateComicCollectionView.stopLottie()
+                    vc.newUpdateComicCollectionView.isUserInteractionEnabled = true
+                    vc.newUpdateComicCollectionView.visibleCells
+                        .forEach({ cell in
+                            cell.hideSkeleton()
+                        })
                 }
             })
             .disposed(by: disposeBag)
@@ -280,6 +299,8 @@ class MainViewController: BaseViewController, ViewModelInjectable {
             .bind(to: watchHistoryCollectionView.rx.items(cellIdentifier: ComicThumbnailCollectionCell.identifier,
                                                           cellType: ComicThumbnailCollectionCell.self)) { [weak self] _, comic, cell in
                 guard let self = self else { return }
+                
+                cell.hideSkeleton()
                 cell.thumbnailImagePlaceholderLabel.text = comic.episodeTitle
                 cell.titleLabel.text = comic.episodeTitle
                 
@@ -289,7 +310,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
                         DispatchQueue.main.async {
                             cell.thumbnailImageView.image = image.imageCache.image
                             cell.thumbnailImagePlaceholderLabel.isHidden = true
-                            cell.thumbnailImageBaseView.setThumbnailShadow(with: image.imageCache.averageColor.cgColor)
+                            cell.thumbnailImagePlaceholderView.setThumbnailShadow(with: image.imageCache.averageColor.cgColor)
                             
                             if image.animate {
                                 cell.thumbnailImageView.startFadeInAnimation(duration: 0.5, nil)
@@ -332,6 +353,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
         viewModel.comicRankObservable
             .bind(to: comicRankTableView.rx.items(cellIdentifier: ComicRankTableCell.identifier,
                                                   cellType: ComicRankTableCell.self)) { index, comic, cell in
+                cell.hideSkeleton()
                 cell.titleLabel.text = comic.title
                 cell.rankLabel.text = "\(index + 1)"
             }.disposed(by: disposeBag)
@@ -340,25 +362,35 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     private func bindComicRankCollectionCell() {
         comicRankTableView.rx.itemSelected
             .asDriver()
-            .drive(onNext: { [weak self] indexPath in
-                self?.viewModel.comicRankItemSelected(indexPath)
+            .drive(with: self, onNext: { vc, indexPath in
+                vc.viewModel.comicRankItemSelected(indexPath)
             })
             .disposed(by: disposeBag)
         
         viewModel.presentComicStripVCObservable
-            .subscribe(onNext: { [weak self] comic in
-                self?.presentComicStripVC(comic)
+            .subscribe(with: self, onNext: { vc, comic in
+                vc.presentComicStripVC(comic)
             })
             .disposed(by: disposeBag)
     }
     
     private func bindComicRankLoadingLoadingState() {
         viewModel.isLoadingComicRank
-            .subscribe(onNext: { [weak self] isLoading in
+            .subscribe(with: self, onNext: { vc, isLoading in
+                vc.comicRankTableView.layoutIfNeeded()
+                
                 if isLoading {
-                    self?.comicRankTableView.playLottie()
+                    vc.comicRankTableView.isUserInteractionEnabled = false
+                    vc.comicRankTableView.visibleCells
+                        .forEach({ cell in
+                            cell.showCustomSkeleton()
+                        })
                 } else {
-                    self?.comicRankTableView.stopLottie()
+                    vc.comicRankTableView.isUserInteractionEnabled = true
+                    vc.comicRankTableView.visibleCells
+                        .forEach({ cell in
+                            cell.hideSkeleton()
+                        })
                 }
             })
             .disposed(by: disposeBag)
@@ -366,12 +398,12 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     
     private func bindComicRankFailState() {
         viewModel.failToGetComicRank
-            .subscribe(onNext: { [weak self] isFailed in
+            .subscribe(with: self, onNext: { vc, isFailed in
                 if isFailed {
-                    self?.comicRankTableView.stopLottie()
-                    self?.comicRankTableView.makeNoticeLabel("🛠서버 점검중입니다.\n나중에 다시 시도해주세요")
+                    vc.comicRankTableView.stopLottie()
+                    vc.comicRankTableView.makeNoticeLabel("🛠서버 점검중입니다.\n나중에 다시 시도해주세요")
                 } else {
-                    self?.comicRankTableView.removeNoticeLabels()
+                    vc.comicRankTableView.removeNoticeLabels()
                 }
             })
             .disposed(by: disposeBag)

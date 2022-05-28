@@ -311,7 +311,7 @@ extension MarumaruApiService {
                         thumbnailImageUrl = self.getEndPoint(url: thumbnailImageUrl)
                         
                         let comicEpisode = ComicEpisode(title: episodeTitle,
-                                                        author: description,
+                                                        description: description,
                                                         thumbnailImageURL: thumbnailImageUrl,
                                                         episodeURL: link)
                         
