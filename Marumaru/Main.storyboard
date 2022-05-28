@@ -346,7 +346,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vHw-eb-i9G">
-                                            <rect key="frame" x="20" y="20" width="388" height="52"/>
+                                            <rect key="frame" x="20" y="16" width="388" height="52"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="어떤 만화를 보고싶으신가요?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sfx-5a-mKM">
                                                     <rect key="frame" x="16" y="17.666666666666664" width="324" height="17"/>
@@ -377,7 +377,7 @@
                                     <constraints>
                                         <constraint firstItem="vHw-eb-i9G" firstAttribute="leading" secondItem="jxk-o0-BDn" secondAttribute="leading" constant="20" id="knv-cy-YBi"/>
                                         <constraint firstAttribute="trailing" secondItem="vHw-eb-i9G" secondAttribute="trailing" constant="20" id="pZU-e2-UUP"/>
-                                        <constraint firstAttribute="bottom" secondItem="vHw-eb-i9G" secondAttribute="bottom" constant="8" id="ykA-eJ-87p"/>
+                                        <constraint firstAttribute="bottom" secondItem="vHw-eb-i9G" secondAttribute="bottom" constant="12" id="ykA-eJ-87p"/>
                                     </constraints>
                                 </view>
                                 <constraints>
