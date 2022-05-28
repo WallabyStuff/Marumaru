@@ -10,85 +10,78 @@ import RxSwift
 import RxCocoa
 
 class ComicDetailViewModel: MarumaruApiServiceViewModel {
+    
+    public var comicInfo: ComicInfo
+    
     private var disposeBag = DisposeBag()
     private let marumaruApiService = MarumaruApiService()
     private let watchHistoryHandler = WatchHistoryManager()
+    
+    private var comicEpisodes = [ComicEpisode]()
+    public var comicEpisodesObservable = PublishRelay<[ComicEpisode]>()
+    public var isLoadingComicEpisodes = BehaviorRelay<Bool>(value: false)
+    public var failedToLoadingComicEpisodes = BehaviorRelay<Bool>(value: false)
+    
     private var watchHistories = [String: String]()
-    public var reloadComicEpisodeTableView: (() -> Void)?
+    public var watchHistoriesObservable = PublishRelay<[WatchHistory]>()
     
-    private var comicEpisodes = [ComicEpisode]() {
-        didSet {
-            getWatchHistories()
-                .subscribe(onCompleted: { [weak self] in
-                    self?.reloadComicEpisodeTableView?()
-                }, onError: { error in
-                    print(error.localizedDescription)
-                }).disposed(by: disposeBag)
-        }
+    public var presentComicStripVCObservable = PublishRelay<ComicEpisode>()
+    
+    init(comicInfo: ComicInfo) {
+        self.comicInfo = comicInfo
+    }
+    
+    override convenience init() {
+        fatalError("ComicInfo has not been implemented")
     }
 }
 
 extension ComicDetailViewModel {
-    public func getComicEpisodes(_ serialNumber: String) -> Completable {
-        return Completable.create { [weak self] observer in
-            guard let self = self else { return Disposables.create()}
-            
-            self.marumaruApiService.getEpisodes(serialNumber)
-                .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
-                .observe(on: MainScheduler.instance)
-                .subscribe(with: self, onNext: { strongSelf, episodes in
-                    strongSelf.comicEpisodes = episodes
-                    observer(.completed)
-                }, onError: { _, error in
-                    observer(.error(error))
-                }).disposed(by: self.disposeBag)
-            
-            return Disposables.create()
-        }
-    }
-    
-    public var totalEpisodeCountText: String {
-        return "총 \(comicEpisodes.count)화"
-    }
-    
-    public var totalEpisodeCount: Int {
-        return comicEpisodes.count
-    }
-}
-
-extension ComicDetailViewModel {
-    public func getWatchHistories() -> Completable {
-        return Completable.create { [weak self] observer in
-            guard let self = self else { return Disposables.create() }
-            
-            self.watchHistoryHandler.fetchData()
-                .subscribe(onSuccess: { [weak self] watchHistories in
-                    self?.watchHistories =  Dictionary(uniqueKeysWithValues: watchHistories.map { ($0.comicURL, $0.comicURL) })
-                    observer(.completed)
-                }, onFailure: { error in
-                    observer(.error(error))
-                }).disposed(by: self.disposeBag)
-            
-            return Disposables.create()
-        }
-    }
-    
-    public func ifAlreadyWatched(at indexPath: IndexPath) -> Bool {
+    public func updateComicEpisodes() {
+        comicEpisodesObservable.accept([])
+        isLoadingComicEpisodes.accept(true)
+        failedToLoadingComicEpisodes.accept(false)
         
-        return watchHistories[comicEpisodes[indexPath.row].comicURL] == nil ? false : true
+        self.marumaruApiService.getEpisodes(comicInfo.serialNumber)
+            .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
+            .observe(on: MainScheduler.instance)
+            .subscribe(with: self, onNext: { strongSelf, comics in
+                strongSelf.comicEpisodes = comics
+                strongSelf.isLoadingComicEpisodes.accept(false)
+                strongSelf.comicEpisodesObservable.accept(comics)
+            }, onError: { strongSelf, _ in
+                strongSelf.isLoadingComicEpisodes.accept(false)
+                strongSelf.failedToLoadingComicEpisodes.accept(true)
+            }).disposed(by: self.disposeBag)
+    }
+    
+    public func comicItemSelected(_ indexPath: IndexPath) {
+        let selectedComic = comicEpisodes[indexPath.row]
+        presentComicStripVCObservable.accept(selectedComic)
     }
 }
 
 extension ComicDetailViewModel {
-    public func numberOfRowsIn(section: Int) -> Int {
-        if section == 0 {
-            return comicEpisodes.count
-        } else {
-            return 0
-        }
+    public func getWatchHistories() {
+        watchHistoriesObservable.accept([])
+        
+        watchHistoryHandler.fetchData()
+            .subscribe(with: self, onSuccess: { strongSelf, comics in
+                strongSelf.watchHistories =  Dictionary(uniqueKeysWithValues: comics.map { ($0.episodeURL, $0.episodeURL) })
+            }, onFailure: { strongSelf, _ in
+                strongSelf.watchHistoriesObservable.accept([])
+            }).disposed(by: self.disposeBag)
     }
     
-    public func cellItemForRow(at indexPath: IndexPath) -> ComicEpisode {
-        return comicEpisodes[indexPath.row]
+    public func ifAlreadyWatched(_ index: Int) -> Bool {
+        return watchHistories[comicEpisodes[index].episodeURL] == nil ? false : true
+    }
+    
+    public func comicEpisodeIndex(_ index: Int) -> Int {
+        return comicEpisodes.count - index
+    }
+    
+    public var comicEpisodeAmount: Int {
+        return comicEpisodes.count
     }
 }

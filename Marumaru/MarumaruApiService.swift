@@ -56,7 +56,7 @@ class MarumaruApiService {
                 remoteBasePath = remoteBasePath.trimmingCharacters(in: .newlines)
                 UserDefaults.standard.setValue(remoteBasePath, forKey: "remoteBasePath")
             } catch {
-                UserDefaults.standard.setValue("https://marumaru259.com", forKey: "remoteBasePath")
+                UserDefaults.standard.setValue("https://marumaru260.com", forKey: "remoteBasePath")
                 print(error)
             }
         }
@@ -64,7 +64,7 @@ class MarumaruApiService {
     
     // TODO: - Fetch updated path
     private func setupBasePath() {
-        basePath = "https://marumaru259.com"
+        basePath = "https://marumaru260.com"
 //        let remoteBasePath = UserDefaults.standard.string(forKey: "remoteBasePath")
 //        if let remoteBasePath = remoteBasePath {
 //            basePath = remoteBasePath
@@ -145,7 +145,7 @@ extension MarumaruApiService {
 
 // MARK: - Top Ranked Managa
 extension MarumaruApiService {
-    public func getTopRankComic() -> Observable<[TopRankedComic]> {
+    public func getTopRankComic() -> Observable<[ComicRank]> {
         return Observable.create { [weak self] observer in
             
             guard let self = self else { return Disposables.create() }
@@ -171,9 +171,9 @@ extension MarumaruApiService {
         }
     }
     
-    private func parseTopRankComic(with document: Document) throws -> [TopRankedComic] {
+    private func parseTopRankComic(with document: Document) throws -> [ComicRank] {
         do {
-            var topRankComics = [TopRankedComic]()
+            var topRankComics = [ComicRank]()
             
             let elements = try document.getElementsByClass("basic-post-list")
             let topRankedList = try elements.first()?.getElementsByTag("tr")
@@ -182,7 +182,7 @@ extension MarumaruApiService {
                 let comicTitle = try comic.select("a").text().trimmingCharacters(in: .whitespaces)
                 let comicURL = try comic.select("a").attr("href").trimmingCharacters(in: .whitespaces)
                 
-                let topRankComic = TopRankedComic(title: comicTitle, link: comicURL)
+                let topRankComic = ComicRank(title: comicTitle, episodeURL: comicURL)
                 topRankComics.append(topRankComic)
             })
             
@@ -255,7 +255,7 @@ extension MarumaruApiService {
                                             updateCycle: descriptions[1],
                                             thumbnailImage: nil,
                                             thumbnailImageURL: thumbnailImageUrl,
-                                            comicSN: serialNumber)
+                                            serialNumber: serialNumber)
                 searchResult.append(conicInfo)
             }
             
@@ -311,9 +311,9 @@ extension MarumaruApiService {
                         thumbnailImageUrl = self.getEndPoint(url: thumbnailImageUrl)
                         
                         let comicEpisode = ComicEpisode(title: episodeTitle,
-                                                        description: description,
+                                                        author: description,
                                                         thumbnailImageURL: thumbnailImageUrl,
-                                                        comicURL: link)
+                                                        episodeURL: link)
                         
                         comicEpisodes.append(comicEpisode)
                     }
@@ -328,28 +328,42 @@ extension MarumaruApiService {
 }
 
 extension MarumaruApiService {
-    public func getEpisodesInPlay() -> Single<[Episode]> {
+    public func getEpisodesInStrip(_ url: String) -> Single<[Episode]> {
         return Single.create { [weak self] observer in
             guard let self = self else { return Disposables.create() }
             
-            do {
-                let episodes = try self.parseEpisodesInPlay()
-                observer(.success(episodes))
-            } catch {
-                observer(.failure(error))
+            if let sharedDoc = self.sharedDoc {
+                do {
+                    let episodes = try self.parseEpisodesInStrip(sharedDoc)
+                    observer(.success(episodes))
+                } catch {
+                    observer(.failure(MarumaruApiErrorMessage.failToGetUrl))
+                }
+            } else {
+                let endPoint = self.getEndPoint(url: url)
+                self.getDocument(endPoint)
+                    .subscribe(with: self, onNext: { vc, document in
+                        do {
+                            let episodes = try self.parseEpisodesInStrip(document)
+                            observer(.success(episodes))
+                        } catch {
+                            observer(.failure(MarumaruApiErrorMessage.failToGetUrl))
+                        }
+                    })
+                    .disposed(by: self.disposeBag)
             }
             
             return Disposables.create()
         }
     }
     
-    public func parseEpisodesInPlay() throws -> [Episode] {
-        guard let sharedDoc = sharedDoc else {
-            throw MarumaruApiErrorMessage.failToParseHtml
-        }
+    public func parseEpisodesInStrip(_ document: Document) throws -> [Episode] {
+//        guard let sharedDoc = sharedDoc else {
+//            throw MarumaruApiErrorMessage.failToParseHtml
+//        }
         
         do {
-            let chartElement = try sharedDoc.getElementsByClass("chart").first()
+            let chartElement = try document.getElementsByClass("chart").first()
             var episodes = [Episode]()
             
             if let chartElements = try chartElement?.select("option") {

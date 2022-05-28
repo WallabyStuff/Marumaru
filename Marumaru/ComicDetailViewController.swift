@@ -29,8 +29,6 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     
     static let identifier = R.storyboard.comicDetail.comicDetailStoryboard.identifier
     var viewModel: ViewModel
-    public var comicSN: String?
-    public var currentComic: ComicInfo?
     private var cancelRequestImage: (() -> Void)?
     
     
@@ -80,21 +78,16 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     
     private func setupData() {
         setupComicInfoData()
-        setupComicEpisodeData()
+        viewModel.updateComicEpisodes()
     }
     
     private func setupComicInfoData() {
-        guard let currentComic = currentComic else {
-            dismiss(animated: true, completion: nil)
-            return
-        }
-        
-        comicTitleLabel.text = currentComic.title
-        authorLabel.text = currentComic.author
-        updateCycleLabel.text = currentComic.updateCycle
+        comicTitleLabel.text = viewModel.comicInfo.title
+        authorLabel.text = viewModel.comicInfo.author
+        updateCycleLabel.text = viewModel.comicInfo.updateCycle
         thumbnailImageView.layer.cornerRadius = 8
         
-        if currentComic.updateCycle.contains("미분류") {
+        if viewModel.comicInfo.updateCycle.contains("미분류") {
             updateCycleLabel.setBackgroundHighlight(with: .systemTeal,
                                                     textColor: .white)
         } else {
@@ -102,15 +95,15 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
                                                     textColor: .white)
         }
         
-        if currentComic.thumbnailImage != nil {
-            thumbnailImageView.image = currentComic.thumbnailImage
-            thumbnailImageView.layer.borderColor = currentComic.thumbnailImage?.averageColor?.cgColor
+        if viewModel.comicInfo.thumbnailImage != nil {
+            thumbnailImageView.image = viewModel.comicInfo.thumbnailImage
+            thumbnailImageView.layer.borderColor = viewModel.comicInfo.thumbnailImage?.averageColor?.cgColor
         } else {
-            if let thumbnailImageUrl = currentComic.thumbnailImageURL {
+            if let thumbnailImageUrl = viewModel.comicInfo.thumbnailImageURL {
                 let token = viewModel.requestImage(thumbnailImageUrl) { result in
                     do {
                         let resultImage = try result.get()
-                        
+
                         DispatchQueue.main.async {
                             self.thumbnailImageView.image = resultImage.imageCache.image
                             self.thumbnailImageView.startFadeInAnimation(duration: 0.3, nil)
@@ -120,7 +113,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
                         print(error.localizedDescription)
                     }
                 }
-                
+
                 cancelRequestImage = { [weak self] in
                     if let token = token {
                         self?.viewModel.cancelImageRequest(token)
@@ -128,16 +121,6 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
                 }
             }
         }
-    }
-    
-    private func setupComicEpisodeData() {
-        comicEpisodeTableView.playLottie()
-        
-        viewModel.getComicEpisodes(currentComic!.comicSN)
-            .subscribe(onCompleted: { [weak self] in
-                self?.comicEpisodeTableView.stopLottie()
-            })
-            .disposed(by: disposeBag)
     }
     
     private func setupView() {
@@ -158,13 +141,6 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     private func setupEpisodeTableView() {
         let nibName = UINib(nibName: ComicEpisodeThumbnailTableCell.identifier, bundle: nil)
         comicEpisodeTableView.register(nibName, forCellReuseIdentifier: ComicEpisodeThumbnailTableCell.identifier)
-        comicEpisodeTableView.delegate = self
-        comicEpisodeTableView.dataSource = self
-        
-        viewModel.reloadComicEpisodeTableView = { [weak self] in
-            self?.comicEpisodeTableView.reloadData()
-            self?.episodeAmountLabel.text = self?.viewModel.totalEpisodeCountText
-        }
     }
     
     private func setupScrollToBottomButton() {
@@ -177,25 +153,109 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     
     private func bind() {
         bindScrollToBottomButton()
-        bindComicEpisodeCell()
+        
+        bindComicEpisodeTableView()
+        bindComicEpisodeTableViewCell()
+        bindComicEpisodeLoadingState()
+        bindComicEpisodeFailState()
+        bindEpisodeAmountLabel()
     }
     
     private func bindScrollToBottomButton() {
         scrollToBottomButton.rx.tap
             .asDriver()
-            .drive(onNext: { [weak self] in
-                self?.scrollToBottom()
+            .drive(with: self, onNext: { vc, _ in
+                vc.scrollToBottom()
             })
             .disposed(by: disposeBag)
     }
     
-    private func bindComicEpisodeCell() {
+    private func bindComicEpisodeTableView() {
+        viewModel.comicEpisodesObservable
+            .bind(to: comicEpisodeTableView.rx.items(cellIdentifier: ComicEpisodeThumbnailTableCell.identifier,
+                                                     cellType: ComicEpisodeThumbnailTableCell.self)) { [weak self] index, comic, cell in
+                guard let self = self else { return }
+                
+                cell.titleLabel.text = comic.title
+                cell.authorLabel.text = comic.author
+                cell.indexLabel.text = self.viewModel.comicEpisodeIndex(index).description
+                cell.thumbnailImageView.image = nil
+                
+                if self.viewModel.ifAlreadyWatched(index) {
+                    cell.setWatched()
+                } else {
+                    cell.setUnWatched()
+                }
+                
+                if let thumbnailImageUrl = comic.thumbnailImageURL {
+                    let token = self.viewModel.requestImage(thumbnailImageUrl) { result in
+                        do {
+                            let resultImage = try result.get()
+                            
+                            DispatchQueue.main.async {
+                                cell.thumbnailImageView.image = resultImage.imageCache.image
+                                if resultImage.animate {
+                                    cell.thumbnailImageView.startFadeInAnimation(duration: 0.3)
+                                }
+                            }
+                        } catch {
+                            print(error.localizedDescription)
+                        }
+                    }
+                    
+                    cell.onReuse = { [weak self] in
+                        if let token = token {
+                            self?.viewModel.cancelImageRequest(token)
+                        }
+                    }
+                }
+            }.disposed(by: disposeBag)
+    }
+    
+    private func bindComicEpisodeTableViewCell() {
         comicEpisodeTableView.rx.itemSelected
             .asDriver()
             .drive(with: self, onNext: { vc, indexPath in
-                let comicInfo = vc.viewModel.cellItemForRow(at: indexPath)
-                vc.presentComicStripVC(comicInfo.title, comicInfo.comicURL)
+                vc.viewModel.comicItemSelected(indexPath)
             }).disposed(by: disposeBag)
+        
+        viewModel.presentComicStripVCObservable
+            .subscribe(with: self, onNext: { vc, comic in
+                vc.presentComicStripVC(comic)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindComicEpisodeLoadingState() {
+        viewModel.isLoadingComicEpisodes
+            .subscribe(with: self, onNext: { vc, isLoading in
+                if isLoading {
+                    vc.comicEpisodeTableView.playLottie()
+                } else {
+                    vc.comicEpisodeTableView.stopLottie()
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindComicEpisodeFailState() {
+        viewModel.failedToLoadingComicEpisodes
+            .subscribe(with: self, onNext: { vc, isFailed in
+                if isFailed {
+                    vc.comicEpisodeTableView.makeNoticeLabel("🛠서버 점검중입니다.\n나중에 다시 시도해주세요")
+                } else {
+                    vc.comicEpisodeTableView.removeNoticeLabels()
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindEpisodeAmountLabel() {
+        viewModel.comicEpisodesObservable
+            .subscribe(with: self, onNext: { vc, comics in
+                vc.episodeAmountLabel.text  = "총 \(comics.count)화"
+            })
+            .disposed(by: disposeBag)
     }
     
     
@@ -217,20 +277,20 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     
     private func scrollToBottom() {
         if comicEpisodeTableView.contentSize.height > 0 {
-            let indexPath = IndexPath(row: viewModel.totalEpisodeCount - 1, section: 0)
+            let indexPath = IndexPath(row: viewModel.comicEpisodeAmount - 1, section: 0)
             comicEpisodeTableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
         }
     }
     
-    private func presentComicStripVC(_ comicTitle: String, _ comicURL: String) {
+    private func presentComicStripVC(_ comicEpisode: ComicEpisode) {
         let storyboard = UIStoryboard(name: R.storyboard.comicStrip.name, bundle: nil)
         let comicStripVC = storyboard.instantiateViewController(identifier: ComicStripViewController.identifier,
                                                                 creator: { coder -> ComicStripViewController in
-            let viewModel = ComicStripViewModel(comicTitle: comicTitle, comicURL: comicURL)
-            return .init(coder, viewModel) ?? ComicStripViewController(.init(comicTitle: "", comicURL: ""))
+            let episode = Episode(title: comicEpisode.title, serialNumber: "")
+            let viewModel = ComicStripViewModel(episode: episode, episodeURL: comicEpisode.episodeURL)
+            return .init(coder, viewModel) ?? ComicStripViewController(.init(episode: episode, episodeURL: ""))
         })
         
-        comicStripVC.delegate = self
         comicStripVC.modalPresentationStyle = .fullScreen
         present(comicStripVC, animated: true)
     }
@@ -238,57 +298,6 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
 
 
 // MARK: - Extenstions
-
-extension ComicDetailViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.numberOfRowsIn(section: 0)
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let episodeCell = tableView.dequeueReusableCell(withIdentifier: ComicEpisodeThumbnailTableCell.identifier)
-                as? ComicEpisodeThumbnailTableCell else {
-            return UITableViewCell()
-        }
-        
-        let comicInfo = viewModel.cellItemForRow(at: indexPath)
-        
-        episodeCell.titleLabel.text = comicInfo.title
-        episodeCell.authorLabel.text = comicInfo.description
-        episodeCell.indexLabel.text = (viewModel.totalEpisodeCount - indexPath.row).description
-        episodeCell.thumbnailImageView.image = nil
-        
-        if viewModel.ifAlreadyWatched(at: indexPath) {
-            episodeCell.setWatched()
-        } else {
-            episodeCell.setUnWatched()
-        }
-        
-        if let thumbnailImageUrl = comicInfo.thumbnailImageURL {
-            let token = viewModel.requestImage(thumbnailImageUrl) { result in
-                do {
-                    let resultImage = try result.get()
-                    
-                    DispatchQueue.main.async {
-                        episodeCell.thumbnailImageView.image = resultImage.imageCache.image
-                        if resultImage.animate {
-                            episodeCell.thumbnailImageView.startFadeInAnimation(duration: 0.3)
-                        }
-                    }
-                } catch {
-                    print(error.localizedDescription)
-                }
-            }
-            
-            episodeCell.onReuse = { [weak self] in
-                if let token = token {
-                    self?.viewModel.cancelImageRequest(token)
-                }
-            }
-        }
-        
-        return episodeCell
-    }
-}
 
 extension ComicDetailViewController: UIScrollViewDelegate {
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
@@ -299,11 +308,5 @@ extension ComicDetailViewController: UIScrollViewDelegate {
         } else {
             fadeScrollToBottomButton(bool: false)
         }
-    }
-}
-
-extension ComicDetailViewController: ComicStripViewDelegate {
-    func didWatchHistoryUpdated() {
-        setupComicEpisodeData()
     }
 }

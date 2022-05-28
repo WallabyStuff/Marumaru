@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct TopRankedComic {
+struct ComicRank {
     var title: String
-    var link: String
+    var episodeURL: String
 }

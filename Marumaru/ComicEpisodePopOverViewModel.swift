@@ -6,15 +6,19 @@
 //
 
 import Foundation
+import RxSwift
+import RxCocoa
 
 class ComicEpisodePopOverViewModel {
-    private var currentSerialNumber: String
+    
+    public var currentEpisodeSN: String
     private var episodes: [Episode]
-    private var currentEpisode: Episode?
+    public var episodesObservable = BehaviorRelay<[Episode]>(value: [])
     
     init(_ serialNumber: String, _ episodes: [Episode]) {
-        self.currentSerialNumber = serialNumber
+        self.currentEpisodeSN = serialNumber
         self.episodes = episodes.reversed()
+        self.episodesObservable.accept(self.episodes)
     }
 }
 
@@ -34,14 +38,10 @@ extension ComicEpisodePopOverViewModel {
 
 extension ComicEpisodePopOverViewModel {
     public var currentEpisodeIndex: Int? {
-        for (index, episode) in episodes.enumerated() where episode.serialNumber == currentSerialNumber {
+        for (index, episode) in episodes.enumerated() where episode.serialNumber == currentEpisodeSN {
             return index
         }
         
         return nil
-    }
-    
-    public var serialNumber: String {
-        return currentSerialNumber
     }
 }

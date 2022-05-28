@@ -26,8 +26,6 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
     
     static let identifier = R.storyboard.searchComic.searchComicStoryboard.identifier
     var viewModel: ViewModel
-    private var isSearching = false
-    private var searchResultPlaceholderLabel = StickyPlaceholderLabel()
     
     
     // MARK: - Initializers
@@ -60,19 +58,6 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
         super.viewDidAppear(true)
         focusSearchTextField()
         navigationController?.navigationBar.isHidden = true
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(true)
-    }
-    
-    
-    // MARK: - Overrides
-    
-    override func updateViewConstraints() {
-        super.updateViewConstraints()
-        configureAppbarViewConstraints()
-        configureSearchResultTableViewInsets()
     }
     
     
@@ -108,8 +93,6 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
         let nibName = UINib(nibName: SearchResultComicCollectionCell.identifier, bundle: nil)
         searchResultCollectionView.register(nibName,
                                             forCellWithReuseIdentifier: SearchResultComicCollectionCell.identifier)
-        searchResultCollectionView.delegate = self
-        searchResultCollectionView.dataSource = self
         searchResultCollectionView.keyboardDismissMode = .onDrag
         searchResultCollectionView.contentInset = UIEdgeInsets(top: compactAppbarHeight,
                                                                left: 12,
@@ -120,22 +103,24 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
         flowLayout.minimumLineSpacing = 16
         flowLayout.itemSize = CGSize(width: view.frame.width - 24, height: 128)
         searchResultCollectionView.collectionViewLayout = flowLayout
-        
-        viewModel.reloadSearchResultTableView = { [weak self] in
-            self?.searchResultCollectionView.reloadData()
-        }
     }
     
     private func setupSearchButton() {
         searchButton.rx.tap
             .asDriver()
             .drive(with: self, onNext: { vc, _ in
-                vc.searchComic()
+                vc.updateSearchResult()
             }).disposed(by: disposeBag)
     }
     
     
     // MARK: - Constraints
+    
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
+        configureAppbarViewConstraints()
+        configureSearchResultTableViewInsets()
+    }
     
     private func configureAppbarViewConstraints() {
         appbarViewHeightConstraint.constant = view.safeAreaInsets.top + regularAppbarHeight
@@ -151,8 +136,12 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
     
     private func bind() {
         bindBackButton()
-        bindSearchResultCell()
-        bindSearchResultTableViewScroll()
+        
+        bindSearchResultComicCollectionView()
+        bindSearchResultComicCollectionCell()
+        bindSearchResultComicLoadingState()
+        bindSearchResultComicFailState()
+        bindSearchResultComicCollectionViewScrollAction()
     }
     
     private func bindBackButton() {
@@ -163,68 +152,138 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
             }).disposed(by: disposeBag)
     }
     
-    private func bindSearchResultCell() {
+    private func bindSearchResultComicCollectionView() {
+        viewModel.searchResultComicsObservable
+            .bind(to: searchResultCollectionView.rx.items(cellIdentifier: SearchResultComicCollectionCell.identifier,
+                                                          cellType: SearchResultComicCollectionCell.self)) { [weak self] _, comicInfo, cell in
+                guard let self = self else { return }
+                
+                cell.titleLabel.text = comicInfo.title
+                cell.thumbnailImagePlaceholderLabel.text = comicInfo.title
+                cell.authorLabel.text = comicInfo.author.isEmpty ? "작가정보 없음" : comicInfo.author
+                cell.uploadCycleLabel.text = comicInfo.updateCycle
+                
+                if comicInfo.updateCycle.contains("미분류") {
+                    cell.uploadCycleLabel.setBackgroundHighlight(with: .systemTeal,
+                                                                 textColor: .white)
+                } else {
+                    cell.uploadCycleLabel.setBackgroundHighlight(with: .systemTeal,
+                                                                 textColor: .white)
+                }
+                
+                if let thumbnailImageUrl = comicInfo.thumbnailImageURL {
+                    let token = self.viewModel.requestImage(thumbnailImageUrl) { result in
+                        do {
+                            let resultImage = try result.get()
+                            DispatchQueue.main.async {
+                                cell.thumbnailImagePlaceholderLabel.isHidden = true
+                                cell.thumbnailImageView.image = resultImage.imageCache.image
+                                cell.thumbnailImagePlaceholderView.setThumbnailShadow(with: resultImage.imageCache.averageColor.cgColor)
+                                
+                                if resultImage.animate {
+                                    cell.thumbnailImageView.startFadeInAnimation(duration: 0.3)
+                                }
+                            }
+                        } catch {
+                            DispatchQueue.main.async {
+                                cell.thumbnailImagePlaceholderLabel.isHidden = false
+                            }
+                        }
+                    }
+                    
+                    cell.onReuse = { [weak self] in
+                        if let token = token {
+                            self?.viewModel.cancelImageRequest(token)
+                        }
+                    }
+                }
+            }.disposed(by: disposeBag)
+        
+        viewModel.searchResultComicsObservable
+            .subscribe(with: self, onNext: { vc, comics in
+                if comics.isEmpty {
+                    vc.searchResultCollectionView.heightAnchor.constraint(equalToConstant: vc.view.frame.height).isActive = true
+                    vc.view.makeNoticeLabel("검색결과가 없습니다.")
+                } else {
+                    vc.view.removeNoticeLabels()
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindSearchResultComicCollectionCell() {
         searchResultCollectionView.rx.itemSelected
             .asDriver()
             .drive(with: self, onNext: { vc, indexPath in
-                let comicInfo = vc.viewModel.cellItemForRow(at: indexPath)
+                vc.viewModel.comicItemSelected(indexPath)
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.presentComicDetailVC
+            .subscribe(with: self, onNext: { vc, comicInfo in
                 vc.presentComicDetailVC(comicInfo)
-            }).disposed(by: disposeBag)
+            })
+            .disposed(by: disposeBag)
     }
     
-    private func bindSearchResultTableViewScroll() {
+    private func bindSearchResultComicLoadingState() {
+        viewModel.isLoadingSearchResultComics
+            .subscribe(with: self, onNext: { vc, isLoading in
+                if isLoading {
+                    vc.view.playLottie(animation: .loading_cat_radial)
+                } else {
+                    vc.view.stopLottie()
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindSearchResultComicFailState() {
+        viewModel.failToLoadSearchResult
+            .subscribe(with: self, onNext: { vc, isFailed in
+                if isFailed {
+                    vc.view.makeNoticeLabel("🛠서버 점검중입니다.\n나중에 다시 시도해주세요")
+                } else {
+                    vc.view.removeNoticeLabels()
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindSearchResultComicCollectionViewScrollAction() {
         searchResultCollectionView.rx.willBeginDragging
             .asDriver()
-            .drive(onNext: { [weak self] in
-                self?.view.endEditing(true)
+            .drive(with: self, onNext: { vc, _ in
+                vc.view.endEditing(true)
             }).disposed(by: disposeBag)
     }
     
     
     // MARK: - Methods
     
-    private func searchComic() {
-        if let title = searchTextField.text?.trimmingCharacters(in: .whitespaces) {
-            if isSearching {
-                self.view.makeToast("검색중입니다.")
-            } else {
-                setSearchResult(title: title)
-            }
-        }
-    }
-    
-    private func setSearchResult(title: String) {
-        if title.count < 1 {
-            self.view.stopLottie()
-            self.view.makeToast("최소 한 글자 이상의 단어로 검색해주세요")
+    private func updateSearchResult() {
+        guard let searchKeyword = searchTextField.text else {
             return
         }
         
-        isSearching = true
-        searchResultPlaceholderLabel.detatchLabel()
-        self.view.playLottie(animation: .loading_cat_radial)
-        view.endEditing(true)
+        if searchKeyword.count <= 1 {
+            self.view.stopLottie()
+            self.view.makeToast("최소 두 글자 이상의 단어로 검색해주세요")
+            return
+        }
         
-        viewModel.getSearchResult(title)
-            .subscribe(with: self, onError: { vc, error in
-                if let error = error as? SearchViewError {
-                    vc.searchResultPlaceholderLabel.attatchLabel(text: error.message, to: vc.view)
-                }
-            }, onDisposed: { vc in
-                self.view.stopLottie()
-                vc.isSearching = false
-            }).disposed(by: disposeBag)
+        view.endEditing(true)
+        viewModel.updateSearchResult(searchKeyword)
     }
     
     private func presentComicDetailVC(_ comicInfo: ComicInfo) {
         let storyboard = UIStoryboard(name: R.storyboard.comicDetail.name, bundle: nil)
         let comicDetailVC = storyboard.instantiateViewController(identifier: ComicDetailViewController.identifier,
                                                              creator: { coder -> ComicDetailViewController in
-            let viewModel = ComicDetailViewModel()
+            let viewModel = ComicDetailViewModel(comicInfo: comicInfo)
             return .init(coder, viewModel) ?? ComicDetailViewController(.init())
         })
         
-        comicDetailVC.currentComic = comicInfo
         present(comicDetailVC, animated: true, completion: nil)
     }
     
@@ -256,68 +315,7 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
 extension SearchComicViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         // Seach action on keyboard
-        searchComic()
+        updateSearchResult()
         return true
-    }
-}
-
-
-extension SearchComicViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return viewModel.numberOfSection
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.numberOfRowsIn(section: section)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultComicCollectionCell.identifier, for: indexPath) as? SearchResultComicCollectionCell else {
-            return UICollectionViewCell()
-        }
-        
-        let comicInfo = viewModel.cellItemForRow(at: indexPath)
-        
-        cell.titleLabel.text = comicInfo.title
-        cell.thumbnailImagePlaceholderLabel.text = comicInfo.title
-        cell.authorLabel.text = comicInfo.author.isEmpty ? "작가정보 없음" : comicInfo.author
-        cell.uploadCycleLabel.text = comicInfo.updateCycle
-        
-        if comicInfo.updateCycle.contains("미분류") {
-            cell.uploadCycleLabel.setBackgroundHighlight(with: .systemTeal,
-                                                         textColor: .white)
-        } else {
-            cell.uploadCycleLabel.setBackgroundHighlight(with: .systemTeal,
-                                                         textColor: .white)
-        }
-        
-        if let thumbnailImageUrl = comicInfo.thumbnailImageURL {
-            let token = viewModel.requestImage(thumbnailImageUrl) { result in
-                do {
-                    let resultImage = try result.get()
-                    DispatchQueue.main.async {
-                        cell.thumbnailImagePlaceholderLabel.isHidden = true
-                        cell.thumbnailImageView.image = resultImage.imageCache.image
-                        cell.thumbnailImagePlaceholderView.setThumbnailShadow(with: resultImage.imageCache.averageColor.cgColor)
-                        
-                        if resultImage.animate {
-                            cell.thumbnailImageView.startFadeInAnimation(duration: 0.3)
-                        }
-                    }
-                } catch {
-                    DispatchQueue.main.async {
-                        cell.thumbnailImagePlaceholderLabel.isHidden = false
-                    }
-                }
-            }
-            
-            cell.onReuse = { [weak self] in
-                if let token = token {
-                    self?.viewModel.cancelImageRequest(token)
-                }
-            }
-        }
-        
-        return cell
     }
 }

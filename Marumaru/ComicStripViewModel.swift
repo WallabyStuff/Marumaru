@@ -5,242 +5,157 @@
 //  Created by 이승기 on 2022/02/03.
 //
 
-import UIKit
+import Foundation
+
 import RxSwift
 import RxCocoa
 
-enum ComicStripViewError: Error {
-    case endOfEpisode
-    case firstEpisode
-    
-    var message: String {
-        switch self {
-        case .endOfEpisode:
-            return "마지막 화 입니다."
-        case .firstEpisode:
-            return "첫 화 입니다."
-        }
-    }
-}
-
 class ComicStripViewModel: MarumaruApiServiceViewModel {
     private var disposeBag = DisposeBag()
-    private var comicURL: String = ""
-    private var currentComicSN: String = ""
+    private var episodeURL: String = ""
+    private var currentEpisode: Episode
     private var marumaruApiService = MarumaruApiService()
     private var watchHistoryHandler = WatchHistoryManager()
     
-    public var updateComicTitleLabel: (() -> Void)?
-    public var reloadSceneScrollView: (() -> Void)?
-    public var prepareForReloadSceneScrollview: (() -> Void)?
-    public var reloadEpisodeTableView: (() -> Void)?
+    public var episodeTitle = BehaviorRelay<String>(value: "")
+    public var makeToast = PublishRelay<String>()
+    public var comicEpisodes = [Episode]()
+
+    private var comicStripScenes = [ComicStripScene]()
+    public var comicStripScenesObservable = PublishRelay<[ComicStripScene]>()
+    public var isLoadingScenes = BehaviorRelay<Bool>(value: false)
+    public var failToLoadingScenes = BehaviorRelay<Bool>(value: false)
     
-    private var comicTitle: String = "" {
-        didSet {
-            self.updateComicTitleLabel?()
-        }
-    }
-    
-    private var comicStripScenes = [ComicStripScene]() {
-        didSet {
-            self.reloadSceneScrollView?()
-        }
-    }
-    
-    private var comicEpisodes = [Episode]() {
-        didSet {
-            self.reloadEpisodeTableView?()
-        }
-    }
-    
-    init(comicTitle: String, comicURL: String) {
+    init(episode: Episode, episodeURL: String) {
+        self.currentEpisode = episode
         super.init()
-        self.comicTitle = comicTitle
-        self.comicURL = comicURL
         
+        self.episodeTitle.accept(episode.title)
+        self.episodeURL = episodeURL
         setupData()
     }
     
     private func setupData() {
-        currentComicSN = getSerialNumberFromUrl()
+        if currentEpisode.serialNumber == "" {
+            currentEpisode.serialNumber = getSerialNumberFromUrl()
+        }
+        
+        updateComicEpisodes()
     }
 }
 
 extension ComicStripViewModel {
-    public func renderComicStripScene(_ serialNumber: String) -> Completable {
-        return Completable.create { [weak self] observer in
-            guard let self = self else { return Disposables.create() }
-            
-            self.currentComicSN = serialNumber
-            self.comicTitle = ""
-            self.comicStripScenes.removeAll()
-            self.prepareForReloadSceneScrollview?()
-            
-            let endPoint = self.getEndPoint(with: serialNumber)
-            self.marumaruApiService.getComicStripScenes(endPoint)
-                .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .background))
-                .observe(on: MainScheduler.instance)
-                .subscribe(with: self, onNext: { strongSelf, scenes in
-                    strongSelf.getComicEpisodes()
-                        .subscribe(onCompleted: { [weak self] in
-                            self?.comicStripScenes = scenes
-                            self?.updateComicTitle()
-                            self?.saveToWatchHistory()
-                            observer(.completed)
-                        }).disposed(by: self.disposeBag)
-                }).disposed(by: self.disposeBag)
-            return Disposables.create()
+    public func renderComicStripScenes(_ episode: Episode) {
+        currentEpisode = episode
+        episodeTitle.accept(episode.title)
+        comicStripScenesObservable.accept([])
+        failToLoadingScenes.accept(false)
+        isLoadingScenes.accept(true)
+        episodeURL = getEndPoint(with: episode.serialNumber)
+        
+        marumaruApiService.getComicStripScenes(episodeURL)
+            .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .background))
+            .observe(on: MainScheduler.instance)
+            .subscribe(with: self, onNext: { strongSelf, scenes in
+                strongSelf.isLoadingScenes.accept(false)
+                strongSelf.comicStripScenes = scenes
+                strongSelf.comicStripScenesObservable.accept(scenes)
+            }, onError: { strongSelf, _ in
+                strongSelf.failToLoadingScenes.accept(true)
+                strongSelf.isLoadingScenes.accept(false)
+            }).disposed(by: self.disposeBag)
+    }
+    
+    public func renderCurrentEpisodeScenes() {
+        renderComicStripScenes(currentEpisode)
+    }
+    
+    public func renderNextEpisodeScenes() {
+        guard let currentEpisodeIndex = currentEpisodeIndex else {
+            return
+        }
+        
+        let targetIndex = currentEpisodeIndex + 1
+        if comicEpisodes.isInBound(targetIndex) {
+            let nextEpisode = comicEpisodes[targetIndex]
+            renderComicStripScenes(nextEpisode)
+        } else {
+            makeToast.accept("마지막 화 입니다.")
         }
     }
     
-    public func renderCurrentEpisodeScene() -> Completable {
-        return Completable.create { [weak self] observer in
-            guard let self = self else { return Disposables.create() }
-         
-            self.renderComicStripScene(self.currentComicSN)
-                .subscribe(onCompleted: {
-                    observer(.completed)
-                }, onError: { error in
-                    observer(.error(error))
-                }).disposed(by: self.disposeBag)
-            return Disposables.create()
+    public func renderPreviousEpisodeScenes() {
+        guard let currentEpisodeIndex = currentEpisodeIndex else {
+            return
+        }
+
+        let targetIndex = currentEpisodeIndex - 1
+        if comicEpisodes.isInBound(targetIndex) {
+            let previousEpisode = comicEpisodes[targetIndex]
+            renderComicStripScenes(previousEpisode)
+        } else {
+            makeToast.accept("첫 화 입니다.")
         }
     }
     
-    public func renderNextEpisodeScene() -> Completable {
-        return Completable.create { [weak self] observer in
-            guard let self = self else { return Disposables.create() }
-            
-            if let index = self.currentEpisodeIndex {
-                if index + 1 < self.comicEpisodes.count {
-                    let nextEpisodeIndex = self.comicEpisodes.index(index, offsetBy: +1)
-                    let nextEpisodeSN = self.comicEpisodes[nextEpisodeIndex].serialNumber
-                    
-                    self.renderComicStripScene(nextEpisodeSN)
-                        .subscribe(onCompleted: {
-                            observer(.completed)
-                        }, onError: { error in
-                            observer(.error(error))
-                        }).disposed(by: self.disposeBag)
-                } else {
-                    observer(.error(ComicStripViewError.endOfEpisode))
-                }
-            } else {
-                observer(.error(ComicStripViewError.endOfEpisode))
-            }
-            
-            return Disposables.create()
+    public var currentEpisodeIndex: Int? {
+        for (i, episode) in comicEpisodes.enumerated()
+        where episode.serialNumber == currentEpisode.serialNumber {
+            return i
         }
-    }
-    
-    public func renderPreviousEpisodeScene() -> Completable {
-        return Completable.create { [weak self] observer in
-            guard let self = self else { return Disposables.create() }
-            
-            if let index = self.currentEpisodeIndex {
-                if index - 1 >= 0 {
-                    let prevEpisodeIndex = self.comicEpisodes.index(index, offsetBy: -1)
-                    let prevEpisodeSN = self.comicEpisodes[prevEpisodeIndex].serialNumber
-                    
-                    self.renderComicStripScene(prevEpisodeSN)
-                        .subscribe(onCompleted: {
-                            observer(.completed)
-                        }, onError: { error in
-                            observer(.error(error))
-                        }).disposed(by: self.disposeBag)
-                } else {
-                    observer(.error(ComicStripViewError.firstEpisode))
-                }
-            } else {
-                observer(.error(ComicStripViewError.firstEpisode))
-            }
-            
-            return Disposables.create()
-        }
-    }
-    
-    public func updateComicTitle() {
-        for episode in comicEpisodes where episode.serialNumber == currentComicSN {
-            return comicTitle = episode.title
-        }
+        
+        return nil
     }
 }
 
 extension ComicStripViewModel {
-    public var firstSceneImageUrl: String? {
+    private var firstSceneImageUrl: String? {
         return comicStripScenes.first?.sceneImageUrl
     }
     
     public func saveToWatchHistory() {
-        let currentComic = WatchHistory(comicURL: comicURL,
-                                        comicTitle: comicTitle,
-                                        thumbnailImageUrl: firstSceneImageUrl ?? "")
-        
-        watchHistoryHandler.addData(watchHistory: currentComic)
-            .subscribe().disposed(by: disposeBag)
+        let currentEpisode = WatchHistory(episodeTitle: currentEpisode.title,
+                                          episodeURL: episodeURL,
+                                          thumbnailImageUrl: firstSceneImageUrl ?? "")
+        watchHistoryHandler
+            .addData(watchHistory: currentEpisode)
+            .subscribe()
+            .disposed(by: disposeBag)
     }
 }
 
 extension ComicStripViewModel {
-    private func getComicEpisodes() -> Completable {
-        return Completable.create { [weak self] observer in
-            guard let self = self else { return Disposables.create() }
-            
-            self.marumaruApiService.getEpisodesInPlay()
-                .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .background))
-                .observe(on: MainScheduler.instance)
-                .subscribe(onSuccess: { [weak self] episodes in
-                    self?.comicEpisodes = episodes.reversed()
-                    observer(.completed)
-                }, onFailure: { error in
-                    observer(.error(error))
-                }).disposed(by: self.disposeBag)
-            
-            return Disposables.create()
-        }
+    private func updateComicEpisodes() {
+        marumaruApiService.getEpisodesInStrip(episodeURL)
+            .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .background))
+            .observe(on: MainScheduler.instance)
+            .subscribe(with: self, onSuccess: { strongSelf, episodes in
+                strongSelf.comicEpisodes = episodes.reversed()
+            }).disposed(by: self.disposeBag)
     }
 }
+
+
+// TODO: - Move to MarumaruAPIService
 
 extension ComicStripViewModel {
     private func getEndPoint(with newSerialNumber: String) -> String {
-        if let serialNumberStartIndex = comicURL.lastIndex(of: "/") {
-            let serialNumberRange = comicURL.index(serialNumberStartIndex, offsetBy: 1)..<comicURL.endIndex
+        if let serialNumberStartIndex = episodeURL.lastIndex(of: "/") {
+            let serialNumberRange = episodeURL.index(serialNumberStartIndex, offsetBy: 1)..<episodeURL.endIndex
             
-            comicURL.replaceSubrange(serialNumberRange, with: newSerialNumber)
-            currentComicSN = newSerialNumber
+            episodeURL.replaceSubrange(serialNumberRange, with: newSerialNumber)
+            currentEpisode.serialNumber = newSerialNumber
         }
         
-        return comicURL
+        return episodeURL
     }
     
     public func getSerialNumberFromUrl() -> String {
-        if let serialNumberStartIndex = comicURL.lastIndex(of: "/") {
-            let serialNumberRange = comicURL.index(serialNumberStartIndex, offsetBy: 1)..<comicURL.endIndex
-            return comicURL[serialNumberRange].description
+        if let serialNumberStartIndex = episodeURL.lastIndex(of: "/") {
+            let serialNumberRange = episodeURL.index(serialNumberStartIndex, offsetBy: 1)..<episodeURL.endIndex
+            return episodeURL[serialNumberRange].description
         }
         
         return ""
-    }
-}
-
-extension ComicStripViewModel {
-    public var currentEpisodeTitle: String {
-        return comicTitle
-    }
-    
-    public var currentEpisodeScenes: [ComicStripScene] {
-        return comicStripScenes
-    }
-    
-    public var currentComicEpisode: [Episode] {
-        return comicEpisodes
-    }
-    
-    private var currentEpisodeIndex: Int? {
-        for (index, episode) in comicEpisodes.enumerated() where episode.serialNumber == currentComicSN {
-            return index
-        }
-        
-        return nil
     }
 }

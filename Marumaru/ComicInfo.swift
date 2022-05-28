@@ -13,5 +13,5 @@ struct ComicInfo {
     var updateCycle: String
     var thumbnailImage: UIImage?
     var thumbnailImageURL: String?
-    var comicSN: String
+    var serialNumber: String
 }

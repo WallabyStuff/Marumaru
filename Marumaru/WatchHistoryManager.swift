@@ -19,8 +19,8 @@ extension WatchHistoryManager {
     public func addData(comicURL: String, comicTitle: String, thumbnailImageUrl: String) -> Completable {
         return Completable.create { [weak self] observer in
             guard let self = self else { return Disposables.create() }
-            let watchHistory = WatchHistory(comicURL: comicURL,
-                                            comicTitle: comicTitle,
+            let watchHistory = WatchHistory(episodeTitle: comicTitle,
+                                            episodeURL: comicURL,
                                             thumbnailImageUrl: thumbnailImageUrl)
             
             self.addData(watchHistory: watchHistory)
