@@ -31,7 +31,7 @@ class MainViewModel: MarumaruApiServiceViewModel {
     private let watchHistoryManager = WatchHistoryManager()
 
     private var newUpdateComics = [Comic]()
-    public var newUpdateComicsObservable = PublishRelay<[Comic]>()
+    public var newUpdateComicsObservable = BehaviorRelay<[Comic]>(value: [])
     public var isLoadingNewUpdateComic = BehaviorRelay<Bool>(value: true)
     public var failToGetNewUPdateComic = BehaviorRelay<Bool>(value: false)
     
@@ -39,7 +39,7 @@ class MainViewModel: MarumaruApiServiceViewModel {
     public var watchHistoriesObservable = PublishRelay<[WatchHistory]>()
     
     private var comicRank = [ComicRank]()
-    public var comicRankObservable = PublishRelay<[ComicRank]>()
+    public var comicRankObservable = BehaviorRelay<[ComicRank]>(value: [])
     public var isLoadingComicRank = BehaviorRelay<Bool>(value: false)
     public var failToGetComicRank = BehaviorRelay<Bool>(value: false)
     
@@ -54,9 +54,9 @@ extension MainViewModel {
 
 extension MainViewModel {
     public func updateNewUpdatedComics() {
+        newUpdateComicsObservable.accept(fakeComicItems(10))
         isLoadingNewUpdateComic.accept(true)
         failToGetNewUPdateComic.accept(false)
-        newUpdateComicsObservable.accept([])
         
         marumaruApiService
             .getNewUpdateComic()
@@ -87,9 +87,9 @@ extension MainViewModel {
     }
     
     public func updateComicRank() {
+        comicRankObservable.accept(fakeComicRankItems(10))
         isLoadingComicRank.accept(true)
         failToGetComicRank.accept(false)
-        comicRankObservable.accept([])
         
         marumaruApiService
             .getTopRankComic()
@@ -121,5 +121,23 @@ extension MainViewModel {
         let comic = Comic(title: selectedComic.title,
                           link: selectedComic.episodeURL)
         presentComicStripVCObservable.accept(comic)
+    }
+}
+
+extension MainViewModel {
+    public func fakeComicItems(_ count: Int) -> [Comic] {
+        return [Comic](repeating: fakeComicItem, count: count)
+    }
+    
+    public var fakeComicItem: Comic {
+        return .init(title: "", link: "")
+    }
+    
+    public func fakeComicRankItems(_ count: Int) -> [ComicRank] {
+        return [ComicRank](repeating: fakeComicRankItem, count: count)
+    }
+    
+    public var fakeComicRankItem: ComicRank {
+        return .init(title: "", episodeURL: "")
     }
 }

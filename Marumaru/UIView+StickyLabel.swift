@@ -17,6 +17,7 @@ extension UIView {
         removeNoticeLabels()
         
         let containerView = UIView()
+        containerView.isUserInteractionEnabled = false
         addSubview(containerView)
         containerView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -27,6 +28,7 @@ extension UIView {
         ])
         
         let noticeLabel = UILabel()
+        noticeLabel.isUserInteractionEnabled = false
         noticeLabel.text = message
         noticeLabel.numberOfLines = 3
         noticeLabel.textAlignment = .center

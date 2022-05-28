@@ -28,20 +28,36 @@
                                     <constraint firstAttribute="height" constant="172" id="ND7-Nj-7Wj"/>
                                 </constraints>
                             </view>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Rui-tn-hTc">
-                                <rect key="frame" x="8" y="8" width="120" height="172"/>
-                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="placeholder" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c4q-bC-PYC">
                                 <rect key="frame" x="16" y="86" width="104" height="16"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="13"/>
-                                <color key="textColor" name="TextBlack-lightest"/>
+                                <color key="textColor" name="TextBlack-lighter"/>
                                 <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isHiddenWhenSkeletonIsActive" value="YES"/>
+                                </userDefinedRuntimeAttributes>
                             </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Rui-tn-hTc">
+                                <rect key="frame" x="8" y="8" width="120" height="172"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="skeletonCornerRadius">
+                                        <real key="value" value="8"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="title" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lkd-Eo-k8Q">
                                 <rect key="frame" x="8" y="192" width="120" height="17"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                 <color key="textColor" name="TextBlack"/>
                                 <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="useFontLineHeight" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="linesCornerRadius">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                </userDefinedRuntimeAttributes>
                             </label>
                         </subviews>
                         <constraints>
@@ -62,6 +78,9 @@
                             <constraint firstItem="Rui-tn-hTc" firstAttribute="height" secondItem="Hdb-Dm-Zes" secondAttribute="height" id="vYZ-vH-FiR"/>
                             <constraint firstItem="c4q-bC-PYC" firstAttribute="leading" secondItem="Rui-tn-hTc" secondAttribute="leading" constant="8" id="wHs-8h-nj9"/>
                         </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                        </userDefinedRuntimeAttributes>
                     </view>
                 </subviews>
             </view>
@@ -73,9 +92,12 @@
                 <constraint firstItem="Xaf-0b-TKa" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="bFn-G9-mze"/>
             </constraints>
             <size key="customSize" width="196" height="294"/>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+            </userDefinedRuntimeAttributes>
             <connections>
-                <outlet property="thumbnailImageBaseView" destination="Hdb-Dm-Zes" id="Feq-9C-vtq"/>
                 <outlet property="thumbnailImagePlaceholderLabel" destination="c4q-bC-PYC" id="c5l-zH-RDW"/>
+                <outlet property="thumbnailImagePlaceholderView" destination="Hdb-Dm-Zes" id="Feq-9C-vtq"/>
                 <outlet property="thumbnailImageView" destination="Rui-tn-hTc" id="4UC-wf-qEY"/>
                 <outlet property="titleLabel" destination="lkd-Eo-k8Q" id="Eb9-H3-qV2"/>
             </connections>
@@ -89,8 +111,8 @@
         <namedColor name="TextBlack">
             <color red="0.13300000131130219" green="0.15700000524520874" blue="0.16500000655651093" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="TextBlack-lightest">
-            <color red="0.84299999475479126" green="0.85100001096725464" blue="0.85100001096725464" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <namedColor name="TextBlack-lighter">
+            <color red="0.68599998950958252" green="0.69800001382827759" blue="0.69800001382827759" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

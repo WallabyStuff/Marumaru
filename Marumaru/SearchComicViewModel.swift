@@ -18,7 +18,7 @@ class SearchComicViewModel: MarumaruApiServiceViewModel {
     private var marumaruApiService = MarumaruApiService()
     
     private var searchResultComics = [ComicInfo]()
-    public var searchResultComicsObservable = PublishRelay<[ComicInfo]>()
+    public var searchResultComicsObservable = BehaviorRelay<[ComicInfo]>(value: [])
     public var isLoadingSearchResultComics = PublishRelay<Bool>()
     public var failToLoadSearchResult = BehaviorRelay<Bool>(value: false)
     
@@ -27,7 +27,7 @@ class SearchComicViewModel: MarumaruApiServiceViewModel {
 
 extension SearchComicViewModel {
     public func updateSearchResult(_ title: String) {
-        searchResultComicsObservable.accept([])
+        searchResultComicsObservable.accept(fakeSearchResultComics(10))
         failToLoadSearchResult.accept(false)
         isLoadingSearchResultComics.accept(true)
         
@@ -47,5 +47,15 @@ extension SearchComicViewModel {
     public func comicItemSelected(_ indexPath: IndexPath) {
         let selectedComic = searchResultComics[indexPath.row]
         presentComicDetailVC.accept(selectedComic)
+    }
+}
+
+extension SearchComicViewModel {
+    private func fakeSearchResultComics(_ count: Int) -> [ComicInfo] {
+        return [ComicInfo](repeating: fakeSearchResultComic, count: count)
+    }
+    
+    private var fakeSearchResultComic: ComicInfo {
+        return .init(title: "", author: "", updateCycle: "미분류", serialNumber: "")
     }
 }

@@ -176,8 +176,9 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
                                                      cellType: ComicEpisodeThumbnailTableCell.self)) { [weak self] index, comic, cell in
                 guard let self = self else { return }
                 
+                cell.hideSkeleton()
                 cell.titleLabel.text = comic.title
-                cell.authorLabel.text = comic.author
+                cell.authorLabel.text = comic.description
                 cell.indexLabel.text = self.viewModel.comicEpisodeIndex(index).description
                 cell.thumbnailImageView.image = nil
                 
@@ -229,10 +230,20 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     private func bindComicEpisodeLoadingState() {
         viewModel.isLoadingComicEpisodes
             .subscribe(with: self, onNext: { vc, isLoading in
+                vc.comicEpisodeTableView.layoutSubviews()
+                
                 if isLoading {
-                    vc.comicEpisodeTableView.playLottie()
+                    vc.comicEpisodeTableView.isUserInteractionEnabled = false
+                    vc.episodeAmountLabel.showCustomSkeleton()
+                    vc.comicEpisodeTableView.visibleCells.forEach { cell in
+                        cell.showCustomSkeleton()
+                    }
                 } else {
-                    vc.comicEpisodeTableView.stopLottie()
+                    vc.comicEpisodeTableView.isUserInteractionEnabled = true
+                    vc.episodeAmountLabel.hideSkeleton()
+                    vc.comicEpisodeTableView.visibleCells.forEach { cell in
+                        cell.hideSkeleton()
+                    }
                 }
             })
             .disposed(by: disposeBag)
