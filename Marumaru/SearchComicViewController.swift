@@ -26,6 +26,9 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
     
     static let identifier = R.storyboard.searchComic.searchComicStoryboard.identifier
     var viewModel: ViewModel
+    private var searchResultCollectionViewTopInset: CGFloat {
+        return regularAppbarHeight + 12 + view.safeAreaInsets.top
+    }
     
     
     // MARK: - Initializers
@@ -94,7 +97,7 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
         searchResultCollectionView.register(nibName,
                                             forCellWithReuseIdentifier: SearchResultComicCollectionCell.identifier)
         searchResultCollectionView.keyboardDismissMode = .onDrag
-        searchResultCollectionView.contentInset = UIEdgeInsets(top: 12,
+        searchResultCollectionView.contentInset = UIEdgeInsets(top: searchResultCollectionViewTopInset,
                                                                left: 12,
                                                                bottom: compactAppbarHeight,
                                                                right: 12)
@@ -103,6 +106,7 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
         flowLayout.minimumLineSpacing = 16
         flowLayout.itemSize = CGSize(width: view.frame.width - 24, height: 128)
         searchResultCollectionView.collectionViewLayout = flowLayout
+        searchResultCollectionView.clipsToBounds = false
     }
     
     private func setupSearchButton() {
@@ -127,8 +131,8 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func configureSearchResultTableViewInsets() {
-        searchResultCollectionView.contentInset = UIEdgeInsets(top: 12,
-                                                          left: 0, bottom: 40, right: 0)
+        searchResultCollectionView.contentInset = UIEdgeInsets(top: searchResultCollectionViewTopInset,
+                                                               left: 0, bottom: 40, right: 0)
     }
     
     
@@ -283,7 +287,7 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
         }
         
         view.endEditing(true)
-        searchResultCollectionView.scrollToTop(topInset: 12, animated: false)
+        searchResultCollectionView.scrollToTop(topInset: searchResultCollectionViewTopInset, animated: false)
         viewModel.updateSearchResult(searchKeyword)
     }
     
