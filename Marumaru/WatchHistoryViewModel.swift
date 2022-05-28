@@ -9,75 +9,43 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-enum WatchHistoryViewError: Error {
-    case emptyHistory
-    
-    var message: String {
-        switch self {
-        case .emptyHistory:
-            return "아직 시청 기록이 없습니다"
-        }
-    }
-}
-
 class WatchHistoryViewModel: MarumaruApiServiceViewModel {
     
     private var disposeBag = DisposeBag()
     private let watchHistoryManager = WatchHistoryManager()
     
-    public var reloadWatchHistoryCollectionView: (() -> Void)?
-    private var groupedWatchHistories = [(String, [WatchHistory])]() {
-        didSet {
-            self.reloadWatchHistoryCollectionView?()
-        }
-    }
+    private var watchHistories = [WatchHistorySection]()
+    public var watchHistoriesObservable = PublishRelay<[WatchHistorySection]>()
+    public var failToLoadWatchHistories = PublishRelay<Bool>()
+    
+    public var presentComicStrip = PublishRelay<WatchHistory>()
 }
 
 extension WatchHistoryViewModel {
-    public func getWatchHistories() -> Completable {
-        return Completable.create { [weak self] observer in
-            guard let self = self else { return Disposables.create() }
-            self.groupedWatchHistories.removeAll()
-            
-            self.watchHistoryManager.fetchData()
-                .subscribe(onSuccess: { [weak self] watchHistories in
-                    if watchHistories.count == 0 {
-                        observer(.error(WatchHistoryViewError.emptyHistory))
-                    } else {
-                        self?.groupWatchHistoryByDate(watchHistories)
-                        observer(.completed)
-                    }
-                }, onFailure: { error in
-                    observer(.error(error))
-                }).disposed(by: self.disposeBag)
-            
-            return Disposables.create()
-        }
+    public func updateWatchHistories() {
+        failToLoadWatchHistories.accept(false)
+        
+        watchHistoryManager.fetchData()
+            .subscribe(with: self, onSuccess: { strongSelf, comics in
+                strongSelf.watchHistories = strongSelf.configureSections(comics)
+                strongSelf.watchHistoriesObservable.accept(strongSelf.watchHistories)
+            }, onFailure: { strongSelf, _ in
+                strongSelf.failToLoadWatchHistories.accept(true)
+            }).disposed(by: self.disposeBag)
     }
     
-    public func clearHistories() -> Completable {
-        return Completable.create { [weak self] observer in
-            guard let self = self else { return Disposables.create() }
-            
-            self.watchHistoryManager.deleteAll()
-                .subscribe(with: self, onCompleted: { vc in
-                    vc.getWatchHistories()
-                        .subscribe(onCompleted: {
-                            observer(.completed)
-                        }, onError: { error in
-                            observer(.error(error))
-                        }).disposed(by: vc.disposeBag)
-                }, onError: { _, error in
-                    observer(.error(error))
-                }).disposed(by: self.disposeBag)
-            
-            return Disposables.create()
-        }
+    public func clearHistories() {
+        watchHistoryManager.deleteAll()
+            .subscribe(with: self, onCompleted: { strongSelf in
+                strongSelf.watchHistoriesObservable.accept([])
+            }, onError: { strongSelf, _ in
+                strongSelf.failToLoadWatchHistories.accept(true)
+            }).disposed(by: self.disposeBag)
     }
     
-    private func groupWatchHistoryByDate(_ watchHistories: [WatchHistory]) {
+    private func configureSections(_ watchHistories: [WatchHistory]) -> [WatchHistorySection] {
         var groupedWatchHistories = Dictionary<String, [WatchHistory]>()
-        let watchHistories = watchHistories.sorted { $0.timeStamp > $1.timeStamp }
+        var sections = [WatchHistorySection]()
         
         watchHistories.forEach { watchHistory in
             if groupedWatchHistories[watchHistory.watchDateFormattedString] == nil {
@@ -87,26 +55,21 @@ extension WatchHistoryViewModel {
             }
         }
         
-        self.groupedWatchHistories = groupedWatchHistories.sorted { $0.key > $1.key }
-    }
-}
-
-extension WatchHistoryViewModel {
-    public var numberOfSection: Int {
-        return groupedWatchHistories.count
-    }
-    
-    public func numberOfItemsIn(section: Int) -> Int {
-        return groupedWatchHistories[section].1.count
+        groupedWatchHistories.sorted { $0.key > $1.key }.forEach { watchHistories in
+            let section = WatchHistorySection(header: watchHistories.key,
+                                              items: watchHistories.value)
+            sections.append(section)
+        }
+        
+        return sections
     }
     
-    public func watchHistoryCellItemForRow(at indexPath: IndexPath) -> WatchHistory {
-        return groupedWatchHistories[indexPath.section].1[indexPath.row]
+    public func comicItemSelected(_ indexPath: IndexPath) {
+        let selectedComic = watchHistories[indexPath.section].items[indexPath.row]
+        presentComicStrip.accept(selectedComic)
     }
-}
-
-extension Dictionary {
-    func index(_ of: Int) -> Index {
-        return index(startIndex, offsetBy: of)
+    
+    public func sectionHeader(_ indexPath: IndexPath) -> String {
+        return watchHistories[indexPath.section].header
     }
 }

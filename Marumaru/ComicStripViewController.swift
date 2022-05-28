@@ -14,10 +14,6 @@ import RxSwift
 import RxCocoa
 import RxGesture
 
-@objc protocol ComicStripViewDelegate: AnyObject {
-    @objc optional func didWatchHistoryUpdated()
-}
-
 class ComicStripViewController: BaseViewController, ViewModelInjectable {
     
     
@@ -26,7 +22,7 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     typealias ViewModel = ComicStripViewModel
     
     @IBOutlet weak var appbarView: UIVisualEffectView!
-    @IBOutlet weak var comicTitleLabel: UILabel!
+    @IBOutlet weak var episodeTitleLabel: UILabel!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var showEpisodeListButton: UIButton!
     @IBOutlet weak var nextEpisodeButton: UIButton!
@@ -35,7 +31,6 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     @IBOutlet weak var appbarViewHieghtConstraint: NSLayoutConstraint!
     
     static let identifier = R.storyboard.comicStrip.comicStripStroyboard.identifier
-    public weak var delegate: ComicStripViewDelegate?
     var viewModel: ViewModel
     private var cellHeightDictionary: NSMutableDictionary = [:]
     private let safeAreaInsets = UIApplication.shared.windows[0].safeAreaInsets
@@ -68,32 +63,26 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
         super.viewDidLoad()
         setup()
         bind()
-        renderEpisode()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        self.delegate?.didWatchHistoryUpdated?()
-    }
-    
-    
-    // MARK: - Overrides
-    
-    override func updateViewConstraints() {
-        super.updateViewConstraints()
-        configureAppbarViewConstraints()
     }
 
     
     // MARK: - Setups
     
     private func setup() {
+        setupData()
         setupView()
+    }
+    
+    private func setupData() {
+        viewModel.renderCurrentEpisodeScenes()
     }
     
     private func setupView() {
         setupSceneScrollView()
-        setupNavigationTitle()
         setupBottomIndicatorView()
         setupPreviousEpisodeButton()
         setupShowEpisodeListButton()
@@ -111,26 +100,6 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
         sceneScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         sceneScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         sceneScrollView.delegate = self
-        
-        viewModel.reloadSceneScrollView = { [weak self] in
-            guard let self = self else { return }
-            self.sceneScrollView.sceneArr = self.viewModel.currentEpisodeScenes
-            self.sceneScrollView.reloadData()
-        }
-        
-        viewModel.prepareForReloadSceneScrollview = { [weak self] in
-            self?.sceneScrollView.playLottie()
-            self?.disableIndicatorButtons()
-            self?.sceneScrollView.clearAndReloadData()
-        }
-    }
-    
-    private func setupNavigationTitle() {
-        comicTitleLabel.text = viewModel.currentEpisodeTitle
-        
-        viewModel.updateComicTitleLabel = { [weak self] in
-            self?.comicTitleLabel.text = self?.viewModel.currentEpisodeTitle
-        }
     }
     
     private func setupBottomIndicatorView() {
@@ -153,6 +122,11 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     
     // MARK: - Constraints
     
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
+        configureAppbarViewConstraints()
+    }
+    
     private func configureAppbarViewConstraints() {
         appbarViewHieghtConstraint.constant = view.safeAreaInsets.top + compactAppbarHeight
     }
@@ -162,20 +136,34 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     
     private func bind() {
         bindBackButton()
+        bindEpisodeTitleLabel()
         bindNextEpisodeButton()
         bindPreviousEpisodeButton()
         bindShowEpisodeListButton()
+        bindShowEpisodeListButton()
+        bindComicStripScrollView()
+        bindComicStripLoadingState()
+        bindComicStripFailState()
         bindSceneSingleTapGesture()
         bindSceneDoubleTapGesture()
         bindSceneScrollView()
+        bindToastMessage()
     }
     
     private func bindBackButton() {
         backButton.rx.tap
             .asDriver()
-            .drive(onNext: { [weak self] in
-                self?.navigationController?.popViewController(animated: true)
-                self?.dismiss(animated: true)
+            .drive(with: self, onNext: { vc, _ in
+                vc.navigationController?.popViewController(animated: true)
+                vc.dismiss(animated: true)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindEpisodeTitleLabel() {
+        viewModel.episodeTitle
+            .subscribe(with: self, onNext: { vc, title in
+                vc.episodeTitleLabel.text = title
             })
             .disposed(by: disposeBag)
     }
@@ -183,8 +171,8 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     private func bindNextEpisodeButton() {
         nextEpisodeButton.rx.tap
             .asDriver()
-            .drive(onNext: { [weak self] in
-                self?.renderNextEpisode()
+            .drive(with: self, onNext: { vc, _  in
+                vc.viewModel.renderNextEpisodeScenes()
             })
             .disposed(by: disposeBag)
     }
@@ -192,8 +180,8 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     private func bindPreviousEpisodeButton() {
         previousEpisodeButton.rx.tap
             .asDriver()
-            .drive(onNext: { [weak self] in
-                self?.renderPrevEpisode()
+            .drive(with: self, onNext: { vc, _ in
+                vc.viewModel.renderPreviousEpisodeScenes()
             })
             .disposed(by: disposeBag)
     }
@@ -201,8 +189,45 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     private func bindShowEpisodeListButton() {
         showEpisodeListButton.rx.tap
             .asDriver()
-            .drive(onNext: { [weak self] in
-                self?.presentComicEpisodePopoverVC()
+            .drive(with: self, onNext: { vc, _ in
+                vc.presentComicEpisodePopoverVC()
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindComicStripScrollView() {
+        viewModel.comicStripScenesObservable
+            .subscribe(with: self, onNext: { vc, scenes in
+                vc.sceneScrollView.sceneArr = scenes
+                vc.sceneScrollView.reloadData()
+                vc.viewModel.saveToWatchHistory()
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindComicStripLoadingState() {
+        viewModel.isLoadingScenes
+            .subscribe(with: self, onNext: { vc, isLoading in
+                if isLoading {
+                    vc.view.playLottie()
+                    vc.disableIndicatorButtons()
+                    vc.sceneScrollView.clearAndReloadData()
+                } else {
+                    vc.view.stopLottie()
+                    vc.enableIndicatorButtons()
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindComicStripFailState() {
+        viewModel.failToLoadingScenes
+            .subscribe(with: self, onNext: { vc, isFailed in
+                if isFailed {
+                    vc.view.makeNoticeLabel("🛠서버 점검중입니다.\n나중에 다시 시도해주세요")
+                } else {
+                    vc.view.removeNoticeLabels()
+                }
             })
             .disposed(by: disposeBag)
     }
@@ -214,11 +239,11 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
         sceneScrollView.rx
             .gesture(sceneTapGestureRocognizer)
             .when(.recognized)
-            .subscribe(onNext: { [weak self] _ in
-                if self?.appbarView.alpha == 0 {
-                    self?.showNavigationBar()
+            .subscribe(with: self, onNext: { vc, _ in
+                if vc.appbarView.alpha == 0 {
+                    vc.showNavigationBar()
                 } else {
-                    self?.hideNavigationBar()
+                    vc.hideNavigationBar()
                 }
             })
             .disposed(by: disposeBag)
@@ -231,35 +256,41 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
         sceneScrollView.rx
             .gesture(sceneDoubleTapGestureRecognizer)
             .when(.recognized)
-            .subscribe(onNext: { [weak self] recognizer in
-                let tapPoint = recognizer.location(in: self?.sceneScrollView.contentView)
-                self?.zoom(point: tapPoint)
+            .subscribe(with: self, onNext: { vc, recognizer in
+                let tapPoint = recognizer.location(in: vc.sceneScrollView.contentView)
+                vc.zoom(point: tapPoint)
             })
             .disposed(by: disposeBag)
     }
     
     private func bindSceneScrollView() {
         sceneScrollView.rx.contentOffset
-            .subscribe(onNext: { [weak self] offset in
-                guard let self = self else { return }
-                
+            .subscribe(with: self, onNext: { vc, offset in
                 let overPanThreshold: CGFloat = 50
                 // reached the top
                 if offset.y < -(overPanThreshold + overPanThreshold) {
-                    self.showNavigationBar()
+                    vc.showNavigationBar()
                 }
                 
                 // reached the bottom
-                if offset.y > self.sceneScrollView.contentSize.height - self.view.frame.height + overPanThreshold + self.bottomIndicatorView.frame.height {
-                    self.showNavigationBar()
+                if offset.y > vc.sceneScrollView.contentSize.height - vc.view.frame.height + overPanThreshold + vc.bottomIndicatorView.frame.height {
+                    vc.showNavigationBar()
                 }
             })
             .disposed(by: disposeBag)
         
         sceneScrollView.rx.panGesture()
             .when(.began)
-            .subscribe(onNext: { [weak self] _ in
-                self?.hideNavigationBar()
+            .subscribe(with: self, onNext: { vc, _ in
+                vc.hideNavigationBar()
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindToastMessage() {
+        viewModel.makeToast
+            .subscribe(with: self, onNext: { vc, message in
+                vc.view.makeToast(message)
             })
             .disposed(by: disposeBag)
     }
@@ -267,29 +298,13 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     
     // MARK: - Methods
     
-    private func renderEpisode() {
-        viewModel.renderCurrentEpisodeScene()
-            .subscribe(onCompleted: { [weak self] in
-                self?.sceneScrollView.stopLottie()
-                self?.enableIndicatorButtons()
-            }).disposed(by: disposeBag)
-    }
-    
-    private func renderEpisode(serialNumber: String) {
-        viewModel.renderComicStripScene(serialNumber)
-            .subscribe(onCompleted: { [weak self] in
-                self?.sceneScrollView.stopLottie()
-                self?.enableIndicatorButtons()
-            }).disposed(by: disposeBag)
-    }
-    
     private func presentComicEpisodePopoverVC() {
         let storyboard = UIStoryboard(name: R.storyboard.popOverComicEpisode.name, bundle: nil)
         let comicEpisodePopOverVC = storyboard.instantiateViewController(identifier: PopOverComicEpisodeViewController.identifier,
                                                                          creator: { [weak self] coder -> PopOverComicEpisodeViewController in
             let dumpVC = PopOverComicEpisodeViewController(.init("", []))
             guard let self = self else { return dumpVC }
-            let viewModel = ComicEpisodePopOverViewModel(self.viewModel.getSerialNumberFromUrl(), self.viewModel.currentComicEpisode)
+            let viewModel = ComicEpisodePopOverViewModel(self.viewModel.getSerialNumberFromUrl(), self.viewModel.comicEpisodes)
             return .init(coder, viewModel) ?? dumpVC
         })
         
@@ -306,32 +321,6 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
 
 
 // MARK: - Extensions
-
-extension ComicStripViewController {
-    func renderNextEpisode() {
-        viewModel.renderNextEpisodeScene()
-            .subscribe(onCompleted: { [weak self] in
-                self?.sceneScrollView.stopLottie()
-                self?.enableIndicatorButtons()
-            }, onError: { [weak self] error in
-                if let error = error as? ComicStripViewError {
-                    self?.view.makeToast(error.message)
-                }
-            }).disposed(by: disposeBag)
-    }
-    
-    func renderPrevEpisode() {
-        viewModel.renderPreviousEpisodeScene()
-            .subscribe(onCompleted: { [weak self] in
-                self?.sceneScrollView.stopLottie()
-                self?.enableIndicatorButtons()
-            }, onError: { [weak self] error in
-                if let error = error as? ComicStripViewError {
-                    self?.view.makeToast(error.message)
-                }
-            }).disposed(by: disposeBag)
-    }
-}
 
 extension ComicStripViewController {
     func zoom(point: CGPoint) {
@@ -405,7 +394,7 @@ extension UIViewController: UIPopoverPresentationControllerDelegate {
 }
 
 extension ComicStripViewController: PopOverComicEpisodeViewDelegate {
-    func didEpisodeSelected(_ serialNumber: String) {
-        renderEpisode(serialNumber: serialNumber)
+    func didEpisodeSelected(_ episode: Episode) {
+        viewModel.renderComicStripScenes(episode)
     }
 }

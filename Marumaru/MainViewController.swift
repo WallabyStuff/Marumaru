@@ -34,7 +34,6 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     
     static let identifier = R.storyboard.main.mainStoryboard.identifier
     var viewModel: ViewModel
-    private var watchHistoryPlaceholderLabel = StickyPlaceholderLabel()
     
     
     // MARK: - Initializers
@@ -55,15 +54,6 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     }
     
     
-    // MARK: - Overrides
-    
-    override func updateViewConstraints() {
-        super.updateViewConstraints()
-        configureAppbarViewConstraints()
-        configureMainContentViewInsets()
-    }
-    
-    
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
@@ -75,6 +65,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
+        viewModel.updateWatchHistories()
     }
     
     
@@ -87,9 +78,8 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     
     private func setupData() {
         viewModel.cleanCacheIfNeeded()
-        reloadUpdatedComic()
-        reloadWatchHistory()
-        reloadComicRank()
+        viewModel.updateNewUpdatedComics()
+        viewModel.updateComicRank()
     }
     
     private func setupView() {
@@ -97,7 +87,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
         setupRefreshNewUpdatedComicButton()
         setupUpdatedComicCollectionView()
         setupWatchHistoryCollectionView()
-        setupTopRankComicTableView()
+        setupComicRankTableView()
     }
     
     private func setupSearchBarView() {
@@ -113,51 +103,32 @@ class MainViewController: BaseViewController, ViewModelInjectable {
         let nibName = UINib(nibName: ComicThumbnailCollectionCell.identifier, bundle: nil)
         newUpdateComicCollectionView.register(nibName, forCellWithReuseIdentifier: ComicThumbnailCollectionCell.identifier)
         newUpdateComicCollectionView.clipsToBounds = false
-        newUpdateComicCollectionView.delegate = self
-        newUpdateComicCollectionView.dataSource = self
         newUpdateComicCollectionView.contentInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
-        
-        viewModel.reloadUpdatedContentCollectionView = { [weak self] in
-            DispatchQueue.main.async {
-                self?.newUpdateComicCollectionView.reloadData()
-            }
-        }
     }
     
     private func setupWatchHistoryCollectionView() {
         let nibName = UINib(nibName: ComicThumbnailCollectionCell.identifier, bundle: nil)
         watchHistoryCollectionView.register(nibName, forCellWithReuseIdentifier: ComicThumbnailCollectionCell.identifier)
         watchHistoryCollectionView.clipsToBounds = false
-        watchHistoryCollectionView.delegate = self
-        watchHistoryCollectionView.dataSource = self
         watchHistoryCollectionView.contentInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
-        
-        viewModel.reloadWatchHistoryCollectionView = { [weak self] in
-            DispatchQueue.main.async {
-                self?.watchHistoryCollectionView.reloadData()
-            }
-        }
     }
     
-    private func setupTopRankComicTableView() {
+    private func setupComicRankTableView() {
         let nibName = UINib(nibName: ComicRankTableCell.identifier, bundle: nil)
         comicRankTableView.register(nibName, forCellReuseIdentifier: ComicRankTableCell.identifier)
         
         comicRankTableView.layer.cornerRadius = 12
         comicRankTableView.layer.masksToBounds = true
-        
-        comicRankTableView.delegate = self
-        comicRankTableView.dataSource = self
-        
-        viewModel.reloadTopRankTableView = { [weak self] in
-            DispatchQueue.main.async {
-                self?.comicRankTableView.reloadData()
-            }
-        }
     }
     
         
     // MARK: - Constraints
+    
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
+        configureAppbarViewConstraints()
+        configureMainContentViewInsets()
+    }
     
     private func configureAppbarViewConstraints() {
         appbarViewHeightConstraint.constant = view.safeAreaInsets.top + regularAppbarHeight
@@ -175,17 +146,29 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     
     private func bind() {
         bindSearchButton()
-        bindRefreshUpdatedContentButton()
         bindShowWatchHistoryButton()
+        bindRefreshNewUpdatedComicsButton()
         bindRefreshComicRankButton()
-        bindComicRankCell()
+        
+        bindNewUpdateComicCollectionView()
+        bindNewUpdatecomicCollectionCell()
+        bindNewUpdateComicLoadingState()
+        bindNewUpdateFailState()
+        
+        bindWatchHistoryCollectionView()
+        bindWatchHistoryCollectionCell()
+        
+        bindComicRankCollctionView()
+        bindComicRankCollectionCell()
+        bindComicRankLoadingLoadingState()
+        bindComicRankFailState()
     }
     
     private func bindSearchButton() {
         searchBarView.rx.tapGesture()
             .when(.recognized)
-            .subscribe(onNext: { [weak self] _ in
-                self?.presentSearchComicVC()
+            .subscribe(with: self, onNext: { vc, _ in
+                vc.presentSearchComicVC()
             })
             .disposed(by: disposeBag)
     }
@@ -193,18 +176,18 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     private func bindShowWatchHistoryButton() {
         showWatchHistoryButton.rx.tap
             .asDriver()
-            .drive(onNext: { [weak self] _ in
-                self?.presentWatchHistoryVC()
+            .drive(with: self, onNext: { vc, _ in
+                vc.presentWatchHistoryVC()
             })
             .disposed(by: disposeBag)
     }
     
-    private func bindRefreshUpdatedContentButton() {
+    private func bindRefreshNewUpdatedComicsButton() {
         refreshNewUpdateComicButton.rx.tap
             .asDriver()
             .debounce(.milliseconds(300))
-            .drive(with: self, onNext: { vc, _  in
-                vc.reloadUpdatedComic()
+            .drive(with: self, onNext: { vc, _ in
+                vc.viewModel.updateNewUpdatedComics()
             })
             .disposed(by: disposeBag)
     }
@@ -214,63 +197,198 @@ class MainViewController: BaseViewController, ViewModelInjectable {
             .asDriver()
             .debounce(.milliseconds(300))
             .drive(with: self, onNext: { vc, _ in
-                vc.reloadComicRank()
+                vc.viewModel.updateComicRank()
             })
             .disposed(by: disposeBag)
     }
     
-    private func bindComicRankCell() {
-        comicRankTableView.rx.itemSelected
+    private func bindNewUpdateComicCollectionView() {
+        viewModel.newUpdateComicsObservable
+            .bind(to: newUpdateComicCollectionView.rx
+                .items(cellIdentifier: ComicThumbnailCollectionCell.identifier, cellType: ComicThumbnailCollectionCell.self)) { [weak self] _, comic, cell in
+                    guard let self = self else { return }
+                    
+                    cell.thumbnailImagePlaceholderLabel.text = comic.title
+                    cell.titleLabel.text = comic.title
+                    
+                    if let imageURL = comic.thumbnailImageUrl {
+                        let token = self.viewModel.requestImage(imageURL) { result in
+                            do {
+                                let image = try result.get()
+                                DispatchQueue.main.async {
+                                    cell.thumbnailImageView.image = image.imageCache.image
+                                    cell.thumbnailImagePlaceholderLabel.isHidden = true
+                                    cell.thumbnailImageBaseView.setThumbnailShadow(with: image.imageCache.averageColor.cgColor)
+                                    
+                                    if image.animate {
+                                        cell.thumbnailImageView.startFadeInAnimation(duration: 0.5, nil)
+                                    }
+                                }
+                            } catch {
+                                cell.thumbnailImagePlaceholderLabel.isHidden = false
+                            }
+                        }
+                        
+                        cell.onReuse = { [weak self] in
+                            if let token = token {
+                                self?.viewModel.cancelImageRequest(token)
+                            }
+                        }
+                    }
+                }.disposed(by: disposeBag)
+    }
+    
+    private func bindNewUpdatecomicCollectionCell() {
+        newUpdateComicCollectionView.rx
+            .itemSelected
             .asDriver()
-            .drive(with: self, onNext: { vc, indexPath in
-                let mangaInfo = vc.viewModel.topRankCellItemForRow(at: indexPath)
-                vc.presentComicStripVC(mangaInfo.title, mangaInfo.link)
-            }).disposed(by: disposeBag)
+            .drive(onNext: { [weak self] indexPath in
+                self?.viewModel.newUpdateComicItemSelected(indexPath)
+            })
+            .disposed(by: disposeBag)
     }
     
-    
-    // MARK: - Methods
-    
-    func reloadUpdatedComic() {
-        newUpdateComicCollectionView.playLottie()
-        
-        viewModel.getUpdatedContents()
-            .subscribe(with: self, onCompleted: { vc in
-                vc.newUpdateComicCollectionView.stopLottie()
-            }).disposed(by: disposeBag)
-    }
-    
-    func reloadWatchHistory() {
-        watchHistoryPlaceholderLabel.detatchLabel()
-        
-        viewModel.getWatchHistories()
-            .subscribe(with: self, onError: { vc, error in
-                if let error = error as? MainViewError {
-                    vc.watchHistoryPlaceholderLabel.attatchLabel(text: error.message,
-                                                                 to: vc.watchHistoryCollectionView)
+    private func bindNewUpdateComicLoadingState() {
+        viewModel.isLoadingNewUpdateComic
+            .subscribe(onNext: { [weak self] isLoading in
+                if isLoading {
+                    self?.newUpdateComicCollectionView.playLottie()
+                } else {
+                    self?.newUpdateComicCollectionView.stopLottie()
                 }
             })
             .disposed(by: disposeBag)
     }
     
-    func reloadComicRank() {
-        comicRankTableView.playLottie()
+    private func bindNewUpdateFailState() {
+        viewModel.failToGetNewUPdateComic
+            .subscribe(onNext: { [weak self] isFailed in
+                guard let self = self else { return }
+                if isFailed {
+                    self.newUpdateComicCollectionView.stopLottie()
+                    self.newUpdateComicCollectionView.makeNoticeLabel("🛠서버 점검중입니다.\n나중에 다시 시도해주세요",
+                                                                      contentInsets: self.newUpdateComicCollectionView.contentInset)
+                } else {
+                    self.newUpdateComicCollectionView.removeNoticeLabels()
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindWatchHistoryCollectionView() {
+        viewModel.watchHistoriesObservable
+            .bind(to: watchHistoryCollectionView.rx.items(cellIdentifier: ComicThumbnailCollectionCell.identifier,
+                                                          cellType: ComicThumbnailCollectionCell.self)) { [weak self] _, comic, cell in
+                guard let self = self else { return }
+                cell.thumbnailImagePlaceholderLabel.text = comic.episodeTitle
+                cell.titleLabel.text = comic.episodeTitle
+                
+                let token = self.viewModel.requestImage(comic.thumbnailImageURL) { result in
+                    do {
+                        let image = try result.get()
+                        DispatchQueue.main.async {
+                            cell.thumbnailImageView.image = image.imageCache.image
+                            cell.thumbnailImagePlaceholderLabel.isHidden = true
+                            cell.thumbnailImageBaseView.setThumbnailShadow(with: image.imageCache.averageColor.cgColor)
+                            
+                            if image.animate {
+                                cell.thumbnailImageView.startFadeInAnimation(duration: 0.5, nil)
+                            }
+                        }
+                    } catch {
+                        cell.thumbnailImagePlaceholderLabel.isHidden = false
+                    }
+                }
+                
+                cell.onReuse = { [weak self] in
+                    if let token = token {
+                        self?.viewModel.cancelImageRequest(token)
+                    }
+                }
+            }.disposed(by: disposeBag)
         
-        viewModel.getTopRankedComics()
-            .subscribe(with: self, onCompleted: { vc in
-                vc.comicRankTableView.stopLottie()
+        viewModel.watchHistoriesObservable
+            .subscribe(with: self, onNext: { vc, comics in
+                if comics.isEmpty {
+                    vc.watchHistoryCollectionView.makeNoticeLabel("아직 시청기록이 없습니다.",
+                                                                  contentInsets: vc.watchHistoryCollectionView.contentInset)
+                } else {
+                    vc.watchHistoryCollectionView.removeNoticeLabels()
+                }
             }).disposed(by: disposeBag)
     }
     
-    func presentComicStripVC(_ mangaTitle: String, _ mangaUrl: String) {
+    private func bindWatchHistoryCollectionCell() {
+        watchHistoryCollectionView.rx
+            .itemSelected
+            .asDriver()
+            .drive(onNext: { [weak self] indexPath in
+                self?.viewModel.watchHistoryItemSelected(indexPath)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindComicRankCollctionView() {
+        viewModel.comicRankObservable
+            .bind(to: comicRankTableView.rx.items(cellIdentifier: ComicRankTableCell.identifier,
+                                                  cellType: ComicRankTableCell.self)) { index, comic, cell in
+                cell.titleLabel.text = comic.title
+                cell.rankLabel.text = "\(index + 1)"
+            }.disposed(by: disposeBag)
+    }
+    
+    private func bindComicRankCollectionCell() {
+        comicRankTableView.rx.itemSelected
+            .asDriver()
+            .drive(onNext: { [weak self] indexPath in
+                self?.viewModel.comicRankItemSelected(indexPath)
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.presentComicStripVCObservable
+            .subscribe(onNext: { [weak self] comic in
+                self?.presentComicStripVC(comic)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindComicRankLoadingLoadingState() {
+        viewModel.isLoadingComicRank
+            .subscribe(onNext: { [weak self] isLoading in
+                if isLoading {
+                    self?.comicRankTableView.playLottie()
+                } else {
+                    self?.comicRankTableView.stopLottie()
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindComicRankFailState() {
+        viewModel.failToGetComicRank
+            .subscribe(onNext: { [weak self] isFailed in
+                if isFailed {
+                    self?.comicRankTableView.stopLottie()
+                    self?.comicRankTableView.makeNoticeLabel("🛠서버 점검중입니다.\n나중에 다시 시도해주세요")
+                } else {
+                    self?.comicRankTableView.removeNoticeLabels()
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    
+    // MARK: - Methods
+    
+    func presentComicStripVC(_ comic: Comic) {
         let storyboard = UIStoryboard(name: R.storyboard.comicStrip.name, bundle: nil)
         let comicStripVC = storyboard.instantiateViewController(identifier: ComicStripViewController.identifier,
                                                                 creator: { coder -> ComicStripViewController in
-            let viewModel = ComicStripViewModel(comicTitle: mangaTitle, comicURL: mangaUrl)
-            return .init(coder, viewModel) ?? ComicStripViewController(.init(comicTitle: "", comicURL: ""))
+            let episode = Episode(title: comic.title, serialNumber: "")
+            let viewModel = ComicStripViewModel(episode: episode, episodeURL: comic.link)
+            return .init(coder, viewModel) ?? ComicStripViewController(.init(episode: episode, episodeURL: ""))
         })
-        
-        comicStripVC.delegate = self
+
         comicStripVC.modalPresentationStyle = .fullScreen
         navigationController?.pushViewController(comicStripVC, animated: true)
     }
@@ -295,88 +413,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
             return .init(coder, viewModel) ?? WatchHistoryViewController(.init())
         })
         
-        watchHistoryVC.delegate = self
         watchHistoryVC.modalPresentationStyle = .fullScreen
         navigationController?.pushViewController(watchHistoryVC, animated: true)
-    }
-}
-
-
-// MARK: - Extensions
-
-extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        if collectionView == newUpdateComicCollectionView {
-            return viewModel.updatedContentsNumberOfItem
-        } else {
-            return viewModel.watchHistoriesNumberOfItem
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let mangaCollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: ComicThumbnailCollectionCell.identifier,
-                                                                           for: indexPath) as? ComicThumbnailCollectionCell else {
-            return UICollectionViewCell()
-        }
-        
-        let mangaInfo = collectionView == newUpdateComicCollectionView ? viewModel.updatedContentCellItemForRow(at: indexPath) : viewModel.watchHistoryCellItemForRow(at: indexPath)
-        
-        mangaCollectionCell.titleLabel.text = mangaInfo.title
-        mangaCollectionCell.thumbnailImagePlaceholderLabel.text = mangaInfo.title
-        
-        if let thumbnailImageUrl = mangaInfo.thumbnailImageUrl {
-            let token = viewModel.requestImage(thumbnailImageUrl) { result in
-                do {
-                    let resultImage = try result.get()
-                    DispatchQueue.main.async {
-                        mangaCollectionCell.thumbnailImageView.image = resultImage.imageCache.image
-                        mangaCollectionCell.thumbnailImagePlaceholderLabel.isHidden = true
-                        mangaCollectionCell.thumbnailImageBaseView.setThumbnailShadow(with: resultImage.imageCache.averageColor.cgColor)
-                        
-                        if resultImage.animate {
-                            mangaCollectionCell.thumbnailImageView.startFadeInAnimation(duration: 0.5, nil)
-                        }
-                    }
-                } catch {
-                    mangaCollectionCell.thumbnailImagePlaceholderLabel.isHidden = false
-                }
-            }
-            
-            mangaCollectionCell.onReuse = { [weak self] in
-                if let token = token {
-                    self?.viewModel.cancelImageRequest(token)
-                }
-            }
-        }
-        
-        return mangaCollectionCell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let mangaInfo = collectionView == newUpdateComicCollectionView ? viewModel.updatedContentCellItemForRow(at: indexPath) : viewModel.watchHistoryCellItemForRow(at: indexPath)
-        
-        presentComicStripVC(mangaInfo.title, mangaInfo.link)
-    }
-}
-
-extension MainViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.topRankNumberOfItemsInSection(section: 0)
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let rankCell = tableView.dequeueReusableCell(withIdentifier: ComicRankTableCell.identifier, for: indexPath) as? ComicRankTableCell else { return UITableViewCell() }
-        
-        let comicInfo = viewModel.topRankCellItemForRow(at: indexPath)
-        rankCell.titleLabel.text = comicInfo.title
-        rankCell.rankLabel.text = viewModel.topRankCellRank(indexPath: indexPath).description
-        return rankCell
-    }
-}
-
-extension MainViewController: WatchHistoryViewDelegate, ComicStripViewDelegate {
-    func didWatchHistoryUpdated() {
-        reloadWatchHistory()
     }
 }

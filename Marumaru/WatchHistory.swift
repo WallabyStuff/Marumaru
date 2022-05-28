@@ -7,28 +7,33 @@
 
 import UIKit
 import RealmSwift
+import Differentiator
 
 class WatchHistory: Object {
+
     
-    // MARK: - Declaration
-    @objc dynamic var comicURL: String = ""
-    @objc dynamic var comicTitle: String = ""
+    // MARK: - Properties
+    
+    @objc dynamic var episodeTitle: String = ""
+    @objc dynamic var episodeURL: String = ""
     @objc dynamic var thumbnailImageURL: String = ""
     @objc dynamic var timeStamp: Int64 = 0
     
+    
     // MARK: - Initializer
-    convenience init(comicURL: String,
-                     comicTitle: String,
+    
+    convenience init(episodeTitle: String,
+                     episodeURL: String,
                      thumbnailImageUrl: String) {
         self.init()
-        self.comicURL = comicURL
-        self.comicTitle = comicTitle
+        self.episodeTitle = episodeTitle
+        self.episodeURL = episodeURL
         self.thumbnailImageURL = thumbnailImageUrl
         self.timeStamp = Date.timeStamp
     }
     
     override class func primaryKey() -> String? {
-        return "comicURL"
+        return "episodeURL"
     }
 }
 
@@ -41,5 +46,19 @@ extension WatchHistory {
     
     public var watchDate: Date {
         return Date(timeIntervalSince1970: Double(timeStamp))
+    }
+}
+
+
+extension WatchHistory: IdentifiableType {
+    typealias Identity = String
+    
+    var identity: String {
+        if isInvalidated {
+            /// return random id to prevent RLMException
+            return UUID().uuidString
+        } else {
+            return episodeURL
+        }
     }
 }

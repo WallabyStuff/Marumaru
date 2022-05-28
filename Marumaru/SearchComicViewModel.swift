@@ -9,70 +9,43 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-enum SearchViewError: Error {
-    case emptySearchResult
-    
-    var message: String {
-        switch self {
-        case .emptySearchResult:
-            return "검색 결과가 없습니다."
-        }
-    }
-}
-
 class SearchComicViewModel: MarumaruApiServiceViewModel {
+    
+    
+    // MARK: - Properties
     
     private var disposeBag = DisposeBag()
     private var marumaruApiService = MarumaruApiService()
-    public var reloadSearchResultTableView: (() -> Void)?
     
-    private var searchResultComics: [ComicInfo] = [] {
-        didSet {
-            self.reloadSearchResultTableView?()
-        }
-    }
+    private var searchResultComics = [ComicInfo]()
+    public var searchResultComicsObservable = PublishRelay<[ComicInfo]>()
+    public var isLoadingSearchResultComics = PublishRelay<Bool>()
+    public var failToLoadSearchResult = BehaviorRelay<Bool>(value: false)
+    
+    public var presentComicDetailVC = PublishRelay<ComicInfo>()
 }
 
 extension SearchComicViewModel {
-    public func getSearchResult(_ title: String) -> Completable {
-        return Completable.create { [weak self] observer in
-            guard let self = self else { return Disposables.create() }
-            
-            self.searchResultComics.removeAll()
-            
-            self.marumaruApiService.getSearchResult(title: title)
-                .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .background))
-                .observe(on: MainScheduler.instance)
-                .subscribe(with: self, onNext: { strongSelf, comics in
-                    if comics.count == 0 {
-                        observer(.error(SearchViewError.emptySearchResult))
-                    } else {
-                        strongSelf.searchResultComics = comics
-                        observer(.completed)
-                    }
-                }, onError: { _, error in
-                    observer(.error(error))
-                }).disposed(by: self.disposeBag)
-            
-            return Disposables.create()
-        }
-    }
-}
-
-extension SearchComicViewModel {
-    public var numberOfSection: Int {
-        return 1
+    public func updateSearchResult(_ title: String) {
+        searchResultComicsObservable.accept([])
+        failToLoadSearchResult.accept(false)
+        isLoadingSearchResultComics.accept(true)
+        
+        self.marumaruApiService.getSearchResult(title: title)
+            .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .background))
+            .observe(on: MainScheduler.instance)
+            .subscribe(with: self, onNext: { strongSelf, comics in
+                strongSelf.searchResultComics = comics
+                strongSelf.searchResultComicsObservable.accept(comics)
+                strongSelf.isLoadingSearchResultComics.accept(false)
+            }, onError: { strongSelf, _ in
+                strongSelf.isLoadingSearchResultComics.accept(false)
+                strongSelf.failToLoadSearchResult.accept(true)
+            }).disposed(by: self.disposeBag)
     }
     
-    public func numberOfRowsIn(section: Int) -> Int {
-        if section == 0 {
-            return searchResultComics.count
-        } else {
-            return 0
-        }
-    }
-    
-    public func cellItemForRow(at indexPath: IndexPath) -> ComicInfo {
-        return searchResultComics[indexPath.row]
+    public func comicItemSelected(_ indexPath: IndexPath) {
+        let selectedComic = searchResultComics[indexPath.row]
+        presentComicDetailVC.accept(selectedComic)
     }
 }

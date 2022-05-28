@@ -14,11 +14,11 @@
             <objects>
                 <viewController storyboardIdentifier="MainStoryboard" id="BYZ-38-t0r" customClass="MainViewController" customModule="Marumaru" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="1500"/>
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IQz-28-dsB">
-                                <rect key="frame" x="0.0" y="0.0" width="428" height="1500"/>
+                                <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FUc-n8-T3p" userLabel="ContentView">
                                         <rect key="frame" x="0.0" y="0.0" width="428" height="1300"/>
@@ -400,7 +400,6 @@
                         <nil key="title"/>
                     </navigationItem>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
-                    <size key="freeformSize" width="428" height="1500"/>
                     <connections>
                         <outlet property="appbarViewHeightConstraint" destination="NQ8-NP-Cbd" id="36B-OW-6ib"/>
                         <outlet property="comicRankTableView" destination="QoE-Qg-aZ4" id="9ry-8Q-425"/>

@@ -9,7 +9,7 @@ import UIKit
 
 struct ComicEpisode {
     var title: String
-    var description: String
+    var author: String
     var thumbnailImageURL: String?
-    var comicURL: String
+    var episodeURL: String
 }

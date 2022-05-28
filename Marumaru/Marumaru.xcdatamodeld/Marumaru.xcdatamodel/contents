@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="WatchHistory" representedClassName="WatchHistory" syncable="YES">
-        <attribute name="comicTitle" optional="YES" attributeType="String"/>
-        <attribute name="comicURL" optional="YES" attributeType="String"/>
+        <attribute name="episodeTitle" optional="YES" attributeType="String"/>
+        <attribute name="episodeURL" optional="YES" attributeType="String"/>
         <attribute name="thumbnailImageAvgColorHex" optional="YES" attributeType="String"/>
         <attribute name="thumbnailImageData" optional="YES" attributeType="Binary"/>
         <attribute name="thumbnailImageURL" optional="YES" attributeType="String"/>

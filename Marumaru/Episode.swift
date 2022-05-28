@@ -7,7 +7,12 @@
 
 import UIKit
 
-struct Episode {
+class Episode: NSObject {
     var title: String
     var serialNumber: String
+    
+    init(title: String, serialNumber: String) {
+        self.title = title
+        self.serialNumber = serialNumber
+    }
 }
