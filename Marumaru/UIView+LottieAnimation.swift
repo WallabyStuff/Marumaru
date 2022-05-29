@@ -9,10 +9,8 @@ import UIKit
 import Lottie
 
 enum AnimationType: String, CaseIterable {
-    case loading_cat_black
     case rainbow_cat
     case loading_cat_radial
-    case loading_cat
 }
 
 extension UIView {

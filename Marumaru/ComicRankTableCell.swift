@@ -26,14 +26,14 @@ class ComicRankTableCell: UITableViewCell {
         setup()
     }
     
-    
-    // MARK: - Overrides
-    
     override func prepareForReuse() {
         super.prepareForReuse()
         rankLabel.text = ""
         titleLabel.text = ""
     }
+    
+    
+    // MARK: - Overrides
     
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         if highlighted {

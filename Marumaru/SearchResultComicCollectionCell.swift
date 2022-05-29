@@ -22,7 +22,15 @@ class SearchResultComicCollectionCell: UICollectionViewCell {
     @IBOutlet weak var thumbnailImagePlaceholderLabel: UILabel!
     @IBOutlet weak var thumbnailImageView: UIImageView!
     
-    public var onReuse: () -> Void = {}
+    override var isHighlighted: Bool {
+        didSet {
+            if isHighlighted == true {
+                cellContentView.backgroundColor = R.color.backgroundWhiteLight()
+            } else {
+                cellContentView.backgroundColor = R.color.backgroundWhite()
+            }
+        }
+    }
     
     
     // MARK: - LifeCycle
@@ -33,8 +41,6 @@ class SearchResultComicCollectionCell: UICollectionViewCell {
     }
     
     override func prepareForReuse() {
-        onReuse()
-        
         thumbnailImageView.image = nil
         thumbnailImagePlaceholderView.removeThumbnailShadow()
     }
@@ -44,16 +50,6 @@ class SearchResultComicCollectionCell: UICollectionViewCell {
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         setupCellContentView()
-    }
-    
-    override var isHighlighted: Bool {
-        didSet {
-            if isHighlighted == true {
-                cellContentView.backgroundColor = R.color.backgroundWhiteLight()
-            } else {
-                cellContentView.backgroundColor = R.color.backgroundWhite()
-            }
-        }
     }
     
     

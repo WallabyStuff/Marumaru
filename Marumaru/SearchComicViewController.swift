@@ -159,9 +159,7 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
     private func bindSearchResultComicCollectionView() {
         viewModel.searchResultComicsObservable
             .bind(to: searchResultCollectionView.rx.items(cellIdentifier: SearchResultComicCollectionCell.identifier,
-                                                          cellType: SearchResultComicCollectionCell.self)) { [weak self] _, comicInfo, cell in
-                guard let self = self else { return }
-                
+                                                          cellType: SearchResultComicCollectionCell.self)) { _, comicInfo, cell in
                 cell.hideSkeleton()
                 cell.titleLabel.text = comicInfo.title
                 cell.thumbnailImagePlaceholderLabel.text = comicInfo.title
@@ -177,29 +175,15 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
                 }
                 
                 if let thumbnailImageUrl = comicInfo.thumbnailImageURL {
-                    let token = self.viewModel.requestImage(thumbnailImageUrl) { result in
+                    let url = URL(string: thumbnailImageUrl)
+                    cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { result in
                         do {
-                            let resultImage = try result.get()
-                            DispatchQueue.main.async {
-                                cell.thumbnailImagePlaceholderLabel.isHidden = true
-                                cell.thumbnailImageView.image = resultImage.imageCache.image
-                                cell.thumbnailImagePlaceholderView.setThumbnailShadow(with: resultImage.imageCache.averageColor.cgColor)
-                                
-                                if resultImage.animate {
-                                    cell.thumbnailImageView.startFadeInAnimation(duration: 0.3)
-                                }
-                            }
+                            let result = try result.get()
+                            let image = result.image
+                            cell.thumbnailImagePlaceholderView.setThumbnailShadow(with: image.averageColor)
+                            cell.thumbnailImagePlaceholderLabel.isHidden = true
                         } catch {
-                            DispatchQueue.main.async {
-                                cell.thumbnailImagePlaceholderLabel.isHidden = false
-                            }
-                        }
-                    }
-                    
-                    cell.onReuse = { [weak self] in
-                        if let token = token {
                             cell.thumbnailImagePlaceholderLabel.isHidden = false
-                            self?.viewModel.cancelImageRequest(token)
                         }
                     }
                 }

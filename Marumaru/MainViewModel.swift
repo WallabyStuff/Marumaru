@@ -26,7 +26,6 @@ class MainViewModel: MarumaruApiServiceViewModel {
     // MARK: - Properteis
     
     private var disposeBag = DisposeBag()
-    private let imageCacheManager = ImageCacheManager()
     private let marumaruApiService = MarumaruApiService()
     private let watchHistoryManager = WatchHistoryManager()
 
@@ -44,12 +43,6 @@ class MainViewModel: MarumaruApiServiceViewModel {
     public var failToGetComicRank = BehaviorRelay<Bool>(value: false)
     
     public var presentComicStripVCObservable = PublishRelay<Comic>()
-}
-
-extension MainViewModel {
-    public func cleanCacheIfNeeded() {
-        ImageCacheManager.cleanChacheIfNeeded()
-    }
 }
 
 extension MainViewModel {

@@ -27,8 +27,8 @@ extension ThumbnailView {
         self.layer.shouldRasterize = true
     }
     
-    func setThumbnailShadow(with color: CGColor) {
-        self.layer.shadowColor = color
+    func setThumbnailShadow(with color: UIColor?) {
+        self.layer.shadowColor = color == nil ? R.color.shadowBlack()!.cgColor : color!.cgColor
         self.layer.shadowOffset = CGSize(width: 0, height: 4)
         self.layer.shadowRadius = 12
         self.layer.shadowOpacity = 0.3

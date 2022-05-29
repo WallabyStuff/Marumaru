@@ -38,13 +38,10 @@ class MarumaruApiService {
     let searchPath = "/bbs/search.php?url=%2Fbbs%2Fsearch.php&stx="
     
     private var disposeBag = DisposeBag()
-    private let imageCacheHandler = ImageCacheManager()
     private var runningRequest = [UUID: URLSessionDataTask]()
-    private var imageCacheArr: [ImageCache] = []
     private var sharedDoc: Document?
     
     init() {
-        fetchImageCaches()
         setupBasePath()
     }
     
@@ -342,7 +339,7 @@ extension MarumaruApiService {
             } else {
                 let endPoint = self.getEndPoint(url: url)
                 self.getDocument(endPoint)
-                    .subscribe(with: self, onNext: { vc, document in
+                    .subscribe(onNext: { document in
                         do {
                             let episodes = try self.parseEpisodesInStrip(document)
                             observer(.success(episodes))
@@ -358,10 +355,6 @@ extension MarumaruApiService {
     }
     
     public func parseEpisodesInStrip(_ document: Document) throws -> [Episode] {
-//        guard let sharedDoc = sharedDoc else {
-//            throw MarumaruApiErrorMessage.failToParseHtml
-//        }
-        
         do {
             let chartElement = try document.getElementsByClass("chart").first()
             var episodes = [Episode]()
@@ -431,28 +424,14 @@ extension MarumaruApiService {
     @discardableResult
     public func requestImage(_ url: String, _ completion: @escaping (Result<ImageResult, Error>) -> Void) -> UUID? {
         guard let url = URL(string: url) else { return nil }
-        
-        // Check does image existing on Cache data
-        var isExists = false
-        
-        imageCacheArr.forEach { imageCache in
-            if imageCache.url == url.path {
-                // Already exists on Cache data
-                isExists = true
-                let result = ImageResult(imageCache: imageCache, animate: false)
-                completion(.success(result))
-            }
-        }
-
-        if isExists { return nil }
-        
         let uuid = UUID()
         
-        // if image is not existing on Cache data download from url
         let task = URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
             guard let self = self else { return }
             
-            defer {self.runningRequest.removeValue(forKey: uuid)}
+            defer {
+                self.runningRequest.removeValue(forKey: uuid)
+            }
             
             if let data = data, let image = UIImage(data: data) {
                 let imageCache = ImageCache(url: url.path,
@@ -463,16 +442,6 @@ extension MarumaruApiService {
                 let result = ImageResult(imageCache: imageCache, animate: true)
                 completion(.success(result))
                 
-                // save image to CacheData
-                self.imageCacheHandler.addData(imageCache)
-                    .subscribe(on: MainScheduler.instance)
-                    .subscribe { [weak self] _ in
-                        guard let self = self else { return }
-                        // Success saving image to cache data STATE
-                        self.imageCacheArr.append(imageCache)
-                    }
-                    .disposed(by: self.disposeBag)
-
                 return
             }
             
@@ -496,18 +465,6 @@ extension MarumaruApiService {
     public func cancelImageRequest(_ uuid: UUID) {
         runningRequest[uuid]?.cancel()
         runningRequest.removeValue(forKey: uuid)
-    }
-    
-    private func fetchImageCaches() {
-        imageCacheArr.removeAll()
-        imageCacheHandler.fetchData()
-            .subscribe { [weak self] event in
-                guard let self = self else { return }
-                
-                if let imageCaches = event.element {
-                    self.imageCacheArr = imageCaches
-                }
-            }.disposed(by: disposeBag)
     }
 }
 
