@@ -224,7 +224,7 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
         viewModel.failToLoadingScenes
             .subscribe(with: self, onNext: { vc, isFailed in
                 if isFailed {
-                    vc.view.makeNoticeLabel("🛠서버 점검중입니다.\n나중에 다시 시도해주세요")
+                    vc.view.makeNoticeLabel("message.serverError".localized())
                 } else {
                     vc.view.removeNoticeLabels()
                 }

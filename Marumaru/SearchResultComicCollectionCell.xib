@@ -31,7 +31,7 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Comic title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WWF-UW-Luv">
                                 <rect key="frame" x="104" y="16" width="214" height="20"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="20" id="oXr-e1-3Y1"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="oXr-e1-3Y1"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
                                 <color key="textColor" name="TextBlack"/>

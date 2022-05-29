@@ -27,7 +27,10 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
     static let identifier = R.storyboard.searchComic.searchComicStoryboard.identifier
     var viewModel: ViewModel
     private var searchResultCollectionViewTopInset: CGFloat {
-        return regularAppbarHeight + 12 + view.safeAreaInsets.top
+        return regularAppbarHeight + 12
+    }
+    private var actualSearchResultCollectionViewTopInset: CGFloat {
+        return searchResultCollectionViewTopInset + view.safeAreaInsets.top
     }
     
     
@@ -86,7 +89,6 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
         let rightPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 48, height: searchTextField.frame.height))
         searchTextField.rightView = rightPaddingView
         searchTextField.rightViewMode = .always
-        
         searchTextField.returnKeyType = .search
         searchTextField.delegate = self
         searchTextField.becomeFirstResponder()
@@ -193,7 +195,7 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
             .subscribe(with: self, onNext: { vc, comics in
                 if comics.isEmpty {
                     vc.searchResultCollectionView.heightAnchor.constraint(equalToConstant: vc.view.frame.height).isActive = true
-                    vc.view.makeNoticeLabel("검색결과가 없습니다.")
+                    vc.view.makeNoticeLabel("message.emptyResult".localized())
                 } else {
                     vc.view.removeNoticeLabels()
                 }
@@ -240,7 +242,7 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
         viewModel.failToLoadSearchResult
             .subscribe(with: self, onNext: { vc, isFailed in
                 if isFailed {
-                    vc.view.makeNoticeLabel("🛠서버 점검중입니다.\n나중에 다시 시도해주세요")
+                    vc.view.makeNoticeLabel("message.serverError".localized())
                 } else {
                     vc.view.removeNoticeLabels()
                 }
@@ -260,18 +262,19 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
     // MARK: - Methods
     
     private func updateSearchResult() {
-        guard let searchKeyword = searchTextField.text else {
+        guard let searchKeyword = searchTextField.text?.trimmingCharacters(in: .whitespaces) else {
             return
         }
         
         if searchKeyword.count <= 1 {
             self.view.stopLottie()
-            self.view.makeToast("최소 두 글자 이상의 단어로 검색해주세요")
+            self.view.makeToast("message.searchKeywordConstraint".localized())
             return
         }
         
         view.endEditing(true)
-        searchResultCollectionView.scrollToTop(topInset: searchResultCollectionViewTopInset, animated: false)
+        searchResultCollectionView.scrollToTop(topInset: actualSearchResultCollectionViewTopInset,
+                                               animated: false)
         viewModel.updateSearchResult(searchKeyword)
     }
     

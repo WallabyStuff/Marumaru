@@ -31,9 +31,13 @@ extension ThumbnailView {
         self.layer.shadowColor = color == nil ? R.color.shadowBlack()!.cgColor : color!.cgColor
         self.layer.shadowOffset = CGSize(width: 0, height: 4)
         self.layer.shadowRadius = 12
-        self.layer.shadowOpacity = 0.3
+        self.layer.shadowOpacity = 0
         self.layer.masksToBounds = false
         self.layer.shouldRasterize = true
+        
+        UIView.animate(withDuration: 0.5) {
+            self.layer.shadowOpacity = 0.3
+        }
     }
     
     func removeThumbnailShadow() {

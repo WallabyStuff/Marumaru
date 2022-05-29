@@ -51,7 +51,7 @@ extension WatchHistoryViewModel {
             if groupedWatchHistories[watchHistory.watchDateFormattedString] == nil {
                 groupedWatchHistories[watchHistory.watchDateFormattedString] = [watchHistory]
             } else {
-                groupedWatchHistories[watchHistory.watchDateFormattedString]?.append(watchHistory)
+                groupedWatchHistories[watchHistory.watchDateFormattedString]?.insert(watchHistory, at: 0)
             }
         }
         

@@ -9,7 +9,7 @@ import Foundation
 
 extension Array {
     func isInBound(_ index: Int) -> Bool {
-        if (!self.isEmpty) && (index >= 0) && (self.count < index) {
+        if (!self.isEmpty) && (index >= 0) && (self.count > index) {
             return true
         } else {
             return false
