@@ -3,6 +3,11 @@
     {
       "filename" : "category@1x.svg",
       "idiom" : "universal"
+    },
+    {
+      "filename" : "category@1x-filled.svg",
+      "idiom" : "universal",
+      "width-class" : "compact"
     }
   ],
   "info" : {

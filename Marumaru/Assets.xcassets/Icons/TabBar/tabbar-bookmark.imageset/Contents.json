@@ -3,6 +3,11 @@
     {
       "filename" : "bookmark@1x.svg",
       "idiom" : "universal"
+    },
+    {
+      "filename" : "bookmark@1x-1.svg",
+      "idiom" : "universal",
+      "width-class" : "compact"
     }
   ],
   "info" : {
