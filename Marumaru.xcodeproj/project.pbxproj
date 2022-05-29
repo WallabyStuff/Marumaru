@@ -46,6 +46,8 @@
 		8E319309283B540900C350F9 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E319308283B540900C350F9 /* BaseViewController.swift */; };
 		8E3A896627AB9FB00014303D /* TagLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3A896527AB9FB00014303D /* TagLabel.swift */; };
 		8E3C72FB27A983EC00F057DA /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3C72FA27A983EC00F057DA /* MainViewModel.swift */; };
+		8E41465D28437E490005BCFD /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8E41465C28437E490005BCFD /* Localizable.strings */; };
+		8E41465F284380120005BCFD /* String+Localizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E41465E284380120005BCFD /* String+Localizable.swift */; };
 		8E662DE927AC2C3E0048BF39 /* FlexibleSceneScrollViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E662DE827AC2C3E0048BF39 /* FlexibleSceneScrollViewCellModel.swift */; };
 		8E662DEB27AC2FF40048BF39 /* WatchHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E662DEA27AC2FF40048BF39 /* WatchHistoryViewModel.swift */; };
 		8E662DED27AC38290048BF39 /* MarumaruApiServiceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E662DEC27AC38290048BF39 /* MarumaruApiServiceViewModel.swift */; };
@@ -148,6 +150,8 @@
 		8E319308283B540900C350F9 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		8E3A896527AB9FB00014303D /* TagLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagLabel.swift; sourceTree = "<group>"; };
 		8E3C72FA27A983EC00F057DA /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		8E41465C28437E490005BCFD /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		8E41465E284380120005BCFD /* String+Localizable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Localizable.swift"; sourceTree = "<group>"; };
 		8E662DE827AC2C3E0048BF39 /* FlexibleSceneScrollViewCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexibleSceneScrollViewCellModel.swift; sourceTree = "<group>"; };
 		8E662DEA27AC2FF40048BF39 /* WatchHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchHistoryViewModel.swift; sourceTree = "<group>"; };
 		8E662DEC27AC38290048BF39 /* MarumaruApiServiceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarumaruApiServiceViewModel.swift; sourceTree = "<group>"; };
@@ -406,6 +410,7 @@
 				76BEEB4B2622D80000642001 /* LottieAnimations */,
 				765C8B34261CA2C50056C83B /* Assets.xcassets */,
 				765C8B36261CA2C50056C83B /* LaunchScreen.storyboard */,
+				8E41465C28437E490005BCFD /* Localizable.strings */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -448,6 +453,7 @@
 				8EFCD0EB2841F0E600685503 /* Array+IsInBound.swift */,
 				8E83DAD628426DBA00C0A10B /* UICollectionView+ScrollTo.swift */,
 				8E83DADA28428E0C00C0A10B /* UIView+CustomAnimation.swift */,
+				8E41465E284380120005BCFD /* String+Localizable.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -570,6 +576,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E41465D28437E490005BCFD /* Localizable.strings in Resources */,
 				76F912F526D160FA00B39BE7 /* loading_cat_radial.json in Resources */,
 				765C8B38261CA2C50056C83B /* LaunchScreen.storyboard in Resources */,
 				8E3192CB283A15B900C350F9 /* PopOverComicEpisodeTableCell.xib in Resources */,
@@ -796,6 +803,7 @@
 				8ED56F3427AEFBAA00E78A8A /* ThumbnailView.swift in Sources */,
 				8ED56F3827AEFDD400E78A8A /* UIView+Animation.swift in Sources */,
 				8EFCD0EA2840DB3900685503 /* WatchHistorySection.swift in Sources */,
+				8E41465F284380120005BCFD /* String+Localizable.swift in Sources */,
 				7641C3B1264682B900A79A79 /* PopOverComicEpisodeViewController.swift in Sources */,
 				765C8C6D261F16880056C83B /* ComicStripViewController.swift in Sources */,
 				8E662DE927AC2C3E0048BF39 /* FlexibleSceneScrollViewCellModel.swift in Sources */,

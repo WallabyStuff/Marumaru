@@ -54,6 +54,15 @@
                                     <constraint firstAttribute="height" constant="160" id="z7N-Ad-Utu"/>
                                 </constraints>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="placeholder" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="exS-Qj-xsj">
+                                <rect key="frame" x="28" y="141.5" width="104" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="j9w-OA-bV5"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" name="TextBlack-light"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="UfP-1z-GxZ">
                                 <rect key="frame" x="20" y="72" width="120" height="160"/>
                             </imageView>
@@ -94,6 +103,7 @@
                         <color key="backgroundColor" name="BackgroundWhite"/>
                         <constraints>
                             <constraint firstItem="w3Q-oB-Dox" firstAttribute="trailing" secondItem="eli-yo-fW8" secondAttribute="trailing" constant="20" id="1dw-AP-mUH"/>
+                            <constraint firstItem="exS-Qj-xsj" firstAttribute="centerY" secondItem="UfP-1z-GxZ" secondAttribute="centerY" id="4lC-bu-vUP"/>
                             <constraint firstItem="w3Q-oB-Dox" firstAttribute="trailing" secondItem="40a-wv-lyT" secondAttribute="trailing" id="CxJ-k1-l94"/>
                             <constraint firstItem="eli-yo-fW8" firstAttribute="leading" secondItem="1D4-wB-rc5" secondAttribute="trailing" constant="16" id="Hbw-ZK-VZP"/>
                             <constraint firstItem="1D4-wB-rc5" firstAttribute="top" secondItem="w3Q-oB-Dox" secondAttribute="top" constant="28" id="IhI-wb-1sv"/>
@@ -105,11 +115,13 @@
                             <constraint firstAttribute="bottom" secondItem="40a-wv-lyT" secondAttribute="bottom" id="UDR-rS-oxj"/>
                             <constraint firstItem="UfP-1z-GxZ" firstAttribute="trailing" secondItem="1D4-wB-rc5" secondAttribute="trailing" id="W6y-T2-fmY"/>
                             <constraint firstItem="EAb-jD-8vo" firstAttribute="leading" secondItem="N4Z-JQ-SBA" secondAttribute="leading" id="WP4-AV-cS0"/>
+                            <constraint firstItem="exS-Qj-xsj" firstAttribute="leading" secondItem="UfP-1z-GxZ" secondAttribute="leading" constant="8" id="ZOH-Ce-MUF"/>
                             <constraint firstItem="w3Q-oB-Dox" firstAttribute="trailing" secondItem="UIt-BV-sOC" secondAttribute="trailing" constant="20" id="aRf-Sk-Ykh"/>
                             <constraint firstItem="w3Q-oB-Dox" firstAttribute="trailing" secondItem="N4Z-JQ-SBA" secondAttribute="trailing" constant="20" id="buF-Yo-OCb"/>
                             <constraint firstItem="40a-wv-lyT" firstAttribute="leading" secondItem="w3Q-oB-Dox" secondAttribute="leading" id="e7R-20-vuc"/>
                             <constraint firstItem="UIt-BV-sOC" firstAttribute="leading" secondItem="w3Q-oB-Dox" secondAttribute="leading" constant="20" id="gvN-Uk-Ql5"/>
                             <constraint firstItem="N4Z-JQ-SBA" firstAttribute="top" secondItem="eli-yo-fW8" secondAttribute="bottom" constant="12" id="hLb-MU-nYQ"/>
+                            <constraint firstItem="exS-Qj-xsj" firstAttribute="trailing" secondItem="UfP-1z-GxZ" secondAttribute="trailing" constant="-8" id="hls-p0-lXF"/>
                             <constraint firstItem="UfP-1z-GxZ" firstAttribute="leading" secondItem="1D4-wB-rc5" secondAttribute="leading" id="iVy-6Z-kE6"/>
                             <constraint firstItem="EAb-jD-8vo" firstAttribute="top" secondItem="N4Z-JQ-SBA" secondAttribute="bottom" constant="8" id="qO7-dn-sOy"/>
                             <constraint firstItem="N4Z-JQ-SBA" firstAttribute="leading" secondItem="eli-yo-fW8" secondAttribute="leading" id="t5l-Ud-uhh"/>
@@ -124,6 +136,7 @@
                         <outlet property="comicTitleLabel" destination="eli-yo-fW8" id="ziT-WM-vrm"/>
                         <outlet property="episodeAmountLabel" destination="UIt-BV-sOC" id="R3S-nH-ENM"/>
                         <outlet property="scrollToBottomButton" destination="ARJ-be-L3h" id="vSI-PM-PYt"/>
+                        <outlet property="thumbnailImagePlaceholderLabel" destination="exS-Qj-xsj" id="CwW-mP-9AZ"/>
                         <outlet property="thumbnailImagePlaceholderView" destination="1D4-wB-rc5" id="Bny-dQ-nLY"/>
                         <outlet property="thumbnailImageView" destination="UfP-1z-GxZ" id="zkd-QS-KFC"/>
                         <outlet property="updateCycleLabel" destination="EAb-jD-8vo" id="8Yz-G5-MWL"/>
@@ -131,7 +144,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RLk-ml-g6x" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1458.4615384615383" y="-311.37440758293837"/>
+            <point key="canvasLocation" x="1457.9710144927537" y="-311.38392857142856"/>
         </scene>
     </scenes>
     <resources>
@@ -147,6 +160,9 @@
         </namedColor>
         <namedColor name="TextBlack">
             <color red="0.13300000131130219" green="0.15700000524520874" blue="0.16500000655651093" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="TextBlack-light">
+            <color red="0.4779999852180481" green="0.49399998784065247" blue="0.49799999594688416" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="TextBlack-lighter">
             <color red="0.68599998950958252" green="0.69800001382827759" blue="0.69800001382827759" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

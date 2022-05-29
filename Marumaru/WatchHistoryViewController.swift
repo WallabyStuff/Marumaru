@@ -155,7 +155,7 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
         viewModel.watchHistoriesObservable
             .subscribe(with: self, onNext: { vc, comics in
                 if comics.isEmpty {
-                    vc.view.makeNoticeLabel("시청기록이 없습니다.")
+                    vc.view.makeNoticeLabel("message.emptyWatchHistory".localized())
                 } else {
                     vc.view.removeNoticeLabels()
                 }
@@ -207,12 +207,14 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func presentClearHistoryActionSheet() {
-        let deleteMenu = UIAlertController(title: "기록 삭제", message: "삭제 버튼을 눌러 시청 기록을 삭제할 수 있습니다.\n삭제 후 데이터 복원은 어렵습니다.", preferredStyle: .actionSheet)
+        let deleteMenu = UIAlertController(title: "title.removeHistory".localized(),
+                                           message: "message.removeHistory".localized(),
+                                           preferredStyle: .actionSheet)
         
-        let clearAction = UIAlertAction(title: "삭제", style: .destructive) { [weak self] _ in
+        let clearAction = UIAlertAction(title: "title.remove".localized(), style: .destructive) { [weak self] _ in
             self?.viewModel.clearHistories()
         }
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel)
+        let cancelAction = UIAlertAction(title: "title.cancel".localized(), style: .cancel)
         
         deleteMenu.addAction(clearAction)
         deleteMenu.addAction(cancelAction)

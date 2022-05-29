@@ -80,7 +80,7 @@ extension ComicStripViewModel {
             let nextEpisode = comicEpisodes[targetIndex]
             renderComicStripScenes(nextEpisode)
         } else {
-            makeToast.accept("마지막 화 입니다.")
+            makeToast.accept("message.lastEpisode".localized())
         }
     }
     
@@ -94,7 +94,7 @@ extension ComicStripViewModel {
             let previousEpisode = comicEpisodes[targetIndex]
             renderComicStripScenes(previousEpisode)
         } else {
-            makeToast.accept("첫 화 입니다.")
+            makeToast.accept("message.firstEpisode".localized())
         }
     }
     

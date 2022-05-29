@@ -9,17 +9,6 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-enum MainViewError: Error {
-    case emptyHistory
-    
-    var message: String {
-        switch self {
-        case .emptyHistory:
-            return "아직 시청 기록이 없습니다"
-        }
-    }
-}
-
 class MainViewModel: MarumaruApiServiceViewModel {
     
     
@@ -73,8 +62,9 @@ extension MainViewModel {
             .fetchData()
             .observe(on: MainScheduler.instance)
             .subscribe(onSuccess: { [weak self] comics in
-                self?.watchHistories = comics
-                self?.watchHistoriesObservable.accept(comics)
+                let reversedComics: [WatchHistory] = comics.reversed()
+                self?.watchHistories = reversedComics
+                self?.watchHistoriesObservable.accept(reversedComics)
             })
             .disposed(by: self.disposeBag)
     }

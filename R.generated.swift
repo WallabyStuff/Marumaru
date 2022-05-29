@@ -1003,6 +1003,167 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
+  /// This `R.string` struct is generated, and contains static references to 1 localization tables.
+  struct string {
+    /// This `R.string.localizable` struct is generated, and contains static references to 10 localization keys.
+    struct localizable {
+      /// Value: 검색결과가 없습니다.
+      static let messageEmptyResult = Rswift.StringResource(key: "message.emptyResult", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
+      /// Value: 기록삭제
+      static let titleRemoveHistory = Rswift.StringResource(key: "title.removeHistory", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
+      /// Value: 마지막 화 입니다.
+      static let messageLastEpisode = Rswift.StringResource(key: "message.lastEpisode", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
+      /// Value: 삭제
+      static let titleRemove = Rswift.StringResource(key: "title.remove", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
+      /// Value: 삭제 버튼을 눌러 시청 기록을 삭제할 수 있습니다. 삭제 후 데이터 복원은 어렵습니다.
+      static let messageRemoveHistory = Rswift.StringResource(key: "message.removeHistory", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
+      /// Value: 아직 시청기록이 없습니다.
+      static let messageEmptyWatchHistory = Rswift.StringResource(key: "message.emptyWatchHistory", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
+      /// Value: 첫 화 입니다.
+      static let messageFirstEpisode = Rswift.StringResource(key: "message.firstEpisode", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
+      /// Value: 최소 두 글자 이상의 단어로 검색해주세요
+      static let messageSearchKeywordConstraint = Rswift.StringResource(key: "message.searchKeywordConstraint", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
+      /// Value: 취소
+      static let titleCancel = Rswift.StringResource(key: "title.cancel", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
+      /// Value: 🛠서버 점검중입니다. 나중에 다시 시도해주세요.
+      static let messageServerError = Rswift.StringResource(key: "message.serverError", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
+
+      /// Value: 검색결과가 없습니다.
+      static func messageEmptyResult(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("message.emptyResult", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "message.emptyResult"
+        }
+
+        return NSLocalizedString("message.emptyResult", bundle: bundle, comment: "")
+      }
+
+      /// Value: 기록삭제
+      static func titleRemoveHistory(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("title.removeHistory", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "title.removeHistory"
+        }
+
+        return NSLocalizedString("title.removeHistory", bundle: bundle, comment: "")
+      }
+
+      /// Value: 마지막 화 입니다.
+      static func messageLastEpisode(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("message.lastEpisode", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "message.lastEpisode"
+        }
+
+        return NSLocalizedString("message.lastEpisode", bundle: bundle, comment: "")
+      }
+
+      /// Value: 삭제
+      static func titleRemove(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("title.remove", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "title.remove"
+        }
+
+        return NSLocalizedString("title.remove", bundle: bundle, comment: "")
+      }
+
+      /// Value: 삭제 버튼을 눌러 시청 기록을 삭제할 수 있습니다. 삭제 후 데이터 복원은 어렵습니다.
+      static func messageRemoveHistory(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("message.removeHistory", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "message.removeHistory"
+        }
+
+        return NSLocalizedString("message.removeHistory", bundle: bundle, comment: "")
+      }
+
+      /// Value: 아직 시청기록이 없습니다.
+      static func messageEmptyWatchHistory(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("message.emptyWatchHistory", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "message.emptyWatchHistory"
+        }
+
+        return NSLocalizedString("message.emptyWatchHistory", bundle: bundle, comment: "")
+      }
+
+      /// Value: 첫 화 입니다.
+      static func messageFirstEpisode(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("message.firstEpisode", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "message.firstEpisode"
+        }
+
+        return NSLocalizedString("message.firstEpisode", bundle: bundle, comment: "")
+      }
+
+      /// Value: 최소 두 글자 이상의 단어로 검색해주세요
+      static func messageSearchKeywordConstraint(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("message.searchKeywordConstraint", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "message.searchKeywordConstraint"
+        }
+
+        return NSLocalizedString("message.searchKeywordConstraint", bundle: bundle, comment: "")
+      }
+
+      /// Value: 취소
+      static func titleCancel(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("title.cancel", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "title.cancel"
+        }
+
+        return NSLocalizedString("title.cancel", bundle: bundle, comment: "")
+      }
+
+      /// Value: 🛠서버 점검중입니다. 나중에 다시 시도해주세요.
+      static func messageServerError(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("message.serverError", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "message.serverError"
+        }
+
+        return NSLocalizedString("message.serverError", bundle: bundle, comment: "")
+      }
+
+      fileprivate init() {}
+    }
+
+    fileprivate init() {}
+  }
+
   fileprivate struct intern: Rswift.Validatable {
     fileprivate static func validate() throws {
       try _R.validate()
@@ -1144,6 +1305,7 @@ struct _R: Rswift.Validatable {
           if UIKit.UIColor(named: "BackgroundWhite", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'BackgroundWhite' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
           if UIKit.UIColor(named: "BackgroundWhite-lighter", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'BackgroundWhite-lighter' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
           if UIKit.UIColor(named: "TextBlack", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'TextBlack' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
+          if UIKit.UIColor(named: "TextBlack-light", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'TextBlack-light' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
           if UIKit.UIColor(named: "TextBlack-lighter", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'TextBlack-lighter' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
         }
         if _R.storyboard.comicDetail().comicDetailStoryboard() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'comicDetailStoryboard' could not be loaded from storyboard 'ComicDetail' as 'ComicDetailViewController'.") }

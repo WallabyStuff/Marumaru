@@ -19,6 +19,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     typealias ViewModel = ComicDetailViewModel
     
     @IBOutlet weak var thumbnailImagePlaceholderView: ThumbnailView!
+    @IBOutlet weak var thumbnailImagePlaceholderLabel: UILabel!
     @IBOutlet weak var thumbnailImageView: UIImageView!
     @IBOutlet weak var comicTitleLabel: UILabel!
     @IBOutlet weak var authorLabel: UILabel!
@@ -86,6 +87,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
         authorLabel.text = viewModel.comicInfo.author
         updateCycleLabel.text = viewModel.comicInfo.updateCycle
         thumbnailImageView.layer.cornerRadius = 8
+        thumbnailImagePlaceholderLabel.text = viewModel.comicInfo.title
         
         if viewModel.comicInfo.updateCycle.contains("미분류") {
             updateCycleLabel.setBackgroundHighlight(with: .systemTeal,
@@ -108,9 +110,9 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
                         let result = try result.get()
                         let image = result.image
                         self.thumbnailImagePlaceholderView.setThumbnailShadow(with: image.averageColor)
+                        self.thumbnailImagePlaceholderLabel.isHidden = true
                     } catch {
-                        // TODO: Write fail state
-                        print(error.localizedDescription)
+                        self.thumbnailImagePlaceholderLabel.isHidden = false
                     }
                 }
             }
@@ -229,7 +231,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
         viewModel.failedToLoadingComicEpisodes
             .subscribe(with: self, onNext: { vc, isFailed in
                 if isFailed {
-                    vc.comicEpisodeTableView.makeNoticeLabel("🛠서버 점검중입니다.\n나중에 다시 시도해주세요")
+                    vc.comicEpisodeTableView.makeNoticeLabel("message.serverError".localized())
                 } else {
                     vc.comicEpisodeTableView.removeNoticeLabels()
                 }

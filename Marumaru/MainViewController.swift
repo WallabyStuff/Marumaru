@@ -212,7 +212,8 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     private func bindNewUpdateComicCollectionView() {
         viewModel.newUpdateComicsObservable
             .bind(to: newUpdateComicCollectionView.rx
-                .items(cellIdentifier: ComicThumbnailCollectionCell.identifier, cellType: ComicThumbnailCollectionCell.self)) { _, comic, cell in
+                .items(cellIdentifier: ComicThumbnailCollectionCell.identifier,
+                       cellType: ComicThumbnailCollectionCell.self)) { _, comic, cell in
                     cell.hideSkeleton()
                     cell.thumbnailImagePlaceholderLabel.text = comic.title
                     cell.titleLabel.text = comic.title
@@ -271,7 +272,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
                 guard let self = self else { return }
                 if isFailed {
                     self.newUpdateComicCollectionView.stopLottie()
-                    self.newUpdateComicCollectionView.makeNoticeLabel("🛠서버 점검중입니다.\n나중에 다시 시도해주세요",
+                    self.newUpdateComicCollectionView.makeNoticeLabel("message.serverError".localized(),
                                                                       contentInsets: self.newUpdateComicCollectionView.contentInset)
                 } else {
                     self.newUpdateComicCollectionView.removeNoticeLabels()
@@ -304,7 +305,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
         viewModel.watchHistoriesObservable
             .subscribe(with: self, onNext: { vc, comics in
                 if comics.isEmpty {
-                    vc.watchHistoryCollectionView.makeNoticeLabel("아직 시청기록이 없습니다.",
+                    vc.watchHistoryCollectionView.makeNoticeLabel("message.emptyWatchHistory".localized(),
                                                                   contentInsets: vc.watchHistoryCollectionView.contentInset)
                 } else {
                     vc.watchHistoryCollectionView.removeNoticeLabels()
@@ -374,7 +375,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
             .subscribe(with: self, onNext: { vc, isFailed in
                 if isFailed {
                     vc.comicRankTableView.stopLottie()
-                    vc.comicRankTableView.makeNoticeLabel("🛠서버 점검중입니다.\n나중에 다시 시도해주세요")
+                    vc.comicRankTableView.makeNoticeLabel("message.serverError".localized())
                 } else {
                     vc.comicRankTableView.removeNoticeLabels()
                 }
