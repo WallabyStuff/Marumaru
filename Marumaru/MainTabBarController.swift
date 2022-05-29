@@ -71,7 +71,7 @@ class MainTabBarController: UITabBarController {
     }
     
     private func setupViewControllers() {
-        setViewControllers([mainViewController, searchViewController, categoryViewController, bookMarkViewController],
+        setViewControllers([mainViewController, searchViewController, comingSoonViewController, comingSoonViewController],
                            animated: true)
     }
     
@@ -110,11 +110,8 @@ extension MainTabBarController {
         return viewController
     }
     
-    private var categoryViewController: UIViewController {
-        return .init()
-    }
-    
-    private var bookMarkViewController: UIViewController {
-        return .init()
+    private var comingSoonViewController: UIViewController {
+        let viewController = ComingSoonViewController()
+        return viewController
     }
 }

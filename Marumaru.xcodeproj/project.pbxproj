@@ -48,6 +48,8 @@
 		8E3C72FB27A983EC00F057DA /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3C72FA27A983EC00F057DA /* MainViewModel.swift */; };
 		8E41465D28437E490005BCFD /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8E41465C28437E490005BCFD /* Localizable.strings */; };
 		8E41465F284380120005BCFD /* String+Localizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E41465E284380120005BCFD /* String+Localizable.swift */; };
+		8E41466E284394AA0005BCFD /* coming_soon.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E41466D284394AA0005BCFD /* coming_soon.json */; };
+		8E414670284394DF0005BCFD /* ComingSoonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E41466F284394DF0005BCFD /* ComingSoonViewController.swift */; };
 		8E662DE927AC2C3E0048BF39 /* FlexibleSceneScrollViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E662DE827AC2C3E0048BF39 /* FlexibleSceneScrollViewCellModel.swift */; };
 		8E662DEB27AC2FF40048BF39 /* WatchHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E662DEA27AC2FF40048BF39 /* WatchHistoryViewModel.swift */; };
 		8E662DED27AC38290048BF39 /* MarumaruApiServiceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E662DEC27AC38290048BF39 /* MarumaruApiServiceViewModel.swift */; };
@@ -152,6 +154,8 @@
 		8E3C72FA27A983EC00F057DA /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		8E41465C28437E490005BCFD /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		8E41465E284380120005BCFD /* String+Localizable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Localizable.swift"; sourceTree = "<group>"; };
+		8E41466D284394AA0005BCFD /* coming_soon.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = coming_soon.json; sourceTree = "<group>"; };
+		8E41466F284394DF0005BCFD /* ComingSoonViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComingSoonViewController.swift; sourceTree = "<group>"; };
 		8E662DE827AC2C3E0048BF39 /* FlexibleSceneScrollViewCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexibleSceneScrollViewCellModel.swift; sourceTree = "<group>"; };
 		8E662DEA27AC2FF40048BF39 /* WatchHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchHistoryViewModel.swift; sourceTree = "<group>"; };
 		8E662DEC27AC38290048BF39 /* MarumaruApiServiceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarumaruApiServiceViewModel.swift; sourceTree = "<group>"; };
@@ -365,6 +369,7 @@
 		76BEEB4B2622D80000642001 /* LottieAnimations */ = {
 			isa = PBXGroup;
 			children = (
+				8E41466D284394AA0005BCFD /* coming_soon.json */,
 				8E92C019283EA3E500E0CD82 /* rainbow_cat.json */,
 				76F912F426D160FA00B39BE7 /* loading_cat_radial.json */,
 			);
@@ -383,6 +388,7 @@
 				765C8C67261F05BD0056C83B /* ComicDetailViewController.swift */,
 				765C8C6C261F16880056C83B /* ComicStripViewController.swift */,
 				7641C3B0264682B900A79A79 /* PopOverComicEpisodeViewController.swift */,
+				8E41466F284394DF0005BCFD /* ComingSoonViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -593,6 +599,7 @@
 				8E83DAD12842058F00C0A10B /* Main.storyboard in Resources */,
 				8ECAB66228390F6B008E531D /* WatchHistory.storyboard in Resources */,
 				8E88519F27A952A900126701 /* .swiftlint.yml in Resources */,
+				8E41466E284394AA0005BCFD /* coming_soon.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -798,6 +805,7 @@
 				7641C3AF2646826100A79A79 /* PopOverComicEpisodeTableCell.swift in Sources */,
 				7641C3B32646874300A79A79 /* Episode.swift in Sources */,
 				76BEEBB02624B64E00642001 /* ComicThumbnailCollectionCell.swift in Sources */,
+				8E414670284394DF0005BCFD /* ComingSoonViewController.swift in Sources */,
 				8E8D381D27ABD56600E82FE2 /* ComicStripViewModel.swift in Sources */,
 				8EAFD069283B78B700FD569F /* MainTabBarController.swift in Sources */,
 				8ED56F3427AEFBAA00E78A8A /* ThumbnailView.swift in Sources */,

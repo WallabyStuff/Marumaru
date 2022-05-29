@@ -602,10 +602,12 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.file` struct is generated, and contains static references to 3 files.
+  /// This `R.file` struct is generated, and contains static references to 4 files.
   struct file {
     /// Resource file `.swiftlint.yml`.
     static let swiftlintYml = Rswift.FileResource(bundle: R.hostingBundle, name: ".swiftlint", pathExtension: "yml")
+    /// Resource file `coming_soon.json`.
+    static let coming_soonJson = Rswift.FileResource(bundle: R.hostingBundle, name: "coming_soon", pathExtension: "json")
     /// Resource file `loading_cat_radial.json`.
     static let loading_cat_radialJson = Rswift.FileResource(bundle: R.hostingBundle, name: "loading_cat_radial", pathExtension: "json")
     /// Resource file `rainbow_cat.json`.
@@ -614,6 +616,12 @@ struct R: Rswift.Validatable {
     /// `bundle.url(forResource: ".swiftlint", withExtension: "yml")`
     static func swiftlintYml(_: Void = ()) -> Foundation.URL? {
       let fileResource = R.file.swiftlintYml
+      return fileResource.bundle.url(forResource: fileResource)
+    }
+
+    /// `bundle.url(forResource: "coming_soon", withExtension: "json")`
+    static func coming_soonJson(_: Void = ()) -> Foundation.URL? {
+      let fileResource = R.file.coming_soonJson
       return fileResource.bundle.url(forResource: fileResource)
     }
 
