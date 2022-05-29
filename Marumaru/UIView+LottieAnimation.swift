@@ -11,6 +11,7 @@ import Lottie
 enum AnimationType: String, CaseIterable {
     case rainbow_cat
     case loading_cat_radial
+    case coming_soon
 }
 
 extension UIView {
@@ -22,6 +23,7 @@ extension UIView {
     func playLottie(animation: AnimationType = AnimationType.allCases.randomElement()!,
                     size: CGSize = .init(width: 120, height: 120)) {
         let animationView = AnimationView(name: animation.rawValue)
+        animationView.loopMode = .loop
         self.addSubview(animationView)
         
         animationView.translatesAutoresizingMaskIntoConstraints = false
