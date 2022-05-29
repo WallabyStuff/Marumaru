@@ -3,6 +3,11 @@
     {
       "filename" : "magnifying-glass@1x.svg",
       "idiom" : "universal"
+    },
+    {
+      "filename" : "magnifying-glass@1x-1.svg",
+      "idiom" : "universal",
+      "width-class" : "compact"
     }
   ],
   "info" : {
