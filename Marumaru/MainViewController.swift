@@ -14,6 +14,7 @@ import RxSwift
 import RxCocoa
 import RealmSwift
 import SkeletonView
+import Kingfisher
 
 class MainViewController: BaseViewController, ViewModelInjectable {
     
@@ -84,7 +85,6 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func setupData() {
-        viewModel.cleanCacheIfNeeded()
         viewModel.updateNewUpdatedComics()
         viewModel.updateComicRank()
     }
@@ -212,35 +212,21 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     private func bindNewUpdateComicCollectionView() {
         viewModel.newUpdateComicsObservable
             .bind(to: newUpdateComicCollectionView.rx
-                .items(cellIdentifier: ComicThumbnailCollectionCell.identifier, cellType: ComicThumbnailCollectionCell.self)) { [weak self] _, comic, cell in
-                    guard let self = self else { return }
-                    
+                .items(cellIdentifier: ComicThumbnailCollectionCell.identifier, cellType: ComicThumbnailCollectionCell.self)) { _, comic, cell in
                     cell.hideSkeleton()
                     cell.thumbnailImagePlaceholderLabel.text = comic.title
                     cell.titleLabel.text = comic.title
                     
                     if let imageURL = comic.thumbnailImageUrl {
-                        let token = self.viewModel.requestImage(imageURL) { result in
+                        let url = URL(string: imageURL)
+                        cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { result in
                             do {
-                                let image = try result.get()
-                                DispatchQueue.main.async {
-                                    cell.thumbnailImageView.image = image.imageCache.image
-                                    cell.thumbnailImagePlaceholderLabel.isHidden = true
-                                    cell.thumbnailImagePlaceholderView.setThumbnailShadow(with: image.imageCache.averageColor.cgColor)
-                                    
-                                    if image.animate {
-                                        cell.thumbnailImageView.startFadeInAnimation(duration: 0.5, nil)
-                                    }
-                                }
+                                let result = try result.get()
+                                let image = result.image
+                                cell.thumbnailImagePlaceholderView.setThumbnailShadow(with: image.averageColor)
+                                cell.thumbnailImagePlaceholderLabel.isHidden = true
                             } catch {
                                 cell.thumbnailImagePlaceholderLabel.isHidden = false
-                            }
-                        }
-                        
-                        cell.onReuse = { [weak self] in
-                            if let token = token {
-                                cell.thumbnailImagePlaceholderLabel.isHidden = false
-                                self?.viewModel.cancelImageRequest(token)
                             }
                         }
                     }
@@ -297,33 +283,20 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     private func bindWatchHistoryCollectionView() {
         viewModel.watchHistoriesObservable
             .bind(to: watchHistoryCollectionView.rx.items(cellIdentifier: ComicThumbnailCollectionCell.identifier,
-                                                          cellType: ComicThumbnailCollectionCell.self)) { [weak self] _, comic, cell in
-                guard let self = self else { return }
-                
+                                                          cellType: ComicThumbnailCollectionCell.self)) { _, comic, cell in
                 cell.hideSkeleton()
                 cell.thumbnailImagePlaceholderLabel.text = comic.episodeTitle
                 cell.titleLabel.text = comic.episodeTitle
                 
-                let token = self.viewModel.requestImage(comic.thumbnailImageURL) { result in
+                let url = URL(string: comic.thumbnailImageURL)
+                cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { result in
                     do {
-                        let image = try result.get()
-                        DispatchQueue.main.async {
-                            cell.thumbnailImageView.image = image.imageCache.image
-                            cell.thumbnailImagePlaceholderLabel.isHidden = true
-                            cell.thumbnailImagePlaceholderView.setThumbnailShadow(with: image.imageCache.averageColor.cgColor)
-                            
-                            if image.animate {
-                                cell.thumbnailImageView.startFadeInAnimation(duration: 0.5, nil)
-                            }
-                        }
+                        let result = try result.get()
+                        let image = result.image
+                        cell.thumbnailImagePlaceholderView.setThumbnailShadow(with: image.averageColor)
+                        cell.thumbnailImagePlaceholderLabel.isHidden = true
                     } catch {
                         cell.thumbnailImagePlaceholderLabel.isHidden = false
-                    }
-                }
-                
-                cell.onReuse = { [weak self] in
-                    if let token = token {
-                        self?.viewModel.cancelImageRequest(token)
                     }
                 }
             }.disposed(by: disposeBag)

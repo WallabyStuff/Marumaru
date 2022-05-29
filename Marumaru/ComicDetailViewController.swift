@@ -99,24 +99,18 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
             thumbnailImageView.image = viewModel.comicInfo.thumbnailImage
             thumbnailImageView.layer.borderColor = viewModel.comicInfo.thumbnailImage?.averageColor?.cgColor
         } else {
-            if let thumbnailImageUrl = viewModel.comicInfo.thumbnailImageURL {
-                let token = viewModel.requestImage(thumbnailImageUrl) { result in
+            if let thumbnailImageURL = viewModel.comicInfo.thumbnailImageURL {
+                let url = URL(string: thumbnailImageURL)
+                thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { [weak self] result in
+                    guard let self = self else { return }
+                    
                     do {
-                        let resultImage = try result.get()
-
-                        DispatchQueue.main.async {
-                            self.thumbnailImageView.image = resultImage.imageCache.image
-                            self.thumbnailImageView.startFadeInAnimation(duration: 0.3, nil)
-                            self.thumbnailImagePlaceholderView.setThumbnailShadow(with: resultImage.imageCache.averageColor.cgColor)
-                        }
+                        let result = try result.get()
+                        let image = result.image
+                        self.thumbnailImagePlaceholderView.setThumbnailShadow(with: image.averageColor)
                     } catch {
+                        // TODO: Write fail state
                         print(error.localizedDescription)
-                    }
-                }
-
-                cancelRequestImage = { [weak self] in
-                    if let token = token {
-                        self?.viewModel.cancelImageRequest(token)
                     }
                 }
             }
@@ -189,26 +183,8 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
                 }
                 
                 if let thumbnailImageUrl = comic.thumbnailImageURL {
-                    let token = self.viewModel.requestImage(thumbnailImageUrl) { result in
-                        do {
-                            let resultImage = try result.get()
-                            
-                            DispatchQueue.main.async {
-                                cell.thumbnailImageView.image = resultImage.imageCache.image
-                                if resultImage.animate {
-                                    cell.thumbnailImageView.startFadeInAnimation(duration: 0.3)
-                                }
-                            }
-                        } catch {
-                            print(error.localizedDescription)
-                        }
-                    }
-                    
-                    cell.onReuse = { [weak self] in
-                        if let token = token {
-                            self?.viewModel.cancelImageRequest(token)
-                        }
-                    }
+                    let url = URL(string: thumbnailImageUrl)
+                    cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))])
                 }
             }.disposed(by: disposeBag)
     }

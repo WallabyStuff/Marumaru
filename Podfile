@@ -17,6 +17,7 @@ target 'Marumaru' do
   pod 'Toast'
   pod 'RxDataSources'
   pod 'SkeletonView'
+  pod 'Kingfisher'
   
   target 'MarumaruTests' do
     inherit! :search_paths

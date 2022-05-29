@@ -171,32 +171,23 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
             if comic.isInvalidated { return UICollectionViewCell() }
             
             guard let self = self,
-                  let cell = self.watchHistoryCollectionView.dequeueReusableCell(withReuseIdentifier: ComicThumbnailCollectionCell.identifier, for: indexPath) as? ComicThumbnailCollectionCell else {
+                  let cell = self.watchHistoryCollectionView.dequeueReusableCell(withReuseIdentifier: ComicThumbnailCollectionCell.identifier, for: indexPath)
+                    as? ComicThumbnailCollectionCell else {
                 return UICollectionViewCell()
             }
             
             cell.titleLabel.text = comic.episodeTitle
             cell.thumbnailImagePlaceholderLabel.text = comic.episodeTitle
 
-            let token = self.viewModel.requestImage(comic.thumbnailImageURL) { result in
+            let url = URL(string: comic.thumbnailImageURL)
+            cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { result in
                 do {
-                    let imageResult = try result.get()
-
-                    DispatchQueue.main.async {
-                        cell.thumbnailImagePlaceholderLabel.isHidden = true
-                        cell.thumbnailImageView.image = imageResult.imageCache.image
-                        cell.thumbnailImageView.startFadeInAnimation(duration: 0.3)
-                    }
+                    let result = try result.get()
+                    let image = result.image
+                    cell.thumbnailImagePlaceholderView.setThumbnailShadow(with: image.averageColor)
+                    cell.thumbnailImagePlaceholderLabel.isHidden = true
                 } catch {
-                    DispatchQueue.main.async {
-                        cell.thumbnailImagePlaceholderLabel.isHidden = false
-                    }
-                }
-            }
-            
-            cell.onReuse = { [weak self] in
-                if let token = token {
-                    self?.viewModel.cancelImageRequest(token)
+                    cell.thumbnailImagePlaceholderLabel.isHidden = false
                 }
             }
              

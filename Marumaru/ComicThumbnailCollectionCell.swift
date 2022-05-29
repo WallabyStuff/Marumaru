@@ -9,13 +9,18 @@ import UIKit
 
 class ComicThumbnailCollectionCell: UICollectionViewCell {
     
+    
+    // MARK: - Properties
+    
+    static let identifier = R.reuseIdentifier.comicThumbnailCollectionCell.identifier
+    
     @IBOutlet weak var thumbnailImagePlaceholderView: ThumbnailView!
     @IBOutlet weak var thumbnailImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var thumbnailImagePlaceholderLabel: UILabel!
+
     
-    static let identifier = R.reuseIdentifier.comicThumbnailCollectionCell.identifier
-    public var onReuse: () -> Void = {}
+    // MARK: - LifeCycle
     
     override func awakeFromNib() {
         setup()
@@ -23,11 +28,12 @@ class ComicThumbnailCollectionCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        onReuse()
-        
         thumbnailImageView.image = nil
         thumbnailImagePlaceholderView.removeThumbnailShadow()
     }
+    
+    
+    // MARK: - Setups
     
     private func setup() {
         setupView()
