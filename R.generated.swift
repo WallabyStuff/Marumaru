@@ -89,7 +89,7 @@ struct R: Rswift.Validatable {
   }
 
   #if os(iOS) || os(tvOS)
-  /// This `R.storyboard` struct is generated, and contains static references to 7 storyboards.
+  /// This `R.storyboard` struct is generated, and contains static references to 9 storyboards.
   struct storyboard {
     /// Storyboard `ComicDetail`.
     static let comicDetail = _R.storyboard.comicDetail()
@@ -103,6 +103,10 @@ struct R: Rswift.Validatable {
     static let popOverComicEpisode = _R.storyboard.popOverComicEpisode()
     /// Storyboard `SearchComic`.
     static let searchComic = _R.storyboard.searchComic()
+    /// Storyboard `SearchHistory`.
+    static let searchHistory = _R.storyboard.searchHistory()
+    /// Storyboard `SearchResult`.
+    static let searchResult = _R.storyboard.searchResult()
     /// Storyboard `WatchHistory`.
     static let watchHistory = _R.storyboard.watchHistory()
 
@@ -145,6 +149,20 @@ struct R: Rswift.Validatable {
     /// `UIStoryboard(name: "SearchComic", bundle: ...)`
     static func searchComic(_: Void = ()) -> UIKit.UIStoryboard {
       return UIKit.UIStoryboard(resource: R.storyboard.searchComic)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIStoryboard(name: "SearchHistory", bundle: ...)`
+    static func searchHistory(_: Void = ()) -> UIKit.UIStoryboard {
+      return UIKit.UIStoryboard(resource: R.storyboard.searchHistory)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIStoryboard(name: "SearchResult", bundle: ...)`
+    static func searchResult(_: Void = ()) -> UIKit.UIStoryboard {
+      return UIKit.UIStoryboard(resource: R.storyboard.searchResult)
     }
     #endif
 
@@ -919,7 +937,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.nib` struct is generated, and contains static references to 5 nibs.
+  /// This `R.nib` struct is generated, and contains static references to 6 nibs.
   struct nib {
     /// Nib `ComicEpisodeThumbnailTableCell`.
     static let comicEpisodeThumbnailTableCell = _R.nib._ComicEpisodeThumbnailTableCell()
@@ -929,6 +947,8 @@ struct R: Rswift.Validatable {
     static let comicThumbnailCollectionCell = _R.nib._ComicThumbnailCollectionCell()
     /// Nib `PopOverComicEpisodeTableCell`.
     static let popOverComicEpisodeTableCell = _R.nib._PopOverComicEpisodeTableCell()
+    /// Nib `SearchHistoryCollectionCell`.
+    static let searchHistoryCollectionCell = _R.nib._SearchHistoryCollectionCell()
     /// Nib `SearchResultComicCollectionCell`.
     static let searchResultComicCollectionCell = _R.nib._SearchResultComicCollectionCell()
 
@@ -965,6 +985,14 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(iOS) || os(tvOS)
+    /// `UINib(name: "SearchHistoryCollectionCell", in: bundle)`
+    @available(*, deprecated, message: "Use UINib(resource: R.nib.searchHistoryCollectionCell) instead")
+    static func searchHistoryCollectionCell(_: Void = ()) -> UIKit.UINib {
+      return UIKit.UINib(resource: R.nib.searchHistoryCollectionCell)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
     /// `UINib(name: "SearchResultComicCollectionCell", in: bundle)`
     @available(*, deprecated, message: "Use UINib(resource: R.nib.searchResultComicCollectionCell) instead")
     static func searchResultComicCollectionCell(_: Void = ()) -> UIKit.UINib {
@@ -988,6 +1016,10 @@ struct R: Rswift.Validatable {
       return R.nib.popOverComicEpisodeTableCell.instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? PopOverComicEpisodeTableCell
     }
 
+    static func searchHistoryCollectionCell(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> SearchHistoryCollectionCell? {
+      return R.nib.searchHistoryCollectionCell.instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? SearchHistoryCollectionCell
+    }
+
     static func searchResultComicCollectionCell(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> SearchResultComicCollectionCell? {
       return R.nib.searchResultComicCollectionCell.instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? SearchResultComicCollectionCell
     }
@@ -995,7 +1027,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.reuseIdentifier` struct is generated, and contains static references to 5 reuse identifiers.
+  /// This `R.reuseIdentifier` struct is generated, and contains static references to 6 reuse identifiers.
   struct reuseIdentifier {
     /// Reuse identifier `ComicEpisodeThumbnailTableCell`.
     static let comicEpisodeThumbnailTableCell: Rswift.ReuseIdentifier<ComicEpisodeThumbnailTableCell> = Rswift.ReuseIdentifier(identifier: "ComicEpisodeThumbnailTableCell")
@@ -1005,6 +1037,8 @@ struct R: Rswift.Validatable {
     static let comicThumbnailCollectionCell: Rswift.ReuseIdentifier<ComicThumbnailCollectionCell> = Rswift.ReuseIdentifier(identifier: "ComicThumbnailCollectionCell")
     /// Reuse identifier `PopOverComicEpisodeTableCell`.
     static let popOverComicEpisodeTableCell: Rswift.ReuseIdentifier<PopOverComicEpisodeTableCell> = Rswift.ReuseIdentifier(identifier: "PopOverComicEpisodeTableCell")
+    /// Reuse identifier `SearchHistoryCollectionCell`.
+    static let searchHistoryCollectionCell: Rswift.ReuseIdentifier<SearchHistoryCollectionCell> = Rswift.ReuseIdentifier(identifier: "SearchHistoryCollectionCell")
     /// Reuse identifier `SearchResultComicCollectionCell`.
     static let searchResultComicCollectionCell: Rswift.ReuseIdentifier<SearchResultComicCollectionCell> = Rswift.ReuseIdentifier(identifier: "SearchResultComicCollectionCell")
 
@@ -1188,12 +1222,19 @@ struct R: Rswift.Validatable {
 struct _R: Rswift.Validatable {
   static func validate() throws {
     #if os(iOS) || os(tvOS)
+    try nib.validate()
+    #endif
+    #if os(iOS) || os(tvOS)
     try storyboard.validate()
     #endif
   }
 
   #if os(iOS) || os(tvOS)
-  struct nib {
+  struct nib: Rswift.Validatable {
+    static func validate() throws {
+      try _SearchHistoryCollectionCell.validate()
+    }
+
     struct _ComicEpisodeThumbnailTableCell: Rswift.NibResourceType, Rswift.ReuseIdentifierType {
       typealias ReusableType = ComicEpisodeThumbnailTableCell
 
@@ -1250,6 +1291,29 @@ struct _R: Rswift.Validatable {
       fileprivate init() {}
     }
 
+    struct _SearchHistoryCollectionCell: Rswift.NibResourceType, Rswift.ReuseIdentifierType, Rswift.Validatable {
+      typealias ReusableType = SearchHistoryCollectionCell
+
+      let bundle = R.hostingBundle
+      let identifier = "SearchHistoryCollectionCell"
+      let name = "SearchHistoryCollectionCell"
+
+      func firstView(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> SearchHistoryCollectionCell? {
+        return instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? SearchHistoryCollectionCell
+      }
+
+      static func validate() throws {
+        if UIKit.UIImage(named: "trash-bin", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Image named 'trash-bin' is used in nib 'SearchHistoryCollectionCell', but couldn't be loaded.") }
+        if #available(iOS 11.0, tvOS 11.0, *) {
+          if UIKit.UIColor(named: "BackgroundWhite", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'BackgroundWhite' is used in nib 'SearchHistoryCollectionCell', but couldn't be loaded.") }
+          if UIKit.UIColor(named: "IconBlack-lighter", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'IconBlack-lighter' is used in nib 'SearchHistoryCollectionCell', but couldn't be loaded.") }
+          if UIKit.UIColor(named: "TextBlack", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'TextBlack' is used in nib 'SearchHistoryCollectionCell', but couldn't be loaded.") }
+        }
+      }
+
+      fileprivate init() {}
+    }
+
     struct _SearchResultComicCollectionCell: Rswift.NibResourceType, Rswift.ReuseIdentifierType {
       typealias ReusableType = SearchResultComicCollectionCell
 
@@ -1288,6 +1352,12 @@ struct _R: Rswift.Validatable {
       #endif
       #if os(iOS) || os(tvOS)
       try searchComic.validate()
+      #endif
+      #if os(iOS) || os(tvOS)
+      try searchHistory.validate()
+      #endif
+      #if os(iOS) || os(tvOS)
+      try searchResult.validate()
       #endif
       #if os(iOS) || os(tvOS)
       try watchHistory.validate()
@@ -1443,6 +1513,48 @@ struct _R: Rswift.Validatable {
           if UIKit.UIColor(named: "TextBlack", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'TextBlack' is used in storyboard 'SearchComic', but couldn't be loaded.") }
         }
         if _R.storyboard.searchComic().searchComicStoryboard() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'searchComicStoryboard' could not be loaded from storyboard 'SearchComic' as 'SearchComicViewController'.") }
+      }
+
+      fileprivate init() {}
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    struct searchHistory: Rswift.StoryboardResourceType, Rswift.Validatable {
+      let bundle = R.hostingBundle
+      let name = "SearchHistory"
+      let searchHistoryStoryboard = StoryboardViewControllerResource<SearchHistoryViewController>(identifier: "SearchHistoryStoryboard")
+
+      func searchHistoryStoryboard(_: Void = ()) -> SearchHistoryViewController? {
+        return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: searchHistoryStoryboard)
+      }
+
+      static func validate() throws {
+        if #available(iOS 11.0, tvOS 11.0, *) {
+          if UIKit.UIColor(named: "BackgroundWhite", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'BackgroundWhite' is used in storyboard 'SearchHistory', but couldn't be loaded.") }
+        }
+        if _R.storyboard.searchHistory().searchHistoryStoryboard() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'searchHistoryStoryboard' could not be loaded from storyboard 'SearchHistory' as 'SearchHistoryViewController'.") }
+      }
+
+      fileprivate init() {}
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    struct searchResult: Rswift.StoryboardResourceType, Rswift.Validatable {
+      let bundle = R.hostingBundle
+      let name = "SearchResult"
+      let searchResultStoryboard = StoryboardViewControllerResource<SearchResultViewController>(identifier: "SearchResultStoryboard")
+
+      func searchResultStoryboard(_: Void = ()) -> SearchResultViewController? {
+        return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: searchResultStoryboard)
+      }
+
+      static func validate() throws {
+        if #available(iOS 11.0, tvOS 11.0, *) {
+          if UIKit.UIColor(named: "BackgroundWhite", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'BackgroundWhite' is used in storyboard 'SearchResult', but couldn't be loaded.") }
+        }
+        if _R.storyboard.searchResult().searchResultStoryboard() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'searchResultStoryboard' could not be loaded from storyboard 'SearchResult' as 'SearchResultViewController'.") }
       }
 
       fileprivate init() {}

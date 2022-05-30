@@ -36,7 +36,8 @@ class MainViewModel: MarumaruApiServiceViewModel {
 
 extension MainViewModel {
     public func updateNewUpdatedComics() {
-        newUpdateComicsObservable.accept(fakeComicItems(10))
+        newUpdateComics = fakeComicItems(10)
+        newUpdateComicsObservable.accept(newUpdateComics)
         isLoadingNewUpdateComic.accept(true)
         failToGetNewUPdateComic.accept(false)
         
@@ -56,6 +57,7 @@ extension MainViewModel {
     }
     
     public func updateWatchHistories() {
+        watchHistories.removeAll()
         watchHistoriesObservable.accept([])
         
         self.watchHistoryManager
@@ -70,7 +72,8 @@ extension MainViewModel {
     }
     
     public func updateComicRank() {
-        comicRankObservable.accept(fakeComicRankItems(10))
+        comicRank = fakeComicRankItems(10)
+        comicRankObservable.accept(comicRank)
         isLoadingComicRank.accept(true)
         failToGetComicRank.accept(false)
         
