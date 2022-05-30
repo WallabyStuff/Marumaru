@@ -191,19 +191,10 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func adaptiveDismiss(animated: Bool) {
-        if let navigationController = navigationController {
-            guard let tabBarController = tabBarController else {
-                navigationController.popViewController(animated: animated)
-                return
-            }
-            
-            if tabBarController.selectedIndex == 0 {
-                navigationController.popViewController(animated: animated)
-            } else {
-                tabBarController.selectedIndex = 0
-            }
+        if let tabbarController = tabBarController {
+            tabbarController.selectedIndex = 0
         } else {
-            dismiss(animated: animated)
+            navigationController?.popViewController(animated: true)
         }
     }
     

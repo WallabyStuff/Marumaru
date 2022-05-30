@@ -21,23 +21,23 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </containerView>
                             <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hKu-Fo-WR9">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="80"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="72"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="drq-GV-fuu">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="80"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="72"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="만화 제목으로 검색해보세요!" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="f6V-W2-Udq">
-                                            <rect key="frame" x="56" y="16" width="338" height="52"/>
+                                            <rect key="frame" x="56" y="16" width="338" height="48"/>
                                             <color key="backgroundColor" name="BackgroundWhite-lighter"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="52" id="hdS-ev-n4F"/>
+                                                <constraint firstAttribute="height" constant="48" id="hdS-ev-n4F"/>
                                             </constraints>
                                             <color key="textColor" name="TextBlack"/>
                                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
                                             <textInputTraits key="textInputTraits"/>
                                         </textField>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z8L-cW-kYr">
-                                            <rect key="frame" x="358" y="32" width="20" height="20"/>
+                                            <rect key="frame" x="358" y="30" width="20" height="20"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="20" id="epS-VQ-xfd"/>
                                                 <constraint firstAttribute="width" constant="20" id="iKv-jE-Bfc"/>
@@ -47,7 +47,7 @@
                                             <state key="normal" image="magnifying-glass-filled"/>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KY9-xo-3ee">
-                                            <rect key="frame" x="20" y="30" width="24" height="24"/>
+                                            <rect key="frame" x="20" y="28" width="24" height="24"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="24" id="GZJ-Dm-1PL"/>
                                                 <constraint firstAttribute="height" constant="24" id="PVm-c9-nZP"/>
@@ -61,14 +61,14 @@
                                         <constraint firstItem="KY9-xo-3ee" firstAttribute="leading" secondItem="drq-GV-fuu" secondAttribute="leading" constant="20" id="BLU-rd-7LB"/>
                                         <constraint firstItem="z8L-cW-kYr" firstAttribute="trailing" secondItem="f6V-W2-Udq" secondAttribute="trailing" constant="-16" id="EaZ-VO-8jQ"/>
                                         <constraint firstItem="z8L-cW-kYr" firstAttribute="centerY" secondItem="f6V-W2-Udq" secondAttribute="centerY" id="GOO-nL-efx"/>
-                                        <constraint firstAttribute="bottom" secondItem="f6V-W2-Udq" secondAttribute="bottom" constant="12" id="NWf-G1-8eq"/>
+                                        <constraint firstAttribute="bottom" secondItem="f6V-W2-Udq" secondAttribute="bottom" constant="8" id="NWf-G1-8eq"/>
                                         <constraint firstItem="f6V-W2-Udq" firstAttribute="leading" secondItem="KY9-xo-3ee" secondAttribute="trailing" constant="12" id="Tpc-oI-B5E"/>
                                         <constraint firstItem="KY9-xo-3ee" firstAttribute="centerY" secondItem="f6V-W2-Udq" secondAttribute="centerY" id="ytv-0Z-xVu"/>
                                         <constraint firstAttribute="trailing" secondItem="f6V-W2-Udq" secondAttribute="trailing" constant="20" id="zeK-45-TkH"/>
                                     </constraints>
                                 </view>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="80" id="SRe-KC-UvJ"/>
+                                    <constraint firstAttribute="height" constant="72" id="SRe-KC-UvJ"/>
                                 </constraints>
                                 <blurEffect style="regular"/>
                             </visualEffectView>
