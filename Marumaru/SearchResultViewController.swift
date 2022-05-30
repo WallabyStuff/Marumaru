@@ -179,6 +179,7 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
                         cell.showCustomSkeleton()
                     }
                 } else {
+                    vc.makeHapticFeedback()
                     vc.searchResultCollectionView.isUserInteractionEnabled = true
                     vc.searchResultCollectionView.visibleCells.forEach { cell in
                         cell.hideSkeleton()

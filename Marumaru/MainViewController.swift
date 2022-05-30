@@ -192,6 +192,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
             .asDriver()
             .debounce(.milliseconds(300))
             .drive(with: self, onNext: { vc, _ in
+                vc.makeHapticFeedback()
                 vc.newUpdateComicCollectionView.scrollToLeft(leftInset: 12, animated: false)
                 vc.viewModel.updateNewUpdatedComics()
             })
@@ -203,6 +204,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
             .asDriver()
             .debounce(.milliseconds(300))
             .drive(with: self, onNext: { vc, _ in
+                vc.makeHapticFeedback()
                 vc.comicRankTableView.scrollToTop(animated: false)
                 vc.viewModel.updateComicRank()
             })

@@ -23,4 +23,9 @@ class BaseViewController: UIViewController {
     override var prefersStatusBarHidden: Bool {
            return isStatusBarHidden
     }
+    
+    func makeHapticFeedback() {
+        let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
+        selectionFeedbackGenerator.selectionChanged()
+    }
 }
