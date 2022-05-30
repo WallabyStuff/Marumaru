@@ -402,15 +402,11 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     }
     
     func presentSearchComicVC() {
-        let storyboard = UIStoryboard(name: R.storyboard.searchComic.name, bundle: nil)
-        let searchComicVC = storyboard.instantiateViewController(identifier: SearchComicViewController.identifier,
-                                                                 creator: { coder -> SearchComicViewController in
-            let viewModel = SearchComicViewModel()
-            return .init(coder, viewModel) ?? SearchComicViewController(.init())
-        })
-        
-        searchComicVC.modalPresentationStyle = .fullScreen
-        navigationController?.pushViewController(searchComicVC, animated: true)
+        if let tabbarController = tabBarController {
+            tabbarController.selectedIndex = 1
+        } else {
+            return
+        }
     }
     
     func presentWatchHistoryVC() {

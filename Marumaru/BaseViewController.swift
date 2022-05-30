@@ -11,7 +11,7 @@ import RxSwift
 class BaseViewController: UIViewController {
     
     var disposeBag = DisposeBag()
-    let regularAppbarHeight: CGFloat = 80
+    let regularAppbarHeight: CGFloat = 72
     let compactAppbarHeight: CGFloat = 52
     
     var isStatusBarHidden: Bool = false {
