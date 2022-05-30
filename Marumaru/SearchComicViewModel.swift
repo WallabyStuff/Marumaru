@@ -5,7 +5,8 @@
 //  Created by 이승기 on 2022/02/02.
 //
 
-import UIKit
+import Foundation
+
 import RxSwift
 import RxCocoa
 
@@ -15,47 +16,14 @@ class SearchComicViewModel: MarumaruApiServiceViewModel {
     // MARK: - Properties
     
     private var disposeBag = DisposeBag()
-    private var marumaruApiService = MarumaruApiService()
-    
-    private var searchResultComics = [ComicInfo]()
-    public var searchResultComicsObservable = BehaviorRelay<[ComicInfo]>(value: [])
-    public var isLoadingSearchResultComics = PublishRelay<Bool>()
-    public var failToLoadSearchResult = BehaviorRelay<Bool>(value: false)
-    
-    public var presentComicDetailVC = PublishRelay<ComicInfo>()
+    private var searchHistoryManager = SearchHistoryManager()
 }
 
 extension SearchComicViewModel {
-    public func updateSearchResult(_ title: String) {
-        searchResultComicsObservable.accept(fakeSearchResultComics(10))
-        failToLoadSearchResult.accept(false)
-        isLoadingSearchResultComics.accept(true)
-        
-        self.marumaruApiService.getSearchResult(title: title)
-            .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .background))
-            .observe(on: MainScheduler.instance)
-            .subscribe(with: self, onNext: { strongSelf, comics in
-                strongSelf.searchResultComics = comics
-                strongSelf.searchResultComicsObservable.accept(comics)
-                strongSelf.isLoadingSearchResultComics.accept(false)
-            }, onError: { strongSelf, _ in
-                strongSelf.isLoadingSearchResultComics.accept(false)
-                strongSelf.failToLoadSearchResult.accept(true)
-            }).disposed(by: self.disposeBag)
-    }
-    
-    public func comicItemSelected(_ indexPath: IndexPath) {
-        let selectedComic = searchResultComics[indexPath.row]
-        presentComicDetailVC.accept(selectedComic)
-    }
-}
-
-extension SearchComicViewModel {
-    private func fakeSearchResultComics(_ count: Int) -> [ComicInfo] {
-        return [ComicInfo](repeating: fakeSearchResultComic, count: count)
-    }
-    
-    private var fakeSearchResultComic: ComicInfo {
-        return .init(title: "", author: "", updateCycle: "미분류", serialNumber: "")
+    public func addSearchHistory(_ title: String) {
+        let searchHistory = SearchHistory(title: title)
+        searchHistoryManager.addData(searchHistory)
+            .subscribe()
+            .dispose()
     }
 }

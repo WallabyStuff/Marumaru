@@ -21,16 +21,17 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
     @IBOutlet weak var appbarViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var searchTextField: UITextField!
-    @IBOutlet weak var searchResultCollectionView: UICollectionView!
     @IBOutlet weak var searchButton: UIButton!
+    @IBOutlet weak var mainContainerView: UIView!
+    private var searchHistoryVC: SearchHistoryViewController?
+    private var searchResultVC: SearchResultViewController?
     
     static let identifier = R.storyboard.searchComic.searchComicStoryboard.identifier
     var viewModel: ViewModel
-    private var searchResultCollectionViewTopInset: CGFloat {
-        return regularAppbarHeight + 12
-    }
-    private var actualSearchResultCollectionViewTopInset: CGFloat {
-        return searchResultCollectionViewTopInset + view.safeAreaInsets.top
+    
+    enum ContentType {
+        case searchHistory
+        case searchResult
     }
     
     
@@ -45,6 +46,9 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
     required init?(_ coder: NSCoder, _ viewModel: SearchComicViewModel) {
         self.viewModel = viewModel
         super.init(coder: coder)
+        
+        self.searchHistoryVC = configureSearchHistoryVC()
+        self.searchResultVC = configureSearchResultVC()
     }
     
     required init?(coder: NSCoder) {
@@ -75,8 +79,9 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
     
     private func setupView() {
         setupSearchTextField()
-        setupSearchResultCollectionView()
         setupSearchButton()
+        setupWatchHistoryViewController()
+        setupSearchResultViewController()
     }
     
     private func setupSearchTextField() {
@@ -94,29 +99,37 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
         searchTextField.becomeFirstResponder()
     }
     
-    private func setupSearchResultCollectionView() {
-        let nibName = UINib(nibName: SearchResultComicCollectionCell.identifier, bundle: nil)
-        searchResultCollectionView.register(nibName,
-                                            forCellWithReuseIdentifier: SearchResultComicCollectionCell.identifier)
-        searchResultCollectionView.keyboardDismissMode = .onDrag
-        searchResultCollectionView.contentInset = UIEdgeInsets(top: searchResultCollectionViewTopInset,
-                                                               left: 12,
-                                                               bottom: compactAppbarHeight,
-                                                               right: 12)
-        
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.minimumLineSpacing = 16
-        flowLayout.itemSize = CGSize(width: view.frame.width - 24, height: 128)
-        searchResultCollectionView.collectionViewLayout = flowLayout
-        searchResultCollectionView.clipsToBounds = false
-    }
-    
+
     private func setupSearchButton() {
         searchButton.rx.tap
             .asDriver()
             .drive(with: self, onNext: { vc, _ in
-                vc.updateSearchResult()
+                vc.setSearchResult()
             }).disposed(by: disposeBag)
+    }
+    
+    private func setupWatchHistoryViewController() {
+        guard let searchHistoryVC = searchHistoryVC else {
+            return
+        }
+
+        addChild(searchHistoryVC)
+        mainContainerView.addSubview(searchHistoryVC.view)
+        searchHistoryVC.didMove(toParent: self)
+        searchHistoryVC.view.frame = mainContainerView.bounds
+        searchHistoryVC.view.isHidden = false
+    }
+    
+    private func setupSearchResultViewController() {
+        guard let searchResultVC = searchResultVC else {
+            return
+        }
+
+        addChild(searchResultVC)
+        mainContainerView.addSubview(searchResultVC.view)
+        searchResultVC.didMove(toParent: self)
+        searchResultVC.view.frame = mainContainerView.bounds
+        searchResultVC.view.isHidden = true
     }
     
     
@@ -125,29 +138,19 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
     override func updateViewConstraints() {
         super.updateViewConstraints()
         configureAppbarViewConstraints()
-        configureSearchResultTableViewInsets()
     }
     
     private func configureAppbarViewConstraints() {
         appbarViewHeightConstraint.constant = view.safeAreaInsets.top + regularAppbarHeight
     }
     
-    private func configureSearchResultTableViewInsets() {
-        searchResultCollectionView.contentInset = UIEdgeInsets(top: searchResultCollectionViewTopInset,
-                                                               left: 0, bottom: 40, right: 0)
-    }
-    
+
     
     // MARK: - Bind
     
     private func bind() {
         bindBackButton()
-        
-        bindSearchResultComicCollectionView()
-        bindSearchResultComicCollectionCell()
-        bindSearchResultComicLoadingState()
-        bindSearchResultComicFailState()
-        bindSearchResultComicCollectionViewScrollAction()
+        bindSearchTextField()
     }
     
     private func bindBackButton() {
@@ -158,125 +161,19 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
             }).disposed(by: disposeBag)
     }
     
-    private func bindSearchResultComicCollectionView() {
-        viewModel.searchResultComicsObservable
-            .bind(to: searchResultCollectionView.rx.items(cellIdentifier: SearchResultComicCollectionCell.identifier,
-                                                          cellType: SearchResultComicCollectionCell.self)) { _, comicInfo, cell in
-                cell.hideSkeleton()
-                cell.titleLabel.text = comicInfo.title
-                cell.thumbnailImagePlaceholderLabel.text = comicInfo.title
-                cell.authorLabel.text = comicInfo.author.isEmpty ? "작가정보 없음" : comicInfo.author
-                cell.uploadCycleLabel.text = comicInfo.updateCycle
-                
-                if comicInfo.updateCycle.contains("미분류") {
-                    cell.uploadCycleLabel.setBackgroundHighlight(with: .systemTeal,
-                                                                 textColor: .white)
-                } else {
-                    cell.uploadCycleLabel.setBackgroundHighlight(with: .systemTeal,
-                                                                 textColor: .white)
-                }
-                
-                if let thumbnailImageUrl = comicInfo.thumbnailImageURL {
-                    let url = URL(string: thumbnailImageUrl)
-                    cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { result in
-                        do {
-                            let result = try result.get()
-                            let image = result.image
-                            cell.thumbnailImagePlaceholderView.setThumbnailShadow(with: image.averageColor)
-                            cell.thumbnailImagePlaceholderLabel.isHidden = true
-                        } catch {
-                            cell.thumbnailImagePlaceholderLabel.isHidden = false
-                        }
-                    }
-                }
-            }.disposed(by: disposeBag)
-        
-        viewModel.searchResultComicsObservable
-            .subscribe(with: self, onNext: { vc, comics in
-                if comics.isEmpty {
-                    vc.searchResultCollectionView.heightAnchor.constraint(equalToConstant: vc.view.frame.height).isActive = true
-                    vc.view.makeNoticeLabel("message.emptyResult".localized())
-                } else {
-                    vc.view.removeNoticeLabels()
-                }
-            })
-            .disposed(by: disposeBag)
-    }
-    
-    private func bindSearchResultComicCollectionCell() {
-        searchResultCollectionView.rx.itemSelected
+    private func bindSearchTextField() {
+        searchTextField.rx.text
             .asDriver()
-            .drive(with: self, onNext: { vc, indexPath in
-                vc.viewModel.comicItemSelected(indexPath)
-            })
-            .disposed(by: disposeBag)
-        
-        viewModel.presentComicDetailVC
-            .subscribe(with: self, onNext: { vc, comicInfo in
-                vc.presentComicDetailVC(comicInfo)
-            })
-            .disposed(by: disposeBag)
-    }
-    
-    private func bindSearchResultComicLoadingState() {
-        viewModel.isLoadingSearchResultComics
-            .subscribe(with: self, onNext: { vc, isLoading in
-                vc.searchResultCollectionView.layoutIfNeeded()
-                
-                if isLoading {
-                    vc.searchResultCollectionView.isUserInteractionEnabled = false
-                    vc.searchResultCollectionView.visibleCells.forEach { cell in
-                        cell.showCustomSkeleton()
-                    }
-                } else {
-                    vc.searchResultCollectionView.isUserInteractionEnabled = true
-                    vc.searchResultCollectionView.visibleCells.forEach { cell in
-                        cell.hideSkeleton()
-                    }
+            .drive(with: self, onNext: { vc, text in
+                if text == nil || text?.count == 0 {
+                    vc.switchContentView(.searchHistory)
                 }
             })
             .disposed(by: disposeBag)
     }
-    
-    private func bindSearchResultComicFailState() {
-        viewModel.failToLoadSearchResult
-            .subscribe(with: self, onNext: { vc, isFailed in
-                if isFailed {
-                    vc.view.makeNoticeLabel("message.serverError".localized())
-                } else {
-                    vc.view.removeNoticeLabels()
-                }
-            })
-            .disposed(by: disposeBag)
-    }
-    
-    private func bindSearchResultComicCollectionViewScrollAction() {
-        searchResultCollectionView.rx.willBeginDragging
-            .asDriver()
-            .drive(with: self, onNext: { vc, _ in
-                vc.view.endEditing(true)
-            }).disposed(by: disposeBag)
-    }
-    
+  
     
     // MARK: - Methods
-    
-    private func updateSearchResult() {
-        guard let searchKeyword = searchTextField.text?.trimmingCharacters(in: .whitespaces) else {
-            return
-        }
-        
-        if searchKeyword.count <= 1 {
-            self.view.stopLottie()
-            self.view.makeToast("message.searchKeywordConstraint".localized())
-            return
-        }
-        
-        view.endEditing(true)
-        searchResultCollectionView.scrollToTop(topInset: actualSearchResultCollectionViewTopInset,
-                                               animated: false)
-        viewModel.updateSearchResult(searchKeyword)
-    }
     
     private func presentComicDetailVC(_ comicInfo: ComicInfo) {
         let storyboard = UIStoryboard(name: R.storyboard.comicDetail.name, bundle: nil)
@@ -309,6 +206,63 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
             dismiss(animated: animated)
         }
     }
+    
+    private func setSearchResult() {
+        guard let title = searchTextField.text?.trimmingCharacters(in: .whitespaces) else {
+            return
+        }
+        
+        if title.count <= 1 {
+            self.view.stopLottie()
+            self.view.makeToast("message.searchKeywordConstraint".localized())
+            return
+        }
+        
+        view.endEditing(true)
+        viewModel.addSearchHistory(title)
+        switchContentView(.searchResult)
+        searchResultVC?.updateSearchResult(title)
+    }
+    
+    private func configureSearchHistoryVC() -> SearchHistoryViewController {
+        let storyboard = UIStoryboard(name: R.storyboard.searchHistory.name,
+                                      bundle: nil)
+        let viewController = storyboard.instantiateViewController(identifier: SearchHistoryViewController.identifier, creator: { coder -> SearchHistoryViewController in
+            let viewModel = SearchHistoryViewModel()
+            return .init(coder, viewModel) ?? SearchHistoryViewController(viewModel)
+        })
+        
+        viewController.delegate = self
+        return viewController
+    }
+    
+    private func configureSearchResultVC() -> SearchResultViewController {
+        let storyboard = UIStoryboard(name: R.storyboard.searchResult.name,
+                                      bundle: nil)
+        let viewController = storyboard.instantiateViewController(identifier: SearchResultViewController.identifier, creator: { coder -> SearchResultViewController in
+            let viewModel = SearchResultViewModel()
+            return .init(coder, viewModel) ?? SearchResultViewController(viewModel)
+        })
+        
+        viewController.delegate = self
+        return viewController
+    }
+    
+    private func switchContentView(_ contentType: ContentType) {
+        guard let searchHistoryVC = searchHistoryVC,
+              let searchResultVC = searchResultVC else {
+            return
+        }
+        
+        if contentType == .searchHistory {
+            searchHistoryVC.view.isHidden = false
+            searchResultVC.view.isHidden = true
+            searchHistoryVC.viewModel.updateSearchHistory()
+        } else {
+            searchHistoryVC.view.isHidden = true
+            searchResultVC.view.isHidden = false
+        }
+    }
 }
 
 
@@ -317,7 +271,28 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
 extension SearchComicViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         // Seach action on keyboard
-        updateSearchResult()
+        setSearchResult()
         return true
+    }
+}
+
+extension SearchComicViewController: SearchHistoryViewDelegate {
+    func didSelectedSearchHistory(title: String) {
+        searchTextField.text = title
+        setSearchResult()
+    }
+    
+    func didHistoryCollectionViewViewScrolled() {
+        view.endEditing(true)
+    }
+}
+
+extension SearchComicViewController: SearchResultViewDelegate {
+    func didSelectedComicItem(_ comicInfo: ComicInfo) {
+        presentComicDetailVC(comicInfo)
+    }
+    
+    func didSearchResultCollectionViewScrolled() {
+        view.endEditing(true)
     }
 }

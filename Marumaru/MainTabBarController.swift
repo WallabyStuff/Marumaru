@@ -68,6 +68,7 @@ class MainTabBarController: UITabBarController {
     private func setup() {
         setupViewControllers()
         setupTabBarItems()
+        setupTabbarAppearance()
     }
     
     private func setupViewControllers() {
@@ -83,6 +84,21 @@ class MainTabBarController: UITabBarController {
             item.title = tabBarItem.title
             item.image = tabBarItem.image
             item.selectedImage = tabBarItem.selectedImage
+        }
+    }
+    
+    private func setupTabbarAppearance() {
+        UITabBar.appearance().barTintColor = .systemGray6.withAlphaComponent(0.6)
+        UITabBar.appearance().tintColor = R.color.accentYellow()!
+        UITabBar.appearance().isTranslucent = true
+
+        if #available(iOS 15.0, *) {
+            let appearance = UITabBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = .systemGray6.withAlphaComponent(0.6)
+            appearance.backgroundEffect = .init(style: .regular)
+            UITabBar.appearance().standardAppearance = appearance
+            UITabBar.appearance().scrollEdgeAppearance = appearance
         }
     }
 }

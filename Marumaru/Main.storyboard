@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qFj-Hk-3q0">
-    <device id="retina6_7" orientation="portrait" appearance="dark"/>
+    <device id="retina6_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
@@ -402,7 +402,9 @@
                     <navigationItem key="navigationItem" id="tlD-yN-u6C">
                         <nil key="title"/>
                     </navigationItem>
+                    <nil key="simulatedTopBarMetrics"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <size key="freeformSize" width="428" height="926"/>
                     <connections>
                         <outlet property="appbarViewHeightConstraint" destination="NQ8-NP-Cbd" id="36B-OW-6ib"/>
                         <outlet property="comicRankTableView" destination="QoE-Qg-aZ4" id="9ry-8Q-425"/>

@@ -64,6 +64,7 @@ extension ComicDetailViewModel {
 
 extension ComicDetailViewModel {
     public func getWatchHistories() {
+        watchHistories.removeAll()
         watchHistoriesObservable.accept([])
         
         watchHistoryHandler.fetchData()

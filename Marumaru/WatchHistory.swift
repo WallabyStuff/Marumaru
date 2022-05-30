@@ -55,7 +55,7 @@ extension WatchHistory: IdentifiableType {
     
     var identity: String {
         if isInvalidated {
-            /// return random id to prevent RLMException
+            // return random id to prevent RLMException
             return UUID().uuidString
         } else {
             return episodeURL
