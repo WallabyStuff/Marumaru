@@ -18,8 +18,9 @@ class SearchResultViewModel {
     private var disposeBag = DisposeBag()
     private var marumaruApiService = MarumaruApiService()
     
+    public var searchKeyword = ""
     private var searchResultComics = [ComicInfo]()
-    public var searchResultComicsObservable = BehaviorRelay<[ComicInfo]>(value: [])
+    public var searchResultComicsObservable = BehaviorRelay<[SearchResultSection]>(value: [])
     public var isLoadingSearchResultComics = PublishRelay<Bool>()
     public var failToLoadSearchResult = BehaviorRelay<Bool>(value: false)
     
@@ -28,8 +29,12 @@ class SearchResultViewModel {
 
 extension SearchResultViewModel {
     public func updateSearchResult(_ title: String) {
+        searchKeyword = title
         searchResultComics = fakeSearchResultComics(10)
-        searchResultComicsObservable.accept(searchResultComics)
+        
+        let fakeSection = SearchResultSection(items: searchResultComics)
+        searchResultComicsObservable.accept([fakeSection])
+        
         failToLoadSearchResult.accept(false)
         isLoadingSearchResultComics.accept(true)
         
@@ -38,7 +43,9 @@ extension SearchResultViewModel {
             .observe(on: MainScheduler.instance)
             .subscribe(with: self, onNext: { strongSelf, comics in
                 strongSelf.searchResultComics = comics
-                strongSelf.searchResultComicsObservable.accept(comics)
+                
+                let section = SearchResultSection(items: comics)
+                strongSelf.searchResultComicsObservable.accept([section])
                 strongSelf.isLoadingSearchResultComics.accept(false)
             }, onError: { strongSelf, _ in
                 strongSelf.isLoadingSearchResultComics.accept(false)

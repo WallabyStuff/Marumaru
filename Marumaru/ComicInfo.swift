@@ -6,12 +6,21 @@
 //
 
 import UIKit
+import RxDataSources
 
-struct ComicInfo {
+struct ComicInfo: Equatable {
     var title: String
     var author: String
     var updateCycle: String
     var thumbnailImage: UIImage?
     var thumbnailImageURL: String?
     var serialNumber: String
+}
+
+extension ComicInfo: IdentifiableType {
+    typealias Identity = String
+    
+    var identity: String {
+        return UUID().uuidString
+    }
 }

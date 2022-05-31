@@ -961,7 +961,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.nib` struct is generated, and contains static references to 6 nibs.
+  /// This `R.nib` struct is generated, and contains static references to 8 nibs.
   struct nib {
     /// Nib `ComicEpisodeThumbnailTableCell`.
     static let comicEpisodeThumbnailTableCell = _R.nib._ComicEpisodeThumbnailTableCell()
@@ -969,12 +969,16 @@ struct R: Rswift.Validatable {
     static let comicRankTableCell = _R.nib._ComicRankTableCell()
     /// Nib `ComicThumbnailCollectionCell`.
     static let comicThumbnailCollectionCell = _R.nib._ComicThumbnailCollectionCell()
+    /// Nib `DescriptionHeaderReusableView`.
+    static let descriptionHeaderReusableView = _R.nib._DescriptionHeaderReusableView()
     /// Nib `PopOverComicEpisodeTableCell`.
     static let popOverComicEpisodeTableCell = _R.nib._PopOverComicEpisodeTableCell()
     /// Nib `SearchHistoryCollectionCell`.
     static let searchHistoryCollectionCell = _R.nib._SearchHistoryCollectionCell()
     /// Nib `SearchResultComicCollectionCell`.
     static let searchResultComicCollectionCell = _R.nib._SearchResultComicCollectionCell()
+    /// Nib `SingleButtonFooterReusableView`.
+    static let singleButtonFooterReusableView = _R.nib._SingleButtonFooterReusableView()
 
     #if os(iOS) || os(tvOS)
     /// `UINib(name: "ComicEpisodeThumbnailTableCell", in: bundle)`
@@ -997,6 +1001,14 @@ struct R: Rswift.Validatable {
     @available(*, deprecated, message: "Use UINib(resource: R.nib.comicThumbnailCollectionCell) instead")
     static func comicThumbnailCollectionCell(_: Void = ()) -> UIKit.UINib {
       return UIKit.UINib(resource: R.nib.comicThumbnailCollectionCell)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UINib(name: "DescriptionHeaderReusableView", in: bundle)`
+    @available(*, deprecated, message: "Use UINib(resource: R.nib.descriptionHeaderReusableView) instead")
+    static func descriptionHeaderReusableView(_: Void = ()) -> UIKit.UINib {
+      return UIKit.UINib(resource: R.nib.descriptionHeaderReusableView)
     }
     #endif
 
@@ -1024,6 +1036,14 @@ struct R: Rswift.Validatable {
     }
     #endif
 
+    #if os(iOS) || os(tvOS)
+    /// `UINib(name: "SingleButtonFooterReusableView", in: bundle)`
+    @available(*, deprecated, message: "Use UINib(resource: R.nib.singleButtonFooterReusableView) instead")
+    static func singleButtonFooterReusableView(_: Void = ()) -> UIKit.UINib {
+      return UIKit.UINib(resource: R.nib.singleButtonFooterReusableView)
+    }
+    #endif
+
     static func comicEpisodeThumbnailTableCell(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> ComicEpisodeThumbnailTableCell? {
       return R.nib.comicEpisodeThumbnailTableCell.instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? ComicEpisodeThumbnailTableCell
     }
@@ -1034,6 +1054,10 @@ struct R: Rswift.Validatable {
 
     static func comicThumbnailCollectionCell(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> ComicThumbnailCollectionCell? {
       return R.nib.comicThumbnailCollectionCell.instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? ComicThumbnailCollectionCell
+    }
+
+    static func descriptionHeaderReusableView(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> DescriptionHeaderReusableView? {
+      return R.nib.descriptionHeaderReusableView.instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? DescriptionHeaderReusableView
     }
 
     static func popOverComicEpisodeTableCell(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> PopOverComicEpisodeTableCell? {
@@ -1048,10 +1072,14 @@ struct R: Rswift.Validatable {
       return R.nib.searchResultComicCollectionCell.instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? SearchResultComicCollectionCell
     }
 
+    static func singleButtonFooterReusableView(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> SingleButtonFooterReusableView? {
+      return R.nib.singleButtonFooterReusableView.instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? SingleButtonFooterReusableView
+    }
+
     fileprivate init() {}
   }
 
-  /// This `R.reuseIdentifier` struct is generated, and contains static references to 6 reuse identifiers.
+  /// This `R.reuseIdentifier` struct is generated, and contains static references to 8 reuse identifiers.
   struct reuseIdentifier {
     /// Reuse identifier `ComicEpisodeThumbnailTableCell`.
     static let comicEpisodeThumbnailTableCell: Rswift.ReuseIdentifier<ComicEpisodeThumbnailTableCell> = Rswift.ReuseIdentifier(identifier: "ComicEpisodeThumbnailTableCell")
@@ -1059,22 +1087,32 @@ struct R: Rswift.Validatable {
     static let comicRankTableCell: Rswift.ReuseIdentifier<ComicRankTableCell> = Rswift.ReuseIdentifier(identifier: "ComicRankTableCell")
     /// Reuse identifier `ComicThumbnailCollectionCell`.
     static let comicThumbnailCollectionCell: Rswift.ReuseIdentifier<ComicThumbnailCollectionCell> = Rswift.ReuseIdentifier(identifier: "ComicThumbnailCollectionCell")
+    /// Reuse identifier `DescriptionHeaderReusableView`.
+    static let descriptionHeaderReusableView: Rswift.ReuseIdentifier<DescriptionHeaderReusableView> = Rswift.ReuseIdentifier(identifier: "DescriptionHeaderReusableView")
     /// Reuse identifier `PopOverComicEpisodeTableCell`.
     static let popOverComicEpisodeTableCell: Rswift.ReuseIdentifier<PopOverComicEpisodeTableCell> = Rswift.ReuseIdentifier(identifier: "PopOverComicEpisodeTableCell")
     /// Reuse identifier `SearchHistoryCollectionCell`.
     static let searchHistoryCollectionCell: Rswift.ReuseIdentifier<SearchHistoryCollectionCell> = Rswift.ReuseIdentifier(identifier: "SearchHistoryCollectionCell")
     /// Reuse identifier `SearchResultComicCollectionCell`.
     static let searchResultComicCollectionCell: Rswift.ReuseIdentifier<SearchResultComicCollectionCell> = Rswift.ReuseIdentifier(identifier: "SearchResultComicCollectionCell")
+    /// Reuse identifier `singleButtonFooterReusableView`.
+    static let singleButtonFooterReusableView: Rswift.ReuseIdentifier<SingleButtonFooterReusableView> = Rswift.ReuseIdentifier(identifier: "singleButtonFooterReusableView")
 
     fileprivate init() {}
   }
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 10 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 15 localization keys.
     struct localizable {
       /// Value: 검색결과가 없습니다.
       static let messageEmptyResult = Rswift.StringResource(key: "message.emptyResult", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
+      /// Value: 검색기록
+      static let titleSearchHistory = Rswift.StringResource(key: "title.searchHistory", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
+      /// Value: 검색기록이 없습니다.
+      static let messageNoSearchHistory = Rswift.StringResource(key: "message.noSearchHistory", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
+      /// Value: 검색중...
+      static let messageSearching = Rswift.StringResource(key: "message.searching", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
       /// Value: 기록삭제
       static let titleRemoveHistory = Rswift.StringResource(key: "title.removeHistory", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
       /// Value: 마지막 화 입니다.
@@ -1085,6 +1123,10 @@ struct R: Rswift.Validatable {
       static let messageRemoveHistory = Rswift.StringResource(key: "message.removeHistory", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
       /// Value: 아직 시청기록이 없습니다.
       static let messageEmptyWatchHistory = Rswift.StringResource(key: "message.emptyWatchHistory", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
+      /// Value: 에 대한 검색결과
+      static let titleSearchResultHeader = Rswift.StringResource(key: "title.searchResultHeader", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
+      /// Value: 전체삭제
+      static let titleDeleteAll = Rswift.StringResource(key: "title.deleteAll", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
       /// Value: 첫 화 입니다.
       static let messageFirstEpisode = Rswift.StringResource(key: "message.firstEpisode", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
       /// Value: 최소 두 글자 이상의 단어로 검색해주세요
@@ -1105,6 +1147,45 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("message.emptyResult", bundle: bundle, comment: "")
+      }
+
+      /// Value: 검색기록
+      static func titleSearchHistory(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("title.searchHistory", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "title.searchHistory"
+        }
+
+        return NSLocalizedString("title.searchHistory", bundle: bundle, comment: "")
+      }
+
+      /// Value: 검색기록이 없습니다.
+      static func messageNoSearchHistory(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("message.noSearchHistory", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "message.noSearchHistory"
+        }
+
+        return NSLocalizedString("message.noSearchHistory", bundle: bundle, comment: "")
+      }
+
+      /// Value: 검색중...
+      static func messageSearching(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("message.searching", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "message.searching"
+        }
+
+        return NSLocalizedString("message.searching", bundle: bundle, comment: "")
       }
 
       /// Value: 기록삭제
@@ -1170,6 +1251,32 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("message.emptyWatchHistory", bundle: bundle, comment: "")
+      }
+
+      /// Value: 에 대한 검색결과
+      static func titleSearchResultHeader(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("title.searchResultHeader", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "title.searchResultHeader"
+        }
+
+        return NSLocalizedString("title.searchResultHeader", bundle: bundle, comment: "")
+      }
+
+      /// Value: 전체삭제
+      static func titleDeleteAll(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("title.deleteAll", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "title.deleteAll"
+        }
+
+        return NSLocalizedString("title.deleteAll", bundle: bundle, comment: "")
       }
 
       /// Value: 첫 화 입니다.
@@ -1301,6 +1408,20 @@ struct _R: Rswift.Validatable {
       fileprivate init() {}
     }
 
+    struct _DescriptionHeaderReusableView: Rswift.NibResourceType, Rswift.ReuseIdentifierType {
+      typealias ReusableType = DescriptionHeaderReusableView
+
+      let bundle = R.hostingBundle
+      let identifier = "DescriptionHeaderReusableView"
+      let name = "DescriptionHeaderReusableView"
+
+      func firstView(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> DescriptionHeaderReusableView? {
+        return instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? DescriptionHeaderReusableView
+      }
+
+      fileprivate init() {}
+    }
+
     struct _PopOverComicEpisodeTableCell: Rswift.NibResourceType, Rswift.ReuseIdentifierType {
       typealias ReusableType = PopOverComicEpisodeTableCell
 
@@ -1347,6 +1468,20 @@ struct _R: Rswift.Validatable {
 
       func firstView(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> SearchResultComicCollectionCell? {
         return instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? SearchResultComicCollectionCell
+      }
+
+      fileprivate init() {}
+    }
+
+    struct _SingleButtonFooterReusableView: Rswift.NibResourceType, Rswift.ReuseIdentifierType {
+      typealias ReusableType = SingleButtonFooterReusableView
+
+      let bundle = R.hostingBundle
+      let identifier = "singleButtonFooterReusableView"
+      let name = "SingleButtonFooterReusableView"
+
+      func firstView(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> SingleButtonFooterReusableView? {
+        return instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? SingleButtonFooterReusableView
       }
 
       fileprivate init() {}

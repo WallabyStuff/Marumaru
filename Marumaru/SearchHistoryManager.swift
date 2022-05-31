@@ -64,7 +64,10 @@ class SearchHistoryManager {
         return Completable.create { observer  in
             do {
                 let realmInstance = try Realm()
-                realmInstance.deleteAll()
+                try realmInstance.write {
+                    realmInstance.deleteAll()
+                }
+                
                 observer(.completed)
             } catch {
                 observer(.error(error))

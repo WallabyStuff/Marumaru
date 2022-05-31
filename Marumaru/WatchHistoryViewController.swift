@@ -167,11 +167,10 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
     // MARK: - Methods
     
     private func dataSourceFactory() -> RxCollectionViewSectionedAnimatedDataSource<WatchHistorySection> {
-        let dataSource = RxCollectionViewSectionedAnimatedDataSource<WatchHistorySection>(configureCell: { [weak self] _, _, indexPath, comic in
+        let dataSource = RxCollectionViewSectionedAnimatedDataSource<WatchHistorySection>(configureCell: { _, cv, indexPath, comic in
             if comic.isInvalidated { return UICollectionViewCell() }
             
-            guard let self = self,
-                  let cell = self.watchHistoryCollectionView.dequeueReusableCell(withReuseIdentifier: ComicThumbnailCollectionCell.identifier, for: indexPath)
+            guard let cell = cv.dequeueReusableCell(withReuseIdentifier: ComicThumbnailCollectionCell.identifier, for: indexPath)
                     as? ComicThumbnailCollectionCell else {
                 return UICollectionViewCell()
             }
@@ -192,10 +191,10 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
             }
              
             return cell
-        }, configureSupplementaryView: { [weak self] _, collectionView, _, indexPath in
+        }, configureSupplementaryView: { [weak self] _, cv, _, indexPath in
             guard let self = self else { return .init() }
             
-            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: WatchHistoryCollectionReusableView.identifier, for: indexPath) as? WatchHistoryCollectionReusableView else {
+            guard let headerView = cv.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: WatchHistoryCollectionReusableView.identifier, for: indexPath) as? WatchHistoryCollectionReusableView else {
                 return UICollectionReusableView()
             }
 

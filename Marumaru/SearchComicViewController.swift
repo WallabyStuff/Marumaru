@@ -166,7 +166,9 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
             .asDriver()
             .drive(with: self, onNext: { vc, text in
                 if text == nil || text?.count == 0 {
-                    vc.switchContentView(.searchHistory)
+                    if vc.searchResultVC?.view.isHidden == false {
+                        vc.switchContentView(.searchHistory)
+                    }
                 }
             })
             .disposed(by: disposeBag)

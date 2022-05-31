@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RxDataSources
 
 protocol SearchResultViewDelegate: AnyObject {
     func didSelectedComicItem(_ comicInfo: ComicInfo)
@@ -24,8 +25,9 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
     
     weak var delegate: SearchResultViewDelegate?
     var viewModel: ViewModel
+    private var dataSource: RxCollectionViewSectionedAnimatedDataSource<SearchResultSection>?
     private var searchResultCollectionViewTopInset: CGFloat {
-        return regularAppbarHeight + 12
+        return regularAppbarHeight
     }
     private var actualSearchResultCollectionViewTopInset: CGFloat {
         return searchResultCollectionViewTopInset + view.safeAreaInsets.top
@@ -52,6 +54,7 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
     required init?(_ coder: NSCoder, _ viewModel: SearchResultViewModel) {
         self.viewModel = viewModel
         super.init(coder: coder)
+        self.dataSource = configureDataSource()
     }
     
     required init(coder: NSCoder) {
@@ -70,18 +73,31 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func setupSearchResultCollectionView() {
-        let nibName = UINib(nibName: SearchResultComicCollectionCell.identifier, bundle: nil)
-        searchResultCollectionView.register(nibName,
-                                            forCellWithReuseIdentifier: SearchResultComicCollectionCell.identifier)
-        searchResultCollectionView.keyboardDismissMode = .onDrag
+        registerSearchResultCell()
+        registerSearchResultHeader()
         
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumLineSpacing = 16
         flowLayout.itemSize = CGSize(width: view.frame.width - 24, height: 128)
+        flowLayout.headerReferenceSize = CGSize(width: view.frame.width, height: 100)
         searchResultCollectionView.collectionViewLayout = flowLayout
+        
         searchResultCollectionView.clipsToBounds = false
         searchResultCollectionView.alwaysBounceVertical = true
+        searchResultCollectionView.keyboardDismissMode = .onDrag
         configureSearchResultCollectionViewInsets()
+    }
+    
+    private func registerSearchResultCell() {
+        let nibName = UINib(nibName: SearchResultComicCollectionCell.identifier, bundle: nil)
+        searchResultCollectionView.register(nibName, forCellWithReuseIdentifier: SearchResultComicCollectionCell.identifier)
+    }
+    
+    private func registerSearchResultHeader() {
+        let nibName = UINib(nibName: R.nib.descriptionHeaderReusableView.name, bundle: nil)
+        searchResultCollectionView.register(nibName,
+                                            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                            withReuseIdentifier: DescriptionHeaderReusableView.identifier)
     }
     
     
@@ -109,37 +125,13 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func bindSearchResultComicCollectionView() {
+        guard let dataSource = dataSource else {
+            return
+        }
+
         viewModel.searchResultComicsObservable
-            .bind(to: searchResultCollectionView.rx.items(cellIdentifier: SearchResultComicCollectionCell.identifier,
-                                                          cellType: SearchResultComicCollectionCell.self)) { _, comicInfo, cell in
-                cell.hideSkeleton()
-                cell.titleLabel.text = comicInfo.title
-                cell.thumbnailImagePlaceholderLabel.text = comicInfo.title
-                cell.authorLabel.text = comicInfo.author.isEmpty ? "작가정보 없음" : comicInfo.author
-                cell.uploadCycleLabel.text = comicInfo.updateCycle
-                
-                if comicInfo.updateCycle.contains("미분류") {
-                    cell.uploadCycleLabel.setBackgroundHighlight(with: .systemTeal,
-                                                                 textColor: .white)
-                } else {
-                    cell.uploadCycleLabel.setBackgroundHighlight(with: .systemTeal,
-                                                                 textColor: .white)
-                }
-                
-                if let thumbnailImageUrl = comicInfo.thumbnailImageURL {
-                    let url = URL(string: thumbnailImageUrl)
-                    cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { result in
-                        do {
-                            let result = try result.get()
-                            let image = result.image
-                            cell.thumbnailImagePlaceholderView.setThumbnailShadow(with: image.averageColor)
-                            cell.thumbnailImagePlaceholderLabel.isHidden = true
-                        } catch {
-                            cell.thumbnailImagePlaceholderLabel.isHidden = false
-                        }
-                    }
-                }
-            }.disposed(by: disposeBag)
+            .bind(to: searchResultCollectionView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
         
         viewModel.searchResultComicsObservable
             .subscribe(with: self, onNext: { vc, comics in
@@ -178,6 +170,8 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
                     vc.searchResultCollectionView.visibleCells.forEach { cell in
                         cell.showCustomSkeleton()
                     }
+                    
+                    vc.searchResultCollectionView.collectionViewLayout.invalidateLayout()
                 } else {
                     vc.makeHapticFeedback()
                     vc.searchResultCollectionView.isUserInteractionEnabled = true
@@ -217,5 +211,70 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
         searchResultCollectionView.scrollToTop(topInset: actualSearchResultCollectionViewTopInset,
                                                animated: false)
         viewModel.updateSearchResult(title)
+    }
+    
+    private func configureDataSource() -> RxCollectionViewSectionedAnimatedDataSource<SearchResultSection> {
+        let dataSource = RxCollectionViewSectionedAnimatedDataSource<SearchResultSection>(configureCell: { _, cv, indexPath, comicInfo in
+            guard let cell = cv.dequeueReusableCell(withReuseIdentifier: SearchResultComicCollectionCell.identifier, for: indexPath) as? SearchResultComicCollectionCell else {
+                 return UICollectionViewCell()
+            }
+            
+            cell.hideSkeleton()
+            cell.titleLabel.text = comicInfo.title
+            cell.thumbnailImagePlaceholderLabel.text = comicInfo.title
+            cell.authorLabel.text = comicInfo.author.isEmpty ? "작가정보 없음" : comicInfo.author
+            cell.uploadCycleLabel.text = comicInfo.updateCycle
+            
+            if comicInfo.updateCycle.contains("미분류") {
+                cell.uploadCycleLabel.setBackgroundHighlight(with: .systemTeal,
+                                                             textColor: .white)
+            } else {
+                cell.uploadCycleLabel.setBackgroundHighlight(with: .systemTeal,
+                                                             textColor: .white)
+            }
+            
+            if let thumbnailImageUrl = comicInfo.thumbnailImageURL {
+                let url = URL(string: thumbnailImageUrl)
+                cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { result in
+                    do {
+                        let result = try result.get()
+                        let image = result.image
+                        cell.thumbnailImagePlaceholderView.setThumbnailShadow(with: image.averageColor)
+                        cell.thumbnailImagePlaceholderLabel.isHidden = true
+                    } catch {
+                        cell.thumbnailImagePlaceholderLabel.isHidden = false
+                    }
+                }
+            }
+            
+            return cell
+        }, configureSupplementaryView: { [weak self] _, cv, kind, indexPath in
+            guard let self = self else {
+                return UICollectionReusableView()
+            }
+            
+            if kind == UICollectionView.elementKindSectionHeader {
+                guard let cell = cv.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: DescriptionHeaderReusableView.identifier, for: indexPath) as? DescriptionHeaderReusableView else {
+                    return UICollectionReusableView()
+                }
+                
+                self.viewModel.isLoadingSearchResultComics
+                    .subscribe(onNext: { isLoading in
+                        if isLoading {
+                            cell.descriptionLabel.text = "message.searching".localized()
+                        } else {
+                            let searchKeyword = self.viewModel.searchKeyword
+                            cell.descriptionLabel.text = "\"\(searchKeyword)\"\("title.searchResultHeader".localized())"
+                        }
+                    })
+                    .disposed(by: self.disposeBag)
+                
+                return cell
+            } else {
+                return UICollectionReusableView()
+            }
+        })
+        
+        return dataSource
     }
 }
