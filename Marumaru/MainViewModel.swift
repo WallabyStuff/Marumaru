@@ -36,7 +36,7 @@ class MainViewModel: MarumaruApiServiceViewModel {
 
 extension MainViewModel {
     public func updateNewUpdatedComics() {
-        newUpdateComics = fakeComicItems(10)
+        newUpdateComics = fakeComicItems(15)
         newUpdateComicsObservable.accept(newUpdateComics)
         isLoadingNewUpdateComic.accept(true)
         failToGetNewUPdateComic.accept(false)
@@ -72,7 +72,7 @@ extension MainViewModel {
     }
     
     public func updateComicRank() {
-        comicRank = fakeComicRankItems(10)
+        comicRank = fakeComicRankItems(15)
         comicRankObservable.accept(comicRank)
         isLoadingComicRank.accept(true)
         failToGetComicRank.accept(false)

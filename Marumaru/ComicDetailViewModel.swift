@@ -40,7 +40,7 @@ class ComicDetailViewModel {
 
 extension ComicDetailViewModel {
     public func updateComicEpisodes() {
-        comicEpisodes = fakeEpisodeCells(10)
+        comicEpisodes = fakeEpisodeCells(15)
         comicEpisodesObservable.accept(comicEpisodes)
         isLoadingComicEpisodes.accept(true)
         failedToLoadingComicEpisodes.accept(false)
