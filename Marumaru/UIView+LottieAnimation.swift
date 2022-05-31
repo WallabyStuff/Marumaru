@@ -13,7 +13,7 @@ enum AnimationType {
     case cat(CatType)
     
     enum GeneralType: String, CaseIterable {
-        case comming_soon
+        case coming_soon
         case eyes_blinking
         case fire_burning
         case trophy
