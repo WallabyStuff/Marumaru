@@ -208,7 +208,7 @@ class SearchHistoryViewController: BaseViewController, ViewModelInjectable {
                 } else {
                     footerView.mainButton.isHidden = false
                     footerView.mainButton.setTitle("title.deleteAll".localized(), for: .normal)
-                    footerView.mainButton.titleLabel?.makeUnderLine()
+                    footerView.mainButton.titleLabel?.makeUnderline()
                 }
 
                 footerView.mainButtonTapAction = { [weak self] in
