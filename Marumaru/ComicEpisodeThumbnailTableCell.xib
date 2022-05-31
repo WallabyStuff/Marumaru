@@ -88,6 +88,13 @@
                             <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                         </userDefinedRuntimeAttributes>
                     </view>
+                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DUp-DA-sc2">
+                        <rect key="frame" x="0.0" y="0.0" width="4" height="112"/>
+                        <color key="backgroundColor" name="AccentYellow"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="4" id="kvV-WF-unF"/>
+                        </constraints>
+                    </view>
                 </subviews>
                 <constraints>
                     <constraint firstItem="qL3-DE-96X" firstAttribute="leading" secondItem="5be-zB-JeX" secondAttribute="trailing" constant="8" id="ISf-pq-0NF"/>
@@ -98,9 +105,12 @@
                     <constraint firstItem="5be-zB-JeX" firstAttribute="leading" secondItem="FH7-Uo-u1O" secondAttribute="trailing" constant="8" id="Q8t-Of-Eeh"/>
                     <constraint firstAttribute="bottom" secondItem="FH7-Uo-u1O" secondAttribute="bottom" id="bv5-1S-Brl"/>
                     <constraint firstItem="5be-zB-JeX" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="lsU-by-YbC"/>
+                    <constraint firstItem="DUp-DA-sc2" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="n4L-PY-VMd"/>
                     <constraint firstItem="FH7-Uo-u1O" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="12" id="oOx-4V-qK9"/>
                     <constraint firstAttribute="trailing" secondItem="qL3-DE-96X" secondAttribute="trailing" constant="20" id="qzF-pU-gjf"/>
                     <constraint firstAttribute="trailing" secondItem="yEp-ET-Kky" secondAttribute="trailing" constant="20" id="sSK-hX-sdl"/>
+                    <constraint firstAttribute="bottom" secondItem="DUp-DA-sc2" secondAttribute="bottom" id="wwr-iR-K8A"/>
+                    <constraint firstItem="DUp-DA-sc2" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="xpG-N3-gux"/>
                 </constraints>
                 <userDefinedRuntimeAttributes>
                     <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
@@ -114,6 +124,7 @@
             <connections>
                 <outlet property="authorLabel" destination="qL3-DE-96X" id="Kxb-vv-5Nf"/>
                 <outlet property="indexLabel" destination="D4g-Pf-kYn" id="x6d-Vv-PDW"/>
+                <outlet property="recentWatchingIndicatorView" destination="DUp-DA-sc2" id="mF2-Eb-gDP"/>
                 <outlet property="thumbnailImageView" destination="5be-zB-JeX" id="T0n-xb-jhS"/>
                 <outlet property="titleLabel" destination="yEp-ET-Kky" id="eJU-v8-caE"/>
             </connections>
@@ -121,6 +132,9 @@
         </tableViewCell>
     </objects>
     <resources>
+        <namedColor name="AccentYellow">
+            <color red="1" green="0.77300000190734863" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="BackgroundWhite">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

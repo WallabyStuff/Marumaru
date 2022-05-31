@@ -63,9 +63,9 @@
 		8E4FFE1E2844F04B00A7ED7B /* fire_burning.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E4FFE1C2844F04B00A7ED7B /* fire_burning.json */; };
 		8E4FFE202844F0AB00A7ED7B /* LottieAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4FFE1F2844F0AB00A7ED7B /* LottieAnimationView.swift */; };
 		8E4FFE222844F6B600A7ED7B /* trophy.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E4FFE212844F6B600A7ED7B /* trophy.json */; };
+		8E553E6E2845CF0F00B7F5BC /* MarumaruApiServiceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E553E6D2845CF0F00B7F5BC /* MarumaruApiServiceViewModel.swift */; };
 		8E662DE927AC2C3E0048BF39 /* FlexibleSceneScrollViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E662DE827AC2C3E0048BF39 /* FlexibleSceneScrollViewCellModel.swift */; };
 		8E662DEB27AC2FF40048BF39 /* WatchHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E662DEA27AC2FF40048BF39 /* WatchHistoryViewModel.swift */; };
-		8E662DED27AC38290048BF39 /* MarumaruApiServiceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E662DEC27AC38290048BF39 /* MarumaruApiServiceViewModel.swift */; };
 		8E82D73F27B25701008230BE /* UIView+Insets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E82D73E27B25701008230BE /* UIView+Insets.swift */; };
 		8E83DAD12842058F00C0A10B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E83DAD02842058F00C0A10B /* Main.storyboard */; };
 		8E83DAD728426DBA00C0A10B /* UICollectionView+ScrollTo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E83DAD628426DBA00C0A10B /* UICollectionView+ScrollTo.swift */; };
@@ -182,9 +182,9 @@
 		8E4FFE1C2844F04B00A7ED7B /* fire_burning.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = fire_burning.json; sourceTree = "<group>"; };
 		8E4FFE1F2844F0AB00A7ED7B /* LottieAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationView.swift; sourceTree = "<group>"; };
 		8E4FFE212844F6B600A7ED7B /* trophy.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = trophy.json; sourceTree = "<group>"; };
+		8E553E6D2845CF0F00B7F5BC /* MarumaruApiServiceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarumaruApiServiceViewModel.swift; sourceTree = "<group>"; };
 		8E662DE827AC2C3E0048BF39 /* FlexibleSceneScrollViewCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexibleSceneScrollViewCellModel.swift; sourceTree = "<group>"; };
 		8E662DEA27AC2FF40048BF39 /* WatchHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchHistoryViewModel.swift; sourceTree = "<group>"; };
-		8E662DEC27AC38290048BF39 /* MarumaruApiServiceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarumaruApiServiceViewModel.swift; sourceTree = "<group>"; };
 		8E82D73E27B25701008230BE /* UIView+Insets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Insets.swift"; sourceTree = "<group>"; };
 		8E83DAD02842058F00C0A10B /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		8E83DAD628426DBA00C0A10B /* UICollectionView+ScrollTo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+ScrollTo.swift"; sourceTree = "<group>"; };
@@ -471,12 +471,12 @@
 		8E88515C27A9400800126701 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				8E553E6D2845CF0F00B7F5BC /* MarumaruApiServiceViewModel.swift */,
 				8E3C72FA27A983EC00F057DA /* MainViewModel.swift */,
 				8ED2466127AAC82B00226F2D /* SearchComicViewModel.swift */,
 				8E8D381A27ABA4C700E82FE2 /* ComicDetailViewModel.swift */,
 				8E8D381C27ABD56600E82FE2 /* ComicStripViewModel.swift */,
 				8E662DEA27AC2FF40048BF39 /* WatchHistoryViewModel.swift */,
-				8E662DEC27AC38290048BF39 /* MarumaruApiServiceViewModel.swift */,
 				8E662DE827AC2C3E0048BF39 /* FlexibleSceneScrollViewCellModel.swift */,
 				8ED56F2F27ADACD000E78A8A /* ComicEpisodePopOverViewModel.swift */,
 				8E4146832843BBE50005BCFD /* SearchHistoryViewModel.swift */,
@@ -837,12 +837,12 @@
 				8E82D73F27B25701008230BE /* UIView+Insets.swift in Sources */,
 				8EAFD06F283CC14300FD569F /* UILabel+BackgroundHighlighter.swift in Sources */,
 				765C8B2D261CA2C30056C83B /* MainViewController.swift in Sources */,
+				8E553E6E2845CF0F00B7F5BC /* MarumaruApiServiceViewModel.swift in Sources */,
 				764AE0E2262DA971000F490D /* WatchHistoryViewController.swift in Sources */,
 				8EFCD0EC2841F0E600685503 /* Array+IsInBound.swift in Sources */,
 				76F912E726CFDF7700B39BE7 /* ComicRank.swift in Sources */,
 				49561FB926DCE0AC00FEE026 /* FlexibleSceneScrollViewCell.swift in Sources */,
 				765C8B29261CA2C30056C83B /* AppDelegate.swift in Sources */,
-				8E662DED27AC38290048BF39 /* MarumaruApiServiceViewModel.swift in Sources */,
 				8E319309283B540900C350F9 /* BaseViewController.swift in Sources */,
 				8E92C02C283F68ED00E0CD82 /* UIView+LottieAnimation.swift in Sources */,
 				765C8B2B261CA2C30056C83B /* SceneDelegate.swift in Sources */,

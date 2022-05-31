@@ -30,7 +30,6 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     
     static let identifier = R.storyboard.comicDetail.comicDetailStoryboard.identifier
     var viewModel: ViewModel
-    private var cancelRequestImage: (() -> Void)?
     
     
     // MARK: - Initializers
@@ -60,13 +59,9 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
         bind()
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        cancelRequestImage?()
-    }
-    
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .darkContent
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.updateWatchHistories()
     }
     
     
@@ -155,6 +150,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
         bindComicEpisodeLoadingState()
         bindComicEpisodeFailState()
         bindEpisodeAmountLabel()
+        bindRealodEpisodeRows()
     }
     
     private func bindScrollToBottomButton() {
@@ -171,7 +167,6 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
             .bind(to: comicEpisodeTableView.rx.items(cellIdentifier: ComicEpisodeThumbnailTableCell.identifier,
                                                      cellType: ComicEpisodeThumbnailTableCell.self)) { [weak self] index, comic, cell in
                 guard let self = self else { return }
-                
                 cell.hideSkeleton()
                 cell.titleLabel.text = comic.title
                 cell.authorLabel.text = comic.description
@@ -180,8 +175,12 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
                 
                 if self.viewModel.ifAlreadyWatched(index) {
                     cell.setWatched()
-                } else {
-                    cell.setUnWatched()
+                }
+                
+                if let indexPath = self.viewModel.recentWatchingEpisodeIndex {
+                    if indexPath.row == index {
+                        cell.recentWatchingIndicatorView.isHidden = false
+                    }
                 }
                 
                 if let thumbnailImageUrl = comic.thumbnailImageURL {
@@ -243,6 +242,16 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
         viewModel.comicEpisodesObservable
             .subscribe(with: self, onNext: { vc, comics in
                 vc.episodeAmountLabel.text  = "총 \(comics.count)화"
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindRealodEpisodeRows() {
+        viewModel.reloadEpisodeRows
+            .subscribe(with: self, onNext: { vc, indexPath in
+                if let indexPath = indexPath {
+                    vc.comicEpisodeTableView.reloadRows(at: [indexPath], with: .none)
+                }
             })
             .disposed(by: disposeBag)
     }

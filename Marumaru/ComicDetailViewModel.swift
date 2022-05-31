@@ -9,7 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class ComicDetailViewModel: MarumaruApiServiceViewModel {
+class ComicDetailViewModel {
     
     public var comicInfo: ComicInfo
     
@@ -24,6 +24,8 @@ class ComicDetailViewModel: MarumaruApiServiceViewModel {
     
     private var watchHistories = [String: String]()
     public var watchHistoriesObservable = PublishRelay<[WatchHistory]>()
+    public var recentWatchingEpisodeIndex: IndexPath?
+    public var reloadEpisodeRows = PublishRelay<IndexPath?>()
     
     public var presentComicStripVCObservable = PublishRelay<ComicEpisode>()
     
@@ -31,7 +33,7 @@ class ComicDetailViewModel: MarumaruApiServiceViewModel {
         self.comicInfo = comicInfo
     }
     
-    override convenience init() {
+    convenience init() {
         fatalError("ComicInfo has not been implemented")
     }
 }
@@ -59,17 +61,19 @@ extension ComicDetailViewModel {
     public func comicItemSelected(_ indexPath: IndexPath) {
         let selectedComic = comicEpisodes[indexPath.row]
         presentComicStripVCObservable.accept(selectedComic)
+        recentWatchingEpisodeIndex = indexPath
     }
 }
 
 extension ComicDetailViewModel {
-    public func getWatchHistories() {
+    public func updateWatchHistories() {
         watchHistories.removeAll()
         watchHistoriesObservable.accept([])
         
         watchHistoryHandler.fetchData()
             .subscribe(with: self, onSuccess: { strongSelf, comics in
                 strongSelf.watchHistories =  Dictionary(uniqueKeysWithValues: comics.map { ($0.episodeURL, $0.episodeURL) })
+                strongSelf.reloadEpisodeRows.accept(strongSelf.recentWatchingEpisodeIndex)
             }, onFailure: { strongSelf, _ in
                 strongSelf.watchHistoriesObservable.accept([])
             }).disposed(by: self.disposeBag)
