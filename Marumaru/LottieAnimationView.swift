@@ -42,7 +42,7 @@ class LottieAnimationView: UIView {
     
     private func configureAnimationView() {
         animationView = AnimationView(name: animationName)
-        animationView.loopMode = .loop
+        animationView.loopMode = .repeat(2)
         animationView.sizeToFit()
         
         self.addSubview(animationView)

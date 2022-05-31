@@ -18,6 +18,7 @@ class ComicEpisodeThumbnailTableCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var authorLabel: UILabel!
     @IBOutlet weak var indexLabel: UILabel!
+    @IBOutlet weak var recentWatchingIndicatorView: UIView!
     
     
     // MARK: - LifeCycle
@@ -32,6 +33,8 @@ class ComicEpisodeThumbnailTableCell: UITableViewCell {
         titleLabel.text = ""
         authorLabel.text = ""
         indexLabel.text = ""
+        recentWatchingIndicatorView.isHidden = true
+        setUnWatched()
     }
     
     

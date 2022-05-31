@@ -9,7 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class WatchHistoryViewModel: MarumaruApiServiceViewModel {
+class WatchHistoryViewModel {
     
     private var disposeBag = DisposeBag()
     private let watchHistoryManager = WatchHistoryManager()

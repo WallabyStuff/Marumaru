@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class ComicStripViewModel: MarumaruApiServiceViewModel {
+class ComicStripViewModel {
     private var disposeBag = DisposeBag()
     private var episodeURL: String = ""
     private var currentEpisode: Episode
@@ -28,8 +28,6 @@ class ComicStripViewModel: MarumaruApiServiceViewModel {
     
     init(episode: Episode, episodeURL: String) {
         self.currentEpisode = episode
-        super.init()
-        
         self.episodeTitle.accept(episode.title)
         self.episodeURL = episodeURL
         setupData()
@@ -37,7 +35,7 @@ class ComicStripViewModel: MarumaruApiServiceViewModel {
     
     private func setupData() {
         if currentEpisode.serialNumber == "" {
-            currentEpisode.serialNumber = getSerialNumberFromUrl()
+            currentEpisode.serialNumber = marumaruApiService.getSerialNumberFromUrl(episodeURL)
         }
         
         updateComicEpisodes()
@@ -51,7 +49,8 @@ extension ComicStripViewModel {
         comicStripScenesObservable.accept([])
         failToLoadingScenes.accept(false)
         isLoadingScenes.accept(true)
-        episodeURL = getEndPoint(with: episode.serialNumber)
+        episodeURL = marumaruApiService.getEndPoint(episodeURL: episodeURL,
+                                                    with: episode.serialNumber)
         
         marumaruApiService.getComicStripScenes(episodeURL)
             .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .background))
@@ -135,27 +134,8 @@ extension ComicStripViewModel {
     }
 }
 
-
-// TODO: - Move to MarumaruAPIService
-
 extension ComicStripViewModel {
-    private func getEndPoint(with newSerialNumber: String) -> String {
-        if let serialNumberStartIndex = episodeURL.lastIndex(of: "/") {
-            let serialNumberRange = episodeURL.index(serialNumberStartIndex, offsetBy: 1)..<episodeURL.endIndex
-            
-            episodeURL.replaceSubrange(serialNumberRange, with: newSerialNumber)
-            currentEpisode.serialNumber = newSerialNumber
-        }
-        
-        return episodeURL
-    }
-    
-    public func getSerialNumberFromUrl() -> String {
-        if let serialNumberStartIndex = episodeURL.lastIndex(of: "/") {
-            let serialNumberRange = episodeURL.index(serialNumberStartIndex, offsetBy: 1)..<episodeURL.endIndex
-            return episodeURL[serialNumberRange].description
-        }
-        
-        return ""
+    public var serialNumber: String {
+        return currentEpisode.serialNumber
     }
 }

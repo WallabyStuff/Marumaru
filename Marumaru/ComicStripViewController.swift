@@ -64,10 +64,6 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
         setup()
         bind()
     }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-    }
 
     
     // MARK: - Setups
@@ -304,7 +300,8 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
                                                                          creator: { [weak self] coder -> PopOverComicEpisodeViewController in
             let dumpVC = PopOverComicEpisodeViewController(.init("", []))
             guard let self = self else { return dumpVC }
-            let viewModel = ComicEpisodePopOverViewModel(self.viewModel.getSerialNumberFromUrl(), self.viewModel.comicEpisodes)
+            let viewModel = ComicEpisodePopOverViewModel(self.viewModel.serialNumber,
+                                                         self.viewModel.comicEpisodes)
             return .init(coder, viewModel) ?? dumpVC
         })
         

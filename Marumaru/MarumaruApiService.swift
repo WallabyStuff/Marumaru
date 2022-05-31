@@ -140,7 +140,9 @@ extension MarumaruApiService {
     }
 }
 
-// MARK: - Top Ranked Managa
+
+// MARK: - Comic ranks
+
 extension MarumaruApiService {
     public func getTopRankComic() -> Observable<[ComicRank]> {
         return Observable.create { [weak self] observer in
@@ -190,7 +192,9 @@ extension MarumaruApiService {
     }
 }
 
-// MARK: - Search Result
+
+// MARK: - Search comics
+
 extension MarumaruApiService {
     public func getSearchResult(title: String) -> Observable<[ComicInfo]> {
         return Observable.create { [weak self] observer in
@@ -263,7 +267,9 @@ extension MarumaruApiService {
     }
 }
 
-// MARK: - Episode
+
+// MARK: - Comic episodes
+
 extension MarumaruApiService {
     public func getEpisodes(_ serialNumber: String) -> Observable<[ComicEpisode]> {
         return Observable.create { [weak self] observer in
@@ -375,7 +381,9 @@ extension MarumaruApiService {
     }
 }
 
-// MARK: - Comic storp scene
+
+// MARK: - Comic strip scenes
+
 extension MarumaruApiService {
     public func getComicStripScenes(_ url: String) -> Observable<[ComicStripScene]> {
         return Observable.create { [weak self] observer in
@@ -419,7 +427,9 @@ extension MarumaruApiService {
     }
 }
 
-// MARK: - Fetch Image
+
+// MARK: - Get iamges
+
 extension MarumaruApiService {
     @discardableResult
     public func requestImage(_ url: String, _ completion: @escaping (Result<ImageResult, Error>) -> Void) -> UUID? {
@@ -468,22 +478,45 @@ extension MarumaruApiService {
     }
 }
 
+
 // MARK: - Transforming URL
+
 extension MarumaruApiService {
-    private func getEndPoint(url: String) -> String {
+    public func getEndPoint(url: String) -> String {
         guard let basePath = basePath else { return url }
         return url.contains(basePath) == true ? url : "\(basePath)\(url)"
     }
     
-    private func getEndPoint(with title: String, url: String) -> String {
+    public func getEndPoint(with title: String, url: String) -> String {
         let modifiedTitle = title.replacingOccurrences(of: " ", with: "+")
         let endPoint = getEndPoint(url: "\(self.searchPath)\(modifiedTitle)")
         return transformURLString(endPoint)?.description ?? endPoint
     }
     
-    private func getEndPoint(serialNumber: String) -> String {
+    public func getEndPoint(serialNumber: String) -> String {
         let url = "/bbs/cmoic/\(serialNumber)"
         return getEndPoint(url: url)
+    }
+    
+    public func getEndPoint(episodeURL: String,
+                             with newSerialNumber: String) -> String {
+        var episodeURL = episodeURL
+        if let serialNumberStartIndex = episodeURL.lastIndex(of: "/") {
+            let serialNumberRange = episodeURL.index(serialNumberStartIndex, offsetBy: 1)..<episodeURL.endIndex
+            
+            episodeURL.replaceSubrange(serialNumberRange, with: newSerialNumber)
+        }
+        
+        return episodeURL
+    }
+    
+    public func getSerialNumberFromUrl(_ episodeURL: String) -> String {
+        if let serialNumberStartIndex = episodeURL.lastIndex(of: "/") {
+            let serialNumberRange = episodeURL.index(serialNumberStartIndex, offsetBy: 1)..<episodeURL.endIndex
+            return episodeURL[serialNumberRange].description
+        }
+        
+        return ""
     }
     
     // https://stackoverflow.com/questions/48576329/ios-urlstring-not-working-always
