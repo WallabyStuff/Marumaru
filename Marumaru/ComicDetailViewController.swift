@@ -50,7 +50,6 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     }
     
     
-    
     // MARK: - LifeCycle
     
     override func viewDidLoad() {

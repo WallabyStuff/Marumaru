@@ -64,6 +64,13 @@
 		8E4FFE202844F0AB00A7ED7B /* LottieAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4FFE1F2844F0AB00A7ED7B /* LottieAnimationView.swift */; };
 		8E4FFE222844F6B600A7ED7B /* trophy.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E4FFE212844F6B600A7ED7B /* trophy.json */; };
 		8E553E6E2845CF0F00B7F5BC /* MarumaruApiServiceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E553E6D2845CF0F00B7F5BC /* MarumaruApiServiceViewModel.swift */; };
+		8E553E702846132200B7F5BC /* SearchHistorySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E553E6F2846132200B7F5BC /* SearchHistorySection.swift */; };
+		8E553E7328461D7700B7F5BC /* DescriptionHeaderReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E553E7128461D7700B7F5BC /* DescriptionHeaderReusableView.swift */; };
+		8E553E7428461D7700B7F5BC /* DescriptionHeaderReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E553E7228461D7700B7F5BC /* DescriptionHeaderReusableView.xib */; };
+		8E553E762846260C00B7F5BC /* SearchResultSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E553E752846260C00B7F5BC /* SearchResultSection.swift */; };
+		8E553E792846305A00B7F5BC /* SingleButtonFooterReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E553E772846305A00B7F5BC /* SingleButtonFooterReusableView.swift */; };
+		8E553E7A2846305A00B7F5BC /* SingleButtonFooterReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E553E782846305A00B7F5BC /* SingleButtonFooterReusableView.xib */; };
+		8E553E7E284631AA00B7F5BC /* UILabel+Underline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E553E7D284631AA00B7F5BC /* UILabel+Underline.swift */; };
 		8E662DE927AC2C3E0048BF39 /* FlexibleSceneScrollViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E662DE827AC2C3E0048BF39 /* FlexibleSceneScrollViewCellModel.swift */; };
 		8E662DEB27AC2FF40048BF39 /* WatchHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E662DEA27AC2FF40048BF39 /* WatchHistoryViewModel.swift */; };
 		8E82D73F27B25701008230BE /* UIView+Insets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E82D73E27B25701008230BE /* UIView+Insets.swift */; };
@@ -183,6 +190,13 @@
 		8E4FFE1F2844F0AB00A7ED7B /* LottieAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationView.swift; sourceTree = "<group>"; };
 		8E4FFE212844F6B600A7ED7B /* trophy.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = trophy.json; sourceTree = "<group>"; };
 		8E553E6D2845CF0F00B7F5BC /* MarumaruApiServiceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarumaruApiServiceViewModel.swift; sourceTree = "<group>"; };
+		8E553E6F2846132200B7F5BC /* SearchHistorySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHistorySection.swift; sourceTree = "<group>"; };
+		8E553E7128461D7700B7F5BC /* DescriptionHeaderReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionHeaderReusableView.swift; sourceTree = "<group>"; };
+		8E553E7228461D7700B7F5BC /* DescriptionHeaderReusableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DescriptionHeaderReusableView.xib; sourceTree = "<group>"; };
+		8E553E752846260C00B7F5BC /* SearchResultSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultSection.swift; sourceTree = "<group>"; };
+		8E553E772846305A00B7F5BC /* SingleButtonFooterReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleButtonFooterReusableView.swift; sourceTree = "<group>"; };
+		8E553E782846305A00B7F5BC /* SingleButtonFooterReusableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SingleButtonFooterReusableView.xib; sourceTree = "<group>"; };
+		8E553E7D284631AA00B7F5BC /* UILabel+Underline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Underline.swift"; sourceTree = "<group>"; };
 		8E662DE827AC2C3E0048BF39 /* FlexibleSceneScrollViewCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexibleSceneScrollViewCellModel.swift; sourceTree = "<group>"; };
 		8E662DEA27AC2FF40048BF39 /* WatchHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchHistoryViewModel.swift; sourceTree = "<group>"; };
 		8E82D73E27B25701008230BE /* UIView+Insets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Insets.swift"; sourceTree = "<group>"; };
@@ -354,6 +368,10 @@
 				8EAFD06B283CAA2500FD569F /* SearchResultComicCollectionCell.xib */,
 				8E41467528439AFF0005BCFD /* SearchHistoryCollectionCell.swift */,
 				8E41467628439AFF0005BCFD /* SearchHistoryCollectionCell.xib */,
+				8E553E7128461D7700B7F5BC /* DescriptionHeaderReusableView.swift */,
+				8E553E7228461D7700B7F5BC /* DescriptionHeaderReusableView.xib */,
+				8E553E772846305A00B7F5BC /* SingleButtonFooterReusableView.swift */,
+				8E553E782846305A00B7F5BC /* SingleButtonFooterReusableView.xib */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -499,6 +517,7 @@
 				8E83DAD628426DBA00C0A10B /* UICollectionView+ScrollTo.swift */,
 				8E83DADA28428E0C00C0A10B /* UIView+CustomAnimation.swift */,
 				8E41465E284380120005BCFD /* String+Localizable.swift */,
+				8E553E7D284631AA00B7F5BC /* UILabel+Underline.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -507,6 +526,8 @@
 			isa = PBXGroup;
 			children = (
 				8EFCD0E92840DB3900685503 /* WatchHistorySection.swift */,
+				8E553E6F2846132200B7F5BC /* SearchHistorySection.swift */,
+				8E553E752846260C00B7F5BC /* SearchResultSection.swift */,
 			);
 			name = Sections;
 			sourceTree = "<group>";
@@ -621,11 +642,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E553E7A2846305A00B7F5BC /* SingleButtonFooterReusableView.xib in Resources */,
 				8E41465D28437E490005BCFD /* Localizable.strings in Resources */,
 				76F912F526D160FA00B39BE7 /* loading_cat_radial.json in Resources */,
 				765C8B38261CA2C50056C83B /* LaunchScreen.storyboard in Resources */,
 				8E4FFE1D2844F04B00A7ED7B /* eyes_blinking.json in Resources */,
 				8E4FFE1E2844F04B00A7ED7B /* fire_burning.json in Resources */,
+				8E553E7428461D7700B7F5BC /* DescriptionHeaderReusableView.xib in Resources */,
 				8E3192CB283A15B900C350F9 /* PopOverComicEpisodeTableCell.xib in Resources */,
 				765C8B35261CA2C50056C83B /* Assets.xcassets in Resources */,
 				8ECAB664283910F3008E531D /* SearchComic.storyboard in Resources */,
@@ -810,6 +833,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E553E7328461D7700B7F5BC /* DescriptionHeaderReusableView.swift in Sources */,
+				8E553E7E284631AA00B7F5BC /* UILabel+Underline.swift in Sources */,
 				8E3C72FB27A983EC00F057DA /* MainViewModel.swift in Sources */,
 				8ED2466227AAC82B00226F2D /* SearchComicViewModel.swift in Sources */,
 				76F9129D26CF6FAE00B39BE7 /* WatchHistory.swift in Sources */,
@@ -838,6 +863,8 @@
 				8EAFD06F283CC14300FD569F /* UILabel+BackgroundHighlighter.swift in Sources */,
 				765C8B2D261CA2C30056C83B /* MainViewController.swift in Sources */,
 				8E553E6E2845CF0F00B7F5BC /* MarumaruApiServiceViewModel.swift in Sources */,
+				8E553E702846132200B7F5BC /* SearchHistorySection.swift in Sources */,
+				8E553E762846260C00B7F5BC /* SearchResultSection.swift in Sources */,
 				764AE0E2262DA971000F490D /* WatchHistoryViewController.swift in Sources */,
 				8EFCD0EC2841F0E600685503 /* Array+IsInBound.swift in Sources */,
 				76F912E726CFDF7700B39BE7 /* ComicRank.swift in Sources */,
@@ -863,6 +890,7 @@
 				8EFCD0EA2840DB3900685503 /* WatchHistorySection.swift in Sources */,
 				8E414672284397E20005BCFD /* SearchHistory.swift in Sources */,
 				8E41468228439ED00005BCFD /* SearchResultViewModel.swift in Sources */,
+				8E553E792846305A00B7F5BC /* SingleButtonFooterReusableView.swift in Sources */,
 				8E41465F284380120005BCFD /* String+Localizable.swift in Sources */,
 				7641C3B1264682B900A79A79 /* PopOverComicEpisodeViewController.swift in Sources */,
 				765C8C6D261F16880056C83B /* ComicStripViewController.swift in Sources */,
