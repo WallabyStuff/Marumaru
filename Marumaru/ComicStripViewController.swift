@@ -205,7 +205,7 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
         viewModel.isLoadingScenes
             .subscribe(with: self, onNext: { vc, isLoading in
                 if isLoading {
-                    vc.view.playLottie()
+                    vc.view.playRandomCatLottie()
                     vc.disableIndicatorButtons()
                     vc.sceneScrollView.clearAndReloadData()
                 } else {

@@ -30,7 +30,7 @@ class SearchResultViewModel {
 extension SearchResultViewModel {
     public func updateSearchResult(_ title: String) {
         searchKeyword = title
-        searchResultComics = fakeSearchResultComics(10)
+        searchResultComics = fakeSearchResultComics(15)
         
         let fakeSection = SearchResultSection(items: searchResultComics)
         searchResultComicsObservable.accept([fakeSection])

@@ -8,10 +8,34 @@
 import UIKit
 import Lottie
 
-enum AnimationType: String, CaseIterable {
-    case rainbow_cat
-    case loading_cat_radial
-    case coming_soon
+enum AnimationType {
+    case general(GeneralType)
+    case cat(CatType)
+    
+    enum GeneralType: String, CaseIterable {
+        case comming_soon
+        case eyes_blinking
+        case fire_burning
+        case trophy
+    }
+    
+    enum CatType: String, CaseIterable {
+        case loading_cat_radial
+        case rainbow_cat
+        case acrobatic_cat
+        case bubble_tea_cat
+        case lying_cat
+        case sleeping_cat
+    }
+    
+    var name: String {
+        switch self {
+        case .general(let generalType):
+            return generalType.rawValue
+        case .cat(let catType):
+            return catType.rawValue
+        }
+    }
 }
 
 extension UIView {
@@ -20,9 +44,12 @@ extension UIView {
         static var queue = "com.marumaru.queue"
     }
     
-    func playLottie(animation: AnimationType = AnimationType.allCases.randomElement()!,
-                    size: CGSize = .init(width: 120, height: 120)) {
-        let animationView = AnimationView(name: animation.rawValue)
+    func playRandomCatLottie(size: CGSize = .init(width: 120, height: 120)) {
+        playLottie(animation: AnimationType.cat(.allCases.randomElement()!), size: size)
+    }
+    
+    func playLottie(animation: AnimationType, size: CGSize = .init(width: 120, height: 120)) {
+        let animationView = AnimationView(name: animation.name)
         animationView.loopMode = .loop
         self.addSubview(animationView)
         
