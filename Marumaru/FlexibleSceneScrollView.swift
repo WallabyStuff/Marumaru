@@ -22,14 +22,12 @@ class FlexibleSceneScrollView: UIScrollView {
     // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
-      
         setup()
         initEventListener()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        
         setup()
         initEventListener()
     }
@@ -74,7 +72,7 @@ class FlexibleSceneScrollView: UIScrollView {
     private func loadCells() {
         /// Load scene image cells
         for (index, scene) in sceneArr.enumerated() {
-            let cell = FlexibleSceneScrollViewCell(parentContentView: contentView, imageUrl: scene.sceneImageUrl)
+            let cell = FlexibleSceneScrollViewCell(parentContentView: contentView, imagePath: scene.imagePath)
             cell.delegate = self
             
             if index == 0 {

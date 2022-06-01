@@ -214,9 +214,11 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func configureDataSource() -> RxCollectionViewSectionedAnimatedDataSource<SearchResultSection> {
-        let dataSource = RxCollectionViewSectionedAnimatedDataSource<SearchResultSection>(configureCell: { _, cv, indexPath, comicInfo in
-            guard let cell = cv.dequeueReusableCell(withReuseIdentifier: SearchResultComicCollectionCell.identifier, for: indexPath) as? SearchResultComicCollectionCell else {
-                 return UICollectionViewCell()
+        let dataSource = RxCollectionViewSectionedAnimatedDataSource<SearchResultSection>(configureCell: { [weak self] _, cv, indexPath, comicInfo in
+            
+            guard let self = self,
+                  let cell = cv.dequeueReusableCell(withReuseIdentifier: SearchResultComicCollectionCell.identifier, for: indexPath) as? SearchResultComicCollectionCell else {
+                return UICollectionViewCell()
             }
             
             cell.hideSkeleton()
@@ -233,17 +235,15 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
                                                              textColor: .white)
             }
             
-            if let thumbnailImageUrl = comicInfo.thumbnailImageURL {
-                let url = URL(string: thumbnailImageUrl)
-                cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { result in
-                    do {
-                        let result = try result.get()
-                        let image = result.image
-                        cell.thumbnailImagePlaceholderView.setThumbnailShadow(with: image.averageColor)
-                        cell.thumbnailImagePlaceholderLabel.isHidden = true
-                    } catch {
-                        cell.thumbnailImagePlaceholderLabel.isHidden = false
-                    }
+            let url = self.viewModel.getImageURL(comicInfo.thumbnailImagePath)
+            cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { result in
+                do {
+                    let result = try result.get()
+                    let image = result.image
+                    cell.thumbnailImagePlaceholderView.setThumbnailShadow(with: image.averageColor)
+                    cell.thumbnailImagePlaceholderLabel.isHidden = true
+                } catch {
+                    cell.thumbnailImagePlaceholderLabel.isHidden = false
                 }
             }
             

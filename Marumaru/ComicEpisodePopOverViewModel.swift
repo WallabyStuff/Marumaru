@@ -12,10 +12,10 @@ import RxCocoa
 class ComicEpisodePopOverViewModel {
     
     public var currentEpisodeSN: String
-    private var episodes: [Episode]
-    public var episodesObservable = BehaviorRelay<[Episode]>(value: [])
+    public var episodes: [EpisodeItem]
+    public var episodesObservable = BehaviorRelay<[EpisodeItem]>(value: [])
     
-    init(_ serialNumber: String, _ episodes: [Episode]) {
+    init(_ serialNumber: String, _ episodes: [EpisodeItem]) {
         self.currentEpisodeSN = serialNumber
         self.episodes = episodes.reversed()
         self.episodesObservable.accept(self.episodes)
@@ -31,14 +31,14 @@ extension ComicEpisodePopOverViewModel {
         }
     }
     
-    public func cellItemForRow(at indexPath: IndexPath) -> Episode {
+    public func cellItemForRow(at indexPath: IndexPath) -> EpisodeItem {
         return episodes[indexPath.row]
     }
 }
 
 extension ComicEpisodePopOverViewModel {
     public var currentEpisodeIndex: Int? {
-        for (index, episode) in episodes.enumerated() where episode.serialNumber == currentEpisodeSN {
+        for (index, episode) in episodes.enumerated() where episode.episodeSN == currentEpisodeSN {
             return index
         }
         

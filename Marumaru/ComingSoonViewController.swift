@@ -16,7 +16,7 @@ class ComingSoonViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        view.playLottie(animation: .general(.comming_soon), size: .init(width: 240, height: 240))
+        view.playLottie(animation: .general(.coming_soon), size: .init(width: 240, height: 240))
     }
     
     override func viewWillDisappear(_ animated: Bool) {

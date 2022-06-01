@@ -10,7 +10,9 @@ disabled_rules:
 - file_length
 - syntactic_sugar
 - vertical_whitespace
+- implicit_getter
 
 excluded:
 - Carthage
 - Pods
+- R.generated.swift

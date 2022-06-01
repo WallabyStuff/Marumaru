@@ -95,19 +95,17 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
             thumbnailImageView.image = viewModel.comicInfo.thumbnailImage
             thumbnailImageView.layer.borderColor = viewModel.comicInfo.thumbnailImage?.averageColor?.cgColor
         } else {
-            if let thumbnailImageURL = viewModel.comicInfo.thumbnailImageURL {
-                let url = URL(string: thumbnailImageURL)
-                thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { [weak self] result in
-                    guard let self = self else { return }
-                    
-                    do {
-                        let result = try result.get()
-                        let image = result.image
-                        self.thumbnailImagePlaceholderView.setThumbnailShadow(with: image.averageColor)
-                        self.thumbnailImagePlaceholderLabel.isHidden = true
-                    } catch {
-                        self.thumbnailImagePlaceholderLabel.isHidden = false
-                    }
+            let url = viewModel.getThumbnailImageURL()
+            thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { [weak self] result in
+                guard let self = self else { return }
+                
+                do {
+                    let result = try result.get()
+                    let image = result.image
+                    self.thumbnailImagePlaceholderView.setThumbnailShadow(with: image.averageColor)
+                    self.thumbnailImagePlaceholderLabel.isHidden = true
+                } catch {
+                    self.thumbnailImagePlaceholderLabel.isHidden = false
                 }
             }
         }
@@ -164,11 +162,11 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     private func bindComicEpisodeTableView() {
         viewModel.comicEpisodesObservable
             .bind(to: comicEpisodeTableView.rx.items(cellIdentifier: ComicEpisodeThumbnailTableCell.identifier,
-                                                     cellType: ComicEpisodeThumbnailTableCell.self)) { [weak self] index, comic, cell in
+                                                     cellType: ComicEpisodeThumbnailTableCell.self)) { [weak self] index, episode, cell in
                 guard let self = self else { return }
                 cell.hideSkeleton()
-                cell.titleLabel.text = comic.title
-                cell.authorLabel.text = comic.description
+                cell.titleLabel.text = episode.title
+                cell.authorLabel.text = episode.description
                 cell.indexLabel.text = self.viewModel.comicEpisodeIndex(index).description
                 cell.thumbnailImageView.image = nil
                 
@@ -182,10 +180,8 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
                     }
                 }
                 
-                if let thumbnailImageUrl = comic.thumbnailImageURL {
-                    let url = URL(string: thumbnailImageUrl)
-                    cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))])
-                }
+                let url = self.viewModel.getImageURL(episode.thumbnailImagePath)
+                cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))])
             }.disposed(by: disposeBag)
     }
     
@@ -279,13 +275,18 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
         }
     }
     
-    private func presentComicStripVC(_ comicEpisode: ComicEpisode) {
+    private func presentComicStripVC(_ episode: ComicEpisode) {
         let storyboard = UIStoryboard(name: R.storyboard.comicStrip.name, bundle: nil)
         let comicStripVC = storyboard.instantiateViewController(identifier: ComicStripViewController.identifier,
                                                                 creator: { coder -> ComicStripViewController in
-            let episode = Episode(title: comicEpisode.title, serialNumber: "")
-            let viewModel = ComicStripViewModel(episode: episode, episodeURL: comicEpisode.episodeURL)
-            return .init(coder, viewModel) ?? ComicStripViewController(.init(episode: episode, episodeURL: ""))
+            let comicEpisode = ComicEpisode(comicSN: episode.comicSN,
+                                            episodeSN: episode.episodeSN,
+                                            title: episode.title,
+                                            description: episode.description,
+                                            thumbnailImagePath: episode.thumbnailImagePath)
+            let viewModel = ComicStripViewModel(currentEpisode: comicEpisode)
+            
+            return .init(coder, viewModel) ?? ComicStripViewController(viewModel)
         })
         
         comicStripVC.modalPresentationStyle = .fullScreen

@@ -16,7 +16,6 @@ class SearchResultViewModel {
     // MARK: - Properties
     
     private var disposeBag = DisposeBag()
-    private var marumaruApiService = MarumaruApiService()
     
     public var searchKeyword = ""
     private var searchResultComics = [ComicInfo]()
@@ -38,16 +37,18 @@ extension SearchResultViewModel {
         failToLoadSearchResult.accept(false)
         isLoadingSearchResultComics.accept(true)
         
-        self.marumaruApiService.getSearchResult(title: title)
+        MarumaruApiService.shared
+            .getSearchResult(title: title)
             .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .background))
             .observe(on: MainScheduler.instance)
-            .subscribe(with: self, onNext: { strongSelf, comics in
+            .subscribe(with: self, onSuccess: { strongSelf, comics in
                 strongSelf.searchResultComics = comics
                 
                 let section = SearchResultSection(items: comics)
                 strongSelf.searchResultComicsObservable.accept([section])
                 strongSelf.isLoadingSearchResultComics.accept(false)
-            }, onError: { strongSelf, _ in
+            }, onFailure: { strongSelf, _ in
+                strongSelf.searchResultComicsObservable.accept([])
                 strongSelf.isLoadingSearchResultComics.accept(false)
                 strongSelf.failToLoadSearchResult.accept(true)
             }).disposed(by: self.disposeBag)
@@ -60,11 +61,21 @@ extension SearchResultViewModel {
 }
 
 extension SearchResultViewModel {
+    public func getImageURL(_ imagePath: String?) -> URL? {
+        guard let imagePath = imagePath else {
+            return nil
+        }
+
+        return MarumaruApiService.shared.getImageURL(imagePath)
+    }
+}
+
+extension SearchResultViewModel {
     private func fakeSearchResultComics(_ count: Int) -> [ComicInfo] {
         return [ComicInfo](repeating: fakeSearchResultComic, count: count)
     }
     
     private var fakeSearchResultComic: ComicInfo {
-        return .init(title: "", author: "", updateCycle: "미분류", serialNumber: "")
+        return .init(comicSN: "", title: "", author: "", updateCycle: "미분류")
     }
 }

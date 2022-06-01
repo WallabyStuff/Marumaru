@@ -11,19 +11,19 @@ import SwiftSoup
 import RxSwift
 import RxCocoa
 
-enum MarumaruApiErrorMessage: Error {
+enum MarumaruApiError: Error {
     case wrongBasePath
-    case failToGetUrl
-    case failToParseHtml
+    case failToGetURL
+    case failToParse
     
     var message: String {
         switch self {
         case .wrongBasePath:
-            return "기본 경로가 올바르지 않습니다."
-        case .failToGetUrl:
+            return "기본경로가 올바르지 않습니다."
+        case .failToGetURL:
             return "정보를 가져오는데 실패하였습니다."
-        case .failToParseHtml:
-            return "html파싱에 실패하였습니다."
+        case .failToParse:
+            return "정보 파싱에 실패하였습니다."
         }
     }
 }
@@ -34,54 +34,51 @@ struct ImageResult {
 }
 
 class MarumaruApiService {
-    var basePath: String?
-    let searchPath = "/bbs/search.php?url=%2Fbbs%2Fsearch.php&stx="
+    
+    
+    // MARK: - Properties
+    
+    static let shared = MarumaruApiService()
+    
+    typealias ComicAndEpisodeSN = (comicSN: String, episodeSN: String)
+    typealias URLToDoc = [URL: Document]
+    
+    var basePath = "https://marumaru260.com"
+    static let searchPath = "/bbs/search.php?url=%2Fbbs%2Fsearch.php&stx="
+    static let comicPath = "/bbs/cmoic"
     
     private var disposeBag = DisposeBag()
-    private var runningRequest = [UUID: URLSessionDataTask]()
-    private var sharedDoc: Document?
+    private var docuemntCache: URLToDoc = [:]
     
-    init() {
-        setupBasePath()
-    }
-    
-    func updateBasePath() {
-        let remotePath = "https://raw.githubusercontent.com/Avocado34/Marumaru/develop/Basepath.rtf"
-        if let url = URL(string: remotePath) {
-            do {
-                var remoteBasePath = try String(contentsOf: url, encoding: .utf8)
-                remoteBasePath = remoteBasePath.trimmingCharacters(in: .newlines)
-                UserDefaults.standard.setValue(remoteBasePath, forKey: "remoteBasePath")
-            } catch {
-                UserDefaults.standard.setValue("https://marumaru260.com", forKey: "remoteBasePath")
-                print(error)
+    private init() { }
+}
+
+
+// MARK: - Docuemtn parsing
+
+extension MarumaruApiService {
+    private func getDocument(_ url: URL?, caching: Bool) -> Single<Document> {
+        return Single.create { [weak self] observer in
+            guard let self = self,
+                  let url = url else {
+                return Disposables.create()
             }
-        }
-    }
-    
-    // TODO: - Fetch updated path
-    private func setupBasePath() {
-        basePath = "https://marumaru260.com"
-//        let remoteBasePath = UserDefaults.standard.string(forKey: "remoteBasePath")
-//        if let remoteBasePath = remoteBasePath {
-//            basePath = remoteBasePath
-//        } else {
-//            basePath = "https://marumaru232.com"
-//        }
-    }
-    
-    public func getDocument(_ url: String) -> Observable<Document> {
-        return Observable.create { observer in
-            if let url = URL(string: url) {
-                do {
-                    let html = try String(contentsOf: url, encoding: .utf8)
-                    let doc = try SwiftSoup.parse(html)
-                    observer.onNext(doc)
-                } catch {
-                    observer.onError(MarumaruApiErrorMessage.failToParseHtml)
+            
+            // TODO: - Manage docuemnt cache with REALM
+            if caching {
+                if let cache = self.docuemntCache[url] {
+                    observer(.success(cache))
+                    return Disposables.create()
                 }
-            } else {
-                observer.onError(MarumaruApiErrorMessage.failToGetUrl)
+            }
+
+            do {
+                let html = try String(contentsOf: url, encoding: .utf8)
+                let doc = try SwiftSoup.parse(html)
+                observer(.success(doc))
+                self.docuemntCache[url] = doc
+            } catch {
+                observer(.failure(MarumaruApiError.failToParse))
             }
             
             return Disposables.create()
@@ -89,53 +86,56 @@ class MarumaruApiService {
     }
 }
 
+
 // MARK: - Updated Comic
+
 extension MarumaruApiService {
-    public func getNewUpdateComic() -> Observable<[Comic]> {
-        return Observable.create { [weak self] observer in
+    public func getNewComicEpisodes() -> Single<[ComicEpisode]> {
+        return Single.create { [weak self] observer in
             guard let self = self else { return Disposables.create() }
             
-            guard let basePath = self.basePath else {
-                observer.onError(MarumaruApiErrorMessage.wrongBasePath)
-                return Disposables.create()
-            }
-            
-            self.getDocument(basePath)
-                .subscribe(onNext: { document in
+            self.getDocument(self.baseURL, caching: false)
+                .subscribe(onSuccess: { doc in
                     do {
-                        let comics = try self.parseNewUpdateComic(with: document)
-                        observer.onNext(comics)
+                        let comics = try self.parseNewComicEpisode(with: doc)
+                        observer(.success(comics))
                     } catch {
-                        observer.onError(error)
+                        observer(.failure(error))
                     }
-                }, onError: { error in
-                    observer.onError(error)
+                }, onFailure: { error in
+                    observer(.failure(error))
                 }).dispose()
             
             return Disposables.create()
         }
     }
     
-    private func parseNewUpdateComic(with document: Document) throws -> [Comic] {
+    private func parseNewComicEpisode(with document: Document) throws -> [ComicEpisode] {
         do {
-            var newUpdateComic = [Comic]()
+            var newUpdateEpisodes = [ComicEpisode]()
             
             let elements = try document.getElementsByClass("post-row")
             try elements.forEach { element in
-                let comicTitle = try element.select("a").text().trimmingCharacters(in: .whitespaces)
-                let comicURL = try element .select("a").attr("href").trimmingCharacters(in: .whitespaces)
-                var thumbnailImageUrl = try element.select("img").attr("src").trimmingCharacters(in: .whitespaces)
-                thumbnailImageUrl = getEndPoint(url: thumbnailImageUrl)
+                let title = try element.select("a").text().trimmingCharacters(in: .whitespaces)
                 
-                let comic = Comic(title: comicTitle,
-                                  link: comicURL,
-                                  thumbnailImageUrl: thumbnailImageUrl)
-                newUpdateComic.append(comic)
+                let episodePath = try element .select("a").attr("href").trimmingCharacters(in: .whitespaces)
+                let comicAndEpisodeSN = getComicAndEpisodeSN(episodePath)
+                
+                var imagePath = try element.select("img").attr("src").trimmingCharacters(in: .whitespaces)
+                imagePath = imagePath.dropBasePath()
+                
+                let episode = ComicEpisode(comicSN: comicAndEpisodeSN.comicSN,
+                                           episodeSN: comicAndEpisodeSN.episodeSN,
+                                           title: title,
+                                           description: nil,
+                                           thumbnailImagePath: imagePath)
+                
+                newUpdateEpisodes.append(episode)
             }
             
-            return newUpdateComic
+            return newUpdateEpisodes
         } catch {
-            throw MarumaruApiErrorMessage.failToParseHtml
+            throw MarumaruApiError.failToParse
         }
     }
 }
@@ -144,50 +144,51 @@ extension MarumaruApiService {
 // MARK: - Comic ranks
 
 extension MarumaruApiService {
-    public func getTopRankComic() -> Observable<[ComicRank]> {
-        return Observable.create { [weak self] observer in
-            
+    public func getComicRank() -> Single<[ComicEpisode]> {
+        return Single.create { [weak self] observer in
             guard let self = self else { return Disposables.create() }
-            
-            guard let basePath = self.basePath else {
-                observer.onError(MarumaruApiErrorMessage.wrongBasePath)
-                return Disposables.create()
-            }
 
-            self.getDocument(basePath)
-                .subscribe(onNext: { document in
+            self.getDocument(self.baseURL, caching: false)
+                .subscribe(onSuccess: { doc in
                     do {
-                        let topRankComic = try self.parseTopRankComic(with: document)
-                        observer.onNext(topRankComic)
+                        let episode = try self.parseComicRank(with: doc)
+                        observer(.success(episode))
                     } catch {
-                        observer.onError(error)
+                        observer(.failure(error))
                     }
-                }, onError: { error in
-                    observer.onError(error)
+                }, onFailure: { error in
+                    observer(.failure(error))
                 }).dispose()
             
             return Disposables.create()
         }
     }
     
-    private func parseTopRankComic(with document: Document) throws -> [ComicRank] {
+    private func parseComicRank(with document: Document) throws -> [ComicEpisode] {
         do {
-            var topRankComics = [ComicRank]()
+            var comicRank = [ComicEpisode]()
             
             let elements = try document.getElementsByClass("basic-post-list")
-            let topRankedList = try elements.first()?.getElementsByTag("tr")
+            let comicRankList = try elements.first()?.getElementsByTag("tr")
             
-            try topRankedList?.forEach({ comic in
-                let comicTitle = try comic.select("a").text().trimmingCharacters(in: .whitespaces)
-                let comicURL = try comic.select("a").attr("href").trimmingCharacters(in: .whitespaces)
+            try comicRankList?.forEach({ comic in
+                let title = try comic.select("a").text().trimmingCharacters(in: .whitespaces)
                 
-                let topRankComic = ComicRank(title: comicTitle, episodeURL: comicURL)
-                topRankComics.append(topRankComic)
+                let episodePath = try comic.select("a").attr("href").trimmingCharacters(in: .whitespaces)
+                let comicAndEpisodeSN = getComicAndEpisodeSN(episodePath)
+                
+                let episode = ComicEpisode(comicSN: comicAndEpisodeSN.comicSN,
+                                           episodeSN: comicAndEpisodeSN.episodeSN,
+                                           title: title,
+                                           description: nil,
+                                           thumbnailImagePath: nil)
+                
+                comicRank.append(episode)
             })
             
-            return topRankComics
+            return comicRank
         } catch {
-            throw MarumaruApiErrorMessage.failToParseHtml
+            throw MarumaruApiError.failToParse
         }
     }
 }
@@ -196,27 +197,22 @@ extension MarumaruApiService {
 // MARK: - Search comics
 
 extension MarumaruApiService {
-    public func getSearchResult(title: String) -> Observable<[ComicInfo]> {
-        return Observable.create { [weak self] observer in
+    public func getSearchResult(title: String) -> Single<[ComicInfo]> {
+        return Single.create { [weak self] observer in
             guard let self = self else { return Disposables.create() }
             
-            guard let basePath = self.basePath else {
-                observer.onError(MarumaruApiErrorMessage.wrongBasePath)
-                return Disposables.create()
-            }
-            
-            let endPoint = self.getEndPoint(with: title, url: basePath)
-            self.getDocument(endPoint)
-                .subscribe(onNext: { document in
+            let url = self.getSearchURL(title)
+            self.getDocument(url, caching: true)
+                .subscribe(onSuccess: { doc in
                     do {
-                        let searchResult = try self.parseSearchResult(with: document)
-                        observer.onNext(searchResult)
+                        let searchResult = try self.parseSearchResult(with: doc)
+                        observer(.success(searchResult))
                     } catch {
-                        observer.onError(error)
+                        observer(.failure(error))
                     }
-                }, onError: { error in
-                    observer.onError(error)
-                }).dispose()
+                }, onFailure: { error in
+                    observer(.failure(error))
+                }).disposed(by: self.disposeBag)
             
             return Disposables.create()
         }
@@ -228,15 +224,15 @@ extension MarumaruApiService {
             
             let contents = try document.getElementsByClass("media")
             try contents.forEach { content in
-                let comicTitle = try content.getElementsByClass("media-heading").text().trimmingCharacters(in: .whitespaces)
-                var thumbnailImageUrl = try content.select("img").attr("src")
-                thumbnailImageUrl = self.getEndPoint(url: thumbnailImageUrl)
+                let title = try content.getElementsByClass("media-heading").text().trimmingCharacters(in: .whitespaces)
+                var imagePath = try content.select("img").attr("src")
+                imagePath = imagePath.dropBasePath()
                 
                 // Serial Number
-                var serialNumber = ""
+                var comicSN = ""
                 let link = try content.select("a").attr("href")
                 if let range = link.range(of: "sca=") {
-                    serialNumber = link[range.upperBound...].description
+                    comicSN = link[range.upperBound...].description
                 }
                 
                 // Descriptions
@@ -251,18 +247,19 @@ extension MarumaruApiService {
                     }
                 }
                 
-                let conicInfo = ComicInfo(title: comicTitle,
-                                            author: descriptions[0],
-                                            updateCycle: descriptions[1],
-                                            thumbnailImage: nil,
-                                            thumbnailImageURL: thumbnailImageUrl,
-                                            serialNumber: serialNumber)
-                searchResult.append(conicInfo)
+                let comicInfo = ComicInfo(comicSN: comicSN,
+                                          title: title,
+                                          author: descriptions[0],
+                                          updateCycle: descriptions[1],
+                                          thumbnailImage: nil,
+                                          thumbnailImagePath: imagePath)
+                
+                searchResult.append(comicInfo)
             }
             
             return searchResult
         } catch {
-            throw MarumaruApiErrorMessage.failToParseHtml
+            throw MarumaruApiError.failToParse
         }
     }
 }
@@ -271,30 +268,31 @@ extension MarumaruApiService {
 // MARK: - Comic episodes
 
 extension MarumaruApiService {
-    public func getEpisodes(_ serialNumber: String) -> Observable<[ComicEpisode]> {
-        return Observable.create { [weak self] observer in
+    public func getEpisodes(_ comicSN: String) -> Single<[ComicEpisode]> {
+        return Single.create { [weak self] observer in
             guard let self = self else { return Disposables.create() }
             
-            let endPoint = self.getEndPoint(serialNumber: serialNumber)
-            self.getDocument(endPoint)
-                .subscribe(onNext: { document in
+            
+            let url = self.getComicURL(comicSN)
+            self.getDocument(url, caching: true)
+                .subscribe(onSuccess: { document in
                     do {
-                        let episodes = try self.parseEpisode(with: document)
-                        observer.onNext(episodes)
+                        let episodes = try self.parseEpisodes(with: document)
+                        observer(.success(episodes))
                     } catch {
-                        observer.onError(error)
+                        observer(.failure(error))
                     }
-                }, onError: { error in
-                    observer.onError(error)
+                }, onFailure: { error in
+                    observer(.failure(error))
                 }).dispose()
 
             return Disposables.create()
         }
     }
     
-    private func parseEpisode(with document: Document) throws -> [ComicEpisode] {
+    private func parseEpisodes(with document: Document) throws -> [ComicEpisode] {
         do {
-            var comicEpisodes = [ComicEpisode]()
+            var episodes = [ComicEpisode]()
             
             let headElement = try document.getElementsByClass("list-wrap")
             if let superElement = headElement.first() {
@@ -304,79 +302,78 @@ extension MarumaruApiService {
                     let elements = try tbody.getElementsByTag("tr")
                     
                     try elements.forEach { element in
-                        let episodeTitle = try element.select("a").text().trimmingCharacters(in: .whitespaces)
+                        let title = try element.select("a").text().trimmingCharacters(in: .whitespaces)
                         let description = try element.getElementsByTag("span").text()
                         
-                        var link = String(try element.select("a").attr("href"))
-                        link = self.getEndPoint(url: link)
-                        var thumbnailImageUrl = String(try element.select("img").attr("src"))
+                        let episodePath = String(try element.select("a").attr("href"))
+                        let comicAndEpisodeSN = getComicAndEpisodeSN(episodePath)
                         
-                        thumbnailImageUrl = self.getEndPoint(url: thumbnailImageUrl)
+                        var imagePath = String(try element.select("img").attr("src"))
+                        imagePath = imagePath.dropBasePath()
                         
-                        let comicEpisode = ComicEpisode(title: episodeTitle,
-                                                        description: description,
-                                                        thumbnailImageURL: thumbnailImageUrl,
-                                                        episodeURL: link)
+                        let episode = ComicEpisode(comicSN: comicAndEpisodeSN.comicSN,
+                                                   episodeSN: comicAndEpisodeSN.episodeSN,
+                                                   title: title,
+                                                   description: description,
+                                                   thumbnailImagePath: imagePath)
                         
-                        comicEpisodes.append(comicEpisode)
+                        episodes.append(episode)
                     }
-                }
-            }
-            
-            return comicEpisodes
-        } catch {
-            throw MarumaruApiErrorMessage.failToParseHtml
-        }
-    }
-}
-
-extension MarumaruApiService {
-    public func getEpisodesInStrip(_ url: String) -> Single<[Episode]> {
-        return Single.create { [weak self] observer in
-            guard let self = self else { return Disposables.create() }
-            
-            if let sharedDoc = self.sharedDoc {
-                do {
-                    let episodes = try self.parseEpisodesInStrip(sharedDoc)
-                    observer(.success(episodes))
-                } catch {
-                    observer(.failure(MarumaruApiErrorMessage.failToGetUrl))
-                }
-            } else {
-                let endPoint = self.getEndPoint(url: url)
-                self.getDocument(endPoint)
-                    .subscribe(onNext: { document in
-                        do {
-                            let episodes = try self.parseEpisodesInStrip(document)
-                            observer(.success(episodes))
-                        } catch {
-                            observer(.failure(MarumaruApiErrorMessage.failToGetUrl))
-                        }
-                    })
-                    .disposed(by: self.disposeBag)
-            }
-            
-            return Disposables.create()
-        }
-    }
-    
-    public func parseEpisodesInStrip(_ document: Document) throws -> [Episode] {
-        do {
-            let chartElement = try document.getElementsByClass("chart").first()
-            var episodes = [Episode]()
-            
-            if let chartElements = try chartElement?.select("option") {
-                // last index of element is always empty
-                for (index, chartElement) in chartElements.enumerated() where index != chartElements.count - 1 {
-                    let episodeTitle = try chartElement.text().trimmingCharacters(in: .whitespaces)
-                    let episodeSN = try chartElement.attr("value")
-                    episodes.append(Episode(title: episodeTitle, serialNumber: episodeSN))
                 }
             }
             
             return episodes
         } catch {
-            throw MarumaruApiErrorMessage.failToParseHtml
+            throw MarumaruApiError.failToParse
+        }
+    }
+}
+
+
+// MARK: - Episodes in comic strip
+
+extension MarumaruApiService {
+    public func getEpisodesInStrip(_ comicEpisode: ComicEpisode) -> Single<[EpisodeItem]> {
+        return Single.create { [weak self] observer in
+            guard let self = self else { return Disposables.create() }
+            
+            let url = self.getEpisodeURL(comicEpisode.comicSN, comicEpisode.episodeSN)
+            self.getDocument(url, caching: true)
+                .subscribe(onSuccess: { doc in
+                    do {
+                        let episodes = try self.parseEpisodesInStrip(doc)
+                        observer(.success(episodes))
+                    } catch {
+                        observer(.failure(error))
+                    }
+                }, onFailure: { error in
+                    observer(.failure(error))
+                })
+                .disposed(by: self.disposeBag)
+            
+            return Disposables.create()
+        }
+    }
+    
+    public func parseEpisodesInStrip(_ document: Document) throws -> [EpisodeItem] {
+        do {
+            let chartElement = try document.getElementsByClass("chart").first()
+            var episodes = [EpisodeItem]()
+            
+            if let episodeElements = try chartElement?.select("option") {
+                
+                for (index, chartElement) in episodeElements.enumerated() where index != episodeElements.count - 1 {
+                    let title = try chartElement.text().trimmingCharacters(in: .whitespaces)
+                    let episodeSN = try chartElement.attr("value")
+                    let episode = EpisodeItem(title: title, episodeSN: episodeSN)
+                    
+                    episodes.append(episode)
+                }
+            }
+            
+            return episodes
+        } catch {
+            throw MarumaruApiError.failToParse
         }
     }
 }
@@ -385,21 +382,23 @@ extension MarumaruApiService {
 // MARK: - Comic strip scenes
 
 extension MarumaruApiService {
-    public func getComicStripScenes(_ url: String) -> Observable<[ComicStripScene]> {
-        return Observable.create { [weak self] observer in
-            guard let self = self else { return Disposables.create() }
+    public func getComicStripScenes(_ comicEpisode: ComicEpisode) -> Single<[ComicStripScene]> {
+        return Single.create { [weak self] observer in
+            guard let self = self else {
+                return Disposables.create()
+            }
             
-            let endPoint = self.getEndPoint(url: url)
-            self.getDocument(endPoint)
-                .subscribe(with: self, onNext: { strongSelf, document in
+            let url = self.getEpisodeURL(comicEpisode.comicSN, comicEpisode.episodeSN)
+            self.getDocument(url, caching: true)
+                .subscribe(with: self, onSuccess: { strongSelf, doc in
                     do {
-                        let comicStripScenes = try strongSelf.parseComicScenes(with: document)
-                        observer.onNext(comicStripScenes)
+                        let comicStripScenes = try strongSelf.parseComicScenes(with: doc)
+                        observer(.success(comicStripScenes))
                     } catch {
-                        observer.onError(error)
+                        observer(.failure(error))
                     }
-                }, onError: { _, error in
-                    observer.onError(error)
+                }, onFailure: { _, error in
+                    observer(.failure(error))
                 }).dispose()
             
             return Disposables.create()
@@ -408,73 +407,21 @@ extension MarumaruApiService {
     
     private func parseComicScenes(with document: Document) throws -> [ComicStripScene] {
         do {
-            sharedDoc = document
             var scenes = [ComicStripScene]()
             
             let elements = try document.getElementsByClass("img-tag")
             try elements.forEach { element in
-                var imageUrl = try element.select("img").attr("src")
-                imageUrl = getEndPoint(url: imageUrl)
+                var imagePath = try element.select("img").attr("src")
+                imagePath = imagePath.dropBasePath()
+                let comicScene = ComicStripScene(sceneImage: nil, imagePath: imagePath)
                 
-                let comicScene = ComicStripScene(sceneImage: nil, sceneImageUrl: imageUrl)
                 scenes.append(comicScene)
             }
             
             return scenes
         } catch {
-            throw MarumaruApiErrorMessage.failToParseHtml
+            throw MarumaruApiError.failToParse
         }
-    }
-}
-
-
-// MARK: - Get iamges
-
-extension MarumaruApiService {
-    @discardableResult
-    public func requestImage(_ url: String, _ completion: @escaping (Result<ImageResult, Error>) -> Void) -> UUID? {
-        guard let url = URL(string: url) else { return nil }
-        let uuid = UUID()
-        
-        let task = URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
-            guard let self = self else { return }
-            
-            defer {
-                self.runningRequest.removeValue(forKey: uuid)
-            }
-            
-            if let data = data, let image = UIImage(data: data) {
-                let imageCache = ImageCache(url: url.path,
-                                            image: image,
-                                            imageAvgColor: image.averageColor ?? UIColor.gray)
-                
-                // Image load from url & save to Cache
-                let result = ImageResult(imageCache: imageCache, animate: true)
-                completion(.success(result))
-                
-                return
-            }
-            
-            guard let error = error else {
-                return
-            }
-            
-            guard (error as NSError).code == NSURLErrorCancelled else {
-                completion(.failure(error))
-                return
-            }
-        }
-        
-        // start loading image
-        task.resume()
-        
-        self.runningRequest[uuid] = task
-        return uuid
-    }
-    
-    public func cancelImageRequest(_ uuid: UUID) {
-        runningRequest[uuid]?.cancel()
-        runningRequest.removeValue(forKey: uuid)
     }
 }
 
@@ -482,43 +429,73 @@ extension MarumaruApiService {
 // MARK: - Transforming URL
 
 extension MarumaruApiService {
-    public func getEndPoint(url: String) -> String {
-        guard let basePath = basePath else { return url }
-        return url.contains(basePath) == true ? url : "\(basePath)\(url)"
+    
+    private var baseURL: URL? {
+        if let baseURL = URL(string: basePath) {
+            return baseURL
+        }
+        
+        return nil
+    }
+
+    private func getEpisodeURL(_ comicSN: String, _ episodeSN: String) -> URL? {
+        guard var endPoint = getComicURL(comicSN) else {
+            return nil
+        }
+        
+        endPoint.appendPathComponent(episodeSN)
+        return endPoint
     }
     
-    public func getEndPoint(with title: String, url: String) -> String {
-        let modifiedTitle = title.replacingOccurrences(of: " ", with: "+")
-        let endPoint = getEndPoint(url: "\(self.searchPath)\(modifiedTitle)")
-        return transformURLString(endPoint)?.description ?? endPoint
+    private func getComicURL(_ comicSN: String) -> URL? {
+        guard var endPoint = URL(string: basePath) else {
+            return nil
+        }
+        
+        endPoint.appendPathComponent(Self.comicPath)
+        endPoint.appendPathComponent(comicSN)
+        return endPoint
     }
     
-    public func getEndPoint(serialNumber: String) -> String {
-        let url = "/bbs/cmoic/\(serialNumber)"
-        return getEndPoint(url: url)
-    }
-    
-    public func getEndPoint(episodeURL: String,
-                             with newSerialNumber: String) -> String {
-        var episodeURL = episodeURL
-        if let serialNumberStartIndex = episodeURL.lastIndex(of: "/") {
-            let serialNumberRange = episodeURL.index(serialNumberStartIndex, offsetBy: 1)..<episodeURL.endIndex
+    private func getComicAndEpisodeSN(_ urlString: String) -> ComicAndEpisodeSN {
+        var comicAndEpisodeSN: ComicAndEpisodeSN = ("", "")
+        let subSequences = urlString.split(separator: "/")
+        if subSequences.count >= 2 {
+            let comicSN = subSequences[subSequences.count - 2].description
+            let episodeSN = subSequences[subSequences.count - 1].description
             
-            episodeURL.replaceSubrange(serialNumberRange, with: newSerialNumber)
+            comicAndEpisodeSN.comicSN = comicSN
+            comicAndEpisodeSN.episodeSN = episodeSN
         }
         
-        return episodeURL
+        return comicAndEpisodeSN
     }
     
-    public func getSerialNumberFromUrl(_ episodeURL: String) -> String {
-        if let serialNumberStartIndex = episodeURL.lastIndex(of: "/") {
-            let serialNumberRange = episodeURL.index(serialNumberStartIndex, offsetBy: 1)..<episodeURL.endIndex
-            return episodeURL[serialNumberRange].description
+    private func getSearchURL(_ title: String) -> URL? {
+        // Note: Do not make search urlPath with (URL). (appendPathComponent) makes wrong urlPath
+        var endPoint = basePath
+        let transformedTitle = title.replacingOccurrences(of: " ", with: "+")
+        let searchPath = "\(Self.searchPath)\(transformedTitle)"
+        endPoint.append(searchPath)
+        
+        if let endPoint = transformURLString(endPoint) {
+            let url = URL(string: endPoint.description)
+            return url
         }
         
-        return ""
+        return nil
     }
     
+    public func getImageURL(_ imagePath: String) -> URL? {
+        guard var endPoint = URL(string: basePath) else {
+            return nil
+        }
+        
+        endPoint.appendPathComponent(imagePath)
+        return endPoint
+    }
+    
+    // Code source
     // https://stackoverflow.com/questions/48576329/ios-urlstring-not-working-always
     private func transformURLString(_ string: String) -> URLComponents? {
         guard let urlPath = string.components(separatedBy: "?").first else {
@@ -539,4 +516,26 @@ extension MarumaruApiService {
         }
         return components!
     }
+}
+
+private extension String {
+    func dropBasePath() -> String {
+        var resultPath = self
+        
+        do {
+            let regex = try NSRegularExpression(pattern: "[^ ]+.com")
+            let firstMatch = regex.firstMatch(in: self, options: [], range: self.fullRange)
+            
+            guard let firstMatch = firstMatch,
+                  let range = Range(firstMatch.range, in: resultPath) else {
+                return resultPath
+            }
+
+            resultPath.removeSubrange(range)
+            return resultPath
+        } catch {
+            return resultPath
+        }
+    }
+
 }

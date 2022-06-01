@@ -14,26 +14,28 @@ class WatchHistory: Object {
     
     // MARK: - Properties
     
-    @objc dynamic var episodeTitle: String = ""
-    @objc dynamic var episodeURL: String = ""
-    @objc dynamic var thumbnailImageURL: String = ""
+    @objc dynamic var comicSN: String = ""
+    @objc dynamic var episodeSN: String = ""
+    @objc dynamic var title: String = ""
+    @objc dynamic var thumbnailImagePath = ""
     @objc dynamic var timeStamp: Int64 = 0
     
     
     // MARK: - Initializer
     
-    convenience init(episodeTitle: String,
-                     episodeURL: String,
-                     thumbnailImageUrl: String) {
+    convenience init(comicSN: String,
+                     episodeSN: String,
+                     title: String,
+                     thumbnailImagePath: String = "") {
         self.init()
-        self.episodeTitle = episodeTitle
-        self.episodeURL = episodeURL
-        self.thumbnailImageURL = thumbnailImageUrl
-        self.timeStamp = Date.timeStamp
+        self.comicSN = comicSN
+        self.episodeSN = episodeSN
+        self.title = title
+        self.thumbnailImagePath = thumbnailImagePath
     }
     
     override class func primaryKey() -> String? {
-        return "episodeURL"
+        return "episodeSN"
     }
 }
 
@@ -58,7 +60,7 @@ extension WatchHistory: IdentifiableType {
             // return random id to prevent RLMException
             return UUID().uuidString
         } else {
-            return episodeURL
+            return episodeSN
         }
     }
 }

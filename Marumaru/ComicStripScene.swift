@@ -9,5 +9,5 @@ import UIKit
 
 struct ComicStripScene {
     var sceneImage: UIImage?
-    var sceneImageUrl: String
+    var imagePath: String
 }
