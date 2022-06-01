@@ -13,14 +13,14 @@
 		6DCADC2F19A09BA0104BFEB3 /* Pods_MarumaruTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 608A2B42CDCB73F327345482 /* Pods_MarumaruTests.framework */; };
 		7641C3AF2646826100A79A79 /* PopOverComicEpisodeTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641C3AE2646826100A79A79 /* PopOverComicEpisodeTableCell.swift */; };
 		7641C3B1264682B900A79A79 /* PopOverComicEpisodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641C3B0264682B900A79A79 /* PopOverComicEpisodeViewController.swift */; };
-		7641C3B32646874300A79A79 /* Episode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641C3B22646874300A79A79 /* Episode.swift */; };
+		7641C3B32646874300A79A79 /* EpisodeItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641C3B22646874300A79A79 /* EpisodeItem.swift */; };
 		764AE0E2262DA971000F490D /* WatchHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764AE0E1262DA971000F490D /* WatchHistoryViewController.swift */; };
 		765C8B29261CA2C30056C83B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8B28261CA2C30056C83B /* AppDelegate.swift */; };
 		765C8B2B261CA2C30056C83B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8B2A261CA2C30056C83B /* SceneDelegate.swift */; };
 		765C8B2D261CA2C30056C83B /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8B2C261CA2C30056C83B /* MainViewController.swift */; };
 		765C8B35261CA2C50056C83B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 765C8B34261CA2C50056C83B /* Assets.xcassets */; };
 		765C8B38261CA2C50056C83B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 765C8B36261CA2C50056C83B /* LaunchScreen.storyboard */; };
-		765C8B43261CA2C50056C83B /* MarumaruTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8B42261CA2C50056C83B /* MarumaruTests.swift */; };
+		765C8B43261CA2C50056C83B /* MarumaruAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8B42261CA2C50056C83B /* MarumaruAPITests.swift */; };
 		765C8B4E261CA2C50056C83B /* MarumaruUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8B4D261CA2C50056C83B /* MarumaruUITests.swift */; };
 		765C8C68261F05BD0056C83B /* ComicDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8C67261F05BD0056C83B /* ComicDetailViewController.swift */; };
 		765C8C6D261F16880056C83B /* ComicStripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8C6C261F16880056C83B /* ComicStripViewController.swift */; };
@@ -29,7 +29,6 @@
 		7684F3E226CAA49F0012BD8E /* ComicThumbnailCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7684F3E026CAA49F0012BD8E /* ComicThumbnailCollectionCell.xib */; };
 		7684F3EA26CB5F6A0012BD8E /* ComicEpisodeThumbnailTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7684F3E826CB5F6A0012BD8E /* ComicEpisodeThumbnailTableCell.xib */; };
 		7684F3EC26CB6BBA0012BD8E /* ComicInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7684F3EB26CB6BBA0012BD8E /* ComicInfo.swift */; };
-		7684F3EE26CB6CC40012BD8E /* ComicEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7684F3ED26CB6CC40012BD8E /* ComicEpisode.swift */; };
 		76BEEBA926248A1600642001 /* SearchComicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BEEBA826248A1600642001 /* SearchComicViewController.swift */; };
 		76BEEBB02624B64E00642001 /* ComicThumbnailCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BEEBAF2624B64E00642001 /* ComicThumbnailCollectionCell.swift */; };
 		76BEEBB12624B64E00642001 /* ComicThumbnailCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BEEBAF2624B64E00642001 /* ComicThumbnailCollectionCell.swift */; };
@@ -37,10 +36,10 @@
 		76C9A1B92631BC7F000F801C /* MarumaruApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C9A1B82631BC7F000F801C /* MarumaruApiService.swift */; };
 		76C9A27A2636A843000F801C /* WatchHistoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C9A2792636A842000F801C /* WatchHistoryManager.swift */; };
 		76F9129D26CF6FAE00B39BE7 /* WatchHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F9129C26CF6FAE00B39BE7 /* WatchHistory.swift */; };
-		76F912E726CFDF7700B39BE7 /* ComicRank.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F912E626CFDF7700B39BE7 /* ComicRank.swift */; };
-		76F912E926CFDFA100B39BE7 /* Comic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F912E826CFDFA000B39BE7 /* Comic.swift */; };
+		76F912E926CFDFA100B39BE7 /* ComicEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F912E826CFDFA000B39BE7 /* ComicEpisode.swift */; };
 		76F912EB26CFFE9700B39BE7 /* ComicStripScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F912EA26CFFE9700B39BE7 /* ComicStripScene.swift */; };
 		76F912F526D160FA00B39BE7 /* loading_cat_radial.json in Resources */ = {isa = PBXBuildFile; fileRef = 76F912F426D160FA00B39BE7 /* loading_cat_radial.json */; };
+		8E1569862847AEF800BF1008 /* ImageSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1569852847AEF800BF1008 /* ImageSessionManager.swift */; };
 		8E3192CB283A15B900C350F9 /* PopOverComicEpisodeTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E3192C9283A15B900C350F9 /* PopOverComicEpisodeTableCell.xib */; };
 		8E319309283B540900C350F9 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E319308283B540900C350F9 /* BaseViewController.swift */; };
 		8E3A896627AB9FB00014303D /* TagLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3A896527AB9FB00014303D /* TagLabel.swift */; };
@@ -139,7 +138,7 @@
 		684FD373C658CE5C97795F16 /* Pods-MarumaruTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MarumaruTests.debug.xcconfig"; path = "Target Support Files/Pods-MarumaruTests/Pods-MarumaruTests.debug.xcconfig"; sourceTree = "<group>"; };
 		7641C3AE2646826100A79A79 /* PopOverComicEpisodeTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopOverComicEpisodeTableCell.swift; sourceTree = "<group>"; };
 		7641C3B0264682B900A79A79 /* PopOverComicEpisodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopOverComicEpisodeViewController.swift; sourceTree = "<group>"; };
-		7641C3B22646874300A79A79 /* Episode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Episode.swift; sourceTree = "<group>"; };
+		7641C3B22646874300A79A79 /* EpisodeItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeItem.swift; sourceTree = "<group>"; };
 		764AE0E1262DA971000F490D /* WatchHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchHistoryViewController.swift; sourceTree = "<group>"; };
 		765C8B25261CA2C30056C83B /* Marumaru.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Marumaru.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		765C8B28261CA2C30056C83B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -149,7 +148,7 @@
 		765C8B37261CA2C50056C83B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		765C8B39261CA2C50056C83B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		765C8B3E261CA2C50056C83B /* MarumaruTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MarumaruTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		765C8B42261CA2C50056C83B /* MarumaruTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarumaruTests.swift; sourceTree = "<group>"; };
+		765C8B42261CA2C50056C83B /* MarumaruAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarumaruAPITests.swift; sourceTree = "<group>"; };
 		765C8B44261CA2C50056C83B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		765C8B49261CA2C50056C83B /* MarumaruUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MarumaruUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		765C8B4D261CA2C50056C83B /* MarumaruUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarumaruUITests.swift; sourceTree = "<group>"; };
@@ -161,16 +160,15 @@
 		7684F3E026CAA49F0012BD8E /* ComicThumbnailCollectionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ComicThumbnailCollectionCell.xib; sourceTree = "<group>"; };
 		7684F3E826CB5F6A0012BD8E /* ComicEpisodeThumbnailTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ComicEpisodeThumbnailTableCell.xib; sourceTree = "<group>"; };
 		7684F3EB26CB6BBA0012BD8E /* ComicInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicInfo.swift; sourceTree = "<group>"; };
-		7684F3ED26CB6CC40012BD8E /* ComicEpisode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicEpisode.swift; sourceTree = "<group>"; };
 		76BEEBA826248A1600642001 /* SearchComicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchComicViewController.swift; sourceTree = "<group>"; };
 		76BEEBAF2624B64E00642001 /* ComicThumbnailCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicThumbnailCollectionCell.swift; sourceTree = "<group>"; };
 		76C9A1B82631BC7F000F801C /* MarumaruApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarumaruApiService.swift; sourceTree = "<group>"; };
 		76C9A2792636A842000F801C /* WatchHistoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchHistoryManager.swift; sourceTree = "<group>"; };
 		76F9129C26CF6FAE00B39BE7 /* WatchHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchHistory.swift; sourceTree = "<group>"; };
-		76F912E626CFDF7700B39BE7 /* ComicRank.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicRank.swift; sourceTree = "<group>"; };
-		76F912E826CFDFA000B39BE7 /* Comic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comic.swift; sourceTree = "<group>"; };
+		76F912E826CFDFA000B39BE7 /* ComicEpisode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicEpisode.swift; sourceTree = "<group>"; };
 		76F912EA26CFFE9700B39BE7 /* ComicStripScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicStripScene.swift; sourceTree = "<group>"; };
 		76F912F426D160FA00B39BE7 /* loading_cat_radial.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading_cat_radial.json; sourceTree = "<group>"; };
+		8E1569852847AEF800BF1008 /* ImageSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSessionManager.swift; sourceTree = "<group>"; };
 		8E3192C9283A15B900C350F9 /* PopOverComicEpisodeTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PopOverComicEpisodeTableCell.xib; sourceTree = "<group>"; };
 		8E319308283B540900C350F9 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		8E3A896527AB9FB00014303D /* TagLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagLabel.swift; sourceTree = "<group>"; };
@@ -345,7 +343,7 @@
 		765C8B41261CA2C50056C83B /* MarumaruTests */ = {
 			isa = PBXGroup;
 			children = (
-				765C8B42261CA2C50056C83B /* MarumaruTests.swift */,
+				765C8B42261CA2C50056C83B /* MarumaruAPITests.swift */,
 				765C8B44261CA2C50056C83B /* Info.plist */,
 			);
 			path = MarumaruTests;
@@ -388,6 +386,7 @@
 			isa = PBXGroup;
 			children = (
 				76C9A1B82631BC7F000F801C /* MarumaruApiService.swift */,
+				8E1569852847AEF800BF1008 /* ImageSessionManager.swift */,
 				76C9A2792636A842000F801C /* WatchHistoryManager.swift */,
 				8E414673284398770005BCFD /* SearchHistoryManager.swift */,
 			);
@@ -397,15 +396,13 @@
 		76937C572657923900D36C45 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				7641C3B22646874300A79A79 /* Episode.swift */,
+				76F9129C26CF6FAE00B39BE7 /* WatchHistory.swift */,
+				76F912EA26CFFE9700B39BE7 /* ComicStripScene.swift */,
+				8E414671284397E20005BCFD /* SearchHistory.swift */,
 				7684F3D126C61B890012BD8E /* ImageCache.swift */,
 				7684F3EB26CB6BBA0012BD8E /* ComicInfo.swift */,
-				7684F3ED26CB6CC40012BD8E /* ComicEpisode.swift */,
-				76F9129C26CF6FAE00B39BE7 /* WatchHistory.swift */,
-				76F912E626CFDF7700B39BE7 /* ComicRank.swift */,
-				76F912EA26CFFE9700B39BE7 /* ComicStripScene.swift */,
-				76F912E826CFDFA000B39BE7 /* Comic.swift */,
-				8E414671284397E20005BCFD /* SearchHistory.swift */,
+				76F912E826CFDFA000B39BE7 /* ComicEpisode.swift */,
+				7641C3B22646874300A79A79 /* EpisodeItem.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -868,7 +865,6 @@
 				8E442E8128466B5F009A7E8D /* UILabe+Underline.swift in Sources */,
 				8E87CE6227ACEAD0008CD9C9 /* WatchHistoryCollectionReusableView.swift in Sources */,
 				8E41467728439AFF0005BCFD /* SearchHistoryCollectionCell.swift in Sources */,
-				7684F3EE26CB6CC40012BD8E /* ComicEpisode.swift in Sources */,
 				8ED56F3627AEFCB300E78A8A /* UIColor+HEX.swift in Sources */,
 				8E414674284398770005BCFD /* SearchHistoryManager.swift in Sources */,
 				76C9A27A2636A843000F801C /* WatchHistoryManager.swift in Sources */,
@@ -882,7 +878,7 @@
 				7684F3EC26CB6BBA0012BD8E /* ComicInfo.swift in Sources */,
 				7684F3D226C61B890012BD8E /* ImageCache.swift in Sources */,
 				8E662DEB27AC2FF40048BF39 /* WatchHistoryViewModel.swift in Sources */,
-				76F912E926CFDFA100B39BE7 /* Comic.swift in Sources */,
+				76F912E926CFDFA100B39BE7 /* ComicEpisode.swift in Sources */,
 				8E82D73F27B25701008230BE /* UIView+Insets.swift in Sources */,
 				8EAFD06F283CC14300FD569F /* UILabel+BackgroundHighlighter.swift in Sources */,
 				765C8B2D261CA2C30056C83B /* MainViewController.swift in Sources */,
@@ -891,7 +887,6 @@
 				8E553E762846260C00B7F5BC /* SearchResultSection.swift in Sources */,
 				764AE0E2262DA971000F490D /* WatchHistoryViewController.swift in Sources */,
 				8EFCD0EC2841F0E600685503 /* Array+IsInBound.swift in Sources */,
-				76F912E726CFDF7700B39BE7 /* ComicRank.swift in Sources */,
 				49561FB926DCE0AC00FEE026 /* FlexibleSceneScrollViewCell.swift in Sources */,
 				765C8B29261CA2C30056C83B /* AppDelegate.swift in Sources */,
 				8E319309283B540900C350F9 /* BaseViewController.swift in Sources */,
@@ -904,12 +899,13 @@
 				8E8D381B27ABA4C700E82FE2 /* ComicDetailViewModel.swift in Sources */,
 				8EBCD0F127AAAB8300BEE157 /* ComicRankTableCell.swift in Sources */,
 				7641C3AF2646826100A79A79 /* PopOverComicEpisodeTableCell.swift in Sources */,
-				7641C3B32646874300A79A79 /* Episode.swift in Sources */,
+				7641C3B32646874300A79A79 /* EpisodeItem.swift in Sources */,
 				76BEEBB02624B64E00642001 /* ComicThumbnailCollectionCell.swift in Sources */,
 				8E414670284394DF0005BCFD /* ComingSoonViewController.swift in Sources */,
 				8E8D381D27ABD56600E82FE2 /* ComicStripViewModel.swift in Sources */,
 				8EAFD069283B78B700FD569F /* MainTabBarController.swift in Sources */,
 				8ED56F3427AEFBAA00E78A8A /* ThumbnailView.swift in Sources */,
+				8E1569862847AEF800BF1008 /* ImageSessionManager.swift in Sources */,
 				8ED56F3827AEFDD400E78A8A /* UIView+Animation.swift in Sources */,
 				8EFCD0EA2840DB3900685503 /* WatchHistorySection.swift in Sources */,
 				8E414672284397E20005BCFD /* SearchHistory.swift in Sources */,
@@ -931,7 +927,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				76BEEBB12624B64E00642001 /* ComicThumbnailCollectionCell.swift in Sources */,
-				765C8B43261CA2C50056C83B /* MarumaruTests.swift in Sources */,
+				765C8B43261CA2C50056C83B /* MarumaruAPITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

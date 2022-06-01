@@ -26,8 +26,8 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     @IBOutlet weak var appbarViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var mainScrollView: UIScrollView!
     @IBOutlet weak var searchBarView: UIView!
-    @IBOutlet weak var newUpdateComicContentsView: UIView!
-    @IBOutlet weak var newUpdateComicCollectionView: UICollectionView!
+    @IBOutlet weak var newComicEpisodeContentsView: UIView!
+    @IBOutlet weak var newComicEpisodeCollectionView: UICollectionView!
     @IBOutlet weak var refreshNewUpdateComicButton: UIButton!
     @IBOutlet weak var watchHistoryCollectionView: UICollectionView!
     @IBOutlet weak var showWatchHistoryButton: UIButton!
@@ -108,9 +108,9 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     
     private func setupUpdatedComicCollectionView() {
         let nibName = UINib(nibName: ComicThumbnailCollectionCell.identifier, bundle: nil)
-        newUpdateComicCollectionView.register(nibName, forCellWithReuseIdentifier: ComicThumbnailCollectionCell.identifier)
-        newUpdateComicCollectionView.clipsToBounds = false
-        newUpdateComicCollectionView.contentInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
+        newComicEpisodeCollectionView.register(nibName, forCellWithReuseIdentifier: ComicThumbnailCollectionCell.identifier)
+        newComicEpisodeCollectionView.clipsToBounds = false
+        newComicEpisodeCollectionView.contentInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
     }
     
     private func setupWatchHistoryCollectionView() {
@@ -157,9 +157,9 @@ class MainViewController: BaseViewController, ViewModelInjectable {
         bindRefreshNewUpdatedComicsButton()
         bindRefreshComicRankButton()
         
-        bindNewUpdateComicCollectionView()
-        bindNewUpdatecomicCollectionCell()
-        bindNewUpdateFailState()
+        bindNewComicEpisodeCollectionView()
+        bindNewComicEpisodeCollectionCell()
+        bindNewComicEpisodeFailState()
         
         bindWatchHistoryCollectionView()
         bindWatchHistoryCollectionCell()
@@ -193,7 +193,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
             .debounce(.milliseconds(300))
             .drive(with: self, onNext: { vc, _ in
                 vc.makeHapticFeedback()
-                vc.newUpdateComicCollectionView.scrollToLeft(leftInset: 12, animated: false)
+                vc.newComicEpisodeCollectionView.scrollToLeft(leftInset: 12, animated: false)
                 vc.viewModel.updateNewUpdatedComics()
             })
             .disposed(by: disposeBag)
@@ -211,33 +211,33 @@ class MainViewController: BaseViewController, ViewModelInjectable {
             .disposed(by: disposeBag)
     }
     
-    private func bindNewUpdateComicCollectionView() {
-        viewModel.newUpdateComicsObservable
-            .bind(to: newUpdateComicCollectionView.rx
+    private func bindNewComicEpisodeCollectionView() {
+        viewModel.newComicEpisodesObservable
+            .bind(to: newComicEpisodeCollectionView.rx
                 .items(cellIdentifier: ComicThumbnailCollectionCell.identifier,
-                       cellType: ComicThumbnailCollectionCell.self)) { _, comic, cell in
-                    cell.hideSkeleton()
-                    cell.thumbnailImagePlaceholderLabel.text = comic.title
-                    cell.titleLabel.text = comic.title
-                    
-                    if let imageURL = comic.thumbnailImageUrl {
-                        let url = URL(string: imageURL)
-                        cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { result in
-                            do {
-                                let result = try result.get()
-                                let image = result.image
-                                cell.thumbnailImagePlaceholderView.setThumbnailShadow(with: image.averageColor)
-                                cell.thumbnailImagePlaceholderLabel.isHidden = true
-                            } catch {
-                                cell.thumbnailImagePlaceholderLabel.isHidden = false
-                            }
-                        }
+                       cellType: ComicThumbnailCollectionCell.self)) { [weak self] _, episode, cell in
+                guard let self = self else { return }
+                
+                cell.hideSkeleton()
+                cell.thumbnailImagePlaceholderLabel.text = episode.title
+                cell.titleLabel.text = episode.title
+                
+                let url = self.viewModel.getImageURL(episode.thumbnailImagePath)
+                cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { result in
+                    do {
+                        let result = try result.get()
+                        let image = result.image
+                        cell.thumbnailImagePlaceholderView.setThumbnailShadow(with: image.averageColor)
+                        cell.thumbnailImagePlaceholderLabel.isHidden = true
+                    } catch {
+                        cell.thumbnailImagePlaceholderLabel.isHidden = false
                     }
-                }.disposed(by: disposeBag)
+                }
+            }.disposed(by: disposeBag)
     }
     
-    private func bindNewUpdatecomicCollectionCell() {
-        newUpdateComicCollectionView.rx
+    private func bindNewComicEpisodeCollectionCell() {
+        newComicEpisodeCollectionView.rx
             .itemSelected
             .asDriver()
             .drive(onNext: { [weak self] indexPath in
@@ -247,19 +247,19 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func bindNewUpdateComicLoadingState() {
-        viewModel.isLoadingNewUpdateComic
+        viewModel.isLoadingNewComicEpisode
             .subscribe(with: self, onNext: { vc, isLoading in
-                vc.newUpdateComicCollectionView.layoutIfNeeded()
+                vc.newComicEpisodeCollectionView.layoutIfNeeded()
                 
                 if isLoading {
-                    vc.newUpdateComicCollectionView.isUserInteractionEnabled = false
-                    vc.newUpdateComicCollectionView.visibleCells
+                    vc.newComicEpisodeCollectionView.isUserInteractionEnabled = false
+                    vc.newComicEpisodeCollectionView.visibleCells
                         .forEach({ cell in
                             cell.showCustomSkeleton()
                         })
                 } else {
-                    vc.newUpdateComicCollectionView.isUserInteractionEnabled = true
-                    vc.newUpdateComicCollectionView.visibleCells
+                    vc.newComicEpisodeCollectionView.isUserInteractionEnabled = true
+                    vc.newComicEpisodeCollectionView.visibleCells
                         .forEach({ cell in
                             cell.hideSkeleton()
                         })
@@ -268,16 +268,16 @@ class MainViewController: BaseViewController, ViewModelInjectable {
             .disposed(by: disposeBag)
     }
     
-    private func bindNewUpdateFailState() {
-        viewModel.failToGetNewUPdateComic
+    private func bindNewComicEpisodeFailState() {
+        viewModel.failToGetNewComicEpisode
             .subscribe(onNext: { [weak self] isFailed in
                 guard let self = self else { return }
                 if isFailed {
-                    self.newUpdateComicCollectionView.stopLottie()
-                    self.newUpdateComicCollectionView.makeNoticeLabel("message.serverError".localized(),
-                                                                      contentInsets: self.newUpdateComicCollectionView.contentInset)
+                    self.newComicEpisodeCollectionView.stopLottie()
+                    self.newComicEpisodeCollectionView.makeNoticeLabel("message.serverError".localized(),
+                                                                      contentInsets: self.newComicEpisodeCollectionView.contentInset)
                 } else {
-                    self.newUpdateComicCollectionView.removeNoticeLabels()
+                    self.newComicEpisodeCollectionView.removeNoticeLabels()
                 }
             })
             .disposed(by: disposeBag)
@@ -286,12 +286,14 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     private func bindWatchHistoryCollectionView() {
         viewModel.watchHistoriesObservable
             .bind(to: watchHistoryCollectionView.rx.items(cellIdentifier: ComicThumbnailCollectionCell.identifier,
-                                                          cellType: ComicThumbnailCollectionCell.self)) { _, comic, cell in
-                cell.hideSkeleton()
-                cell.thumbnailImagePlaceholderLabel.text = comic.episodeTitle
-                cell.titleLabel.text = comic.episodeTitle
+                                                          cellType: ComicThumbnailCollectionCell.self)) { [weak self] _, episode, cell in
+                guard let self = self else { return }
                 
-                let url = URL(string: comic.thumbnailImageURL)
+                cell.hideSkeleton()
+                cell.thumbnailImagePlaceholderLabel.text = episode.title
+                cell.titleLabel.text = episode.title
+                
+                let url = self.viewModel.getImageURL(episode.thumbnailImagePath)
                 cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { result in
                     do {
                         let result = try result.get()
@@ -305,8 +307,8 @@ class MainViewController: BaseViewController, ViewModelInjectable {
             }.disposed(by: disposeBag)
         
         viewModel.watchHistoriesObservable
-            .subscribe(with: self, onNext: { vc, comics in
-                if comics.isEmpty {
+            .subscribe(with: self, onNext: { vc, comicEpisodes in
+                if comicEpisodes.isEmpty {
                     vc.watchHistoryCollectionView.makeNoticeLabel("message.emptyWatchHistory".localized(),
                                                                   contentInsets: vc.watchHistoryCollectionView.contentInset)
                 } else {
@@ -328,9 +330,9 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     private func bindComicRankCollctionView() {
         viewModel.comicRankObservable
             .bind(to: comicRankTableView.rx.items(cellIdentifier: ComicRankTableCell.identifier,
-                                                  cellType: ComicRankTableCell.self)) { index, comic, cell in
+                                                  cellType: ComicRankTableCell.self)) { index, episode, cell in
                 cell.hideSkeleton()
-                cell.titleLabel.text = comic.title
+                cell.titleLabel.text = episode.title
                 cell.rankLabel.text = "\(index + 1)"
             }.disposed(by: disposeBag)
     }
@@ -344,8 +346,8 @@ class MainViewController: BaseViewController, ViewModelInjectable {
             .disposed(by: disposeBag)
         
         viewModel.presentComicStripVCObservable
-            .subscribe(with: self, onNext: { vc, comic in
-                vc.presentComicStripVC(comic)
+            .subscribe(with: self, onNext: { vc, comicEpisode in
+                vc.presentComicStripVC(comicEpisode)
             })
             .disposed(by: disposeBag)
     }
@@ -388,13 +390,12 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     
     // MARK: - Methods
     
-    func presentComicStripVC(_ comic: Comic) {
+    func presentComicStripVC(_ comicEpisode: ComicEpisode) {
         let storyboard = UIStoryboard(name: R.storyboard.comicStrip.name, bundle: nil)
         let comicStripVC = storyboard.instantiateViewController(identifier: ComicStripViewController.identifier,
                                                                 creator: { coder -> ComicStripViewController in
-            let episode = Episode(title: comic.title, serialNumber: "")
-            let viewModel = ComicStripViewModel(episode: episode, episodeURL: comic.link)
-            return .init(coder, viewModel) ?? ComicStripViewController(.init(episode: episode, episodeURL: ""))
+            let viewModel = ComicStripViewModel(currentEpisode: comicEpisode)
+            return .init(coder, viewModel) ?? ComicStripViewController(viewModel)
         })
 
         comicStripVC.modalPresentationStyle = .fullScreen

@@ -8,5 +8,7 @@
 import UIKit
 
 class FlexibleSceneScrollViewCellModel: MarumaruApiServiceViewModel {
-    
+    public func getImageURL(_ imagePath: String) -> String {
+        return MarumaruApiService.shared.getImageURL(imagePath)?.description ?? ""
+    }
 }

@@ -15,43 +15,42 @@ class MainViewModel: MarumaruApiServiceViewModel {
     // MARK: - Properteis
     
     private var disposeBag = DisposeBag()
-    private let marumaruApiService = MarumaruApiService()
     private let watchHistoryManager = WatchHistoryManager()
 
-    private var newUpdateComics = [Comic]()
-    public var newUpdateComicsObservable = BehaviorRelay<[Comic]>(value: [])
-    public var isLoadingNewUpdateComic = BehaviorRelay<Bool>(value: true)
-    public var failToGetNewUPdateComic = BehaviorRelay<Bool>(value: false)
+    private var newComicEpisodes = [ComicEpisode]()
+    public var newComicEpisodesObservable = BehaviorRelay<[ComicEpisode]>(value: [])
+    public var isLoadingNewComicEpisode = BehaviorRelay<Bool>(value: true)
+    public var failToGetNewComicEpisode = BehaviorRelay<Bool>(value: false)
     
     private var watchHistories = [WatchHistory]()
     public var watchHistoriesObservable = PublishRelay<[WatchHistory]>()
     
-    private var comicRank = [ComicRank]()
-    public var comicRankObservable = BehaviorRelay<[ComicRank]>(value: [])
+    private var comicRank = [ComicEpisode]()
+    public var comicRankObservable = BehaviorRelay<[ComicEpisode]>(value: [])
     public var isLoadingComicRank = BehaviorRelay<Bool>(value: false)
     public var failToGetComicRank = BehaviorRelay<Bool>(value: false)
     
-    public var presentComicStripVCObservable = PublishRelay<Comic>()
+    public var presentComicStripVCObservable = PublishRelay<ComicEpisode>()
 }
 
 extension MainViewModel {
     public func updateNewUpdatedComics() {
-        newUpdateComics = fakeComicItems(15)
-        newUpdateComicsObservable.accept(newUpdateComics)
-        isLoadingNewUpdateComic.accept(true)
-        failToGetNewUPdateComic.accept(false)
+        newComicEpisodes = fakeComicItems(15)
+        newComicEpisodesObservable.accept(newComicEpisodes)
+        isLoadingNewComicEpisode.accept(true)
+        failToGetNewComicEpisode.accept(false)
         
-        marumaruApiService
-            .getNewUpdateComic()
+        MarumaruApiService.shared
+            .getNewComicEpisodes()
             .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
             .observe(on: MainScheduler.instance)
-            .subscribe(with: self, onNext: { strongSelf, comics in
-                strongSelf.newUpdateComics = comics
-                strongSelf.newUpdateComicsObservable.accept(comics)
-                strongSelf.isLoadingNewUpdateComic.accept(false)
-            }, onError: { strongSelf, error in
-                print(error.localizedDescription)
-                strongSelf.failToGetNewUPdateComic.accept(true)
+            .subscribe(with: self, onSuccess: { strongSelf, comics in
+                strongSelf.newComicEpisodes = comics
+                strongSelf.newComicEpisodesObservable.accept(comics)
+                strongSelf.isLoadingNewComicEpisode.accept(false)
+            }, onFailure: { strongSelf, _ in
+                strongSelf.newComicEpisodesObservable.accept([])
+                strongSelf.failToGetNewComicEpisode.accept(true)
             })
             .disposed(by: self.disposeBag)
     }
@@ -72,58 +71,69 @@ extension MainViewModel {
     }
     
     public func updateComicRank() {
-        comicRank = fakeComicRankItems(15)
+        comicRank = fakeComicItems(15)
         comicRankObservable.accept(comicRank)
         isLoadingComicRank.accept(true)
         failToGetComicRank.accept(false)
         
-        marumaruApiService
-            .getTopRankComic()
+        MarumaruApiService.shared
+            .getComicRank()
             .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .background))
             .observe(on: MainScheduler.instance)
-            .subscribe(with: self, onNext: { strongSelf, comics in
+            .subscribe(with: self, onSuccess: { strongSelf, comics in
                 strongSelf.comicRank = comics
                 strongSelf.comicRankObservable.accept(comics)
                 strongSelf.isLoadingComicRank.accept(false)
-            }, onError: { strongSelf, _ in
+            }, onFailure: { strongSelf, _ in
+                strongSelf.comicRankObservable.accept([])
                 strongSelf.failToGetComicRank.accept(true)
             }).disposed(by: self.disposeBag)
     }
     
     public func newUpdateComicItemSelected(_ indexPath: IndexPath) {
-        let selectedComic = newUpdateComics[indexPath.row]
+        let selectedComic = newComicEpisodes[indexPath.row]
         presentComicStripVCObservable.accept(selectedComic)
     }
     
     public func watchHistoryItemSelected(_ indexPath: IndexPath) {
-        let selectedComic = watchHistories[indexPath.row]
-        let comic = Comic(title: selectedComic.episodeTitle,
-                          link: selectedComic.episodeURL)
-        presentComicStripVCObservable.accept(comic)
+        let selectedComicEpisode = watchHistories[indexPath.row]
+        let comicEpisode = ComicEpisode(comicSN: selectedComicEpisode.comicSN,
+                                        episodeSN: selectedComicEpisode.episodeSN,
+                                        title: selectedComicEpisode.title,
+                                        description: nil,
+                                        thumbnailImagePath: selectedComicEpisode.thumbnailImagePath)
+        
+        presentComicStripVCObservable.accept(comicEpisode)
     }
     
     public func comicRankItemSelected(_ indexPath: IndexPath) {
-        let selectedComic = comicRank[indexPath.row]
-        let comic = Comic(title: selectedComic.title,
-                          link: selectedComic.episodeURL)
-        presentComicStripVCObservable.accept(comic)
+        let selectedComicEpisode = comicRank[indexPath.row]
+        let comicEpisode = ComicEpisode(comicSN: selectedComicEpisode.comicSN,
+                                        episodeSN: selectedComicEpisode.episodeSN,
+                                        title: selectedComicEpisode.title,
+                                        description: nil,
+                                        thumbnailImagePath: nil)
+        
+        presentComicStripVCObservable.accept(comicEpisode)
     }
 }
 
 extension MainViewModel {
-    public func fakeComicItems(_ count: Int) -> [Comic] {
-        return [Comic](repeating: fakeComicItem, count: count)
+    public func getImageURL(_ imageName: String?) -> URL? {
+        guard let imageName = imageName else {
+            return nil
+        }
+
+        return MarumaruApiService.shared.getImageURL(imageName)
+    }
+}
+
+extension MainViewModel {
+    public func fakeComicItems(_ count: Int) -> [ComicEpisode] {
+        return [ComicEpisode](repeating: fakeComicItem, count: count)
     }
     
-    public var fakeComicItem: Comic {
-        return .init(title: "", link: "")
-    }
-    
-    public func fakeComicRankItems(_ count: Int) -> [ComicRank] {
-        return [ComicRank](repeating: fakeComicRankItem, count: count)
-    }
-    
-    public var fakeComicRankItem: ComicRank {
-        return .init(title: "", episodeURL: "")
+    public var fakeComicItem: ComicEpisode {
+        return .init(comicSN: "", title: "")
     }
 }

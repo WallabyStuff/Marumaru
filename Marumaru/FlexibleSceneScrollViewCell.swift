@@ -27,8 +27,8 @@ class FlexibleSceneScrollViewCell: UIView {
     private var disposeBag = DisposeBag()
     weak var delegate: FlexibleSceneScrollViewDelegate?
     
-    private let networkHandler = MarumaruApiService()
-    open var imageUrl: String?
+    private let imageSessionManager = ImageSessionManager()
+    open var imagePath: String = ""
     open var sceneImage = BehaviorSubject<UIImage?>(value: nil)
     /// vertical cell spacing
     open var spacing: CGFloat = 16
@@ -47,11 +47,10 @@ class FlexibleSceneScrollViewCell: UIView {
     
     // MARK: - Initialiers
     
-    convenience init(parentContentView: UIView, imageUrl: String) {
+    convenience init(parentContentView: UIView, imagePath: String) {
         self.init(frame: .zero)
-        
         self.parentContentView = parentContentView
-        self.imageUrl = imageUrl
+        self.imagePath = imagePath
     }
     
     override init(frame: CGRect) {
@@ -68,7 +67,7 @@ class FlexibleSceneScrollViewCell: UIView {
     
     deinit {
         if let token = imageRequestToken {
-            networkHandler.cancelImageRequest(token)
+            imageSessionManager.cancelImageRequest(token)
         }
     }
     
@@ -129,36 +128,35 @@ class FlexibleSceneScrollViewCell: UIView {
     public func appendCell(index: Int, previousCell: FlexibleSceneScrollViewCell?) {
         prepareForCell(index: index, previousCell: previousCell)
         
-        if let imageUrl = imageUrl {
-            let token = viewModel.requestImage(imageUrl) { [weak self] result in
-                guard let self = self else { return }
+        let url = viewModel.getImageURL(imagePath)
+        let token = viewModel.requestImage(url) { [weak self] result in
+            guard let self = self else { return }
+            
+            do {
+                let resultImage = try result.get()
                 
-                do {
-                    let resultImage = try result.get()
-                    
-                    if index == 0 {
+                if index == 0 {
+                    self.setImage(resultImage.imageCache)
+                } else {
+                    if try previousCell?.sceneImage.value() != nil {
                         self.setImage(resultImage.imageCache)
                     } else {
-                        if try previousCell?.sceneImage.value() != nil {
-                            self.setImage(resultImage.imageCache)
-                        } else {
-                            previousCell?.sceneImage
-                                .subscribe(onNext: { [weak self] value in
-                                    if value != nil {
-                                        self?.setImage(resultImage.imageCache)
-                                    }
-                                }).disposed(by: self.disposeBag)
-                        }
+                        previousCell?.sceneImage
+                            .subscribe(onNext: { [weak self] value in
+                                if value != nil {
+                                    self?.setImage(resultImage.imageCache)
+                                }
+                            }).disposed(by: self.disposeBag)
                     }
-                } catch {
-                    print(error.localizedDescription)
                 }
+            } catch {
+                print(error.localizedDescription)
             }
-            
-            cancelIamgeRequest = { [weak self] in
-                if let token = token {
-                    self?.viewModel.cancelImageRequest(token)
-                }
+        }
+        
+        cancelIamgeRequest = { [weak self] in
+            if let token = token {
+                self?.viewModel.cancelImageRequest(token)
             }
         }
     }

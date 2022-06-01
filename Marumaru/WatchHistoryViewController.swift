@@ -167,18 +167,19 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
     // MARK: - Methods
     
     private func dataSourceFactory() -> RxCollectionViewSectionedAnimatedDataSource<WatchHistorySection> {
-        let dataSource = RxCollectionViewSectionedAnimatedDataSource<WatchHistorySection>(configureCell: { _, cv, indexPath, comic in
-            if comic.isInvalidated { return UICollectionViewCell() }
+        let dataSource = RxCollectionViewSectionedAnimatedDataSource<WatchHistorySection>(configureCell: { [weak self] _, cv, indexPath, comicEpisode in
+            if comicEpisode.isInvalidated { return UICollectionViewCell() }
             
-            guard let cell = cv.dequeueReusableCell(withReuseIdentifier: ComicThumbnailCollectionCell.identifier, for: indexPath)
+            guard let self = self,
+                  let cell = cv.dequeueReusableCell(withReuseIdentifier: ComicThumbnailCollectionCell.identifier, for: indexPath)
                     as? ComicThumbnailCollectionCell else {
                 return UICollectionViewCell()
             }
             
-            cell.titleLabel.text = comic.episodeTitle
-            cell.thumbnailImagePlaceholderLabel.text = comic.episodeTitle
-
-            let url = URL(string: comic.thumbnailImageURL)
+            cell.titleLabel.text = comicEpisode.title
+            cell.thumbnailImagePlaceholderLabel.text = comicEpisode.title
+            
+            let url = self.viewModel.getImageURL(comicEpisode.thumbnailImagePath)
             cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { result in
                 do {
                     let result = try result.get()
@@ -223,14 +224,18 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
         self.present(deleteMenu, animated: true)
     }
     
-    private func presentComicStripVC(_ comic: WatchHistory) {
+    private func presentComicStripVC(_ episode: WatchHistory) {
         let storyboard = UIStoryboard(name: R.storyboard.comicStrip.name, bundle: nil)
         let comicStripVC = storyboard.instantiateViewController(identifier: ComicStripViewController.identifier,
                                                                 creator: { coder -> ComicStripViewController in
-            let episode = Episode(title: comic.episodeTitle, serialNumber: "")
-            let viewModel = ComicStripViewModel(episode: episode,
-                                                episodeURL: comic.episodeURL)
-            return .init(coder, viewModel) ?? ComicStripViewController(.init(episode: episode, episodeURL: ""))
+            let comicEpisode = ComicEpisode(comicSN: episode.comicSN,
+                                            episodeSN: episode.episodeSN,
+                                            title: episode.title,
+                                            description: nil,
+                                            thumbnailImagePath: episode.thumbnailImagePath)
+            let viewModel = ComicStripViewModel(currentEpisode: comicEpisode)
+            
+            return .init(coder, viewModel) ?? ComicStripViewController(viewModel)
         })
         
         comicStripVC.modalPresentationStyle = .fullScreen

@@ -9,12 +9,12 @@ import UIKit
 import RxDataSources
 
 struct ComicInfo: Equatable {
+    var comicSN: String
     var title: String
     var author: String
     var updateCycle: String
     var thumbnailImage: UIImage?
-    var thumbnailImageURL: String?
-    var serialNumber: String
+    var thumbnailImagePath: String?
 }
 
 extension ComicInfo: IdentifiableType {

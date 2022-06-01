@@ -10,12 +10,12 @@ import RxSwift
 import RxCocoa
 
 class MarumaruApiServiceViewModel {
-    private let marumaruApiService = MarumaruApiService()
+    private let imageSessionManager = ImageSessionManager()
 }
 
 extension MarumaruApiServiceViewModel {
     public func requestImage(_ url: String, _ completion: @escaping (Result<ImageResult, Error>) -> Void) -> UUID? {
-        let token = marumaruApiService.requestImage(url) { result in
+        let token = imageSessionManager.requestImage(url) { result in
             do {
                 let result =  try result.get()
                 completion(.success(result))
@@ -28,6 +28,6 @@ extension MarumaruApiServiceViewModel {
     }
     
     public func cancelImageRequest(_ token: UUID) {
-        marumaruApiService.cancelImageRequest(token)
+        imageSessionManager.cancelImageRequest(token)
     }
 }

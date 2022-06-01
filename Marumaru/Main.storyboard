@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qFj-Hk-3q0">
-    <device id="retina6_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -21,7 +19,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FUc-n8-T3p" userLabel="ContentView">
-                                        <rect key="frame" x="0.0" y="0.0" width="428" height="1300"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="428" height="860"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2nU-15-P3x" userLabel="RecentsBoard">
                                                 <rect key="frame" x="0.0" y="326" width="428" height="340"/>
@@ -50,7 +48,7 @@
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YUD-Kh-FRd">
-                                                                <rect key="frame" x="308" y="5.6666666666666856" width="100" height="33"/>
+                                                                <rect key="frame" x="308" y="5.5" width="100" height="33"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="100" id="7AJ-ty-Fyg"/>
                                                                 </constraints>
@@ -125,13 +123,13 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </view>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="최신 업데이트" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SWt-26-VJr">
-                                                                <rect key="frame" x="47.999999999999993" y="10" width="108.33333333333331" height="24"/>
+                                                                <rect key="frame" x="48" y="10" width="108.5" height="24"/>
                                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                                 <color key="textColor" name="TextBlack"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wkB-zm-yZd">
-                                                                <rect key="frame" x="168.33333333333334" y="6" width="32" height="32"/>
+                                                                <rect key="frame" x="168.5" y="6" width="32" height="32"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="32" id="CIg-UB-9m1"/>
                                                                     <constraint firstAttribute="width" constant="32" id="RQU-3e-frw"/>
@@ -176,7 +174,7 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="428" height="44"/>
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kdC-L7-ipV">
-                                                                <rect key="frame" x="124.66666666666669" y="6" width="32" height="32"/>
+                                                                <rect key="frame" x="124.5" y="6" width="32" height="32"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="32" id="ADt-96-zgh"/>
                                                                     <constraint firstAttribute="width" constant="32" id="OUJ-Tt-A8e"/>
@@ -196,7 +194,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </view>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Top 20" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5aR-U2-tkF">
-                                                                <rect key="frame" x="48.000000000000007" y="10" width="64.666666666666686" height="24"/>
+                                                                <rect key="frame" x="48" y="10" width="64.5" height="24"/>
                                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                                 <color key="textColor" name="TextBlack"/>
                                                                 <nil key="highlightedColor"/>
@@ -282,7 +280,7 @@
                                                 </variation>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Copyright © LeeSeunggi All Right Reserved" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mtM-uX-GwY">
-                                                <rect key="frame" x="40" y="1224" width="348" height="16"/>
+                                                <rect key="frame" x="40" y="784" width="348" height="16"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <color key="textColor" name="TextBlack-lighter"/>
                                                 <nil key="highlightedColor"/>
@@ -388,7 +386,7 @@
                                             <rect key="frame" x="20" y="16" width="388" height="48"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="어떤 만화를 보고싶으신가요?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sfx-5a-mKM">
-                                                    <rect key="frame" x="16" y="15.666666666666668" width="324" height="17.000000000000004"/>
+                                                    <rect key="frame" x="16" y="15.5" width="324" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
                                                     <color key="textColor" name="TextBlack-lighter"/>
                                                     <nil key="highlightedColor"/>
@@ -448,8 +446,8 @@
                         <outlet property="appbarViewHeightConstraint" destination="NQ8-NP-Cbd" id="36B-OW-6ib"/>
                         <outlet property="comicRankTableView" destination="QoE-Qg-aZ4" id="9ry-8Q-425"/>
                         <outlet property="mainScrollView" destination="IQz-28-dsB" id="P8U-Bf-Ghm"/>
-                        <outlet property="newUpdateComicCollectionView" destination="Zal-TW-flL" id="UG5-u7-1fF"/>
-                        <outlet property="newUpdateComicContentsView" destination="VBH-nw-8Kn" id="mQC-DX-j3b"/>
+                        <outlet property="newComicEpisodeCollectionView" destination="Zal-TW-flL" id="UG5-u7-1fF"/>
+                        <outlet property="newComicEpisodeContentsView" destination="VBH-nw-8Kn" id="mQC-DX-j3b"/>
                         <outlet property="refreshComicRankButton" destination="kdC-L7-ipV" id="S1q-eT-nIp"/>
                         <outlet property="refreshNewUpdateComicButton" destination="wkB-zm-yZd" id="JCu-Bc-dvZ"/>
                         <outlet property="searchBarView" destination="vHw-eb-i9G" id="pgi-4N-LlL"/>

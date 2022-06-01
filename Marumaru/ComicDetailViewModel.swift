@@ -14,7 +14,6 @@ class ComicDetailViewModel {
     public var comicInfo: ComicInfo
     
     private var disposeBag = DisposeBag()
-    private let marumaruApiService = MarumaruApiService()
     private let watchHistoryHandler = WatchHistoryManager()
     
     private var comicEpisodes = [ComicEpisode]()
@@ -45,14 +44,15 @@ extension ComicDetailViewModel {
         isLoadingComicEpisodes.accept(true)
         failedToLoadingComicEpisodes.accept(false)
         
-        self.marumaruApiService.getEpisodes(comicInfo.serialNumber)
+        MarumaruApiService.shared.getEpisodes(comicInfo.comicSN)
             .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
             .observe(on: MainScheduler.instance)
-            .subscribe(with: self, onNext: { strongSelf, comics in
+            .subscribe(with: self, onSuccess: { strongSelf, comics in
                 strongSelf.comicEpisodes = comics
                 strongSelf.isLoadingComicEpisodes.accept(false)
                 strongSelf.comicEpisodesObservable.accept(comics)
-            }, onError: { strongSelf, _ in
+            }, onFailure: { strongSelf, _ in
+                strongSelf.comicEpisodesObservable.accept([])
                 strongSelf.isLoadingComicEpisodes.accept(false)
                 strongSelf.failedToLoadingComicEpisodes.accept(true)
             }).disposed(by: self.disposeBag)
@@ -72,7 +72,7 @@ extension ComicDetailViewModel {
         
         watchHistoryHandler.fetchData()
             .subscribe(with: self, onSuccess: { strongSelf, comics in
-                strongSelf.watchHistories =  Dictionary(uniqueKeysWithValues: comics.map { ($0.episodeURL, $0.episodeURL) })
+                strongSelf.watchHistories =  Dictionary(uniqueKeysWithValues: comics.map { ($0.episodeSN, $0.episodeSN) })
                 strongSelf.reloadEpisodeRows.accept(strongSelf.recentWatchingEpisodeIndex)
             }, onFailure: { strongSelf, _ in
                 strongSelf.watchHistoriesObservable.accept([])
@@ -80,7 +80,7 @@ extension ComicDetailViewModel {
     }
     
     public func ifAlreadyWatched(_ index: Int) -> Bool {
-        return watchHistories[comicEpisodes[index].episodeURL] == nil ? false : true
+        return watchHistories[comicEpisodes[index].episodeSN] == nil ? false : true
     }
     
     public func comicEpisodeIndex(_ index: Int) -> Int {
@@ -93,11 +93,25 @@ extension ComicDetailViewModel {
 }
 
 extension ComicDetailViewModel {
+    public func getThumbnailImageURL() -> URL? {
+        return getImageURL(comicInfo.thumbnailImagePath)
+    }
+    
+    public func getImageURL(_ imagePath: String?) -> URL? {
+        guard let imagePath = imagePath else {
+            return nil
+        }
+        
+        return MarumaruApiService.shared.getImageURL(imagePath)
+    }
+}
+
+extension ComicDetailViewModel {
     private func fakeEpisodeCells(_ count: Int) -> [ComicEpisode] {
         return [ComicEpisode](repeating: fakeEpisodeCell, count: count)
     }
     
     private var fakeEpisodeCell: ComicEpisode {
-        return .init(title: "", description: "", episodeURL: "")
+        return .init(comicSN: "", title: "")
     }
 }

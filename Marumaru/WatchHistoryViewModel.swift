@@ -42,7 +42,9 @@ extension WatchHistoryViewModel {
                 strongSelf.failToLoadWatchHistories.accept(true)
             }).disposed(by: self.disposeBag)
     }
-    
+}
+
+extension WatchHistoryViewModel {
     private func configureSections(_ watchHistories: [WatchHistory]) -> [WatchHistorySection] {
         var groupedWatchHistories = Dictionary<String, [WatchHistory]>()
         var sections = [WatchHistorySection]()
@@ -63,7 +65,9 @@ extension WatchHistoryViewModel {
         
         return sections
     }
-    
+}
+
+extension WatchHistoryViewModel {
     public func comicItemSelected(_ indexPath: IndexPath) {
         let selectedComic = watchHistories[indexPath.section].items[indexPath.row]
         presentComicStrip.accept(selectedComic)
@@ -71,5 +75,15 @@ extension WatchHistoryViewModel {
     
     public func sectionHeader(_ indexPath: IndexPath) -> String {
         return watchHistories[indexPath.section].header
+    }
+}
+
+extension WatchHistoryViewModel {
+    public func getImageURL(_ imagePath: String?) -> URL? {
+        guard let imagePath = imagePath else {
+            return nil
+        }
+
+        return MarumaruApiService.shared.getImageURL(imagePath)
     }
 }

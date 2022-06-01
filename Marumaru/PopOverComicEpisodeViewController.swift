@@ -10,8 +10,8 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-@objc protocol PopOverComicEpisodeViewDelegate: AnyObject {
-    @objc optional func didEpisodeSelected(_ selectedEpisode: Episode)
+protocol PopOverComicEpisodeViewDelegate: AnyObject {
+    func didEpisodeSelected(_ selectedEpisode: EpisodeItem)
 }
 
 class PopOverComicEpisodeViewController: BaseViewController, ViewModelInjectable {
@@ -80,7 +80,7 @@ class PopOverComicEpisodeViewController: BaseViewController, ViewModelInjectable
             .asDriver()
             .drive(with: self, onNext: { vc, indexPath in
                 let selectedEpisode = vc.viewModel.cellItemForRow(at: indexPath)
-                vc.delegate?.didEpisodeSelected?(selectedEpisode)
+                vc.delegate?.didEpisodeSelected(selectedEpisode)
                 vc.dismiss(animated: true, completion: nil)
             }).disposed(by: disposeBag)
     }
@@ -98,7 +98,7 @@ class PopOverComicEpisodeViewController: BaseViewController, ViewModelInjectable
                                                 cellType: PopOverComicEpisodeTableCell.self)) { _, episode, cell in
                 cell.episodeTitleLabel.text = episode.title
                 
-                if episode.serialNumber == self.viewModel.currentEpisodeSN {
+                if episode.episodeSN == self.viewModel.currentEpisodeSN {
                     cell.setHighlighted()
                 } else {
                     cell.setUnHighlighted()

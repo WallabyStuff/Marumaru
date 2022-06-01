@@ -12,60 +12,58 @@ import RxCocoa
 
 class ComicStripViewModel {
     private var disposeBag = DisposeBag()
-    private var episodeURL: String = ""
-    private var currentEpisode: Episode
-    private var marumaruApiService = MarumaruApiService()
+    private var currentEpisode: ComicEpisode
+    
     private var watchHistoryHandler = WatchHistoryManager()
     
     public var episodeTitle = BehaviorRelay<String>(value: "")
     public var makeToast = PublishRelay<String>()
-    public var comicEpisodes = [Episode]()
+    public var comicEpisodes = [EpisodeItem]()
 
     private var comicStripScenes = [ComicStripScene]()
     public var comicStripScenesObservable = PublishRelay<[ComicStripScene]>()
     public var isLoadingScenes = BehaviorRelay<Bool>(value: false)
     public var failToLoadingScenes = BehaviorRelay<Bool>(value: false)
     
-    init(episode: Episode, episodeURL: String) {
-        self.currentEpisode = episode
-        self.episodeTitle.accept(episode.title)
-        self.episodeURL = episodeURL
-        setupData()
-    }
-    
-    private func setupData() {
-        if currentEpisode.serialNumber == "" {
-            currentEpisode.serialNumber = marumaruApiService.getSerialNumberFromUrl(episodeURL)
-        }
-        
-        updateComicEpisodes()
+    init(currentEpisode: ComicEpisode) {
+        self.currentEpisode = currentEpisode
+        self.episodeTitle.accept(currentEpisode.title)
     }
 }
 
 extension ComicStripViewModel {
-    public func renderComicStripScenes(_ episode: Episode) {
-        currentEpisode = episode
-        episodeTitle.accept(episode.title)
+    public func renderComicStripScenes(_ episode: EpisodeItem) {
+        currentEpisode.replaceEpisode(episode)
+        
+        episodeTitle.accept(currentEpisode.title)
         comicStripScenesObservable.accept([])
         failToLoadingScenes.accept(false)
         isLoadingScenes.accept(true)
-        episodeURL = marumaruApiService.getEndPoint(episodeURL: episodeURL,
-                                                    with: episode.serialNumber)
         
-        marumaruApiService.getComicStripScenes(episodeURL)
+        let comicEpisode = ComicEpisode(comicSN: currentEpisode.comicSN,
+                                        episodeSN: currentEpisode.episodeSN,
+                                        title: currentEpisode.title,
+                                        description: currentEpisode.description,
+                                        thumbnailImagePath: currentEpisode.thumbnailImagePath)
+        
+        MarumaruApiService.shared.getComicStripScenes(comicEpisode)
             .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .background))
             .observe(on: MainScheduler.instance)
-            .subscribe(with: self, onNext: { strongSelf, scenes in
+            .subscribe(with: self, onSuccess: { strongSelf, scenes in
                 strongSelf.isLoadingScenes.accept(false)
                 strongSelf.comicStripScenes = scenes
                 strongSelf.comicStripScenesObservable.accept(scenes)
-            }, onError: { strongSelf, _ in
+                strongSelf.updateComicEpisodes()
+            }, onFailure: { strongSelf, _ in
+                strongSelf.comicStripScenesObservable.accept([])
                 strongSelf.failToLoadingScenes.accept(true)
                 strongSelf.isLoadingScenes.accept(false)
             }).disposed(by: self.disposeBag)
     }
     
     public func renderCurrentEpisodeScenes() {
+        let currentEpisode = EpisodeItem(title: currentEpisode.title,
+                                         episodeSN: currentEpisode.episodeSN)
         renderComicStripScenes(currentEpisode)
     }
     
@@ -99,7 +97,7 @@ extension ComicStripViewModel {
     
     public var currentEpisodeIndex: Int? {
         for (i, episode) in comicEpisodes.enumerated()
-        where episode.serialNumber == currentEpisode.serialNumber {
+        where episode.episodeSN == currentEpisode.episodeSN {
             return i
         }
         
@@ -109,13 +107,15 @@ extension ComicStripViewModel {
 
 extension ComicStripViewModel {
     private var firstSceneImageUrl: String? {
-        return comicStripScenes.first?.sceneImageUrl
+        return comicStripScenes.first?.imagePath
     }
     
     public func saveToWatchHistory() {
-        let currentEpisode = WatchHistory(episodeTitle: currentEpisode.title,
-                                          episodeURL: episodeURL,
-                                          thumbnailImageUrl: firstSceneImageUrl ?? "")
+        let currentEpisode = WatchHistory(comicSN: currentEpisode.comicSN,
+                                          episodeSN: currentEpisode.episodeSN,
+                                          title: currentEpisode.title,
+                                          thumbnailImagePath: comicStripScenes.first?.imagePath ?? "")
+        
         watchHistoryHandler
             .addData(watchHistory: currentEpisode)
             .subscribe()
@@ -125,7 +125,7 @@ extension ComicStripViewModel {
 
 extension ComicStripViewModel {
     private func updateComicEpisodes() {
-        marumaruApiService.getEpisodesInStrip(episodeURL)
+        MarumaruApiService.shared.getEpisodesInStrip(currentEpisode)
             .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .background))
             .observe(on: MainScheduler.instance)
             .subscribe(with: self, onSuccess: { strongSelf, episodes in
@@ -136,6 +136,6 @@ extension ComicStripViewModel {
 
 extension ComicStripViewModel {
     public var serialNumber: String {
-        return currentEpisode.serialNumber
+        return currentEpisode.episodeSN
     }
 }

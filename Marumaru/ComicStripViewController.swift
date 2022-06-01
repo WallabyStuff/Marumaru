@@ -391,7 +391,7 @@ extension UIViewController: UIPopoverPresentationControllerDelegate {
 }
 
 extension ComicStripViewController: PopOverComicEpisodeViewDelegate {
-    func didEpisodeSelected(_ episode: Episode) {
+    func didEpisodeSelected(_ episode: EpisodeItem) {
         viewModel.renderComicStripScenes(episode)
     }
 }
