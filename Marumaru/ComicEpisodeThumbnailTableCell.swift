@@ -20,6 +20,8 @@ class ComicEpisodeThumbnailTableCell: UITableViewCell {
     @IBOutlet weak var indexLabel: UILabel!
     @IBOutlet weak var recentWatchingIndicatorView: UIView!
     
+    public var onReuse: () -> Void = { }
+    
     
     // MARK: - LifeCycle
     
@@ -29,6 +31,7 @@ class ComicEpisodeThumbnailTableCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        onReuse()
         thumbnailImageView.image = nil
         titleLabel.text = ""
         authorLabel.text = ""

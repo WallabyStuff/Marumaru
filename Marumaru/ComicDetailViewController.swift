@@ -185,6 +185,10 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
                 
                 let url = self.viewModel.getImageURL(episode.thumbnailImagePath)
                 cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))])
+                
+                cell.onReuse = {
+                    cell.thumbnailImageView.kf.cancelDownloadTask()
+                }
             }.disposed(by: disposeBag)
     }
     
