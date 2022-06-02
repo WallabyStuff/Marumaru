@@ -14,6 +14,11 @@ import RxSwift
 import RxCocoa
 import RxGesture
 
+
+protocol ComicStripViewDelegate: AnyObject {
+    func didRecentWatchingEpisodeUpdated(_ episodeSN: String)
+}
+
 class ComicStripViewController: BaseViewController, ViewModelInjectable {
     
     
@@ -31,7 +36,9 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     @IBOutlet weak var appbarViewHieghtConstraint: NSLayoutConstraint!
     
     static let identifier = R.storyboard.comicStrip.comicStripStroyboard.identifier
+    
     var viewModel: ViewModel
+    weak var delegate: ComicStripViewDelegate?
     private var cellHeightDictionary: NSMutableDictionary = [:]
     private let safeAreaInsets = UIApplication.shared.windows[0].safeAreaInsets
     private var isSceneZoomed = false
@@ -144,6 +151,7 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
         bindSceneDoubleTapGesture()
         bindSceneScrollView()
         bindToastMessage()
+        bindRecentWatchingEpisode()
     }
     
     private func bindBackButton() {
@@ -287,6 +295,14 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
         viewModel.makeToast
             .subscribe(with: self, onNext: { vc, message in
                 vc.view.makeToast(message)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindRecentWatchingEpisode() {
+        viewModel.updateRentWatchingEpisode
+            .subscribe(with: self, onNext: { vc, episodeSN in
+                vc.delegate?.didRecentWatchingEpisodeUpdated(episodeSN)
             })
             .disposed(by: disposeBag)
     }

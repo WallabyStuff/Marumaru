@@ -23,10 +23,11 @@ class ComicDetailViewModel {
     
     private var watchHistories = [String: String]()
     public var watchHistoriesObservable = PublishRelay<[WatchHistory]>()
-    public var recentWatchingEpisodeIndex: IndexPath?
-    public var reloadEpisodeRows = PublishRelay<IndexPath?>()
     
     public var presentComicStripVCObservable = PublishRelay<ComicEpisode>()
+    
+    public var recentWatchingEpisodeSN: String?
+    public var recentWatchingEpisodeUpdated = PublishRelay<IndexPath>()
     
     init(comicInfo: ComicInfo) {
         self.comicInfo = comicInfo
@@ -61,7 +62,6 @@ extension ComicDetailViewModel {
     public func comicItemSelected(_ indexPath: IndexPath) {
         let selectedComic = comicEpisodes[indexPath.row]
         presentComicStripVCObservable.accept(selectedComic)
-        recentWatchingEpisodeIndex = indexPath
     }
 }
 
@@ -73,7 +73,6 @@ extension ComicDetailViewModel {
         watchHistoryHandler.fetchData()
             .subscribe(with: self, onSuccess: { strongSelf, comics in
                 strongSelf.watchHistories =  Dictionary(uniqueKeysWithValues: comics.map { ($0.episodeSN, $0.episodeSN) })
-                strongSelf.reloadEpisodeRows.accept(strongSelf.recentWatchingEpisodeIndex)
             }, onFailure: { strongSelf, _ in
                 strongSelf.watchHistoriesObservable.accept([])
             }).disposed(by: self.disposeBag)
@@ -113,5 +112,16 @@ extension ComicDetailViewModel {
     
     private var fakeEpisodeCell: ComicEpisode {
         return .init(comicSN: "", title: "")
+    }
+}
+
+extension ComicDetailViewModel {
+    public func updateRecentWatchingEpisode(_ episodeSN: String) {
+        recentWatchingEpisodeSN = episodeSN
+        
+        if let index = comicEpisodes.firstIndex(where: { $0.episodeSN == episodeSN }) {
+            let indexPath = IndexPath(row: index, section: 0)
+            recentWatchingEpisodeUpdated.accept(indexPath)
+        }
     }
 }

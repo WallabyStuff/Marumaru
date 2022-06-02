@@ -147,8 +147,9 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
         bindComicEpisodeTableViewCell()
         bindComicEpisodeLoadingState()
         bindComicEpisodeFailState()
+        
         bindEpisodeAmountLabel()
-        bindRealodEpisodeRows()
+        bindRecentWatchingEpisode()
     }
     
     private func bindScrollToBottomButton() {
@@ -165,6 +166,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
             .bind(to: comicEpisodeTableView.rx.items(cellIdentifier: ComicEpisodeThumbnailTableCell.identifier,
                                                      cellType: ComicEpisodeThumbnailTableCell.self)) { [weak self] index, episode, cell in
                 guard let self = self else { return }
+                
                 cell.hideSkeleton()
                 cell.titleLabel.text = episode.title
                 cell.authorLabel.text = episode.description
@@ -175,8 +177,8 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
                     cell.setWatched()
                 }
                 
-                if let indexPath = self.viewModel.recentWatchingEpisodeIndex {
-                    if indexPath.row == index {
+                if let recentWatchingEpisodSN = self.viewModel.recentWatchingEpisodeSN {
+                    if episode.episodeSN == recentWatchingEpisodSN {
                         cell.recentWatchingIndicatorView.isHidden = false
                     }
                 }
@@ -242,12 +244,13 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
             .disposed(by: disposeBag)
     }
     
-    private func bindRealodEpisodeRows() {
-        viewModel.reloadEpisodeRows
+    private func bindRecentWatchingEpisode() {
+        viewModel.recentWatchingEpisodeUpdated
             .subscribe(with: self, onNext: { vc, indexPath in
-                if let indexPath = indexPath {
-                    vc.comicEpisodeTableView.reloadRows(at: [indexPath], with: .none)
-                }
+                vc.comicEpisodeTableView.reloadData()
+                vc.comicEpisodeTableView.scrollToRow(at: indexPath,
+                                                     at: .middle,
+                                                     animated: false)
             })
             .disposed(by: disposeBag)
     }
@@ -277,6 +280,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
         })
         
         comicStripVC.modalPresentationStyle = .fullScreen
+        comicStripVC.delegate = self
         present(comicStripVC, animated: true)
     }
 }
@@ -293,5 +297,11 @@ extension ComicDetailViewController: UITableViewDelegate {
         } else {
             scrollToBottomButton.startFadeInAnimation(duration: 0.2)
         }
+    }
+}
+
+extension ComicDetailViewController: ComicStripViewDelegate {
+    func didRecentWatchingEpisodeUpdated(_ episodeSN: String) {
+        viewModel.updateRecentWatchingEpisode(episodeSN)
     }
 }
