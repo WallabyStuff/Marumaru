@@ -85,7 +85,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func setupData() {
-        viewModel.updateNewUpdatedComics()
+        viewModel.updateNewComicEpisodes()
         viewModel.updateComicRank()
     }
     
@@ -194,7 +194,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
             .drive(with: self, onNext: { vc, _ in
                 vc.makeHapticFeedback()
                 vc.newComicEpisodeCollectionView.scrollToLeft(leftInset: 12, animated: false)
-                vc.viewModel.updateNewUpdatedComics()
+                vc.viewModel.updateNewComicEpisodes()
             })
             .disposed(by: disposeBag)
     }
@@ -233,6 +233,10 @@ class MainViewController: BaseViewController, ViewModelInjectable {
                         cell.thumbnailImagePlaceholderLabel.isHidden = false
                     }
                 }
+                
+                cell.onReuse = {
+                    cell.thumbnailImageView.kf.cancelDownloadTask()
+                }
             }.disposed(by: disposeBag)
     }
     
@@ -241,7 +245,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
             .itemSelected
             .asDriver()
             .drive(onNext: { [weak self] indexPath in
-                self?.viewModel.newUpdateComicItemSelected(indexPath)
+                self?.viewModel.newComicEpisodeItemSelected(indexPath)
             })
             .disposed(by: disposeBag)
     }
@@ -303,6 +307,10 @@ class MainViewController: BaseViewController, ViewModelInjectable {
                     } catch {
                         cell.thumbnailImagePlaceholderLabel.isHidden = false
                     }
+                }
+
+                cell.onReuse = {
+                    cell.thumbnailImageView.kf.cancelDownloadTask()
                 }
             }.disposed(by: disposeBag)
         

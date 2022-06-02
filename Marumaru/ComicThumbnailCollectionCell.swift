@@ -18,6 +18,8 @@ class ComicThumbnailCollectionCell: UICollectionViewCell {
     @IBOutlet weak var thumbnailImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var thumbnailImagePlaceholderLabel: UILabel!
+    
+    public var onReuse: () -> Void = {}
 
     
     // MARK: - LifeCycle
@@ -28,6 +30,7 @@ class ComicThumbnailCollectionCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        onReuse()
         thumbnailImageView.image = nil
         thumbnailImagePlaceholderView.removeThumbnailShadow()
     }

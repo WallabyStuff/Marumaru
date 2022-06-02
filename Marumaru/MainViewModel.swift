@@ -33,8 +33,11 @@ class MainViewModel: MarumaruApiServiceViewModel {
     public var presentComicStripVCObservable = PublishRelay<ComicEpisode>()
 }
 
+
+// MARK: - NewComicEpisode
+
 extension MainViewModel {
-    public func updateNewUpdatedComics() {
+    public func updateNewComicEpisodes() {
         newComicEpisodes = fakeComicItems(15)
         newComicEpisodesObservable.accept(newComicEpisodes)
         isLoadingNewComicEpisode.accept(true)
@@ -55,6 +58,16 @@ extension MainViewModel {
             .disposed(by: self.disposeBag)
     }
     
+    public func newComicEpisodeItemSelected(_ indexPath: IndexPath) {
+        let selectedComic = newComicEpisodes[indexPath.row]
+        presentComicStripVCObservable.accept(selectedComic)
+    }
+}
+
+
+// MARK: - WatchHistory
+
+extension MainViewModel {
     public func updateWatchHistories() {
         watchHistories.removeAll()
         watchHistoriesObservable.accept([])
@@ -70,6 +83,23 @@ extension MainViewModel {
             .disposed(by: self.disposeBag)
     }
     
+    public func watchHistoryItemSelected(_ indexPath: IndexPath) {
+        let selectedComicEpisode = watchHistories[indexPath.row]
+        let comicEpisode = ComicEpisode(comicSN: selectedComicEpisode.comicSN,
+                                        episodeSN: selectedComicEpisode.episodeSN,
+                                        title: selectedComicEpisode.title,
+                                        description: nil,
+                                        thumbnailImagePath: selectedComicEpisode.thumbnailImagePath)
+        
+        presentComicStripVCObservable.accept(comicEpisode)
+    }
+    
+}
+
+
+// MARK: - Comic rank
+
+extension MainViewModel {
     public func updateComicRank() {
         comicRank = fakeComicItems(15)
         comicRankObservable.accept(comicRank)
@@ -88,22 +118,6 @@ extension MainViewModel {
                 strongSelf.comicRankObservable.accept([])
                 strongSelf.failToGetComicRank.accept(true)
             }).disposed(by: self.disposeBag)
-    }
-    
-    public func newUpdateComicItemSelected(_ indexPath: IndexPath) {
-        let selectedComic = newComicEpisodes[indexPath.row]
-        presentComicStripVCObservable.accept(selectedComic)
-    }
-    
-    public func watchHistoryItemSelected(_ indexPath: IndexPath) {
-        let selectedComicEpisode = watchHistories[indexPath.row]
-        let comicEpisode = ComicEpisode(comicSN: selectedComicEpisode.comicSN,
-                                        episodeSN: selectedComicEpisode.episodeSN,
-                                        title: selectedComicEpisode.title,
-                                        description: nil,
-                                        thumbnailImagePath: selectedComicEpisode.thumbnailImagePath)
-        
-        presentComicStripVCObservable.accept(comicEpisode)
     }
     
     public func comicRankItemSelected(_ indexPath: IndexPath) {

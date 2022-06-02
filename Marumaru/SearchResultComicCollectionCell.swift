@@ -22,6 +22,8 @@ class SearchResultComicCollectionCell: UICollectionViewCell {
     @IBOutlet weak var thumbnailImagePlaceholderLabel: UILabel!
     @IBOutlet weak var thumbnailImageView: UIImageView!
     
+    public var onReuse: () -> Void = {}
+    
     override var isHighlighted: Bool {
         didSet {
             if isHighlighted == true {
@@ -41,6 +43,8 @@ class SearchResultComicCollectionCell: UICollectionViewCell {
     }
     
     override func prepareForReuse() {
+        super.prepareForReuse()
+        onReuse()
         thumbnailImageView.image = nil
         thumbnailImagePlaceholderView.removeThumbnailShadow()
     }

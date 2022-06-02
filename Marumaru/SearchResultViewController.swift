@@ -247,6 +247,10 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
                 }
             }
             
+            cell.onReuse = {
+                cell.thumbnailImageView.kf.cancelDownloadTask()
+            }
+            
             return cell
         }, configureSupplementaryView: { [weak self] _, cv, kind, indexPath in
             guard let self = self else {
