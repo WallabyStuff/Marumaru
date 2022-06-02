@@ -66,13 +66,18 @@ class MainTabBarController: UITabBarController {
     }
     
     private func setup() {
+        setDelegate()
         setupViewControllers()
         setupTabBarItems()
         setupTabbarAppearance()
     }
     
+    private func setDelegate() {
+        delegate = self
+    }
+    
     private func setupViewControllers() {
-        setViewControllers([mainViewController, searchViewController, comingSoonViewController, comingSoonViewController],
+        setViewControllers([mainViewController, emptyViewController, comingSoonViewController, comingSoonViewController],
                            animated: true)
     }
     
@@ -126,8 +131,29 @@ extension MainTabBarController {
         return viewController
     }
     
+    private var emptyViewController: UIViewController {
+        let viewController = EmptyViewController()
+        return viewController
+    }
+    
     private var comingSoonViewController: UIViewController {
         let viewController = ComingSoonViewController()
         return viewController
+    }
+}
+
+extension MainTabBarController: UITabBarControllerDelegate {
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        if viewController.isKind(of: EmptyViewController.self) {
+            if let navigationController = tabBarController.navigationController {
+                navigationController.pushViewController(searchViewController, animated: true)
+            } else {
+                tabBarController.present(searchViewController, animated: true)
+            }
+            
+            return false
+        }
+        
+        return true
     }
 }
