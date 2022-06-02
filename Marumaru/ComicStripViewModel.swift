@@ -25,6 +25,8 @@ class ComicStripViewModel {
     public var isLoadingScenes = BehaviorRelay<Bool>(value: false)
     public var failToLoadingScenes = BehaviorRelay<Bool>(value: false)
     
+    public var updateRentWatchingEpisode = PublishRelay<String>()
+    
     init(currentEpisode: ComicEpisode) {
         self.currentEpisode = currentEpisode
         self.episodeTitle.accept(currentEpisode.title)
@@ -118,7 +120,9 @@ extension ComicStripViewModel {
         
         watchHistoryHandler
             .addData(watchHistory: currentEpisode)
-            .subscribe()
+            .subscribe(with: self, onCompleted: { strongSelf in
+                strongSelf.updateRentWatchingEpisode.accept(currentEpisode.episodeSN)
+            })
             .disposed(by: disposeBag)
     }
 }
