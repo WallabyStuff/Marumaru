@@ -111,6 +111,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
         newComicEpisodeCollectionView.register(nibName, forCellWithReuseIdentifier: ComicThumbnailCollectionCell.identifier)
         newComicEpisodeCollectionView.clipsToBounds = false
         newComicEpisodeCollectionView.contentInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
+        newComicEpisodeCollectionView.decelerationRate = .fast
     }
     
     private func setupWatchHistoryCollectionView() {
@@ -118,6 +119,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
         watchHistoryCollectionView.register(nibName, forCellWithReuseIdentifier: ComicThumbnailCollectionCell.identifier)
         watchHistoryCollectionView.clipsToBounds = false
         watchHistoryCollectionView.contentInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
+        watchHistoryCollectionView.decelerationRate = .fast
     }
     
     private func setupComicRankTableView() {
