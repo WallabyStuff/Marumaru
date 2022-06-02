@@ -408,16 +408,18 @@ class MainViewController: BaseViewController, ViewModelInjectable {
             return .init(coder, viewModel) ?? ComicStripViewController(viewModel)
         })
 
-        comicStripVC.modalPresentationStyle = .fullScreen
         navigationController?.pushViewController(comicStripVC, animated: true)
     }
     
     func presentSearchComicVC() {
-        if let tabbarController = tabBarController {
-            tabbarController.selectedIndex = 1
-        } else {
-            return
-        }
+        let storyboard = UIStoryboard(name: R.storyboard.searchComic.name, bundle: nil)
+        let searchComicVC = storyboard.instantiateViewController(identifier: SearchComicViewController.identifier,
+                                                                  creator: { coder -> SearchComicViewController in
+            let viewModel = SearchComicViewModel()
+            return .init(coder, viewModel) ?? SearchComicViewController(.init())
+        })
+        
+        navigationController?.pushViewController(searchComicVC, animated: true)
     }
     
     func presentWatchHistoryVC() {
@@ -428,7 +430,6 @@ class MainViewController: BaseViewController, ViewModelInjectable {
             return .init(coder, viewModel) ?? WatchHistoryViewController(.init())
         })
         
-        watchHistoryVC.modalPresentationStyle = .fullScreen
         navigationController?.pushViewController(watchHistoryVC, animated: true)
     }
 }
