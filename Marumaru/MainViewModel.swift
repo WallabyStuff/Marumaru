@@ -76,7 +76,7 @@ extension MainViewModel {
             .fetchData()
             .observe(on: MainScheduler.instance)
             .subscribe(onSuccess: { [weak self] comics in
-                let reversedComics: [WatchHistory] = comics.reversed()
+                let reversedComics = Array(comics.reversed().prefix(20))
                 self?.watchHistories = reversedComics
                 self?.watchHistoriesObservable.accept(reversedComics)
             })
