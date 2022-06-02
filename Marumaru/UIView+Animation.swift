@@ -9,7 +9,6 @@ import UIKit
 
 extension UIView {
     func startFadeInAnimation(duration: Double, _ completion: ((Bool) -> Void)? = nil) {
-        self.alpha = 0
         UIView.animate(withDuration: duration,
                        delay: 0,
                        options: [.curveEaseIn]) {
@@ -20,7 +19,6 @@ extension UIView {
     }
 
     func startFadeOutAnimation(duration: Double, _ completion: ((Bool) -> Void)? = nil) {
-        self.alpha = 1
         UIView.animate(withDuration: duration,
                        delay: 0,
                        options: [.curveEaseIn]) {

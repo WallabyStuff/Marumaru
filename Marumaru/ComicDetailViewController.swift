@@ -129,6 +129,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     private func setupEpisodeTableView() {
         let nibName = UINib(nibName: ComicEpisodeThumbnailTableCell.identifier, bundle: nil)
         comicEpisodeTableView.register(nibName, forCellReuseIdentifier: ComicEpisodeThumbnailTableCell.identifier)
+        comicEpisodeTableView.delegate = self
     }
     
     private func setupScrollToBottomButton() {
@@ -254,20 +255,6 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     
     // MARK: - Methods
     
-    private func fadeScrollToBottomButton(bool: Bool) {
-        if bool {
-            // fade out
-            UIView.animate(withDuration: 0.3) {
-                self.scrollToBottomButton.alpha = 0
-            }
-        } else {
-            // fade in
-            UIView.animate(withDuration: 0.3) {
-                self.scrollToBottomButton.alpha = 1
-            }
-        }
-    }
-    
     private func scrollToBottom() {
         if comicEpisodeTableView.contentSize.height > 0 {
             let indexPath = IndexPath(row: viewModel.comicEpisodeAmount - 1, section: 0)
@@ -297,14 +284,14 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
 
 // MARK: - Extenstions
 
-extension ComicDetailViewController: UIScrollViewDelegate {
+extension ComicDetailViewController: UITableViewDelegate {
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
         let actualPosition = scrollView.panGestureRecognizer.translation(in: scrollView.superview)
         
         if actualPosition.y > 0 {
-            fadeScrollToBottomButton(bool: true)
+            scrollToBottomButton.startFadeOutAnimation(duration: 0.2)
         } else {
-            fadeScrollToBottomButton(bool: false)
+            scrollToBottomButton.startFadeInAnimation(duration: 0.2)
         }
     }
 }
