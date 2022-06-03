@@ -42,7 +42,7 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     private var cellHeightDictionary: NSMutableDictionary = [:]
     private let safeAreaInsets = UIApplication.shared.windows[0].safeAreaInsets
     private var isSceneZoomed = false
-    private var sceneScrollView = FlexibleSceneScrollView()
+    private var comicStripScrollView = ComicStripScrollView()
     private var sceneDoubleTapGestureRecognizer = UITapGestureRecognizer()
     
     
@@ -93,16 +93,20 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func setupSceneScrollView() {
-        sceneScrollView = FlexibleSceneScrollView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
-        sceneScrollView.minimumZoomScale = 1
-        sceneScrollView.maximumZoomScale = 3
-        sceneScrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: bottomIndicatorView.frame.height, right: 0)
-        view.insertSubview(sceneScrollView, at: 0)
-        sceneScrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        sceneScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        sceneScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        sceneScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        sceneScrollView.delegate = self
+        comicStripScrollView = ComicStripScrollView(frame: .zero)
+        comicStripScrollView.minimumZoomScale = 1
+        comicStripScrollView.maximumZoomScale = 3
+        comicStripScrollView.contentInset = UIEdgeInsets(top: compactAppbarHeight,
+                                                    left: 0,
+                                                    bottom: bottomIndicatorView.frame.height,
+                                                    right: 0)
+        view.insertSubview(comicStripScrollView, at: 0)
+        comicStripScrollView.translatesAutoresizingMaskIntoConstraints = false
+        comicStripScrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        comicStripScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        comicStripScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        comicStripScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        comicStripScrollView.delegate = self
     }
     
     private func setupBottomIndicatorView() {
@@ -202,8 +206,7 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     private func bindComicStripScrollView() {
         viewModel.comicStripScenesObservable
             .subscribe(with: self, onNext: { vc, scenes in
-                vc.sceneScrollView.sceneArr = scenes
-                vc.sceneScrollView.reloadData()
+                vc.comicStripScrollView.reload(scenes: scenes)
                 vc.viewModel.saveToWatchHistory()
             })
             .disposed(by: disposeBag)
@@ -213,10 +216,11 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
         viewModel.isLoadingScenes
             .subscribe(with: self, onNext: { vc, isLoading in
                 if isLoading {
+                    vc.comicStripScrollView.isUserInteractionEnabled = false
                     vc.view.playRandomCatLottie()
                     vc.disableIndicatorButtons()
-                    vc.sceneScrollView.clearAndReloadData()
                 } else {
+                    vc.comicStripScrollView.isUserInteractionEnabled = true
                     vc.view.stopLottie()
                     vc.enableIndicatorButtons()
                 }
@@ -240,7 +244,7 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
         let sceneTapGestureRocognizer = UITapGestureRecognizer()
         sceneTapGestureRocognizer.numberOfTapsRequired = 1
         sceneTapGestureRocognizer.require(toFail: sceneDoubleTapGestureRecognizer)
-        sceneScrollView.rx
+        comicStripScrollView.rx
             .gesture(sceneTapGestureRocognizer)
             .when(.recognized)
             .subscribe(with: self, onNext: { vc, _ in
@@ -256,19 +260,19 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     private func bindSceneDoubleTapGesture() {
         sceneDoubleTapGestureRecognizer = UITapGestureRecognizer()
         sceneDoubleTapGestureRecognizer.numberOfTapsRequired = 2
-        sceneScrollView.addGestureRecognizer(sceneDoubleTapGestureRecognizer)
-        sceneScrollView.rx
+        comicStripScrollView.addGestureRecognizer(sceneDoubleTapGestureRecognizer)
+        comicStripScrollView.rx
             .gesture(sceneDoubleTapGestureRecognizer)
             .when(.recognized)
             .subscribe(with: self, onNext: { vc, recognizer in
-                let tapPoint = recognizer.location(in: vc.sceneScrollView.contentView)
+                let tapPoint = recognizer.location(in: vc.comicStripScrollView.contentView)
                 vc.zoom(point: tapPoint)
             })
             .disposed(by: disposeBag)
     }
     
     private func bindSceneScrollView() {
-        sceneScrollView.rx.contentOffset
+        comicStripScrollView.rx.contentOffset
             .subscribe(with: self, onNext: { vc, offset in
                 let overPanThreshold: CGFloat = 50
                 // reached the top
@@ -277,13 +281,13 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
                 }
                 
                 // reached the bottom
-                if offset.y > vc.sceneScrollView.contentSize.height - vc.view.frame.height + overPanThreshold + vc.bottomIndicatorView.frame.height {
+                if offset.y > vc.comicStripScrollView.contentSize.height - vc.view.frame.height + overPanThreshold + vc.bottomIndicatorView.frame.height {
                     vc.showNavigationBar()
                 }
             })
             .disposed(by: disposeBag)
         
-        sceneScrollView.rx.panGesture()
+        comicStripScrollView.rx.panGesture()
             .when(.began)
             .subscribe(with: self, onNext: { vc, _ in
                 vc.hideNavigationBar()
@@ -339,7 +343,7 @@ extension ComicStripViewController {
     func zoom(point: CGPoint) {
         if isSceneZoomed {
             // zoom out
-            sceneScrollView.zoom(to: CGRect(x: point.x,
+            comicStripScrollView.zoom(to: CGRect(x: point.x,
                                             y: point.y,
                                             width: self.view.frame.width,
                                             height: self.view.frame.height),
@@ -348,7 +352,7 @@ extension ComicStripViewController {
         } else {
             // zoom in
             hideNavigationBar()
-            sceneScrollView.zoom(to: CGRect(x: point.x,
+            comicStripScrollView.zoom(to: CGRect(x: point.x,
                                             y: point.y,
                                             width: self.view.frame.width / 2,
                                             height: self.view.frame.height / 2),
@@ -395,7 +399,7 @@ extension ComicStripViewController {
 extension ComicStripViewController: UIScrollViewDelegate {
     // Set scene scrollview zoomable
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return self.sceneScrollView.contentView
+        return self.comicStripScrollView.contentView
     }
 }
 

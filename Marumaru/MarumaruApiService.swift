@@ -43,7 +43,7 @@ class MarumaruApiService {
     typealias ComicAndEpisodeSN = (comicSN: String, episodeSN: String)
     typealias URLToDoc = [URL: Document]
     
-    var basePath = "https://marumaru260.com"
+    var basePath = "https://marumaru261.com"
     static let searchPath = "/bbs/search.php?url=%2Fbbs%2Fsearch.php&stx="
     static let comicPath = "/bbs/cmoic"
     
