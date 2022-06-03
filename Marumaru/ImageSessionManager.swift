@@ -57,8 +57,28 @@ extension ImageSessionManager {
         return uuid
     }
     
-    public func cancelImageRequest(_ uuid: UUID) {
+    public func cancelImageRequest(_ uuid: UUID?) {
+        guard let uuid = uuid else {
+            return
+        }
+
         runningRequest[uuid]?.cancel()
         runningRequest.removeValue(forKey: uuid)
+    }
+    
+    public func pauseImageRequest(_ uuid: UUID?) {
+        guard let uuid = uuid else {
+            return
+        }
+
+        runningRequest[uuid]?.cancel()
+    }
+    
+    public func resumeImageRequeest(_ uuid: UUID?) {
+        guard let uuid = uuid else {
+            return
+        }
+
+        runningRequest[uuid]?.resume()
     }
 }

@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		43799AA2209028912C9500E7 /* Pods_MarumaruTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65C798793CC3D721071DC869 /* Pods_MarumaruTests.framework */; };
-		49561FB926DCE0AC00FEE026 /* FlexibleSceneScrollViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49561FB826DCE0AC00FEE026 /* FlexibleSceneScrollViewCell.swift */; };
-		49C63E4426D59202004E576F /* FlexibleSceneScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C63E4326D59202004E576F /* FlexibleSceneScrollView.swift */; };
 		6B1ED755F0C59B60BA4F1AF9 /* Pods_Marumaru_MarumaruUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0E2F23C10B67B2F153ED776 /* Pods_Marumaru_MarumaruUITests.framework */; };
 		7641C3AF2646826100A79A79 /* PopOverComicEpisodeTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641C3AE2646826100A79A79 /* PopOverComicEpisodeTableCell.swift */; };
 		7641C3B1264682B900A79A79 /* PopOverComicEpisodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641C3B0264682B900A79A79 /* PopOverComicEpisodeViewController.swift */; };
@@ -74,7 +72,6 @@
 		8E553E762846260C00B7F5BC /* SearchResultSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E553E752846260C00B7F5BC /* SearchResultSection.swift */; };
 		8E553E792846305A00B7F5BC /* SingleButtonFooterReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E553E772846305A00B7F5BC /* SingleButtonFooterReusableView.swift */; };
 		8E553E7A2846305A00B7F5BC /* SingleButtonFooterReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E553E782846305A00B7F5BC /* SingleButtonFooterReusableView.xib */; };
-		8E662DE927AC2C3E0048BF39 /* FlexibleSceneScrollViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E662DE827AC2C3E0048BF39 /* FlexibleSceneScrollViewCellModel.swift */; };
 		8E662DEB27AC2FF40048BF39 /* WatchHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E662DEA27AC2FF40048BF39 /* WatchHistoryViewModel.swift */; };
 		8E82D73F27B25701008230BE /* UIView+Insets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E82D73E27B25701008230BE /* UIView+Insets.swift */; };
 		8E83DAD12842058F00C0A10B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E83DAD02842058F00C0A10B /* Main.storyboard */; };
@@ -89,6 +86,8 @@
 		8E92C01A283EA3E500E0CD82 /* rainbow_cat.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E92C019283EA3E500E0CD82 /* rainbow_cat.json */; };
 		8E92C02C283F68ED00E0CD82 /* UIView+LottieAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E92C02B283F68ED00E0CD82 /* UIView+LottieAnimation.swift */; };
 		8E961293284929CA009422BE /* EmptyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E961292284929C9009422BE /* EmptyViewController.swift */; };
+		8E961295284936E0009422BE /* ComicStirpSceneScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E961294284936E0009422BE /* ComicStirpSceneScrollView.swift */; };
+		8E96129728493707009422BE /* ComicStripScrollViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E96129628493707009422BE /* ComicStripScrollViewModel.swift */; };
 		8EA6B5B728392BA70019B590 /* ComicStrip.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8EA6B5B628392BA70019B590 /* ComicStrip.storyboard */; };
 		8EA6B5B928392BD30019B590 /* PopOverComicEpisode.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8EA6B5B828392BD30019B590 /* PopOverComicEpisode.storyboard */; };
 		8EAFD069283B78B700FD569F /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAFD068283B78B700FD569F /* MainTabBarController.swift */; };
@@ -132,8 +131,6 @@
 /* Begin PBXFileReference section */
 		38EBA91B9EDAEE6B8214F7AB /* Pods-Marumaru-MarumaruUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Marumaru-MarumaruUITests.release.xcconfig"; path = "Target Support Files/Pods-Marumaru-MarumaruUITests/Pods-Marumaru-MarumaruUITests.release.xcconfig"; sourceTree = "<group>"; };
 		3973B1872784EB3A55259E62 /* Pods-Marumaru-MarumaruUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Marumaru-MarumaruUITests.debug.xcconfig"; path = "Target Support Files/Pods-Marumaru-MarumaruUITests/Pods-Marumaru-MarumaruUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		49561FB826DCE0AC00FEE026 /* FlexibleSceneScrollViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlexibleSceneScrollViewCell.swift; sourceTree = "<group>"; };
-		49C63E4326D59202004E576F /* FlexibleSceneScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexibleSceneScrollView.swift; sourceTree = "<group>"; };
 		5053DE916A9DA84FEEDB7569 /* Pods-MarumaruTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MarumaruTests.release.xcconfig"; path = "Target Support Files/Pods-MarumaruTests/Pods-MarumaruTests.release.xcconfig"; sourceTree = "<group>"; };
 		65C798793CC3D721071DC869 /* Pods_MarumaruTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MarumaruTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7641C3AE2646826100A79A79 /* PopOverComicEpisodeTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopOverComicEpisodeTableCell.swift; sourceTree = "<group>"; };
@@ -203,7 +200,6 @@
 		8E553E752846260C00B7F5BC /* SearchResultSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultSection.swift; sourceTree = "<group>"; };
 		8E553E772846305A00B7F5BC /* SingleButtonFooterReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleButtonFooterReusableView.swift; sourceTree = "<group>"; };
 		8E553E782846305A00B7F5BC /* SingleButtonFooterReusableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SingleButtonFooterReusableView.xib; sourceTree = "<group>"; };
-		8E662DE827AC2C3E0048BF39 /* FlexibleSceneScrollViewCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexibleSceneScrollViewCellModel.swift; sourceTree = "<group>"; };
 		8E662DEA27AC2FF40048BF39 /* WatchHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchHistoryViewModel.swift; sourceTree = "<group>"; };
 		8E82D73E27B25701008230BE /* UIView+Insets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Insets.swift"; sourceTree = "<group>"; };
 		8E83DAD02842058F00C0A10B /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
@@ -218,6 +214,8 @@
 		8E92C019283EA3E500E0CD82 /* rainbow_cat.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rainbow_cat.json; sourceTree = "<group>"; };
 		8E92C02B283F68ED00E0CD82 /* UIView+LottieAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+LottieAnimation.swift"; sourceTree = "<group>"; };
 		8E961292284929C9009422BE /* EmptyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyViewController.swift; sourceTree = "<group>"; };
+		8E961294284936E0009422BE /* ComicStirpSceneScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicStirpSceneScrollView.swift; sourceTree = "<group>"; };
+		8E96129628493707009422BE /* ComicStripScrollViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicStripScrollViewModel.swift; sourceTree = "<group>"; };
 		8EA6B5B628392BA70019B590 /* ComicStrip.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ComicStrip.storyboard; sourceTree = "<group>"; };
 		8EA6B5B828392BD30019B590 /* PopOverComicEpisode.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PopOverComicEpisode.storyboard; sourceTree = "<group>"; };
 		8EAFD068283B78B700FD569F /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
@@ -369,7 +367,6 @@
 				7684F3E026CAA49F0012BD8E /* ComicThumbnailCollectionCell.xib */,
 				8EBCD0EF27AAAB8300BEE157 /* ComicRankTableCell.swift */,
 				8EBCD0F027AAAB8300BEE157 /* ComicRankTableCell.xib */,
-				49561FB826DCE0AC00FEE026 /* FlexibleSceneScrollViewCell.swift */,
 				7641C3AE2646826100A79A79 /* PopOverComicEpisodeTableCell.swift */,
 				8E3192C9283A15B900C350F9 /* PopOverComicEpisodeTableCell.xib */,
 				8EAFD06A283CAA2500FD569F /* SearchResultComicCollectionCell.swift */,
@@ -412,7 +409,8 @@
 		76937C592657925300D36C45 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				49C63E4326D59202004E576F /* FlexibleSceneScrollView.swift */,
+				8E961294284936E0009422BE /* ComicStirpSceneScrollView.swift */,
+				8E96129628493707009422BE /* ComicStripScrollViewModel.swift */,
 				8E3A896527AB9FB00014303D /* TagLabel.swift */,
 				8E87CE6127ACEAD0008CD9C9 /* WatchHistoryCollectionReusableView.swift */,
 				8ED56F3327AEFBAA00E78A8A /* ThumbnailView.swift */,
@@ -515,7 +513,6 @@
 				8E8D381A27ABA4C700E82FE2 /* ComicDetailViewModel.swift */,
 				8E8D381C27ABD56600E82FE2 /* ComicStripViewModel.swift */,
 				8E662DEA27AC2FF40048BF39 /* WatchHistoryViewModel.swift */,
-				8E662DE827AC2C3E0048BF39 /* FlexibleSceneScrollViewCellModel.swift */,
 				8ED56F2F27ADACD000E78A8A /* ComicEpisodePopOverViewModel.swift */,
 				8E4146832843BBE50005BCFD /* SearchHistoryViewModel.swift */,
 				8E41468128439ED00005BCFD /* SearchResultViewModel.swift */,
@@ -890,7 +887,6 @@
 				8E553E762846260C00B7F5BC /* SearchResultSection.swift in Sources */,
 				764AE0E2262DA971000F490D /* WatchHistoryViewController.swift in Sources */,
 				8EFCD0EC2841F0E600685503 /* Array+IsInBound.swift in Sources */,
-				49561FB926DCE0AC00FEE026 /* FlexibleSceneScrollViewCell.swift in Sources */,
 				765C8B29261CA2C30056C83B /* AppDelegate.swift in Sources */,
 				8E319309283B540900C350F9 /* BaseViewController.swift in Sources */,
 				8E92C02C283F68ED00E0CD82 /* UIView+LottieAnimation.swift in Sources */,
@@ -914,12 +910,12 @@
 				8EFCD0EA2840DB3900685503 /* WatchHistorySection.swift in Sources */,
 				8E414672284397E20005BCFD /* SearchHistory.swift in Sources */,
 				8E41468228439ED00005BCFD /* SearchResultViewModel.swift in Sources */,
+				8E96129728493707009422BE /* ComicStripScrollViewModel.swift in Sources */,
 				8E553E792846305A00B7F5BC /* SingleButtonFooterReusableView.swift in Sources */,
+				8E961295284936E0009422BE /* ComicStirpSceneScrollView.swift in Sources */,
 				8E41465F284380120005BCFD /* String+Localizable.swift in Sources */,
 				7641C3B1264682B900A79A79 /* PopOverComicEpisodeViewController.swift in Sources */,
 				765C8C6D261F16880056C83B /* ComicStripViewController.swift in Sources */,
-				8E662DE927AC2C3E0048BF39 /* FlexibleSceneScrollViewCellModel.swift in Sources */,
-				49C63E4426D59202004E576F /* FlexibleSceneScrollView.swift in Sources */,
 				8E3A896627AB9FB00014303D /* TagLabel.swift in Sources */,
 				8ED56F3227AEFA7F00E78A8A /* UIImage+AverageColor.swift in Sources */,
 				8E4146842843BBE50005BCFD /* SearchHistoryViewModel.swift in Sources */,
