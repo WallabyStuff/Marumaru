@@ -41,14 +41,20 @@ class MarumaruApiService {
     static let shared = MarumaruApiService()
     
     typealias ComicAndEpisodeSN = (comicSN: String, episodeSN: String)
-    typealias URLToDoc = [URL: Document]
+    typealias URLToDoc = (url: URL, doc: Document)
     
     var basePath = "https://marumaru261.com"
     static let searchPath = "/bbs/search.php?url=%2Fbbs%2Fsearch.php&stx="
     static let comicPath = "/bbs/cmoic"
     
     private var disposeBag = DisposeBag()
-    private var docuemntCache: URLToDoc = [:]
+    private var docuemntCache = [URLToDoc]() {
+        didSet {
+            if docuemntCache.count > 20 {
+                docuemntCache.removeFirst()
+            }
+        }
+    }
     
     private init() { }
 }
@@ -64,10 +70,10 @@ extension MarumaruApiService {
                 return Disposables.create()
             }
             
-            // TODO: - Manage docuemnt cache with REALM
             if caching {
-                if let cache = self.docuemntCache[url] {
-                    observer(.success(cache))
+                if let index = self.docuemntCache.firstIndex(where: {$0.url == url}) {
+                    let cache = self.docuemntCache[index]
+                    observer(.success(cache.doc))
                     return Disposables.create()
                 }
             }
@@ -76,7 +82,7 @@ extension MarumaruApiService {
                 let html = try String(contentsOf: url, encoding: .utf8)
                 let doc = try SwiftSoup.parse(html)
                 observer(.success(doc))
-                self.docuemntCache[url] = doc
+                self.docuemntCache.append((url, doc))
             } catch {
                 observer(.failure(MarumaruApiError.failToParse))
             }
