@@ -93,24 +93,7 @@ class ComicStripScrollView: UIScrollView {
     }
     
     
-    // MARK: - Constraints
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        configureSceneConstraints()
-    }
-
-    private func configureSceneConstraints() {
-        sceneImageViews.forEach { scene in
-            if let image = scene.imageView.image {
-                scene.heightConstraint.constant = fitHeight(image)
-            } else {
-                scene.heightConstraint.constant = frame.width * defaultSceneHeightProportion
-            }
-        }
-        
-        updateContentViewHeight()
-    }
+    // TODO: - Update constraints when size is changed
     
     
     // MARK: - Methods
@@ -177,6 +160,7 @@ extension ComicStripScrollView {
                     // set previous scene image
                     let previouseScene = strongSelf.sceneImageViews[index - 1]
                     previouseScene.imageView.image = resultImage
+                    previouseScene.imageView.backgroundColor = R.color.backgroundWhite()!
                     
                     // Resize image view by iamge resolution
                     previouseScene.heightConstraint.constant = strongSelf.fitHeight(resultImage)
