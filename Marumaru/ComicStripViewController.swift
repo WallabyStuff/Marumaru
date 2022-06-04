@@ -34,6 +34,7 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     @IBOutlet weak var previousEpisodeButton: UIButton!
     @IBOutlet weak var bottomIndicatorView: UIView!
     @IBOutlet weak var appbarViewHieghtConstraint: NSLayoutConstraint!
+    @IBOutlet weak var comicStripScrollView: ComicStripScrollView!
     
     static let identifier = R.storyboard.comicStrip.comicStripStroyboard.identifier
     
@@ -42,7 +43,6 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     private var cellHeightDictionary: NSMutableDictionary = [:]
     private let safeAreaInsets = UIApplication.shared.windows[0].safeAreaInsets
     private var isSceneZoomed = false
-    private var comicStripScrollView = ComicStripScrollView()
     private var sceneDoubleTapGestureRecognizer = UITapGestureRecognizer()
     
     
@@ -93,19 +93,10 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func setupSceneScrollView() {
-        comicStripScrollView = ComicStripScrollView(frame: .zero)
-        comicStripScrollView.minimumZoomScale = 1
-        comicStripScrollView.maximumZoomScale = 3
         comicStripScrollView.contentInset = UIEdgeInsets(top: compactAppbarHeight,
-                                                    left: 0,
-                                                    bottom: bottomIndicatorView.frame.height,
-                                                    right: 0)
-        view.insertSubview(comicStripScrollView, at: 0)
-        comicStripScrollView.translatesAutoresizingMaskIntoConstraints = false
-        comicStripScrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        comicStripScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        comicStripScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        comicStripScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+                                                         left: 0,
+                                                         bottom: bottomIndicatorView.frame.height,
+                                                         right: 0)
         comicStripScrollView.delegate = self
     }
     
