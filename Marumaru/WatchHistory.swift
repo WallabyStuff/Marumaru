@@ -32,6 +32,7 @@ class WatchHistory: Object {
         self.episodeSN = episodeSN
         self.title = title
         self.thumbnailImagePath = thumbnailImagePath
+        self.timeStamp = Int64(Date().timeIntervalSince1970)
     }
     
     override class func primaryKey() -> String? {
