@@ -24,6 +24,7 @@ extension WatchHistoryManager {
                                             episodeSN: comicEpisode.episodeSN,
                                             title: comicEpisode.title,
                                             thumbnailImagePath: comicEpisode.thumbnailImagePath ?? "")
+            print(comicEpisode.thumbnailImagePath)
 
             self.addData(watchHistory: watchHistory)
                 .subscribe(onCompleted: {
