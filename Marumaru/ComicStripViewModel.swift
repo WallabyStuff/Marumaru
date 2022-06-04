@@ -56,6 +56,7 @@ extension ComicStripViewModel {
                 strongSelf.comicStripScenes = scenes
                 strongSelf.comicStripScenesObservable.accept(scenes)
                 strongSelf.updateComicEpisodes()
+                strongSelf.currentEpisode.thumbnailImagePath = scenes.first?.imagePath
             }, onFailure: { strongSelf, _ in
                 strongSelf.comicStripScenesObservable.accept([])
                 strongSelf.failToLoadingScenes.accept(true)
