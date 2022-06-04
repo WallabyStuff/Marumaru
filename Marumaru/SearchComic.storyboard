@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="L0Y-9U-2JT">
-    <device id="retina6_1" orientation="portrait" appearance="dark"/>
+    <device id="retina6_0" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
@@ -14,20 +14,20 @@
             <objects>
                 <viewController storyboardIdentifier="SearchComicStoryboard" id="gDu-Gd-4Ok" customClass="SearchComicViewController" customModule="Marumaru" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="LkL-Kq-1oJ">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y2K-m9-81V">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                             </containerView>
                             <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hKu-Fo-WR9">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="72"/>
+                                <rect key="frame" x="0.0" y="0.0" width="390" height="72"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="drq-GV-fuu">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="72"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="390" height="72"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="만화 제목으로 검색해보세요!" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="f6V-W2-Udq">
-                                            <rect key="frame" x="56" y="16" width="338" height="48"/>
+                                            <rect key="frame" x="56" y="16" width="314" height="48"/>
                                             <color key="backgroundColor" name="BackgroundWhite-lighter"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="48" id="hdS-ev-n4F"/>
@@ -37,7 +37,7 @@
                                             <textInputTraits key="textInputTraits"/>
                                         </textField>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z8L-cW-kYr">
-                                            <rect key="frame" x="358" y="30" width="20" height="20"/>
+                                            <rect key="frame" x="334" y="30" width="20" height="20"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="20" id="epS-VQ-xfd"/>
                                                 <constraint firstAttribute="width" constant="20" id="iKv-jE-Bfc"/>
@@ -79,16 +79,15 @@
                             <constraint firstItem="y2K-m9-81V" firstAttribute="trailing" secondItem="4zu-Cd-AXH" secondAttribute="trailing" id="9Ie-Vh-38L"/>
                             <constraint firstItem="hKu-Fo-WR9" firstAttribute="leading" secondItem="4zu-Cd-AXH" secondAttribute="leading" id="BDf-HE-R39"/>
                             <constraint firstItem="y2K-m9-81V" firstAttribute="leading" secondItem="4zu-Cd-AXH" secondAttribute="leading" id="MNf-d5-8j8"/>
-                            <constraint firstAttribute="bottom" secondItem="y2K-m9-81V" secondAttribute="bottom" id="U3i-gR-Qss"/>
                             <constraint firstItem="hKu-Fo-WR9" firstAttribute="trailing" secondItem="4zu-Cd-AXH" secondAttribute="trailing" id="YEb-SL-HXe"/>
                             <constraint firstItem="hKu-Fo-WR9" firstAttribute="top" secondItem="LkL-Kq-1oJ" secondAttribute="top" id="aoI-4j-2y8"/>
                             <constraint firstItem="y2K-m9-81V" firstAttribute="top" secondItem="LkL-Kq-1oJ" secondAttribute="top" id="g8b-3H-gWK"/>
+                            <constraint firstAttribute="bottom" secondItem="y2K-m9-81V" secondAttribute="bottom" id="kPf-IJ-3KB"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="lb3-BG-6ym"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <nil key="simulatedBottomBarMetrics"/>
-                    <size key="freeformSize" width="414" height="896"/>
                     <connections>
                         <outlet property="appbarViewHeightConstraint" destination="SRe-KC-UvJ" id="iDq-ZZ-FMI"/>
                         <outlet property="backButton" destination="KY9-xo-3ee" id="aGk-eC-gOR"/>
@@ -99,7 +98,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tdM-6g-Bpf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7044.9275362318849" y="128.57142857142856"/>
+            <point key="canvasLocation" x="7044.6153846153848" y="127.96208530805687"/>
         </scene>
         <!--Item-->
         <scene sceneID="BjU-TC-OQR">
@@ -108,7 +107,7 @@
                     <tabBarItem key="tabBarItem" title="Item" id="1Rt-7R-YYQ"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="L1t-h5-3en">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <rect key="frame" x="0.0" y="44" width="390" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -122,8 +121,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="arrow-left" width="50" height="50"/>
-        <image name="magnifying-glass-filled" width="50" height="50"/>
+        <image name="arrow-left" width="75" height="75"/>
+        <image name="magnifying-glass-filled" width="75" height="75"/>
         <namedColor name="BackgroundWhite">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
