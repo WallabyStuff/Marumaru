@@ -33,6 +33,7 @@ class ComicStripScrollView: UIScrollView {
     private var contentViewHeightConstraint = NSLayoutConstraint()
     
     private var sceneImageViews = [SceneImageView]()
+    private var lastestFrameWidth: CGFloat = 0
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -82,6 +83,7 @@ class ComicStripScrollView: UIScrollView {
     
     private func bind() {
         bindScenes()
+        bindSceneConstraints()
     }
     
     private func bindScenes() {
@@ -92,9 +94,38 @@ class ComicStripScrollView: UIScrollView {
             .disposed(by: disposeBag)
     }
     
+    private func bindSceneConstraints() {
+        viewModel.isFrameWidthChanged
+            .subscribe(with: self, onNext: { strongSelf, isChanged in
+                if isChanged {
+                    strongSelf.configureSceneConstraints()
+                }
+            })
+            .disposed(by: disposeBag)
+    }
     
-    // TODO: - Update constraints when size is changed
     
+    // MARK: - Constraints
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        if frame.width != lastestFrameWidth {
+            lastestFrameWidth = frame.width
+            viewModel.updateFrameWidth()
+        }
+    }
+    
+    private func configureSceneConstraints() {
+        sceneImageViews.forEach { scene in
+            if let image = scene.imageView.image {
+                scene.heightConstraint.constant = fitHeight(image)
+            } else {
+                scene.heightConstraint.constant = frame.width * defaultSceneHeightProportion
+            }
+        }
+    }
+
     
     // MARK: - Methods
     
