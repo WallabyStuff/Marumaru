@@ -26,13 +26,19 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     @IBOutlet weak var appbarViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var mainScrollView: UIScrollView!
     @IBOutlet weak var searchBarView: UIView!
+    
     @IBOutlet weak var newComicEpisodeContentsView: UIView!
     @IBOutlet weak var newComicEpisodeCollectionView: UICollectionView!
     @IBOutlet weak var refreshNewUpdateComicButton: UIButton!
+    @IBOutlet weak var newUpdateComicHeaderAnimationView: LottieAnimationView!
+    
     @IBOutlet weak var watchHistoryCollectionView: UICollectionView!
     @IBOutlet weak var showWatchHistoryButton: UIButton!
+    @IBOutlet weak var watchHistoryHeaderAnimationView: LottieAnimationView!
+    
     @IBOutlet weak var comicRankTableView: UITableView!
     @IBOutlet weak var refreshComicRankButton: UIButton!
+    @IBOutlet weak var comicRankHeaderAnimationView: LottieAnimationView!
     
     static let identifier = R.storyboard.main.mainStoryboard.identifier
     var viewModel: ViewModel
@@ -74,6 +80,12 @@ class MainViewController: BaseViewController, ViewModelInjectable {
         super.viewDidAppear(animated)
         bindNewUpdateComicLoadingState()
         bindComicRankLoadingLoadingState()
+        playAllHeaderAnimations()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        stopAllHeaderAnimations()
     }
     
     
@@ -431,5 +443,17 @@ class MainViewController: BaseViewController, ViewModelInjectable {
         })
         
         navigationController?.pushViewController(watchHistoryVC, animated: true)
+    }
+    
+    private func playAllHeaderAnimations() {
+        newUpdateComicHeaderAnimationView.play()
+        watchHistoryHeaderAnimationView.play()
+        comicRankHeaderAnimationView.play()
+    }
+    
+    private func stopAllHeaderAnimations() {
+        newUpdateComicHeaderAnimationView.stop()
+        watchHistoryHeaderAnimationView.stop()
+        comicRankHeaderAnimationView.stop()
     }
 }

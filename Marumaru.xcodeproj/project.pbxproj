@@ -62,7 +62,6 @@
 		8E442E892846A039009A7E8D /* sleeping_cat.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E442E852846A039009A7E8D /* sleeping_cat.json */; };
 		8E442E8A2846A039009A7E8D /* bubble_tea_cat.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E442E862846A039009A7E8D /* bubble_tea_cat.json */; };
 		8E4FFE1D2844F04B00A7ED7B /* eyes_blinking.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E4FFE1B2844F04B00A7ED7B /* eyes_blinking.json */; };
-		8E4FFE1E2844F04B00A7ED7B /* fire_burning.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E4FFE1C2844F04B00A7ED7B /* fire_burning.json */; };
 		8E4FFE202844F0AB00A7ED7B /* LottieAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4FFE1F2844F0AB00A7ED7B /* LottieAnimationView.swift */; };
 		8E4FFE222844F6B600A7ED7B /* trophy.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E4FFE212844F6B600A7ED7B /* trophy.json */; };
 		8E553E6E2845CF0F00B7F5BC /* MarumaruApiServiceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E553E6D2845CF0F00B7F5BC /* MarumaruApiServiceViewModel.swift */; };
@@ -73,6 +72,8 @@
 		8E553E792846305A00B7F5BC /* SingleButtonFooterReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E553E772846305A00B7F5BC /* SingleButtonFooterReusableView.swift */; };
 		8E553E7A2846305A00B7F5BC /* SingleButtonFooterReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E553E782846305A00B7F5BC /* SingleButtonFooterReusableView.xib */; };
 		8E662DEB27AC2FF40048BF39 /* WatchHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E662DEA27AC2FF40048BF39 /* WatchHistoryViewModel.swift */; };
+		8E828F63284B50C40065FA2F /* package.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E828F62284B50C40065FA2F /* package.json */; };
+		8E828F65284B52870065FA2F /* notification_bell.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E828F64284B52870065FA2F /* notification_bell.json */; };
 		8E82D73F27B25701008230BE /* UIView+Insets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E82D73E27B25701008230BE /* UIView+Insets.swift */; };
 		8E83DAD12842058F00C0A10B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E83DAD02842058F00C0A10B /* Main.storyboard */; };
 		8E83DAD728426DBA00C0A10B /* UICollectionView+ScrollTo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E83DAD628426DBA00C0A10B /* UICollectionView+ScrollTo.swift */; };
@@ -190,7 +191,6 @@
 		8E442E852846A039009A7E8D /* sleeping_cat.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sleeping_cat.json; sourceTree = "<group>"; };
 		8E442E862846A039009A7E8D /* bubble_tea_cat.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = bubble_tea_cat.json; sourceTree = "<group>"; };
 		8E4FFE1B2844F04B00A7ED7B /* eyes_blinking.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = eyes_blinking.json; sourceTree = "<group>"; };
-		8E4FFE1C2844F04B00A7ED7B /* fire_burning.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = fire_burning.json; sourceTree = "<group>"; };
 		8E4FFE1F2844F0AB00A7ED7B /* LottieAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationView.swift; sourceTree = "<group>"; };
 		8E4FFE212844F6B600A7ED7B /* trophy.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = trophy.json; sourceTree = "<group>"; };
 		8E553E6D2845CF0F00B7F5BC /* MarumaruApiServiceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarumaruApiServiceViewModel.swift; sourceTree = "<group>"; };
@@ -201,6 +201,8 @@
 		8E553E772846305A00B7F5BC /* SingleButtonFooterReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleButtonFooterReusableView.swift; sourceTree = "<group>"; };
 		8E553E782846305A00B7F5BC /* SingleButtonFooterReusableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SingleButtonFooterReusableView.xib; sourceTree = "<group>"; };
 		8E662DEA27AC2FF40048BF39 /* WatchHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchHistoryViewModel.swift; sourceTree = "<group>"; };
+		8E828F62284B50C40065FA2F /* package.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
+		8E828F64284B52870065FA2F /* notification_bell.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = notification_bell.json; sourceTree = "<group>"; };
 		8E82D73E27B25701008230BE /* UIView+Insets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Insets.swift"; sourceTree = "<group>"; };
 		8E83DAD02842058F00C0A10B /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		8E83DAD628426DBA00C0A10B /* UICollectionView+ScrollTo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+ScrollTo.swift"; sourceTree = "<group>"; };
@@ -424,10 +426,11 @@
 		76BEEB4B2622D80000642001 /* LottieAnimations */ = {
 			isa = PBXGroup;
 			children = (
+				8E828F62284B50C40065FA2F /* package.json */,
 				8E41466D284394AA0005BCFD /* coming_soon.json */,
 				8E4FFE1B2844F04B00A7ED7B /* eyes_blinking.json */,
-				8E4FFE1C2844F04B00A7ED7B /* fire_burning.json */,
 				8E4FFE212844F6B600A7ED7B /* trophy.json */,
+				8E828F64284B52870065FA2F /* notification_bell.json */,
 				8E442E822846A02A009A7E8D /* Cats */,
 			);
 			name = LottieAnimations;
@@ -665,7 +668,6 @@
 				76F912F526D160FA00B39BE7 /* loading_cat_radial.json in Resources */,
 				765C8B38261CA2C50056C83B /* LaunchScreen.storyboard in Resources */,
 				8E4FFE1D2844F04B00A7ED7B /* eyes_blinking.json in Resources */,
-				8E4FFE1E2844F04B00A7ED7B /* fire_burning.json in Resources */,
 				8E553E7428461D7700B7F5BC /* DescriptionHeaderReusableView.xib in Resources */,
 				8E3192CB283A15B900C350F9 /* PopOverComicEpisodeTableCell.xib in Resources */,
 				765C8B35261CA2C50056C83B /* Assets.xcassets in Resources */,
@@ -674,6 +676,7 @@
 				7684F3E226CAA49F0012BD8E /* ComicThumbnailCollectionCell.xib in Resources */,
 				8E442E882846A039009A7E8D /* lying_cat.json in Resources */,
 				8EA6B5B928392BD30019B590 /* PopOverComicEpisode.storyboard in Resources */,
+				8E828F63284B50C40065FA2F /* package.json in Resources */,
 				7684F3EA26CB5F6A0012BD8E /* ComicEpisodeThumbnailTableCell.xib in Resources */,
 				8EA6B5B728392BA70019B590 /* ComicStrip.storyboard in Resources */,
 				8EAFD06D283CAA2500FD569F /* SearchResultComicCollectionCell.xib in Resources */,
@@ -681,6 +684,7 @@
 				8ECAB666283911F3008E531D /* ComicDetail.storyboard in Resources */,
 				8EBCD0F227AAAB8300BEE157 /* ComicRankTableCell.xib in Resources */,
 				8E83DAD12842058F00C0A10B /* Main.storyboard in Resources */,
+				8E828F65284B52870065FA2F /* notification_bell.json in Resources */,
 				8E4FFE222844F6B600A7ED7B /* trophy.json in Resources */,
 				8ECAB66228390F6B008E531D /* WatchHistory.storyboard in Resources */,
 				8E41467E28439DA20005BCFD /* SearchResult.storyboard in Resources */,

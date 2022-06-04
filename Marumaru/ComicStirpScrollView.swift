@@ -124,6 +124,8 @@ class ComicStripScrollView: UIScrollView {
                 scene.heightConstraint.constant = frame.width * defaultSceneHeightProportion
             }
         }
+        
+        updateContentViewHeight()
     }
 
     
@@ -259,7 +261,7 @@ extension ComicStripScrollView {
         }
         
         sceneImageViews.removeAll()
-        scrollToTop()
+        scrollToTop(topInset: contentInset.top, animated: false)
     }
 }
 

@@ -620,7 +620,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.file` struct is generated, and contains static references to 11 files.
+  /// This `R.file` struct is generated, and contains static references to 12 files.
   struct file {
     /// Resource file `.swiftlint.yml`.
     static let swiftlintYml = Rswift.FileResource(bundle: R.hostingBundle, name: ".swiftlint", pathExtension: "yml")
@@ -632,12 +632,14 @@ struct R: Rswift.Validatable {
     static let coming_soonJson = Rswift.FileResource(bundle: R.hostingBundle, name: "coming_soon", pathExtension: "json")
     /// Resource file `eyes_blinking.json`.
     static let eyes_blinkingJson = Rswift.FileResource(bundle: R.hostingBundle, name: "eyes_blinking", pathExtension: "json")
-    /// Resource file `fire_burning.json`.
-    static let fire_burningJson = Rswift.FileResource(bundle: R.hostingBundle, name: "fire_burning", pathExtension: "json")
     /// Resource file `loading_cat_radial.json`.
     static let loading_cat_radialJson = Rswift.FileResource(bundle: R.hostingBundle, name: "loading_cat_radial", pathExtension: "json")
     /// Resource file `lying_cat.json`.
     static let lying_catJson = Rswift.FileResource(bundle: R.hostingBundle, name: "lying_cat", pathExtension: "json")
+    /// Resource file `notification_bell.json`.
+    static let notification_bellJson = Rswift.FileResource(bundle: R.hostingBundle, name: "notification_bell", pathExtension: "json")
+    /// Resource file `package.json`.
+    static let packageJson = Rswift.FileResource(bundle: R.hostingBundle, name: "package", pathExtension: "json")
     /// Resource file `rainbow_cat.json`.
     static let rainbow_catJson = Rswift.FileResource(bundle: R.hostingBundle, name: "rainbow_cat", pathExtension: "json")
     /// Resource file `sleeping_cat.json`.
@@ -675,12 +677,6 @@ struct R: Rswift.Validatable {
       return fileResource.bundle.url(forResource: fileResource)
     }
 
-    /// `bundle.url(forResource: "fire_burning", withExtension: "json")`
-    static func fire_burningJson(_: Void = ()) -> Foundation.URL? {
-      let fileResource = R.file.fire_burningJson
-      return fileResource.bundle.url(forResource: fileResource)
-    }
-
     /// `bundle.url(forResource: "loading_cat_radial", withExtension: "json")`
     static func loading_cat_radialJson(_: Void = ()) -> Foundation.URL? {
       let fileResource = R.file.loading_cat_radialJson
@@ -690,6 +686,18 @@ struct R: Rswift.Validatable {
     /// `bundle.url(forResource: "lying_cat", withExtension: "json")`
     static func lying_catJson(_: Void = ()) -> Foundation.URL? {
       let fileResource = R.file.lying_catJson
+      return fileResource.bundle.url(forResource: fileResource)
+    }
+
+    /// `bundle.url(forResource: "notification_bell", withExtension: "json")`
+    static func notification_bellJson(_: Void = ()) -> Foundation.URL? {
+      let fileResource = R.file.notification_bellJson
+      return fileResource.bundle.url(forResource: fileResource)
+    }
+
+    /// `bundle.url(forResource: "package", withExtension: "json")`
+    static func packageJson(_: Void = ()) -> Foundation.URL? {
+      let fileResource = R.file.packageJson
       return fileResource.bundle.url(forResource: fileResource)
     }
 

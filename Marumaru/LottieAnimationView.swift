@@ -14,6 +14,8 @@ class LottieAnimationView: UIView {
     // MARK: - Properties
     private var _animationName: String = ""
     public var animationView = AnimationView()
+    private var _insets: CGFloat = 0
+    private var isPlaying = false
     
     @IBInspectable
     var animationName: String {
@@ -23,6 +25,17 @@ class LottieAnimationView: UIView {
         set {
             _animationName = newValue
             configureAnimationView()
+        }
+    }
+    
+    @IBInspectable
+    var insets: CGFloat {
+        get {
+            return _insets
+        }
+        set {
+            _insets = newValue
+            configureAnimationViewSize()
         }
     }
     
@@ -38,28 +51,40 @@ class LottieAnimationView: UIView {
     }
     
     
+    // MARK: - Update sizes
+    
+    override func updateConstraints() {
+        super.updateConstraints()
+        configureAnimationViewSize()
+    }
+    
+    private func configureAnimationViewSize() {
+        animationView.frame = .init(x: insets, y: insets,
+                                    width: frame.width + -insets * 2,
+                                    height: frame.height + -insets * 2)
+    }
+    
+    
     // MARK: - Methods
     
     private func configureAnimationView() {
         animationView = AnimationView(name: animationName)
-        animationView.loopMode = .repeat(2)
+        animationView.loopMode = .loop
         animationView.sizeToFit()
         
         self.addSubview(animationView)
-        animationView.translatesAutoresizingMaskIntoConstraints = false
-        animationView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        animationView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        animationView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        animationView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        configureAnimationViewSize()
         
-        animationView.play()
+        play()
     }
     
     public func play() {
         animationView.play()
+        isPlaying = true
     }
     
     public func stop() {
         animationView.stop()
+        isPlaying = false
     }
 }
