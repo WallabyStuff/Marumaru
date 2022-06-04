@@ -113,13 +113,10 @@ extension ComicStripViewModel {
     }
     
     public func saveToWatchHistory() {
-        let currentEpisode = WatchHistory(comicSN: currentEpisode.comicSN,
-                                          episodeSN: currentEpisode.episodeSN,
-                                          title: currentEpisode.title,
-                                          thumbnailImagePath: comicStripScenes.first?.imagePath ?? "")
+        let currentEpisode = currentEpisode
         
         watchHistoryHandler
-            .addData(watchHistory: currentEpisode)
+            .addData(currentEpisode)
             .subscribe(with: self, onCompleted: { strongSelf in
                 strongSelf.updateRentWatchingEpisode.accept(currentEpisode.episodeSN)
             })

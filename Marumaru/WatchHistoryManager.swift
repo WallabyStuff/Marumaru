@@ -19,19 +19,19 @@ extension WatchHistoryManager {
     public func addData(_ comicEpisode: ComicEpisode) -> Completable {
         return Completable.create { [weak self] observer in
             guard let self = self else { return Disposables.create() }
-            
+
             let watchHistory = WatchHistory(comicSN: comicEpisode.comicSN,
                                             episodeSN: comicEpisode.episodeSN,
                                             title: comicEpisode.title,
                                             thumbnailImagePath: comicEpisode.thumbnailImagePath ?? "")
-            
+
             self.addData(watchHistory: watchHistory)
                 .subscribe(onCompleted: {
                     observer(.completed)
                 }, onError: { error in
                     observer(.error(error))
                 }).disposed(by: self.disposeBag)
-            
+
             return Disposables.create()
         }
     }
@@ -47,7 +47,7 @@ extension WatchHistoryManager {
             } catch {
                 observer(.error(error))
             }
-            
+
             return Disposables.create()
         }
     }
