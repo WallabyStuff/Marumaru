@@ -77,13 +77,7 @@ class SearchHistoryViewController: BaseViewController, ViewModelInjectable {
         registerSearchHistoryCell()
         registerSearchHistoryHeader()
         registerSearchHistoryFooter()
-        
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.minimumLineSpacing = 20
-        flowLayout.itemSize = CGSize(width: view.frame.width, height: 36)
-        flowLayout.headerReferenceSize = CGSize(width: view.frame.width, height: 100)
-        flowLayout.footerReferenceSize = CGSize(width: view.frame.width, height: 100)
-        searchHistoryCollectionView.collectionViewLayout = flowLayout
+        searchHistoryCollectionView.collectionViewLayout = flowLayout()
         
         searchHistoryCollectionView.clipsToBounds = false
         searchHistoryCollectionView.alwaysBounceVertical = true
@@ -131,6 +125,7 @@ class SearchHistoryViewController: BaseViewController, ViewModelInjectable {
         bindSearchHistoryCollectionView()
         bindSearchHistoryCollectionCell()
         bindCollectionViewScrollAction()
+        bindUpdateSearchHistoryFlowLayout()
     }
     
     private func bindSearchHistoryCollectionView() {
@@ -167,12 +162,21 @@ class SearchHistoryViewController: BaseViewController, ViewModelInjectable {
             .disposed(by: disposeBag)
     }
     
+    private func bindUpdateSearchHistoryFlowLayout() {
+        baseFrameSizeViewSizeDidChange
+            .subscribe(with: self, onNext: { strongSelf, _ in
+                strongSelf.searchHistoryCollectionView.collectionViewLayout = strongSelf.flowLayout()
+            })
+            .disposed(by: disposeBag)
+    }
+    
     
     // MARK: - Methods
     
     private func dataSourceFactory() -> RxCollectionViewSectionedReloadDataSource<SearchHistorySection> {
         let dataSource = RxCollectionViewSectionedReloadDataSource<SearchHistorySection>(configureCell: { _, cv, indexPath, historyItem in
-            guard let cell = cv.dequeueReusableCell(withReuseIdentifier: SearchHistoryCollectionCell.identifier, for: indexPath) as? SearchHistoryCollectionCell else {
+            guard let cell = cv.dequeueReusableCell(withReuseIdentifier: SearchHistoryCollectionCell.identifier,
+                                                    for: indexPath) as? SearchHistoryCollectionCell else {
                 return UICollectionViewCell()
             }
             
@@ -222,5 +226,15 @@ class SearchHistoryViewController: BaseViewController, ViewModelInjectable {
         })
             
         return dataSource
+    }
+    
+    private func flowLayout() -> UICollectionViewFlowLayout {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.minimumLineSpacing = 20
+        flowLayout.itemSize = CGSize(width: view.frame.width, height: 36)
+        flowLayout.headerReferenceSize = CGSize(width: view.frame.width, height: 100)
+        flowLayout.footerReferenceSize = CGSize(width: view.frame.width, height: 100)
+        
+        return flowLayout
     }
 }

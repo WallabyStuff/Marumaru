@@ -75,12 +75,7 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
     private func setupSearchResultCollectionView() {
         registerSearchResultCell()
         registerSearchResultHeader()
-        
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.minimumLineSpacing = 16
-        flowLayout.itemSize = CGSize(width: view.frame.width - 24, height: 128)
-        flowLayout.headerReferenceSize = CGSize(width: view.frame.width, height: 100)
-        searchResultCollectionView.collectionViewLayout = flowLayout
+        searchResultCollectionView.collectionViewLayout = flowLayout()
         
         searchResultCollectionView.clipsToBounds = false
         searchResultCollectionView.alwaysBounceVertical = true
@@ -122,6 +117,7 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
         bindSearchResultComicLoadingState()
         bindSearchResultComicFailState()
         bindSearchResultComicCollectionViewScrollAction()
+        bindUpdateSearchResultFlowLayout()
     }
     
     private func bindSearchResultComicCollectionView() {
@@ -204,6 +200,14 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
             }).disposed(by: disposeBag)
     }
     
+    private func bindUpdateSearchResultFlowLayout() {
+        baseFrameSizeViewSizeDidChange
+            .subscribe(with: self, onNext: { strongSelf, _ in
+                strongSelf.searchResultCollectionView.collectionViewLayout = strongSelf.flowLayout()
+            })
+            .disposed(by: disposeBag)
+    }
+    
     
     // MARK: - Methods
     
@@ -280,5 +284,14 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
         })
         
         return dataSource
+    }
+    
+    private func flowLayout() -> UICollectionViewFlowLayout {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.minimumLineSpacing = 16
+        flowLayout.itemSize = CGSize(width: view.frame.width - 24, height: 128)
+        flowLayout.headerReferenceSize = CGSize(width: view.frame.width, height: 100)
+        
+        return flowLayout
     }
 }

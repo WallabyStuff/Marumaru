@@ -6,7 +6,9 @@
 //
 
 import UIKit
+
 import RxSwift
+import RxCocoa
 
 class BaseViewController: UIViewController {
     
@@ -14,16 +16,31 @@ class BaseViewController: UIViewController {
     let regularAppbarHeight: CGFloat = 72
     let compactAppbarHeight: CGFloat = 52
     
+    var previousBaseFrameSize: CGRect = .zero
+    let baseFrameSizeViewSizeDidChange = BehaviorRelay<CGRect>(value: .zero)
+    
     var isStatusBarHidden: Bool = false {
         didSet {
             setNeedsStatusBarAppearanceUpdate()
         }
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        let currentBaseViewSize = view.frame
+        if previousBaseFrameSize != currentBaseViewSize {
+            baseFrameSizeViewSizeDidChange.accept(currentBaseViewSize)
+            previousBaseFrameSize = currentBaseViewSize
+        }
+    }
+    
     override var prefersStatusBarHidden: Bool {
            return isStatusBarHidden
     }
-    
+}
+
+extension BaseViewController {
     func makeHapticFeedback() {
         let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
         selectionFeedbackGenerator.selectionChanged()
