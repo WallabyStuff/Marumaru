@@ -71,6 +71,7 @@
 		8E553E762846260C00B7F5BC /* SearchResultSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E553E752846260C00B7F5BC /* SearchResultSection.swift */; };
 		8E553E792846305A00B7F5BC /* SingleButtonFooterReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E553E772846305A00B7F5BC /* SingleButtonFooterReusableView.swift */; };
 		8E553E7A2846305A00B7F5BC /* SingleButtonFooterReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E553E782846305A00B7F5BC /* SingleButtonFooterReusableView.xib */; };
+		8E656232284BCCD6000FF0A4 /* Pods_Marumaru.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA2BBEC6D1E3D4200654F131 /* Pods_Marumaru.framework */; };
 		8E662DEB27AC2FF40048BF39 /* WatchHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E662DEA27AC2FF40048BF39 /* WatchHistoryViewModel.swift */; };
 		8E828F63284B50C40065FA2F /* package.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E828F62284B50C40065FA2F /* package.json */; };
 		8E828F65284B52870065FA2F /* notification_bell.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E828F64284B52870065FA2F /* notification_bell.json */; };
@@ -109,7 +110,6 @@
 		8EFCD0E728408A3A00685503 /* UIView+StickyLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFCD0E628408A3A00685503 /* UIView+StickyLabel.swift */; };
 		8EFCD0EA2840DB3900685503 /* WatchHistorySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFCD0E92840DB3900685503 /* WatchHistorySection.swift */; };
 		8EFCD0EC2841F0E600685503 /* Array+IsInBound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFCD0EB2841F0E600685503 /* Array+IsInBound.swift */; };
-		EC52C6E5DD7CA30A46B08827 /* Pods_Marumaru.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA2BBEC6D1E3D4200654F131 /* Pods_Marumaru.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -250,7 +250,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EC52C6E5DD7CA30A46B08827 /* Pods_Marumaru.framework in Frameworks */,
+				8E656232284BCCD6000FF0A4 /* Pods_Marumaru.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

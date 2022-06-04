@@ -19,12 +19,6 @@ class BaseViewController: UIViewController {
     var previousBaseFrameSize: CGRect = .zero
     let baseFrameSizeViewSizeDidChange = BehaviorRelay<CGRect>(value: .zero)
     
-    var isStatusBarHidden: Bool = false {
-        didSet {
-            setNeedsStatusBarAppearanceUpdate()
-        }
-    }
-    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -33,10 +27,6 @@ class BaseViewController: UIViewController {
             baseFrameSizeViewSizeDidChange.accept(currentBaseViewSize)
             previousBaseFrameSize = currentBaseViewSize
         }
-    }
-    
-    override var prefersStatusBarHidden: Bool {
-           return isStatusBarHidden
     }
 }
 
