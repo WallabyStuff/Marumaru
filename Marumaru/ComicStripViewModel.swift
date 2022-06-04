@@ -56,7 +56,6 @@ extension ComicStripViewModel {
                 strongSelf.comicStripScenes = scenes
                 strongSelf.comicStripScenesObservable.accept(scenes)
                 strongSelf.updateComicEpisodes()
-                strongSelf.currentEpisode.thumbnailImagePath = scenes.first?.imagePath
             }, onFailure: { strongSelf, _ in
                 strongSelf.comicStripScenesObservable.accept([])
                 strongSelf.failToLoadingScenes.accept(true)
@@ -115,6 +114,7 @@ extension ComicStripViewModel {
     
     public func saveToWatchHistory() {
         let currentEpisode = currentEpisode
+        currentEpisode.thumbnailImagePath = comicStripScenes.first?.imagePath
         
         watchHistoryHandler
             .addData(currentEpisode)
