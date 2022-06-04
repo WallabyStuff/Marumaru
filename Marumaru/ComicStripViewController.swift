@@ -93,7 +93,7 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func setupSceneScrollView() {
-        comicStripScrollView.contentInset = UIEdgeInsets(top: compactAppbarHeight,
+        comicStripScrollView.contentInset = UIEdgeInsets(top: compactAppbarHeight + safeAreaInsets.top,
                                                          left: 0,
                                                          bottom: bottomIndicatorView.frame.height,
                                                          right: 0)
@@ -207,11 +207,11 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
         viewModel.isLoadingScenes
             .subscribe(with: self, onNext: { vc, isLoading in
                 if isLoading {
-                    vc.comicStripScrollView.isUserInteractionEnabled = false
+                    vc.comicStripScrollView.disableScrollView()
                     vc.view.playRandomCatLottie()
                     vc.disableIndicatorButtons()
                 } else {
-                    vc.comicStripScrollView.isUserInteractionEnabled = true
+                    vc.comicStripScrollView.enableScrollView()
                     vc.view.stopLottie()
                     vc.enableIndicatorButtons()
                 }
@@ -374,7 +374,6 @@ extension ComicStripViewController {
         if appbarView.alpha == 0 {
             appbarView.startFadeInAnimation(duration: 0.2)
             bottomIndicatorView.startFadeInAnimation(duration: 0.2)
-            isStatusBarHidden = false
         }
     }
     
@@ -382,7 +381,6 @@ extension ComicStripViewController {
         if appbarView.alpha == 1 {
             appbarView.startFadeOutAnimation(duration: 0.2)
             bottomIndicatorView.startFadeOutAnimation(duration: 0.2)
-            isStatusBarHidden = true
         }
     }
 }

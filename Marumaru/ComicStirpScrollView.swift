@@ -285,6 +285,22 @@ extension ComicStripScrollView {
     }
 }
 
+extension ComicStripScrollView {
+    func disableScrollView() {
+        isUserInteractionEnabled = false
+        isScrollEnabled = false
+        maximumZoomScale = 1
+        minimumZoomScale = 1
+    }
+    
+    func enableScrollView() {
+        isUserInteractionEnabled = true
+        isScrollEnabled = true
+        maximumZoomScale = 3
+        minimumZoomScale = 1
+    }
+}
+
 private extension UIView {
     var bottomY: CGFloat {
         return self.frame.origin.y + self.frame.height
