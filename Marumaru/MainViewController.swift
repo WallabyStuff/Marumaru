@@ -119,27 +119,38 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func setupUpdatedComicCollectionView() {
-        let nibName = UINib(nibName: ComicThumbnailCollectionCell.identifier, bundle: nil)
-        newComicEpisodeCollectionView.register(nibName, forCellWithReuseIdentifier: ComicThumbnailCollectionCell.identifier)
-        newComicEpisodeCollectionView.clipsToBounds = false
+        registerNewEpisodeCollecionCell()
         newComicEpisodeCollectionView.contentInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
+        newComicEpisodeCollectionView.clipsToBounds = false
         newComicEpisodeCollectionView.decelerationRate = .fast
     }
     
+    private func registerNewEpisodeCollecionCell() {
+        let nibName = UINib(nibName: R.nib.comicThumbnailCollectionCell.name, bundle: nil)
+        newComicEpisodeCollectionView.register(nibName, forCellWithReuseIdentifier: ComicThumbnailCollectionCell.identifier)
+    }
+    
     private func setupWatchHistoryCollectionView() {
-        let nibName = UINib(nibName: ComicThumbnailCollectionCell.identifier, bundle: nil)
-        watchHistoryCollectionView.register(nibName, forCellWithReuseIdentifier: ComicThumbnailCollectionCell.identifier)
+        registerWatchHistoryCollectionCell()
         watchHistoryCollectionView.clipsToBounds = false
         watchHistoryCollectionView.contentInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
         watchHistoryCollectionView.decelerationRate = .fast
     }
     
+    private func registerWatchHistoryCollectionCell() {
+        let nibName = UINib(nibName: R.nib.comicThumbnailCollectionCell.name, bundle: nil)
+        watchHistoryCollectionView.register(nibName, forCellWithReuseIdentifier: ComicThumbnailCollectionCell.identifier)
+    }
+    
     private func setupComicRankTableView() {
-        let nibName = UINib(nibName: ComicRankTableCell.identifier, bundle: nil)
-        comicRankTableView.register(nibName, forCellReuseIdentifier: ComicRankTableCell.identifier)
-        
+        registerComicRankTableCell()
         comicRankTableView.layer.cornerRadius = 12
         comicRankTableView.layer.masksToBounds = true
+    }
+    
+    private func registerComicRankTableCell() {
+        let nibName = UINib(nibName: R.nib.comicRankTableCell.name, bundle: nil)
+        comicRankTableView.register(nibName, forCellReuseIdentifier: ComicRankTableCell.identifier)
     }
     
         

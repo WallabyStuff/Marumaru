@@ -84,7 +84,7 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func registerSearchResultCell() {
-        let nibName = UINib(nibName: SearchResultComicCollectionCell.identifier, bundle: nil)
+        let nibName = UINib(nibName: R.nib.searchResultComicCollectionCell.name, bundle: nil)
         searchResultCollectionView.register(nibName, forCellWithReuseIdentifier: SearchResultComicCollectionCell.identifier)
     }
     

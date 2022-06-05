@@ -82,18 +82,30 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func setupWatchHistoryCollectionView() {
+        registerWatchHistoryCollectionCell()
+        registerWatchHistoryHeader()
+        registerWatchHistoryFooter()
+        
+        watchHistoryCollectionView.collectionViewLayout = flowLayout()
+        watchHistoryCollectionView.contentInset = UIEdgeInsets(top: compactAppbarHeight + view.safeAreaInsets.top + 24,
+                                                               left: 0, bottom: 0, right: 0)
+    }
+    
+    private func registerWatchHistoryCollectionCell() {
         let nibName = UINib(nibName: ComicThumbnailCollectionCell.identifier, bundle: nil)
         watchHistoryCollectionView.register(nibName, forCellWithReuseIdentifier: ComicThumbnailCollectionCell.identifier)
-        
+    }
+    
+    private func registerWatchHistoryHeader() {
         watchHistoryCollectionView.register(WatchHistoryCollectionReusableView.self,
                                             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                             withReuseIdentifier: WatchHistoryCollectionReusableView.identifier)
-        
-        watchHistoryCollectionView.collectionViewLayout = watchHistoryCollectionViewLayout()
-        watchHistoryCollectionView.contentInset = UIEdgeInsets(top: compactAppbarHeight + view.safeAreaInsets.top + 24,
-                                                               left: 0, bottom: 0, right: 0)
-        
-        watchHistoryCollectionView.register(WatchHistoryCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: WatchHistoryCollectionReusableView.identifier)
+    }
+    
+    private func registerWatchHistoryFooter() {
+        watchHistoryCollectionView.register(WatchHistoryCollectionReusableView.self,
+                                            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                            withReuseIdentifier: WatchHistoryCollectionReusableView.identifier)
     }
     
     private func setupClearHistoryButton() {
@@ -247,7 +259,7 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
 // MARK: - Extensions
 
 extension WatchHistoryViewController {
-    private func watchHistoryCollectionViewLayout() -> UICollectionViewCompositionalLayout {
+    private func flowLayout() -> UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout { _, environment in
             let itemSize = NSCollectionLayoutSize(
                 widthDimension: .absolute(136),

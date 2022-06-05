@@ -127,9 +127,13 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func setupEpisodeTableView() {
-        let nibName = UINib(nibName: ComicEpisodeThumbnailTableCell.identifier, bundle: nil)
-        comicEpisodeTableView.register(nibName, forCellReuseIdentifier: ComicEpisodeThumbnailTableCell.identifier)
+        registerEpisodeTableCell()
         comicEpisodeTableView.delegate = self
+    }
+    
+    private func registerEpisodeTableCell() {
+        let nibName = UINib(nibName: R.nib.comicEpisodeThumbnailTableCell.name, bundle: nil)
+        comicEpisodeTableView.register(nibName, forCellReuseIdentifier: ComicEpisodeThumbnailTableCell.identifier)
     }
     
     private func setupScrollToBottomButton() {

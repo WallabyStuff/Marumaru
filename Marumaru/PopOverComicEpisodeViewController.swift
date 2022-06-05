@@ -69,20 +69,15 @@ class PopOverComicEpisodeViewController: BaseViewController, ViewModelInjectable
     }
     
     private func setupEpisodeTableView() {
+        registerEpisodeTableCell()
         episodeTableView.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
         episodeTableView.tableFooterView = UIView()
-        
-        let nibName = UINib(nibName: R.nib.popOverComicEpisodeTableCell.identifier,
+    }
+    
+    private func registerEpisodeTableCell() {
+        let nibName = UINib(nibName: R.nib.popOverComicEpisodeTableCell.name,
                             bundle: nil)
         episodeTableView.register(nibName, forCellReuseIdentifier: PopOverComicEpisodeTableCell.identifier)
-        
-        episodeTableView.rx.itemSelected
-            .asDriver()
-            .drive(with: self, onNext: { vc, indexPath in
-                let selectedEpisode = vc.viewModel.cellItemForRow(at: indexPath)
-                vc.delegate?.didEpisodeSelected(selectedEpisode)
-                vc.dismiss(animated: true, completion: nil)
-            }).disposed(by: disposeBag)
     }
 
     
@@ -90,6 +85,7 @@ class PopOverComicEpisodeViewController: BaseViewController, ViewModelInjectable
     
     private func bind() {
         bindEpisodeTableView()
+        bindEpisodeTableItemSelected()
     }
     
     private func bindEpisodeTableView() {
@@ -105,7 +101,19 @@ class PopOverComicEpisodeViewController: BaseViewController, ViewModelInjectable
                 }
             }.disposed(by: disposeBag)
     }
+    
+    private func bindEpisodeTableItemSelected() {
+        episodeTableView.rx.itemSelected
+            .asDriver()
+            .drive(with: self, onNext: { vc, indexPath in
+                let selectedEpisode = vc.viewModel.cellItemForRow(at: indexPath)
+                vc.delegate?.didEpisodeSelected(selectedEpisode)
+                vc.dismiss(animated: true, completion: nil)
+            }).disposed(by: disposeBag)
+    }
 
+    
+    // MARK: - Method
     
     private func scrollToCurrentEpisode() {
         if let index = viewModel.currentEpisodeIndex {
