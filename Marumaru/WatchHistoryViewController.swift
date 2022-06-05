@@ -62,14 +62,6 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
     }
     
     
-    // MARK: - Overrides
-    
-    override func updateViewConstraints() {
-        super.updateViewConstraints()
-        configureAppbarViewConstraints()
-    }
-    
-    
     // MARK: - Setups
     
     private func setup() {
@@ -115,6 +107,12 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
     
     
     // MARK: - Configurations
+    
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
+        configureAppbarViewConstraints()
+    }
+    
     
     private func configureAppbarViewConstraints() {
         appbarViewHeightConstraint.constant = view.safeAreaInsets.top + compactAppbarHeight

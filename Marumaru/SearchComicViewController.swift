@@ -66,7 +66,6 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        focusSearchTextField()
         navigationController?.navigationBar.isHidden = true
     }
     
@@ -186,10 +185,6 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
         })
         
         present(comicDetailVC, animated: true, completion: nil)
-    }
-    
-    private func focusSearchTextField() {
-        searchTextField.becomeFirstResponder()
     }
     
     private func adaptiveDismiss(animated: Bool) {
