@@ -22,8 +22,6 @@ class ComicStripScrollViewModel {
     
     public var imageRequestResults = [PublishRelay<UIImage>]()
     public var imageRequestUUIDs = [UUID?]()
-    
-    public var isFrameWidthChanged = PublishRelay<Bool>()
 }
 
 extension ComicStripScrollViewModel {
@@ -72,9 +70,5 @@ extension ComicStripScrollViewModel {
                 imageSessionManager.cancelImageRequest(uuid)
             }
         }
-    }
-    
-    public func updateFrameWidth() {
-        isFrameWidthChanged.accept(true)
     }
 }
