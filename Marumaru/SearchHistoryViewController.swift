@@ -85,7 +85,7 @@ class SearchHistoryViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func registerSearchHistoryCell() {
-        let nibName = UINib(nibName: SearchHistoryCollectionCell.identifier, bundle: nil)
+        let nibName = UINib(nibName: R.nib.searchHistoryCollectionCell.name, bundle: nil)
         searchHistoryCollectionView.register(nibName, forCellWithReuseIdentifier: SearchHistoryCollectionCell.identifier)
     }
     
