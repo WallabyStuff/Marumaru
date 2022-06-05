@@ -11,21 +11,26 @@ import RxSwift
 import RxCocoa
 import RealmSwift
 
-class WatchHistoryManager {
-    private var disposeBag = DisposeBag()
-}
+class WatchHistoryManager: CRUDable {
+    
 
-extension WatchHistoryManager {
+    // MARK: - Properties
+    typealias Item = WatchHistory
+    private var disposeBag = DisposeBag()
+    
+    
+    // MARK: - Methods
+    
     public func addData(_ comicEpisode: ComicEpisode) -> Completable {
         return Completable.create { [weak self] observer in
             guard let self = self else { return Disposables.create() }
 
-            let watchHistory = WatchHistory(comicSN: comicEpisode.comicSN,
+            let item = WatchHistory(comicSN: comicEpisode.comicSN,
                                             episodeSN: comicEpisode.episodeSN,
                                             title: comicEpisode.title,
                                             thumbnailImagePath: comicEpisode.thumbnailImagePath ?? "")
 
-            self.addData(watchHistory: watchHistory)
+            self.addData(item)
                 .subscribe(onCompleted: {
                     observer(.completed)
                 }, onError: { error in
@@ -36,12 +41,12 @@ extension WatchHistoryManager {
         }
     }
     
-    public func addData(watchHistory: WatchHistory) -> Completable {
+    public func addData(_ item: WatchHistory) -> Completable {
         return Completable.create { observer in
             do {
                 let realmInstance = try Realm()
                 try realmInstance.safeWrite {
-                    realmInstance.add(watchHistory, update: .modified)
+                    realmInstance.add(item, update: .modified)
                 }
                 observer(.completed)
             } catch {
@@ -60,6 +65,22 @@ extension WatchHistoryManager {
                 observer(.success(watchHistories))
             } catch {
                 observer(.failure(error))
+            }
+            
+            return Disposables.create()
+        }
+    }
+    
+    public func deleteData(_ item: WatchHistory) -> Completable {
+        return Completable.create { observer in
+            do {
+                let realmInstance = try Realm()
+                try realmInstance.write {
+                    realmInstance.delete(item)
+                }
+                observer(.completed)
+            } catch {
+                observer(.error(error))
             }
             
             return Disposables.create()
