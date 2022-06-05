@@ -33,7 +33,9 @@ class ComicStripScrollView: UIScrollView {
     private var contentViewHeightConstraint = NSLayoutConstraint()
     
     private var sceneImageViews = [SceneImageView]()
-    private var lastestFrameWidth: CGFloat = 0
+    private var previousBaseViewFrame: CGRect = .zero
+    private var previousContentOffset: CGPoint = .zero
+    private var previousContentViewFrame: CGRect = .zero
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -83,7 +85,6 @@ class ComicStripScrollView: UIScrollView {
     
     private func bind() {
         bindScenes()
-        bindSceneConstraints()
     }
     
     private func bindScenes() {
@@ -94,25 +95,20 @@ class ComicStripScrollView: UIScrollView {
             .disposed(by: disposeBag)
     }
     
-    private func bindSceneConstraints() {
-        viewModel.isFrameWidthChanged
-            .subscribe(with: self, onNext: { strongSelf, isChanged in
-                if isChanged {
-                    strongSelf.configureSceneConstraints()
-                }
-            })
-            .disposed(by: disposeBag)
-    }
-    
-    
+
     // MARK: - Constraints
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        if frame.width != lastestFrameWidth {
-            lastestFrameWidth = frame.width
-            viewModel.updateFrameWidth()
+        // Actual size did change
+        if frame != previousBaseViewFrame {
+            previousBaseViewFrame = frame
+            previousContentOffset = contentOffset
+            previousContentViewFrame = contentView.frame
+            
+            configureSceneConstraints()
+            updateContentOffset()
         }
     }
     
@@ -126,6 +122,13 @@ class ComicStripScrollView: UIScrollView {
         }
         
         updateContentViewHeight()
+    }
+    
+    private func updateContentOffset() {
+        // Update scroll position
+        let newOffsetY = previousContentOffset.y * contentView.frame.height / previousContentViewFrame.height
+        let newOffset = CGPoint(x: 0, y: newOffsetY)
+        setContentOffset(newOffset, animated: false)
     }
 
     
@@ -291,6 +294,8 @@ extension ComicStripScrollView {
         isScrollEnabled = false
         maximumZoomScale = 1
         minimumZoomScale = 1
+        showsVerticalScrollIndicator = false
+        showsHorizontalScrollIndicator = false
     }
     
     func enableScrollView() {
@@ -298,6 +303,8 @@ extension ComicStripScrollView {
         isScrollEnabled = true
         maximumZoomScale = 3
         minimumZoomScale = 1
+        showsVerticalScrollIndicator = true
+        showsHorizontalScrollIndicator = true
     }
 }
 
