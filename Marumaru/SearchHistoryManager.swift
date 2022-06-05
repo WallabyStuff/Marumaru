@@ -10,14 +10,22 @@ import Foundation
 import RealmSwift
 import RxSwift
 
-class SearchHistoryManager {
+class SearchHistoryManager: CRUDable {
     
-    func addData(_ object: SearchHistory) -> Completable {
+    
+    // MARK: - Properties
+    
+    typealias Item = SearchHistory
+    
+    
+    // MARK: - Methods
+    
+    func addData(_ item: SearchHistory) -> Completable {
         return Completable.create { observer  in
             do {
                 let realmInstance = try Realm()
                 try realmInstance.write {
-                    realmInstance.add(object, update: .modified)
+                    realmInstance.add(item, update: .modified)
                 }
                 
                 observer(.completed)
@@ -43,12 +51,12 @@ class SearchHistoryManager {
         }
     }
     
-    func deleteData(_ object: SearchHistory) -> Completable {
+    func deleteData(_ item: SearchHistory) -> Completable {
         return Completable.create { observer  in
             do {
                 let realmInstance = try Realm()
                 try realmInstance.write {
-                    realmInstance.delete(object)
+                    realmInstance.delete(item)
                 }
                 
                 observer(.completed)

@@ -71,6 +71,7 @@
 		8E553E762846260C00B7F5BC /* SearchResultSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E553E752846260C00B7F5BC /* SearchResultSection.swift */; };
 		8E553E792846305A00B7F5BC /* SingleButtonFooterReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E553E772846305A00B7F5BC /* SingleButtonFooterReusableView.swift */; };
 		8E553E7A2846305A00B7F5BC /* SingleButtonFooterReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E553E782846305A00B7F5BC /* SingleButtonFooterReusableView.xib */; };
+		8E5C9FCF284D204C008FE961 /* CRUDable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5C9FCE284D204C008FE961 /* CRUDable.swift */; };
 		8E656232284BCCD6000FF0A4 /* Pods_Marumaru.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA2BBEC6D1E3D4200654F131 /* Pods_Marumaru.framework */; };
 		8E662DEB27AC2FF40048BF39 /* WatchHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E662DEA27AC2FF40048BF39 /* WatchHistoryViewModel.swift */; };
 		8E828F63284B50C40065FA2F /* package.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E828F62284B50C40065FA2F /* package.json */; };
@@ -200,6 +201,7 @@
 		8E553E752846260C00B7F5BC /* SearchResultSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultSection.swift; sourceTree = "<group>"; };
 		8E553E772846305A00B7F5BC /* SingleButtonFooterReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleButtonFooterReusableView.swift; sourceTree = "<group>"; };
 		8E553E782846305A00B7F5BC /* SingleButtonFooterReusableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SingleButtonFooterReusableView.xib; sourceTree = "<group>"; };
+		8E5C9FCE284D204C008FE961 /* CRUDable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CRUDable.swift; sourceTree = "<group>"; };
 		8E662DEA27AC2FF40048BF39 /* WatchHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchHistoryViewModel.swift; sourceTree = "<group>"; };
 		8E828F62284B50C40065FA2F /* package.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
 		8E828F64284B52870065FA2F /* notification_bell.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = notification_bell.json; sourceTree = "<group>"; };
@@ -390,6 +392,7 @@
 				8E1569852847AEF800BF1008 /* ImageSessionManager.swift */,
 				76C9A2792636A842000F801C /* WatchHistoryManager.swift */,
 				8E414673284398770005BCFD /* SearchHistoryManager.swift */,
+				8E5C9FCE284D204C008FE961 /* CRUDable.swift */,
 			);
 			name = Services;
 			sourceTree = "<group>";
@@ -889,6 +892,7 @@
 				8E553E6E2845CF0F00B7F5BC /* MarumaruApiServiceViewModel.swift in Sources */,
 				8E553E702846132200B7F5BC /* SearchHistorySection.swift in Sources */,
 				8E553E762846260C00B7F5BC /* SearchResultSection.swift in Sources */,
+				8E5C9FCF284D204C008FE961 /* CRUDable.swift in Sources */,
 				764AE0E2262DA971000F490D /* WatchHistoryViewController.swift in Sources */,
 				8EFCD0EC2841F0E600685503 /* Array+IsInBound.swift in Sources */,
 				765C8B29261CA2C30056C83B /* AppDelegate.swift in Sources */,
