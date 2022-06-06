@@ -7,6 +7,7 @@
 "message.lastEpisode" = "마지막 화 입니다.";
 "message.searching" = "검색중...";
 "message.noSearchHistory" = "검색기록이 없습니다.";
+"message.emptyBookmark" = "아직 북마크한 컨텐츠가 없습니다.";
 
 "title.remove" = "삭제";
 "title.cancel" = "취소";

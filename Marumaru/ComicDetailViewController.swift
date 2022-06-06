@@ -11,6 +11,10 @@ import Lottie
 import RxSwift
 import RxCocoa
 
+protocol ComicDetailViewDelegate: AnyObject {
+    func didBookmarkStateUpdate()
+}
+
 class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     
     
@@ -27,8 +31,10 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     @IBOutlet weak var episodeAmountLabel: UILabel!
     @IBOutlet weak var scrollToBottomButton: UIButton!
     @IBOutlet weak var comicEpisodeTableView: UITableView!
+    @IBOutlet weak var bookmarkButton: UIButton!
     
     static let identifier = R.storyboard.comicDetail.comicDetailStoryboard.identifier
+    weak var delegate: ComicDetailViewDelegate?
     var viewModel: ViewModel
     
     
@@ -74,6 +80,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     private func setupData() {
         setupComicInfoData()
         viewModel.updateComicEpisodes()
+        viewModel.setBookmarkState()
     }
     
     private func setupComicInfoData() {
@@ -115,6 +122,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
         setupThumbnailImagePlaceholderView()
         setupEpisodeTableView()
         setupScrollToBottomButton()
+        setupBookmarkButton()
     }
     
     private func setupThumbnailImagePlaceholderView() {
@@ -141,6 +149,15 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
         scrollToBottomButton.imageEdgeInsets(with: 10)
     }
     
+    private func setupBookmarkButton() {
+        bookmarkButton.layer.cornerRadius = 16
+        bookmarkButton.layer.maskedCorners = [.layerMinXMaxYCorner]
+        bookmarkButton.layer.shadowColor = R.color.shadowBlack()!.cgColor
+        bookmarkButton.layer.shadowOffset = .init(width: 0, height: 4)
+        bookmarkButton.layer.shadowRadius = 20
+        bookmarkButton.layer.shadowOpacity = 0.2
+    }
+    
     
     // MARK: - Bind
     
@@ -154,6 +171,8 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
         
         bindEpisodeAmountLabel()
         bindRecentWatchingEpisode()
+        
+        bindBookmarkState()
     }
     
     private func bindScrollToBottomButton() {
@@ -259,6 +278,29 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
                 vc.comicEpisodeTableView.scrollToRow(at: indexPath,
                                                      at: .middle,
                                                      animated: false)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindBookmarkState() {
+        bookmarkButton.rx.tap
+            .asDriver()
+            .drive(with: self, onNext: { vc, _ in
+                vc.viewModel.tapBookmarkButton()
+                vc.makeImpactFeedback(.light)
+                vc.delegate?.didBookmarkStateUpdate()
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.bookmarkState
+            .subscribe(with: self, onNext: { vc, isBookmarked in
+                if isBookmarked {
+                    vc.bookmarkButton.setImage(R.image.bookmarkFilled(),
+                                               for: .normal)
+                } else {
+                    vc.bookmarkButton.setImage(R.image.bookmark(),
+                                               for: .normal)
+                }
             })
             .disposed(by: disposeBag)
     }

@@ -77,7 +77,7 @@ class MainTabBarController: UITabBarController {
     }
     
     private func setupViewControllers() {
-        setViewControllers([mainViewController, emptyViewController, comingSoonViewController, comingSoonViewController],
+        setViewControllers([mainViewController, emptyViewController, comingSoonViewController, bookmarkViewController],
                            animated: true)
     }
     
@@ -139,6 +139,17 @@ extension MainTabBarController {
     private var comingSoonViewController: UIViewController {
         let viewController = ComingSoonViewController()
         return viewController
+    }
+    
+    private var bookmarkViewController: UINavigationController {
+        let storyboard = UIStoryboard(name: R.storyboard.bookmark.name, bundle: nil)
+        let viewController = storyboard.instantiateViewController(identifier: BookmarkViewController.identifier,
+                                                                  creator: { coder -> BookmarkViewController in
+            let viewModel = BookmarkViewModel()
+            return .init(coder, viewModel) ?? BookmarkViewController(viewModel)
+        })
+        
+        return UINavigationController(rootViewController: viewController)
     }
 }
 

@@ -98,6 +98,18 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J2n-c3-kwj">
+                                <rect key="frame" x="370" y="44" width="44" height="44"/>
+                                <color key="backgroundColor" name="AccentYellow"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="44" id="Iv1-PI-c5x"/>
+                                    <constraint firstAttribute="height" constant="44" id="O6F-sE-Gq1"/>
+                                </constraints>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="contentEdgeInsets" minX="12" minY="12" maxX="12" maxY="12"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="bookmark"/>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="w3Q-oB-Dox"/>
                         <color key="backgroundColor" name="BackgroundWhite"/>
@@ -123,15 +135,18 @@
                             <constraint firstItem="N4Z-JQ-SBA" firstAttribute="top" secondItem="eli-yo-fW8" secondAttribute="bottom" constant="12" id="hLb-MU-nYQ"/>
                             <constraint firstItem="exS-Qj-xsj" firstAttribute="trailing" secondItem="UfP-1z-GxZ" secondAttribute="trailing" constant="-8" id="hls-p0-lXF"/>
                             <constraint firstItem="UfP-1z-GxZ" firstAttribute="leading" secondItem="1D4-wB-rc5" secondAttribute="leading" id="iVy-6Z-kE6"/>
+                            <constraint firstItem="J2n-c3-kwj" firstAttribute="top" secondItem="w3Q-oB-Dox" secondAttribute="top" id="l5t-9c-Jw7"/>
                             <constraint firstItem="EAb-jD-8vo" firstAttribute="top" secondItem="N4Z-JQ-SBA" secondAttribute="bottom" constant="8" id="qO7-dn-sOy"/>
                             <constraint firstItem="N4Z-JQ-SBA" firstAttribute="leading" secondItem="eli-yo-fW8" secondAttribute="leading" id="t5l-Ud-uhh"/>
                             <constraint firstItem="1D4-wB-rc5" firstAttribute="leading" secondItem="kr3-QC-Kcp" secondAttribute="leading" constant="20" id="tmB-TJ-UvL"/>
                             <constraint firstItem="40a-wv-lyT" firstAttribute="top" secondItem="UIt-BV-sOC" secondAttribute="bottom" constant="20" id="u9c-q7-atv"/>
+                            <constraint firstItem="w3Q-oB-Dox" firstAttribute="trailing" secondItem="J2n-c3-kwj" secondAttribute="trailing" id="wNx-hc-Qpw"/>
                             <constraint firstItem="w3Q-oB-Dox" firstAttribute="bottom" secondItem="ARJ-be-L3h" secondAttribute="bottom" constant="20" id="xUi-As-jOh"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="authorLabel" destination="N4Z-JQ-SBA" id="XOe-qR-pML"/>
+                        <outlet property="bookmarkButton" destination="J2n-c3-kwj" id="XPg-Ew-toJ"/>
                         <outlet property="comicEpisodeTableView" destination="40a-wv-lyT" id="Oe6-Ez-3QV"/>
                         <outlet property="comicTitleLabel" destination="eli-yo-fW8" id="ziT-WM-vrm"/>
                         <outlet property="episodeAmountLabel" destination="UIt-BV-sOC" id="R3S-nH-ENM"/>
@@ -149,6 +164,7 @@
     </scenes>
     <resources>
         <image name="arrow-down" width="50" height="50"/>
+        <image name="bookmark" width="50" height="50"/>
         <namedColor name="AccentYellow">
             <color red="1" green="0.77300000190734863" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
