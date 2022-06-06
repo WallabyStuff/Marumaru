@@ -1624,7 +1624,6 @@ struct _R: Rswift.Validatable {
       }
 
       static func validate() throws {
-        if UIKit.UIImage(named: "arrow-down", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Image named 'arrow-down' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
         if UIKit.UIImage(named: "bookmark", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Image named 'bookmark' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
         if #available(iOS 11.0, tvOS 11.0, *) {
           if UIKit.UIColor(named: "AccentYellow", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'AccentYellow' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
@@ -1633,6 +1632,7 @@ struct _R: Rswift.Validatable {
           if UIKit.UIColor(named: "TextBlack", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'TextBlack' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
           if UIKit.UIColor(named: "TextBlack-light", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'TextBlack-light' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
           if UIKit.UIColor(named: "TextBlack-lighter", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'TextBlack-lighter' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
+          if UIKit.UIColor(named: "TextWhite", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'TextWhite' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
         }
         if _R.storyboard.comicDetail().comicDetailStoryboard() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'comicDetailStoryboard' could not be loaded from storyboard 'ComicDetail' as 'ComicDetailViewController'.") }
       }
