@@ -72,6 +72,11 @@
 		8E553E792846305A00B7F5BC /* SingleButtonFooterReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E553E772846305A00B7F5BC /* SingleButtonFooterReusableView.swift */; };
 		8E553E7A2846305A00B7F5BC /* SingleButtonFooterReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E553E782846305A00B7F5BC /* SingleButtonFooterReusableView.xib */; };
 		8E5C9FCF284D204C008FE961 /* CRUDable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5C9FCE284D204C008FE961 /* CRUDable.swift */; };
+		8E5C9FD1284D2332008FE961 /* ComicBookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5C9FD0284D2332008FE961 /* ComicBookmark.swift */; };
+		8E5C9FD3284D2344008FE961 /* ComicBookmarkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5C9FD2284D2344008FE961 /* ComicBookmarkManager.swift */; };
+		8E5C9FD5284D4C90008FE961 /* BookmarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5C9FD4284D4C90008FE961 /* BookmarkViewController.swift */; };
+		8E5C9FD7284D4CAB008FE961 /* BookmarkViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5C9FD6284D4CAB008FE961 /* BookmarkViewModel.swift */; };
+		8E5C9FD9284D4CB8008FE961 /* Bookmark.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E5C9FD8284D4CB8008FE961 /* Bookmark.storyboard */; };
 		8E656232284BCCD6000FF0A4 /* Pods_Marumaru.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA2BBEC6D1E3D4200654F131 /* Pods_Marumaru.framework */; };
 		8E662DEB27AC2FF40048BF39 /* WatchHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E662DEA27AC2FF40048BF39 /* WatchHistoryViewModel.swift */; };
 		8E828F63284B50C40065FA2F /* package.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E828F62284B50C40065FA2F /* package.json */; };
@@ -202,6 +207,11 @@
 		8E553E772846305A00B7F5BC /* SingleButtonFooterReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleButtonFooterReusableView.swift; sourceTree = "<group>"; };
 		8E553E782846305A00B7F5BC /* SingleButtonFooterReusableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SingleButtonFooterReusableView.xib; sourceTree = "<group>"; };
 		8E5C9FCE284D204C008FE961 /* CRUDable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CRUDable.swift; sourceTree = "<group>"; };
+		8E5C9FD0284D2332008FE961 /* ComicBookmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicBookmark.swift; sourceTree = "<group>"; };
+		8E5C9FD2284D2344008FE961 /* ComicBookmarkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicBookmarkManager.swift; sourceTree = "<group>"; };
+		8E5C9FD4284D4C90008FE961 /* BookmarkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkViewController.swift; sourceTree = "<group>"; };
+		8E5C9FD6284D4CAB008FE961 /* BookmarkViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkViewModel.swift; sourceTree = "<group>"; };
+		8E5C9FD8284D4CB8008FE961 /* Bookmark.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Bookmark.storyboard; sourceTree = "<group>"; };
 		8E662DEA27AC2FF40048BF39 /* WatchHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchHistoryViewModel.swift; sourceTree = "<group>"; };
 		8E828F62284B50C40065FA2F /* package.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
 		8E828F64284B52870065FA2F /* notification_bell.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = notification_bell.json; sourceTree = "<group>"; };
@@ -309,6 +319,7 @@
 				8EA6B5B828392BD30019B590 /* PopOverComicEpisode.storyboard */,
 				8E41467928439D6E0005BCFD /* SearchHistory.storyboard */,
 				8E41467D28439DA20005BCFD /* SearchResult.storyboard */,
+				8E5C9FD8284D4CB8008FE961 /* Bookmark.storyboard */,
 			);
 			name = Storyboards;
 			sourceTree = "<group>";
@@ -392,6 +403,7 @@
 				8E1569852847AEF800BF1008 /* ImageSessionManager.swift */,
 				76C9A2792636A842000F801C /* WatchHistoryManager.swift */,
 				8E414673284398770005BCFD /* SearchHistoryManager.swift */,
+				8E5C9FD2284D2344008FE961 /* ComicBookmarkManager.swift */,
 				8E5C9FCE284D204C008FE961 /* CRUDable.swift */,
 			);
 			name = Services;
@@ -407,6 +419,7 @@
 				7684F3EB26CB6BBA0012BD8E /* ComicInfo.swift */,
 				76F912E826CFDFA000B39BE7 /* ComicEpisode.swift */,
 				7641C3B22646874300A79A79 /* EpisodeItem.swift */,
+				8E5C9FD0284D2332008FE961 /* ComicBookmark.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -455,6 +468,7 @@
 				8E41466F284394DF0005BCFD /* ComingSoonViewController.swift */,
 				8E41467B28439D880005BCFD /* SearchHistoryViewController.swift */,
 				8E41467F28439DAE0005BCFD /* SearchResultViewController.swift */,
+				8E5C9FD4284D4C90008FE961 /* BookmarkViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -522,6 +536,7 @@
 				8ED56F2F27ADACD000E78A8A /* ComicEpisodePopOverViewModel.swift */,
 				8E4146832843BBE50005BCFD /* SearchHistoryViewModel.swift */,
 				8E41468128439ED00005BCFD /* SearchResultViewModel.swift */,
+				8E5C9FD6284D4CAB008FE961 /* BookmarkViewModel.swift */,
 			);
 			name = ViewModel;
 			sourceTree = "<group>";
@@ -665,6 +680,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E5C9FD9284D4CB8008FE961 /* Bookmark.storyboard in Resources */,
 				8E553E7A2846305A00B7F5BC /* SingleButtonFooterReusableView.xib in Resources */,
 				8E442E872846A039009A7E8D /* acrobatic_cat.json in Resources */,
 				8E41465D28437E490005BCFD /* Localizable.strings in Resources */,
@@ -870,6 +886,7 @@
 				8ED56F3027ADACD000E78A8A /* ComicEpisodePopOverViewModel.swift in Sources */,
 				76BEEBA926248A1600642001 /* SearchComicViewController.swift in Sources */,
 				8E442E8128466B5F009A7E8D /* UILabe+Underline.swift in Sources */,
+				8E5C9FD1284D2332008FE961 /* ComicBookmark.swift in Sources */,
 				8E87CE6227ACEAD0008CD9C9 /* WatchHistoryCollectionReusableView.swift in Sources */,
 				8E41467728439AFF0005BCFD /* SearchHistoryCollectionCell.swift in Sources */,
 				8ED56F3627AEFCB300E78A8A /* UIColor+HEX.swift in Sources */,
@@ -901,10 +918,12 @@
 				765C8B2B261CA2C30056C83B /* SceneDelegate.swift in Sources */,
 				8E4FFE202844F0AB00A7ED7B /* LottieAnimationView.swift in Sources */,
 				8E83DAD728426DBA00C0A10B /* UICollectionView+ScrollTo.swift in Sources */,
+				8E5C9FD3284D2344008FE961 /* ComicBookmarkManager.swift in Sources */,
 				76C9A1B92631BC7F000F801C /* MarumaruApiService.swift in Sources */,
 				8E83DADB28428E0C00C0A10B /* UIView+CustomAnimation.swift in Sources */,
 				8E8D381B27ABA4C700E82FE2 /* ComicDetailViewModel.swift in Sources */,
 				8EBCD0F127AAAB8300BEE157 /* ComicRankTableCell.swift in Sources */,
+				8E5C9FD5284D4C90008FE961 /* BookmarkViewController.swift in Sources */,
 				7641C3AF2646826100A79A79 /* PopOverComicEpisodeTableCell.swift in Sources */,
 				7641C3B32646874300A79A79 /* EpisodeItem.swift in Sources */,
 				76BEEBB02624B64E00642001 /* ComicThumbnailCollectionCell.swift in Sources */,
@@ -924,6 +943,7 @@
 				8E41465F284380120005BCFD /* String+Localizable.swift in Sources */,
 				7641C3B1264682B900A79A79 /* PopOverComicEpisodeViewController.swift in Sources */,
 				765C8C6D261F16880056C83B /* ComicStripViewController.swift in Sources */,
+				8E5C9FD7284D4CAB008FE961 /* BookmarkViewModel.swift in Sources */,
 				8E3A896627AB9FB00014303D /* TagLabel.swift in Sources */,
 				8ED56F3227AEFA7F00E78A8A /* UIImage+AverageColor.swift in Sources */,
 				8E4146842843BBE50005BCFD /* SearchHistoryViewModel.swift in Sources */,

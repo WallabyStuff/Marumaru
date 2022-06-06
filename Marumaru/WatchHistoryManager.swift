@@ -16,7 +16,6 @@ class WatchHistoryManager: CRUDable {
 
     // MARK: - Properties
     typealias Item = WatchHistory
-    private var disposeBag = DisposeBag()
     
     
     // MARK: - Methods
@@ -35,7 +34,7 @@ class WatchHistoryManager: CRUDable {
                     observer(.completed)
                 }, onError: { error in
                     observer(.error(error))
-                }).disposed(by: self.disposeBag)
+                }).dispose()
 
             return Disposables.create()
         }

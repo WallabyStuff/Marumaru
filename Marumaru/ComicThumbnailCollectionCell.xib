@@ -25,7 +25,7 @@
                                 <rect key="frame" x="8" y="8" width="120" height="172"/>
                                 <color key="backgroundColor" name="BackgroundWhite-lighter"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="172" id="ND7-Nj-7Wj"/>
+                                    <constraint firstAttribute="width" secondItem="Hdb-Dm-Zes" secondAttribute="height" multiplier="30:43" id="MsK-pQ-SeI"/>
                                 </constraints>
                             </view>
                             <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="placeholder" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c4q-bC-PYC">

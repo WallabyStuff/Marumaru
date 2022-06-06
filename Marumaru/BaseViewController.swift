@@ -31,8 +31,13 @@ class BaseViewController: UIViewController {
 }
 
 extension BaseViewController {
-    func makeHapticFeedback() {
+    func makeSelectionFeedback() {
         let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
         selectionFeedbackGenerator.selectionChanged()
+    }
+    
+    func makeImpactFeedback(_ style: UIImpactFeedbackGenerator.FeedbackStyle) {
+        let impactFeedback = UIImpactFeedbackGenerator(style: style)
+        impactFeedback.impactOccurred()
     }
 }

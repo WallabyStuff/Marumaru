@@ -89,8 +89,10 @@ struct R: Rswift.Validatable {
   }
 
   #if os(iOS) || os(tvOS)
-  /// This `R.storyboard` struct is generated, and contains static references to 9 storyboards.
+  /// This `R.storyboard` struct is generated, and contains static references to 10 storyboards.
   struct storyboard {
+    /// Storyboard `Bookmark`.
+    static let bookmark = _R.storyboard.bookmark()
     /// Storyboard `ComicDetail`.
     static let comicDetail = _R.storyboard.comicDetail()
     /// Storyboard `ComicStrip`.
@@ -109,6 +111,13 @@ struct R: Rswift.Validatable {
     static let searchResult = _R.storyboard.searchResult()
     /// Storyboard `WatchHistory`.
     static let watchHistory = _R.storyboard.watchHistory()
+
+    #if os(iOS) || os(tvOS)
+    /// `UIStoryboard(name: "Bookmark", bundle: ...)`
+    static func bookmark(_: Void = ()) -> UIKit.UIStoryboard {
+      return UIKit.UIStoryboard(resource: R.storyboard.bookmark)
+    }
+    #endif
 
     #if os(iOS) || os(tvOS)
     /// `UIStoryboard(name: "ComicDetail", bundle: ...)`
@@ -1143,7 +1152,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 15 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 16 localization keys.
     struct localizable {
       /// Value: 검색결과가 없습니다.
       static let messageEmptyResult = Rswift.StringResource(key: "message.emptyResult", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
@@ -1161,6 +1170,8 @@ struct R: Rswift.Validatable {
       static let titleRemove = Rswift.StringResource(key: "title.remove", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
       /// Value: 삭제 버튼을 눌러 시청 기록을 삭제할 수 있습니다. 삭제 후 데이터 복원은 어렵습니다.
       static let messageRemoveHistory = Rswift.StringResource(key: "message.removeHistory", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
+      /// Value: 아직 북마크한 컨텐츠가 없습니다.
+      static let messageEmptyBookmark = Rswift.StringResource(key: "message.emptyBookmark", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
       /// Value: 아직 시청기록이 없습니다.
       static let messageEmptyWatchHistory = Rswift.StringResource(key: "message.emptyWatchHistory", tableName: "Localizable", bundle: R.hostingBundle, locales: [], comment: nil)
       /// Value: 에 대한 검색결과
@@ -1278,6 +1289,19 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("message.removeHistory", bundle: bundle, comment: "")
+      }
+
+      /// Value: 아직 북마크한 컨텐츠가 없습니다.
+      static func messageEmptyBookmark(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("message.emptyBookmark", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "message.emptyBookmark"
+        }
+
+        return NSLocalizedString("message.emptyBookmark", bundle: bundle, comment: "")
       }
 
       /// Value: 아직 시청기록이 없습니다.
@@ -1535,6 +1559,9 @@ struct _R: Rswift.Validatable {
   struct storyboard: Rswift.Validatable {
     static func validate() throws {
       #if os(iOS) || os(tvOS)
+      try bookmark.validate()
+      #endif
+      #if os(iOS) || os(tvOS)
       try comicDetail.validate()
       #endif
       #if os(iOS) || os(tvOS)
@@ -1564,6 +1591,27 @@ struct _R: Rswift.Validatable {
     }
 
     #if os(iOS) || os(tvOS)
+    struct bookmark: Rswift.StoryboardResourceType, Rswift.Validatable {
+      let bookmarkStoryboard = StoryboardViewControllerResource<BookmarkViewController>(identifier: "bookmarkStoryboard")
+      let bundle = R.hostingBundle
+      let name = "Bookmark"
+
+      func bookmarkStoryboard(_: Void = ()) -> BookmarkViewController? {
+        return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: bookmarkStoryboard)
+      }
+
+      static func validate() throws {
+        if #available(iOS 11.0, tvOS 11.0, *) {
+          if UIKit.UIColor(named: "BackgroundWhite", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'BackgroundWhite' is used in storyboard 'Bookmark', but couldn't be loaded.") }
+        }
+        if _R.storyboard.bookmark().bookmarkStoryboard() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'bookmarkStoryboard' could not be loaded from storyboard 'Bookmark' as 'BookmarkViewController'.") }
+      }
+
+      fileprivate init() {}
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
     struct comicDetail: Rswift.StoryboardResourceWithInitialControllerType, Rswift.Validatable {
       typealias InitialController = ComicDetailViewController
 
@@ -1577,6 +1625,7 @@ struct _R: Rswift.Validatable {
 
       static func validate() throws {
         if UIKit.UIImage(named: "arrow-down", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Image named 'arrow-down' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
+        if UIKit.UIImage(named: "bookmark", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Image named 'bookmark' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
         if #available(iOS 11.0, tvOS 11.0, *) {
           if UIKit.UIColor(named: "AccentYellow", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'AccentYellow' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
           if UIKit.UIColor(named: "BackgroundWhite", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'BackgroundWhite' is used in storyboard 'ComicDetail', but couldn't be loaded.") }

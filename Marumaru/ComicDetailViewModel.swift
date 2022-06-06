@@ -14,7 +14,8 @@ class ComicDetailViewModel {
     public var comicInfo: ComicInfo
     
     private var disposeBag = DisposeBag()
-    private let watchHistoryHandler = WatchHistoryManager()
+    private let watchHistoryManager = WatchHistoryManager()
+    private let comicBookmarkManager = ComicBookmarkManager()
     
     private var comicEpisodes = [ComicEpisode]()
     public var comicEpisodesObservable = BehaviorRelay<[ComicEpisode]>(value: [])
@@ -28,6 +29,8 @@ class ComicDetailViewModel {
     
     public var recentWatchingEpisodeSN: String?
     public var recentWatchingEpisodeUpdated = PublishRelay<IndexPath>()
+    
+    public var bookmarkState = BehaviorRelay<Bool>(value: false)
     
     init(comicInfo: ComicInfo) {
         self.comicInfo = comicInfo
@@ -70,7 +73,7 @@ extension ComicDetailViewModel {
         watchHistories.removeAll()
         watchHistoriesObservable.accept([])
         
-        watchHistoryHandler.fetchData()
+        watchHistoryManager.fetchData()
             .subscribe(with: self, onSuccess: { strongSelf, comics in
                 strongSelf.watchHistories =  Dictionary(uniqueKeysWithValues: comics.map { ($0.episodeSN, $0.episodeSN) })
             }, onFailure: { strongSelf, _ in
@@ -123,5 +126,54 @@ extension ComicDetailViewModel {
             let indexPath = IndexPath(row: index, section: 0)
             recentWatchingEpisodeUpdated.accept(indexPath)
         }
+    }
+}
+
+extension ComicDetailViewModel {
+    public func tapBookmarkButton() {
+        toggleBookmarkState()
+    }
+    
+    private func toggleBookmarkState() {
+        comicBookmarkManager
+            .fetchData(comicInfo.comicSN)
+            .subscribe(with: self, onSuccess: { strongSelf, item in
+                strongSelf.deleteBookmark(item)
+            }, onFailure: { strongSelf, _ in
+                strongSelf.addBookmark()
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    public func setBookmarkState() {
+        comicBookmarkManager
+            .fetchData(comicInfo.comicSN)
+            .subscribe(with: self, onSuccess: { strongSelf, _ in
+                strongSelf.bookmarkState.accept(true)
+            }, onFailure: { strongSelf, _ in
+                strongSelf.bookmarkState.accept(false)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    public func addBookmark() {
+        let item = ComicBookmark(comicSN: comicInfo.comicSN,
+                                 title: comicInfo.title,
+                                 author: comicInfo.author,
+                                 updateCycle: comicInfo.updateCycle,
+                                 thumbnailImagePath: comicInfo.thumbnailImagePath ?? "")
+        comicBookmarkManager.addData(item)
+            .subscribe(with: self, onCompleted: { strongSelf in
+                strongSelf.bookmarkState.accept(true)
+            })
+            .dispose()
+    }
+    
+    public func deleteBookmark(_ item: ComicBookmark) {
+        comicBookmarkManager.deleteData(item)
+            .subscribe(with: self, onCompleted: { strongSelf in
+                strongSelf.bookmarkState.accept(false)
+            })
+            .dispose()
     }
 }
