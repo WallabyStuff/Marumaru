@@ -29,9 +29,9 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     @IBOutlet weak var authorLabel: UILabel!
     @IBOutlet weak var updateCycleLabel: UILabel!
     @IBOutlet weak var episodeAmountLabel: UILabel!
-    @IBOutlet weak var scrollToBottomButton: UIButton!
     @IBOutlet weak var comicEpisodeTableView: UITableView!
     @IBOutlet weak var bookmarkButton: UIButton!
+    @IBOutlet weak var playFirstEpisodeButton: UIButton!
     
     static let identifier = R.storyboard.comicDetail.comicDetailStoryboard.identifier
     weak var delegate: ComicDetailViewDelegate?
@@ -121,8 +121,8 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     private func setupView() {
         setupThumbnailImagePlaceholderView()
         setupEpisodeTableView()
-        setupScrollToBottomButton()
         setupBookmarkButton()
+        setupPlayFirstEpisodeButton()
     }
     
     private func setupThumbnailImagePlaceholderView() {
@@ -136,17 +136,11 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     
     private func setupEpisodeTableView() {
         registerEpisodeTableCell()
-        comicEpisodeTableView.delegate = self
     }
     
     private func registerEpisodeTableCell() {
         let nibName = UINib(nibName: R.nib.comicEpisodeThumbnailTableCell.name, bundle: nil)
         comicEpisodeTableView.register(nibName, forCellReuseIdentifier: ComicEpisodeThumbnailTableCell.identifier)
-    }
-    
-    private func setupScrollToBottomButton() {
-        scrollToBottomButton.layer.cornerRadius = 12
-        scrollToBottomButton.imageEdgeInsets(with: 10)
     }
     
     private func setupBookmarkButton() {
@@ -158,12 +152,20 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
         bookmarkButton.layer.shadowOpacity = 0.2
     }
     
+    private func setupPlayFirstEpisodeButton() {
+        playFirstEpisodeButton.layer.cornerRadius = playFirstEpisodeButton.frame.height / 2
+        playFirstEpisodeButton.layer.borderWidth = 1
+        playFirstEpisodeButton.layer.borderColor = R.color.lineGrayLighter()!.cgColor
+        playFirstEpisodeButton.layer.shadowColor = R.color.shadowBlack()!.cgColor
+        playFirstEpisodeButton.layer.shadowOffset = .init(width: 0, height: 4)
+        playFirstEpisodeButton.layer.shadowOpacity = 0.2
+        playFirstEpisodeButton.layer.shadowRadius  = 20
+    }
+    
     
     // MARK: - Bind
     
     private func bind() {
-        bindScrollToBottomButton()
-        
         bindComicEpisodeTableView()
         bindComicEpisodeTableViewCell()
         bindComicEpisodeLoadingState()
@@ -173,15 +175,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
         bindRecentWatchingEpisode()
         
         bindBookmarkState()
-    }
-    
-    private func bindScrollToBottomButton() {
-        scrollToBottomButton.rx.tap
-            .asDriver()
-            .drive(with: self, onNext: { vc, _ in
-                vc.scrollToBottom()
-            })
-            .disposed(by: disposeBag)
+        bindPlayFirstEpisodeButton()
     }
     
     private func bindComicEpisodeTableView() {
@@ -240,11 +234,17 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
                     vc.comicEpisodeTableView.visibleCells.forEach { cell in
                         cell.showCustomSkeleton()
                     }
+                    
+                    vc.playFirstEpisodeButton.isHidden = true
                 } else {
                     vc.comicEpisodeTableView.isUserInteractionEnabled = true
                     vc.episodeAmountLabel.hideSkeleton()
                     vc.comicEpisodeTableView.visibleCells.forEach { cell in
                         cell.hideSkeleton()
+                    }
+                    
+                    if vc.viewModel.comicEpisodeAmount != 0 {
+                        vc.playFirstEpisodeButton.isHidden = false
                     }
                 }
             })
@@ -305,6 +305,15 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
             .disposed(by: disposeBag)
     }
     
+    private func bindPlayFirstEpisodeButton() {
+        playFirstEpisodeButton.rx.tap
+            .asDriver()
+            .drive(with: self, onNext: { vc, _ in
+                vc.viewModel.playFirstComic()
+            })
+            .disposed(by: disposeBag)
+    }
+    
     
     // MARK: - Methods
     
@@ -337,18 +346,6 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
 
 
 // MARK: - Extenstions
-
-extension ComicDetailViewController: UITableViewDelegate {
-    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-        let actualPosition = scrollView.panGestureRecognizer.translation(in: scrollView.superview)
-        
-        if actualPosition.y > 0 {
-            scrollToBottomButton.startFadeOutAnimation(duration: 0.2)
-        } else {
-            scrollToBottomButton.startFadeInAnimation(duration: 0.2)
-        }
-    }
-}
 
 extension ComicDetailViewController: ComicStripViewDelegate {
     func didRecentWatchingEpisodeUpdated(_ episodeSN: String) {

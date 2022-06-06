@@ -177,3 +177,13 @@ extension ComicDetailViewModel {
             .dispose()
     }
 }
+
+extension ComicDetailViewModel {
+    func playFirstComic() {
+        if let firstEpisode = comicEpisodes.last {
+            if !firstEpisode.comicSN.isEmpty {
+                presentComicStripVCObservable.accept(firstEpisode)
+            }
+        }
+    }
+}
