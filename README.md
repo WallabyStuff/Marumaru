@@ -1,13 +1,12 @@
 <div align="center">
- <img src="https://user-images.githubusercontent.com/63496607/131101666-02dca9a8-bdf9-4427-8799-c7a8d806f61e.png" width="100">
+ <img src="https://user-images.githubusercontent.com/63496607/172176175-968b2cde-7224-4b38-b703-97c2519b2d80.png" width="100">
  <h1>MaruMaru</h1>
 </div>
 
 
-![Previewimage for iPhone](https://user-images.githubusercontent.com/63496607/152677110-c16e6c2e-99af-44c8-80bb-fb867ca052e6.png)
-![PreviewImage for iPad](https://user-images.githubusercontent.com/63496607/152677097-c036f0d8-7a1d-4916-8643-a952e060ce6f.png)
+<img src="https://user-images.githubusercontent.com/63496607/172176270-446aaeae-e031-4b39-9cc3-3eaf5baf0d1f.png"></img>
 
-##### [🎨디자인 변천사](https://www.notion.so/ffed3289a9024ae8a58dbb7614dd553a)
+### ⚠️이 앱은 배포용으로 만들어진 앱이 아닙니다.
 
 <br><br>
 ## Why I made this 🤔
@@ -41,13 +40,9 @@
 [💾이미지 캐싱](https://www.notion.so/6327f97c06974c35ae0b4180ded110df) <br>
 
 <br><br>
-## Download 🛍
-https://testflight.apple.com/join/VQjYWvvm
-
-<br><br>
 ## Used Tools 🛠
 
 - **Appicon** - figma
 - **Design** - figma
-- **Script** - Xcode12(swift / storyboard)
+- **Script** - Xcode13(swift / storyboard)
 - **Preview Images** - figma
