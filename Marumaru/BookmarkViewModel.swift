@@ -30,8 +30,9 @@ extension BookmarkViewModel {
         
         comicBookmarkManager.fetchData()
             .subscribe(with: self, onSuccess: { strongSelf, bookmarks in
-                strongSelf.bookmarks = bookmarks
-                strongSelf.bookmarksObservable.accept(bookmarks)
+                let reversedItems: [ComicBookmark] = bookmarks.reversed()
+                strongSelf.bookmarks = reversedItems
+                strongSelf.bookmarksObservable.accept(reversedItems)
             }, onFailure: { strongSelf, _ in
                 strongSelf.bookmarksObservable.accept([])
             })

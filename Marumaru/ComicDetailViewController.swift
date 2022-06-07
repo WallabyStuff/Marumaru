@@ -89,14 +89,8 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
         updateCycleLabel.text = viewModel.comicInfo.updateCycle
         thumbnailImageView.layer.cornerRadius = 8
         thumbnailImagePlaceholderLabel.text = viewModel.comicInfo.title
-        
-        if viewModel.comicInfo.updateCycle.contains("미분류") {
-            updateCycleLabel.setBackgroundHighlight(with: .systemTeal,
-                                                    textColor: .white)
-        } else {
-            updateCycleLabel.setBackgroundHighlight(with: .systemTeal,
-                                                    textColor: .white)
-        }
+        updateCycleLabel.setBackgroundHighlight(with: UpdateCycle(rawValue: viewModel.comicInfo.updateCycle)?.color,
+                                                textColor: .white)
         
         if viewModel.comicInfo.thumbnailImage != nil {
             thumbnailImageView.image = viewModel.comicInfo.thumbnailImage

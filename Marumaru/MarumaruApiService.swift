@@ -472,7 +472,7 @@ extension MarumaruApiService {
                 
                 let title = try element.getElementsByClass("card-title").text()
                 let author = try element.getElementsByClass("card-footer").text()
-                let updateCycle = try element.select("span").text()
+                let updateCycle = try element.select("span").text().trimmingCharacters(in: .whitespaces)
                 let thumbnailImagePath = try element.select("img").attr("src").dropBasePath()
                 
                 let comic = ComicInfo(comicSN: comicSN,

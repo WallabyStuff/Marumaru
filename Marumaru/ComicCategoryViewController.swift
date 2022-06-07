@@ -163,6 +163,7 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
             cell.thumbnailImagePlaceholderLabel.text = item.title
             cell.authorLabel.text = item.author
             cell.updateCycleLabel.text = item.updateCycle
+            cell.updateCycleView.backgroundColor = UpdateCycle(rawValue: item.updateCycle)?.color
             
             let url = self.viewModel.getImageURL(item.thumbnailImagePath)
             cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { result in

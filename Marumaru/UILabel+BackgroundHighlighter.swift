@@ -8,9 +8,10 @@
 import UIKit
 
 extension UILabel {
-    func setBackgroundHighlight(with backgroundColor: UIColor, textColor: UIColor) {
+    func setBackgroundHighlight(with backgroundColor: UIColor?,
+                                textColor: UIColor) {
         self.clipsToBounds = true
-        self.layer.cornerRadius = 6
+        self.layer.cornerRadius = 8
         self.backgroundColor = backgroundColor
         self.textColor = textColor
     }

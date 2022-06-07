@@ -69,8 +69,11 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="updateCycle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EAb-jD-8vo" customClass="TagLabel" customModule="Marumaru" customModuleProvider="target">
-                                <rect key="frame" x="156" y="147.5" width="91.5" height="19.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <rect key="frame" x="156" y="151.5" width="81.5" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="32" id="lxL-On-cSV"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" name="TextBlack-lighter"/>
                                 <nil key="highlightedColor"/>
                                 <userDefinedRuntimeAttributes>
@@ -137,7 +140,7 @@
                             <constraint firstItem="exS-Qj-xsj" firstAttribute="trailing" secondItem="UfP-1z-GxZ" secondAttribute="trailing" constant="-8" id="hls-p0-lXF"/>
                             <constraint firstItem="UfP-1z-GxZ" firstAttribute="leading" secondItem="1D4-wB-rc5" secondAttribute="leading" id="iVy-6Z-kE6"/>
                             <constraint firstItem="J2n-c3-kwj" firstAttribute="top" secondItem="w3Q-oB-Dox" secondAttribute="top" id="l5t-9c-Jw7"/>
-                            <constraint firstItem="EAb-jD-8vo" firstAttribute="top" secondItem="N4Z-JQ-SBA" secondAttribute="bottom" constant="8" id="qO7-dn-sOy"/>
+                            <constraint firstItem="EAb-jD-8vo" firstAttribute="top" secondItem="N4Z-JQ-SBA" secondAttribute="bottom" constant="12" id="qO7-dn-sOy"/>
                             <constraint firstItem="w3Q-oB-Dox" firstAttribute="bottom" secondItem="NmN-fc-OG9" secondAttribute="bottom" constant="24" id="sYT-Ri-Sbg"/>
                             <constraint firstItem="N4Z-JQ-SBA" firstAttribute="leading" secondItem="eli-yo-fW8" secondAttribute="leading" id="t5l-Ud-uhh"/>
                             <constraint firstItem="1D4-wB-rc5" firstAttribute="leading" secondItem="kr3-QC-Kcp" secondAttribute="leading" constant="20" id="tmB-TJ-UvL"/>

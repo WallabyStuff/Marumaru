@@ -195,14 +195,20 @@ struct R: Rswift.Validatable {
   }
   #endif
 
-  /// This `R.color` struct is generated, and contains static references to 23 colors.
+  /// This `R.color` struct is generated, and contains static references to 26 colors.
   struct color {
     /// Color `AccentColor`.
     static let accentColor = Rswift.ColorResource(bundle: R.hostingBundle, name: "AccentColor")
     /// Color `AccentGreen`.
     static let accentGreen = Rswift.ColorResource(bundle: R.hostingBundle, name: "AccentGreen")
+    /// Color `AccentIndigo`.
+    static let accentIndigo = Rswift.ColorResource(bundle: R.hostingBundle, name: "AccentIndigo")
+    /// Color `AccentOrange`.
+    static let accentOrange = Rswift.ColorResource(bundle: R.hostingBundle, name: "AccentOrange")
     /// Color `AccentRed`.
     static let accentRed = Rswift.ColorResource(bundle: R.hostingBundle, name: "AccentRed")
+    /// Color `AccentTeal`.
+    static let accentTeal = Rswift.ColorResource(bundle: R.hostingBundle, name: "AccentTeal")
     /// Color `AccentYellow`.
     static let accentYellow = Rswift.ColorResource(bundle: R.hostingBundle, name: "AccentYellow")
     /// Color `BackgroundGray`.
@@ -263,11 +269,38 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "AccentIndigo", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func accentIndigo(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.accentIndigo, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "AccentOrange", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func accentOrange(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.accentOrange, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
     /// `UIColor(named: "AccentRed", bundle: ..., traitCollection: ...)`
     @available(tvOS 11.0, *)
     @available(iOS 11.0, *)
     static func accentRed(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
       return UIKit.UIColor(resource: R.color.accentRed, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "AccentTeal", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func accentTeal(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.accentTeal, compatibleWith: traitCollection)
     }
     #endif
 
@@ -468,10 +501,34 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(watchOS)
+    /// `UIColor(named: "AccentIndigo", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func accentIndigo(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.accentIndigo.name)
+    }
+    #endif
+
+    #if os(watchOS)
+    /// `UIColor(named: "AccentOrange", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func accentOrange(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.accentOrange.name)
+    }
+    #endif
+
+    #if os(watchOS)
     /// `UIColor(named: "AccentRed", bundle: ..., traitCollection: ...)`
     @available(watchOSApplicationExtension 4.0, *)
     static func accentRed(_: Void = ()) -> UIKit.UIColor? {
       return UIKit.UIColor(named: R.color.accentRed.name)
+    }
+    #endif
+
+    #if os(watchOS)
+    /// `UIColor(named: "AccentTeal", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func accentTeal(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.accentTeal.name)
     }
     #endif
 
