@@ -123,6 +123,7 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
         viewModel.isLoadingComics
             .subscribe(with: self, onNext: { vc, isLoading in
                 vc.categoryCollectionView.layoutIfNeeded()
+                vc.alignComicCategoryCollectionView()
                 
                 if isLoading {
                     vc.categoryCollectionView.isUserInteractionEnabled = false
@@ -169,7 +170,6 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
                     let result = try result.get()
                     let image = result.image
                     
-                    cell.thumbnailImageView.image = result.image
                     cell.thumbnailImagePlaceholderLabel.isHidden = true
                     cell.thumbnailImagePlaceholderView.makeThumbnailShadow(with: image.averageColor)
                 } catch {
@@ -222,5 +222,11 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
         })
         
         present(comicDetailVC, animated: true, completion: nil)
+    }
+    
+    private func alignComicCategoryCollectionView() {
+        if let indexPath = viewModel.alignIndexPath {
+            categoryCollectionView.scrollToItem(at: indexPath, at: .right, animated: false)
+        }
     }
 }

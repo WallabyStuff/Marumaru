@@ -28,7 +28,9 @@ class ComicCategoryViewModel {
 extension ComicCategoryViewModel {
     public func updateComicCategory() {
         isLoadingComics.accept(true)
-        comicSectionsObservable.accept(fakeComicSections(sectionCount: 3, rowCount: 10))
+        let fakeSections = fakeComicSections(sectionCount: 6, rowCount: 10)
+        comicSections = fakeSections
+        comicSectionsObservable.accept(fakeSections)
         
         MarumaruApiService.shared
             .getComicCategory()
@@ -37,8 +39,8 @@ extension ComicCategoryViewModel {
             .subscribe(with: self, onSuccess: { strongSelf, comics in
                 let sections = strongSelf.groupComicsBySection(comics)
                 strongSelf.comicSections = sections
-                strongSelf.isLoadingComics.accept(false)
                 strongSelf.comicSectionsObservable.accept(sections)
+                strongSelf.isLoadingComics.accept(false)
             }, onFailure: { strongSelf, _ in
                 strongSelf.isLoadingComics.accept(false)
                 strongSelf.comicSectionsObservable.accept([])
@@ -96,5 +98,17 @@ extension ComicCategoryViewModel {
     
     private var fakeComicItem: ComicInfo {
         return .init(comicSN: "", title: "", author: "", updateCycle: "")
+    }
+}
+
+extension ComicCategoryViewModel {
+    public var alignIndexPath: IndexPath? {
+        if comicSections.count >= 2 {
+            let lastItem = comicSections[1].items.count - 1
+            let indexPath = IndexPath(row: lastItem, section: 1)
+            return indexPath
+        }
+        
+        return nil
     }
 }
