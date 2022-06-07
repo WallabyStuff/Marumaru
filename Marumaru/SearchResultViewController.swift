@@ -25,7 +25,7 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
     
     weak var delegate: SearchResultViewDelegate?
     var viewModel: ViewModel
-    private var dataSource: RxCollectionViewSectionedAnimatedDataSource<SearchResultSection>?
+    private var dataSource: RxCollectionViewSectionedAnimatedDataSource<ComicInfoSection>?
     private var searchResultCollectionViewTopInset: CGFloat {
         return regularAppbarHeight
     }
@@ -217,8 +217,8 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
         viewModel.updateSearchResult(title)
     }
     
-    private func configureDataSource() -> RxCollectionViewSectionedAnimatedDataSource<SearchResultSection> {
-        let dataSource = RxCollectionViewSectionedAnimatedDataSource<SearchResultSection>(configureCell: { [weak self] _, cv, indexPath, comicInfo in
+    private func configureDataSource() -> RxCollectionViewSectionedAnimatedDataSource<ComicInfoSection> {
+        let dataSource = RxCollectionViewSectionedAnimatedDataSource<ComicInfoSection>(configureCell: { [weak self] _, cv, indexPath, comicInfo in
             
             guard let self = self,
                   let cell = cv.dequeueReusableCell(withReuseIdentifier: SearchResultComicCollectionCell.identifier, for: indexPath) as? SearchResultComicCollectionCell else {
@@ -244,7 +244,7 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
                 do {
                     let result = try result.get()
                     let image = result.image
-                    cell.thumbnailImagePlaceholderView.setThumbnailShadow(with: image.averageColor)
+                    cell.thumbnailImagePlaceholderView.makeThumbnailShadow(with: image.averageColor)
                     cell.thumbnailImagePlaceholderLabel.isHidden = true
                 } catch {
                     cell.thumbnailImagePlaceholderLabel.isHidden = false

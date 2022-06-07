@@ -107,7 +107,7 @@ class BookmarkViewController: BaseViewController, ViewModelInjectable {
                     do {
                         let result = try result.get()
                         let image = result.image
-                        cell.thumbnailImagePlaceholderView.setThumbnailShadow(with: image.averageColor)
+                        cell.thumbnailImagePlaceholderView.makeThumbnailShadow(with: image.averageColor)
                         cell.thumbnailImagePlaceholderLabel.isHidden = true
                     } catch {
                         cell.thumbnailImagePlaceholderLabel.isHidden = false

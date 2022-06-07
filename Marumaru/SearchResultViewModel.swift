@@ -19,7 +19,7 @@ class SearchResultViewModel {
     
     public var searchKeyword = ""
     private var searchResultComics = [ComicInfo]()
-    public var searchResultComicsObservable = BehaviorRelay<[SearchResultSection]>(value: [])
+    public var searchResultComicsObservable = BehaviorRelay<[ComicInfoSection]>(value: [])
     public var isLoadingSearchResultComics = PublishRelay<Bool>()
     public var failToLoadSearchResult = BehaviorRelay<Bool>(value: false)
     
@@ -31,7 +31,7 @@ extension SearchResultViewModel {
         searchKeyword = title
         searchResultComics = fakeSearchResultComics(15)
         
-        let fakeSection = SearchResultSection(items: searchResultComics)
+        let fakeSection = ComicInfoSection(items: searchResultComics)
         searchResultComicsObservable.accept([fakeSection])
         
         failToLoadSearchResult.accept(false)
@@ -44,7 +44,7 @@ extension SearchResultViewModel {
             .subscribe(with: self, onSuccess: { strongSelf, comics in
                 strongSelf.searchResultComics = comics
                 
-                let section = SearchResultSection(items: comics)
+                let section = ComicInfoSection(items: comics)
                 strongSelf.searchResultComicsObservable.accept([section])
                 strongSelf.isLoadingSearchResultComics.accept(false)
             }, onFailure: { strongSelf, _ in

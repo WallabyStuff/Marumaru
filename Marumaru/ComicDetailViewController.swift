@@ -22,7 +22,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     
     typealias ViewModel = ComicDetailViewModel
     
-    @IBOutlet weak var thumbnailImagePlaceholderView: ThumbnailView!
+    @IBOutlet weak var thumbnailImagePlaceholderView: ThumbnailPlaceholderView!
     @IBOutlet weak var thumbnailImagePlaceholderLabel: UILabel!
     @IBOutlet weak var thumbnailImageView: UIImageView!
     @IBOutlet weak var comicTitleLabel: UILabel!
@@ -109,7 +109,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
                 do {
                     let result = try result.get()
                     let image = result.image
-                    self.thumbnailImagePlaceholderView.setThumbnailShadow(with: image.averageColor)
+                    self.thumbnailImagePlaceholderView.makeThumbnailShadow(with: image.averageColor)
                     self.thumbnailImagePlaceholderLabel.isHidden = true
                 } catch {
                     self.thumbnailImagePlaceholderLabel.isHidden = false

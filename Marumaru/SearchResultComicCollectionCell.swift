@@ -18,7 +18,7 @@ class SearchResultComicCollectionCell: UICollectionViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var authorLabel: UILabel!
     @IBOutlet weak var uploadCycleLabel: TagLabel!
-    @IBOutlet weak var thumbnailImagePlaceholderView: ThumbnailView!
+    @IBOutlet weak var thumbnailImagePlaceholderView: ThumbnailPlaceholderView!
     @IBOutlet weak var thumbnailImagePlaceholderLabel: UILabel!
     @IBOutlet weak var thumbnailImageView: UIImageView!
     

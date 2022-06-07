@@ -46,6 +46,7 @@ class MarumaruApiService {
     var basePath = "https://marumaru261.com"
     static let searchPath = "/bbs/search.php?url=%2Fbbs%2Fsearch.php&stx="
     static let comicPath = "/bbs/cmoic"
+    static let categoryPath = "/bbs/page.php?hid=comicC"
     
     private var disposeBag = DisposeBag()
     private var docuemntCache = [URLToDoc]() {
@@ -432,6 +433,65 @@ extension MarumaruApiService {
 }
 
 
+// MARK: - Comic Category
+
+extension MarumaruApiService {
+    public func getComicCategory() -> Single<[ComicInfo]> {
+        return Single.create { [weak self] observer in
+            guard let self = self else {
+                return Disposables.create()
+            }
+            
+            let url = self.getComicCategoryURL()
+            self.getDocument(url, caching: true)
+                .subscribe(with: self, onSuccess: { strongSelf, doc in
+                    do {
+                        let comics = try strongSelf.parseComicCategory(with: doc)
+                        observer(.success(comics))
+                    } catch {
+                        observer(.failure(error))
+                    }
+                }, onFailure: { _, error in
+                    observer(.failure(error))
+                })
+                .disposed(by: self.disposeBag)
+            
+            return Disposables.create()
+        }
+    }
+    
+    private func parseComicCategory(with document: Document) throws -> [ComicInfo] {
+        do {
+            var comics = [ComicInfo]()
+            
+            let elements = try document.getElementsByClass("card-deck")
+            for element in elements {
+                guard let comicSN = try element.select("a").attr("href").dropAllPathPrefix() else {
+                    continue
+                }
+                
+                let title = try element.getElementsByClass("card-title").text()
+                let author = try element.getElementsByClass("card-footer").text()
+                let updateCycle = try element.select("span").text()
+                let thumbnailImagePath = try element.select("img").attr("src").dropBasePath()
+                
+                let comic = ComicInfo(comicSN: comicSN,
+                                      title: title,
+                                      author: author,
+                                      updateCycle: updateCycle,
+                                      thumbnailImage: nil,
+                                      thumbnailImagePath: thumbnailImagePath)
+                comics.append(comic)
+            }
+            
+            return comics
+        } catch {
+            throw MarumaruApiError.failToParse
+        }
+    }
+}
+
+
 // MARK: - Transforming URL
 
 extension MarumaruApiService {
@@ -492,6 +552,25 @@ extension MarumaruApiService {
         return nil
     }
     
+    private func getComicCategoryURL(_ category: ComicCategory, _ page: Int = 1) -> URL? {
+        guard var endPoint = getComicCategoryURL() else {
+            return nil
+        }
+        
+        endPoint.appendPathComponent(category.path(page: page))
+        return endPoint
+    }
+    
+    private func getComicCategoryURL() -> URL? {
+        guard var endPoint = URL(string: basePath) else {
+            return nil
+        }
+        
+        
+        endPoint.appendRawPathComponent(Self.categoryPath)
+        return endPoint
+    }
+    
     public func getImageURL(_ imagePath: String) -> URL? {
         guard var endPoint = URL(string: basePath) else {
             return nil
@@ -501,7 +580,7 @@ extension MarumaruApiService {
         return endPoint
     }
     
-    // Code source
+    // Code reference from
     // https://stackoverflow.com/questions/48576329/ios-urlstring-not-working-always
     private func transformURLString(_ string: String) -> URLComponents? {
         guard let urlPath = string.components(separatedBy: "?").first else {
@@ -544,4 +623,7 @@ private extension String {
         }
     }
 
+    func dropAllPathPrefix() -> String? {
+        return self.split(separator: "/").last?.description
+    }
 }

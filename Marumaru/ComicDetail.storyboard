@@ -36,7 +36,7 @@
                                 <rect key="frame" x="0.0" y="297" width="414" height="599"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1D4-wB-rc5" customClass="ThumbnailView" customModule="Marumaru" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1D4-wB-rc5" customClass="ThumbnailPlaceholderView" customModule="Marumaru" customModuleProvider="target">
                                 <rect key="frame" x="20" y="72" width="120" height="160"/>
                                 <color key="backgroundColor" name="BackgroundWhite-lighter"/>
                                 <constraints>
@@ -95,7 +95,7 @@
                                     <constraint firstAttribute="height" constant="40" id="yfJ-EY-Z1z"/>
                                     <constraint firstAttribute="width" constant="124" id="zTi-Dg-gfq"/>
                                 </constraints>
-                                <color key="tintColor" name="TextWhite"/>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="첫화보기 💥"/>
                             </button>
@@ -182,9 +182,6 @@
         </namedColor>
         <namedColor name="TextBlack-lighter">
             <color red="0.68599998950958252" green="0.69800001382827759" blue="0.69800001382827759" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="TextWhite">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

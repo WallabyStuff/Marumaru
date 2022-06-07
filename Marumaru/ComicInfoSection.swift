@@ -8,21 +8,21 @@
 import UIKit
 import RxDataSources
 
-struct SearchResultSection: IdentifiableType {
+struct ComicInfoSection: IdentifiableType {
     var header: String = UUID().uuidString
     var items: [ComicInfo]
 }
 
-extension SearchResultSection: AnimatableSectionModelType {
+extension ComicInfoSection: AnimatableSectionModelType {
     
     typealias Item = ComicInfo
     typealias Identity = String
     
     var identity: String {
-        return header
+        return UUID().uuidString
     }
     
-    init(original: SearchResultSection, items: [ComicInfo]) {
+    init(original: ComicInfoSection, items: [ComicInfo]) {
         self = original
         self.items = items
     }
