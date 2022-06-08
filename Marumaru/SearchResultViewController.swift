@@ -25,7 +25,7 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
     
     weak var delegate: SearchResultViewDelegate?
     var viewModel: ViewModel
-    private var dataSource: RxCollectionViewSectionedAnimatedDataSource<SearchResultSection>?
+    private var dataSource: RxCollectionViewSectionedAnimatedDataSource<ComicInfoSection>?
     private var searchResultCollectionViewTopInset: CGFloat {
         return regularAppbarHeight
     }
@@ -217,8 +217,8 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
         viewModel.updateSearchResult(title)
     }
     
-    private func configureDataSource() -> RxCollectionViewSectionedAnimatedDataSource<SearchResultSection> {
-        let dataSource = RxCollectionViewSectionedAnimatedDataSource<SearchResultSection>(configureCell: { [weak self] _, cv, indexPath, comicInfo in
+    private func configureDataSource() -> RxCollectionViewSectionedAnimatedDataSource<ComicInfoSection> {
+        let dataSource = RxCollectionViewSectionedAnimatedDataSource<ComicInfoSection>(configureCell: { [weak self] _, cv, indexPath, comicInfo in
             
             guard let self = self,
                   let cell = cv.dequeueReusableCell(withReuseIdentifier: SearchResultComicCollectionCell.identifier, for: indexPath) as? SearchResultComicCollectionCell else {
@@ -229,22 +229,17 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
             cell.titleLabel.text = comicInfo.title
             cell.thumbnailImagePlaceholderLabel.text = comicInfo.title
             cell.authorLabel.text = comicInfo.author.isEmpty ? "작가정보 없음" : comicInfo.author
-            cell.uploadCycleLabel.text = comicInfo.updateCycle
-            
-            if comicInfo.updateCycle.contains("미분류") {
-                cell.uploadCycleLabel.setBackgroundHighlight(with: .systemTeal,
-                                                             textColor: .white)
-            } else {
-                cell.uploadCycleLabel.setBackgroundHighlight(with: .systemTeal,
-                                                             textColor: .white)
-            }
+            cell.updateCycleLabel.text = comicInfo.updateCycle
+            cell.updateCycleLabel.makeRoundedBackground(cornerRadius: 6,
+                                                   backgroundColor: UpdateCycle(rawValue: comicInfo.updateCycle)?.color,
+                                                   foregroundColor: .white)
             
             let url = self.viewModel.getImageURL(comicInfo.thumbnailImagePath)
             cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { result in
                 do {
                     let result = try result.get()
                     let image = result.image
-                    cell.thumbnailImagePlaceholderView.setThumbnailShadow(with: image.averageColor)
+                    cell.thumbnailImagePlaceholderView.makeThumbnailShadow(with: image.averageColor)
                     cell.thumbnailImagePlaceholderLabel.isHidden = true
                 } catch {
                     cell.thumbnailImagePlaceholderLabel.isHidden = false

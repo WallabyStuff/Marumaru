@@ -126,8 +126,8 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func registerNewEpisodeCollecionCell() {
-        let nibName = UINib(nibName: R.nib.comicThumbnailCollectionCell.name, bundle: nil)
-        newComicEpisodeCollectionView.register(nibName, forCellWithReuseIdentifier: ComicThumbnailCollectionCell.identifier)
+        let nibName = UINib(nibName: R.nib.comicEpisodeThumbnailCollectionCell.name, bundle: nil)
+        newComicEpisodeCollectionView.register(nibName, forCellWithReuseIdentifier: ComicEpisodeThumbnailCollectionCell.identifier)
     }
     
     private func setupWatchHistoryCollectionView() {
@@ -138,8 +138,8 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func registerWatchHistoryCollectionCell() {
-        let nibName = UINib(nibName: R.nib.comicThumbnailCollectionCell.name, bundle: nil)
-        watchHistoryCollectionView.register(nibName, forCellWithReuseIdentifier: ComicThumbnailCollectionCell.identifier)
+        let nibName = UINib(nibName: R.nib.comicEpisodeThumbnailCollectionCell.name, bundle: nil)
+        watchHistoryCollectionView.register(nibName, forCellWithReuseIdentifier: ComicEpisodeThumbnailCollectionCell.identifier)
     }
     
     private func setupComicRankTableView() {
@@ -239,8 +239,8 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     private func bindNewComicEpisodeCollectionView() {
         viewModel.newComicEpisodesObservable
             .bind(to: newComicEpisodeCollectionView.rx
-                .items(cellIdentifier: ComicThumbnailCollectionCell.identifier,
-                       cellType: ComicThumbnailCollectionCell.self)) { [weak self] _, episode, cell in
+                .items(cellIdentifier: ComicEpisodeThumbnailCollectionCell.identifier,
+                       cellType: ComicEpisodeThumbnailCollectionCell.self)) { [weak self] _, episode, cell in
                 guard let self = self else { return }
                 
                 cell.hideSkeleton()
@@ -252,7 +252,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
                     do {
                         let result = try result.get()
                         let image = result.image
-                        cell.thumbnailImagePlaceholderView.setThumbnailShadow(with: image.averageColor)
+                        cell.thumbnailImagePlaceholderView.makeThumbnailShadow(with: image.averageColor)
                         cell.thumbnailImagePlaceholderLabel.isHidden = true
                     } catch {
                         cell.thumbnailImagePlaceholderLabel.isHidden = false
@@ -314,8 +314,8 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     
     private func bindWatchHistoryCollectionView() {
         viewModel.watchHistoriesObservable
-            .bind(to: watchHistoryCollectionView.rx.items(cellIdentifier: ComicThumbnailCollectionCell.identifier,
-                                                          cellType: ComicThumbnailCollectionCell.self)) { [weak self] _, episode, cell in
+            .bind(to: watchHistoryCollectionView.rx.items(cellIdentifier: ComicEpisodeThumbnailCollectionCell.identifier,
+                                                          cellType: ComicEpisodeThumbnailCollectionCell.self)) { [weak self] _, episode, cell in
                 guard let self = self else { return }
                 
                 cell.hideSkeleton()
@@ -327,7 +327,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
                     do {
                         let result = try result.get()
                         let image = result.image
-                        cell.thumbnailImagePlaceholderView.setThumbnailShadow(with: image.averageColor)
+                        cell.thumbnailImagePlaceholderView.makeThumbnailShadow(with: image.averageColor)
                         cell.thumbnailImagePlaceholderLabel.isHidden = true
                     } catch {
                         cell.thumbnailImagePlaceholderLabel.isHidden = false

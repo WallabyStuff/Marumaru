@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ThumbnailView: UIView {
+class ThumbnailPlaceholderView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -17,8 +17,8 @@ class ThumbnailView: UIView {
     }
 }
 
-extension ThumbnailView {
-    func setThubmailShadow() {
+extension ThumbnailPlaceholderView {
+    func makeThubmailShadow() {
         self.layer.shadowColor = R.color.shadowBlack()!.cgColor
         self.layer.shadowOffset = CGSize(width: 0, height: 4)
         self.layer.shadowRadius = 12
@@ -27,7 +27,7 @@ extension ThumbnailView {
         self.layer.shouldRasterize = true
     }
     
-    func setThumbnailShadow(with color: UIColor?) {
+    func makeThumbnailShadow(with color: UIColor?) {
         self.layer.shadowColor = color == nil ? R.color.shadowBlack()!.cgColor : color!.cgColor
         self.layer.shadowOffset = CGSize(width: 0, height: 4)
         self.layer.shadowRadius = 12

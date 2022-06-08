@@ -21,7 +21,7 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R6E-Sc-ujz">
                         <rect key="frame" x="0.0" y="0.0" width="334" height="128"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LOY-QT-njR" customClass="ThumbnailView" customModule="Marumaru" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LOY-QT-njR" customClass="ThumbnailPlaceholderView" customModule="Marumaru" customModuleProvider="target">
                                 <rect key="frame" x="12" y="12" width="76" height="104"/>
                                 <color key="backgroundColor" name="BackgroundWhite-lighter"/>
                                 <constraints>
@@ -77,8 +77,8 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="upload cycle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oXZ-Qt-h69" customClass="TagLabel" customModule="Marumaru" customModuleProvider="target">
-                                <rect key="frame" x="104" y="73" width="72" height="15"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <rect key="frame" x="104" y="73" width="73.5" height="15"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
                                 <color key="textColor" name="TextBlack-light"/>
                                 <nil key="highlightedColor"/>
                                 <userDefinedRuntimeAttributes>
@@ -134,7 +134,7 @@
                 <outlet property="thumbnailImagePlaceholderView" destination="LOY-QT-njR" id="8A2-do-vuC"/>
                 <outlet property="thumbnailImageView" destination="KNs-oS-8vM" id="pQF-7C-iK5"/>
                 <outlet property="titleLabel" destination="WWF-UW-Luv" id="fIM-63-S6D"/>
-                <outlet property="uploadCycleLabel" destination="oXZ-Qt-h69" id="LHz-qO-hr4"/>
+                <outlet property="updateCycleLabel" destination="oXZ-Qt-h69" id="LHz-qO-hr4"/>
             </connections>
             <point key="canvasLocation" x="343.47826086956525" y="109.82142857142857"/>
         </collectionViewCell>

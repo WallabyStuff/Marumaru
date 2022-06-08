@@ -10,5 +10,19 @@ import RxSwift
 @testable import Marumaru
 
 class MarumaruAPITests: XCTestCase {
+    func newEpisodes() {
+        MarumaruApiService.shared.getNewComicEpisodes()
+            .subscribe(onSuccess: { episodes in
+                XCTAssertEqual(episodes.count, 14)
+            })
+            .dispose()
+    }
     
+    func comicCategory() {
+        MarumaruApiService.shared.getComicCategory()
+            .subscribe(onSuccess: { comics in
+                XCTAssertEqual(comics.count, 18)
+            })
+            .dispose()
+    }
 }

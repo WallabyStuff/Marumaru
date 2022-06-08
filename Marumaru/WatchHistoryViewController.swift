@@ -84,8 +84,8 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func registerWatchHistoryCollectionCell() {
-        let nibName = UINib(nibName: ComicThumbnailCollectionCell.identifier, bundle: nil)
-        watchHistoryCollectionView.register(nibName, forCellWithReuseIdentifier: ComicThumbnailCollectionCell.identifier)
+        let nibName = UINib(nibName: ComicEpisodeThumbnailCollectionCell.identifier, bundle: nil)
+        watchHistoryCollectionView.register(nibName, forCellWithReuseIdentifier: ComicEpisodeThumbnailCollectionCell.identifier)
     }
     
     private func registerWatchHistoryHeader() {
@@ -181,8 +181,8 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
             if comicEpisode.isInvalidated { return UICollectionViewCell() }
             
             guard let self = self,
-                  let cell = cv.dequeueReusableCell(withReuseIdentifier: ComicThumbnailCollectionCell.identifier, for: indexPath)
-                    as? ComicThumbnailCollectionCell else {
+                  let cell = cv.dequeueReusableCell(withReuseIdentifier: ComicEpisodeThumbnailCollectionCell.identifier, for: indexPath)
+                    as? ComicEpisodeThumbnailCollectionCell else {
                 return UICollectionViewCell()
             }
             
@@ -194,7 +194,7 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
                 do {
                     let result = try result.get()
                     let image = result.image
-                    cell.thumbnailImagePlaceholderView.setThumbnailShadow(with: image.averageColor)
+                    cell.thumbnailImagePlaceholderView.makeThumbnailShadow(with: image.averageColor)
                     cell.thumbnailImagePlaceholderLabel.isHidden = true
                 } catch {
                     cell.thumbnailImagePlaceholderLabel.isHidden = false

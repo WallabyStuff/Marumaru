@@ -17,8 +17,8 @@ class SearchResultComicCollectionCell: UICollectionViewCell {
     @IBOutlet weak var cellContentView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var authorLabel: UILabel!
-    @IBOutlet weak var uploadCycleLabel: TagLabel!
-    @IBOutlet weak var thumbnailImagePlaceholderView: ThumbnailView!
+    @IBOutlet weak var updateCycleLabel: TagLabel!
+    @IBOutlet weak var thumbnailImagePlaceholderView: ThumbnailPlaceholderView!
     @IBOutlet weak var thumbnailImagePlaceholderLabel: UILabel!
     @IBOutlet weak var thumbnailImageView: UIImageView!
     
@@ -93,8 +93,8 @@ class SearchResultComicCollectionCell: UICollectionViewCell {
     }
     
     private func setupUploadCycleLabel() {
-        uploadCycleLabel.text = "미분류"
-        uploadCycleLabel.makeRoundedBackground(cornerRadius: 8,
+        updateCycleLabel.text = "미분류"
+        updateCycleLabel.makeRoundedBackground(cornerRadius: 6,
                                                backgroundColor: .systemTeal,
                                                foregroundColor: .white)
     }

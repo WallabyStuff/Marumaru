@@ -79,8 +79,8 @@ class BookmarkViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func registerBookmarkCollectionCell() {
-        let nibName = UINib(nibName: R.nib.comicThumbnailCollectionCell.name, bundle: nil)
-        bookmarkCollectionView.register(nibName, forCellWithReuseIdentifier: ComicThumbnailCollectionCell.identifier)
+        let nibName = UINib(nibName: R.nib.comicEpisodeThumbnailCollectionCell.name, bundle: nil)
+        bookmarkCollectionView.register(nibName, forCellWithReuseIdentifier: ComicEpisodeThumbnailCollectionCell.identifier)
     }
     
     
@@ -95,7 +95,7 @@ class BookmarkViewController: BaseViewController, ViewModelInjectable {
     
     private func bindBookmarks() {
         viewModel.bookmarksObservable
-            .bind(to: bookmarkCollectionView.rx.items(cellIdentifier: ComicThumbnailCollectionCell.identifier, cellType: ComicThumbnailCollectionCell.self)) { [weak self] _, bookmark, cell in
+            .bind(to: bookmarkCollectionView.rx.items(cellIdentifier: ComicEpisodeThumbnailCollectionCell.identifier, cellType: ComicEpisodeThumbnailCollectionCell.self)) { [weak self] _, bookmark, cell in
                 guard let self = self else { return }
                 
                 cell.thumbnailImageView.layer.cornerRadius = 6
@@ -107,7 +107,7 @@ class BookmarkViewController: BaseViewController, ViewModelInjectable {
                     do {
                         let result = try result.get()
                         let image = result.image
-                        cell.thumbnailImagePlaceholderView.setThumbnailShadow(with: image.averageColor)
+                        cell.thumbnailImagePlaceholderView.makeThumbnailShadow(with: image.averageColor)
                         cell.thumbnailImagePlaceholderLabel.isHidden = true
                     } catch {
                         cell.thumbnailImagePlaceholderLabel.isHidden = false

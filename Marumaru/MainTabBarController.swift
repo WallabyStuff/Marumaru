@@ -77,7 +77,7 @@ class MainTabBarController: UITabBarController {
     }
     
     private func setupViewControllers() {
-        setViewControllers([mainViewController, emptyViewController, comingSoonViewController, bookmarkViewController],
+        setViewControllers([mainViewController, emptyViewController, comicCategoryViewController, bookmarkViewController],
                            animated: true)
     }
     
@@ -107,6 +107,9 @@ class MainTabBarController: UITabBarController {
         }
     }
 }
+
+
+// MARK: - ViewController factory
 
 extension MainTabBarController {
     private var mainViewController: UIViewController {
@@ -147,6 +150,17 @@ extension MainTabBarController {
                                                                   creator: { coder -> BookmarkViewController in
             let viewModel = BookmarkViewModel()
             return .init(coder, viewModel) ?? BookmarkViewController(viewModel)
+        })
+        
+        return UINavigationController(rootViewController: viewController)
+    }
+    
+    private var comicCategoryViewController: UINavigationController {
+        let storyboard = UIStoryboard(name: R.storyboard.comicCategory.name, bundle: nil)
+        let viewController = storyboard.instantiateViewController(identifier: ComicCategoryViewController.identifier,
+                                                                  creator: { coder -> ComicCategoryViewController in
+            let viewModel = ComicCategoryViewModel()
+            return .init(coder, viewModel) ?? ComicCategoryViewController(viewModel)
         })
         
         return UINavigationController(rootViewController: viewController)

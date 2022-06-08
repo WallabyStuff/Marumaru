@@ -89,10 +89,12 @@ struct R: Rswift.Validatable {
   }
 
   #if os(iOS) || os(tvOS)
-  /// This `R.storyboard` struct is generated, and contains static references to 10 storyboards.
+  /// This `R.storyboard` struct is generated, and contains static references to 11 storyboards.
   struct storyboard {
     /// Storyboard `Bookmark`.
     static let bookmark = _R.storyboard.bookmark()
+    /// Storyboard `ComicCategory`.
+    static let comicCategory = _R.storyboard.comicCategory()
     /// Storyboard `ComicDetail`.
     static let comicDetail = _R.storyboard.comicDetail()
     /// Storyboard `ComicStrip`.
@@ -116,6 +118,13 @@ struct R: Rswift.Validatable {
     /// `UIStoryboard(name: "Bookmark", bundle: ...)`
     static func bookmark(_: Void = ()) -> UIKit.UIStoryboard {
       return UIKit.UIStoryboard(resource: R.storyboard.bookmark)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIStoryboard(name: "ComicCategory", bundle: ...)`
+    static func comicCategory(_: Void = ()) -> UIKit.UIStoryboard {
+      return UIKit.UIStoryboard(resource: R.storyboard.comicCategory)
     }
     #endif
 
@@ -186,14 +195,20 @@ struct R: Rswift.Validatable {
   }
   #endif
 
-  /// This `R.color` struct is generated, and contains static references to 23 colors.
+  /// This `R.color` struct is generated, and contains static references to 26 colors.
   struct color {
     /// Color `AccentColor`.
     static let accentColor = Rswift.ColorResource(bundle: R.hostingBundle, name: "AccentColor")
     /// Color `AccentGreen`.
     static let accentGreen = Rswift.ColorResource(bundle: R.hostingBundle, name: "AccentGreen")
+    /// Color `AccentIndigo`.
+    static let accentIndigo = Rswift.ColorResource(bundle: R.hostingBundle, name: "AccentIndigo")
+    /// Color `AccentOrange`.
+    static let accentOrange = Rswift.ColorResource(bundle: R.hostingBundle, name: "AccentOrange")
     /// Color `AccentRed`.
     static let accentRed = Rswift.ColorResource(bundle: R.hostingBundle, name: "AccentRed")
+    /// Color `AccentTeal`.
+    static let accentTeal = Rswift.ColorResource(bundle: R.hostingBundle, name: "AccentTeal")
     /// Color `AccentYellow`.
     static let accentYellow = Rswift.ColorResource(bundle: R.hostingBundle, name: "AccentYellow")
     /// Color `BackgroundGray`.
@@ -254,11 +269,38 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "AccentIndigo", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func accentIndigo(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.accentIndigo, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "AccentOrange", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func accentOrange(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.accentOrange, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
     /// `UIColor(named: "AccentRed", bundle: ..., traitCollection: ...)`
     @available(tvOS 11.0, *)
     @available(iOS 11.0, *)
     static func accentRed(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
       return UIKit.UIColor(resource: R.color.accentRed, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "AccentTeal", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func accentTeal(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.accentTeal, compatibleWith: traitCollection)
     }
     #endif
 
@@ -459,10 +501,34 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(watchOS)
+    /// `UIColor(named: "AccentIndigo", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func accentIndigo(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.accentIndigo.name)
+    }
+    #endif
+
+    #if os(watchOS)
+    /// `UIColor(named: "AccentOrange", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func accentOrange(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.accentOrange.name)
+    }
+    #endif
+
+    #if os(watchOS)
     /// `UIColor(named: "AccentRed", bundle: ..., traitCollection: ...)`
     @available(watchOSApplicationExtension 4.0, *)
     static func accentRed(_: Void = ()) -> UIKit.UIColor? {
       return UIKit.UIColor(named: R.color.accentRed.name)
+    }
+    #endif
+
+    #if os(watchOS)
+    /// `UIColor(named: "AccentTeal", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func accentTeal(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.accentTeal.name)
     }
     #endif
 
@@ -629,7 +695,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.file` struct is generated, and contains static references to 12 files.
+  /// This `R.file` struct is generated, and contains static references to 11 files.
   struct file {
     /// Resource file `.swiftlint.yml`.
     static let swiftlintYml = Rswift.FileResource(bundle: R.hostingBundle, name: ".swiftlint", pathExtension: "yml")
@@ -647,8 +713,6 @@ struct R: Rswift.Validatable {
     static let lying_catJson = Rswift.FileResource(bundle: R.hostingBundle, name: "lying_cat", pathExtension: "json")
     /// Resource file `notification_bell.json`.
     static let notification_bellJson = Rswift.FileResource(bundle: R.hostingBundle, name: "notification_bell", pathExtension: "json")
-    /// Resource file `package.json`.
-    static let packageJson = Rswift.FileResource(bundle: R.hostingBundle, name: "package", pathExtension: "json")
     /// Resource file `rainbow_cat.json`.
     static let rainbow_catJson = Rswift.FileResource(bundle: R.hostingBundle, name: "rainbow_cat", pathExtension: "json")
     /// Resource file `sleeping_cat.json`.
@@ -701,12 +765,6 @@ struct R: Rswift.Validatable {
     /// `bundle.url(forResource: "notification_bell", withExtension: "json")`
     static func notification_bellJson(_: Void = ()) -> Foundation.URL? {
       let fileResource = R.file.notification_bellJson
-      return fileResource.bundle.url(forResource: fileResource)
-    }
-
-    /// `bundle.url(forResource: "package", withExtension: "json")`
-    static func packageJson(_: Void = ()) -> Foundation.URL? {
-      let fileResource = R.file.packageJson
       return fileResource.bundle.url(forResource: fileResource)
     }
 
@@ -1010,8 +1068,12 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.nib` struct is generated, and contains static references to 8 nibs.
+  /// This `R.nib` struct is generated, and contains static references to 10 nibs.
   struct nib {
+    /// Nib `CategoryChipCollectionCell`.
+    static let categoryChipCollectionCell = _R.nib._CategoryChipCollectionCell()
+    /// Nib `ComicEpisodeThumbnailCollectionCell`.
+    static let comicEpisodeThumbnailCollectionCell = _R.nib._ComicEpisodeThumbnailCollectionCell()
     /// Nib `ComicEpisodeThumbnailTableCell`.
     static let comicEpisodeThumbnailTableCell = _R.nib._ComicEpisodeThumbnailTableCell()
     /// Nib `ComicRankTableCell`.
@@ -1028,6 +1090,22 @@ struct R: Rswift.Validatable {
     static let searchResultComicCollectionCell = _R.nib._SearchResultComicCollectionCell()
     /// Nib `SingleButtonFooterReusableView`.
     static let singleButtonFooterReusableView = _R.nib._SingleButtonFooterReusableView()
+
+    #if os(iOS) || os(tvOS)
+    /// `UINib(name: "CategoryChipCollectionCell", in: bundle)`
+    @available(*, deprecated, message: "Use UINib(resource: R.nib.categoryChipCollectionCell) instead")
+    static func categoryChipCollectionCell(_: Void = ()) -> UIKit.UINib {
+      return UIKit.UINib(resource: R.nib.categoryChipCollectionCell)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UINib(name: "ComicEpisodeThumbnailCollectionCell", in: bundle)`
+    @available(*, deprecated, message: "Use UINib(resource: R.nib.comicEpisodeThumbnailCollectionCell) instead")
+    static func comicEpisodeThumbnailCollectionCell(_: Void = ()) -> UIKit.UINib {
+      return UIKit.UINib(resource: R.nib.comicEpisodeThumbnailCollectionCell)
+    }
+    #endif
 
     #if os(iOS) || os(tvOS)
     /// `UINib(name: "ComicEpisodeThumbnailTableCell", in: bundle)`
@@ -1093,6 +1171,14 @@ struct R: Rswift.Validatable {
     }
     #endif
 
+    static func categoryChipCollectionCell(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> CategoryChipCollectionCell? {
+      return R.nib.categoryChipCollectionCell.instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? CategoryChipCollectionCell
+    }
+
+    static func comicEpisodeThumbnailCollectionCell(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> ComicEpisodeThumbnailCollectionCell? {
+      return R.nib.comicEpisodeThumbnailCollectionCell.instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? ComicEpisodeThumbnailCollectionCell
+    }
+
     static func comicEpisodeThumbnailTableCell(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> ComicEpisodeThumbnailTableCell? {
       return R.nib.comicEpisodeThumbnailTableCell.instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? ComicEpisodeThumbnailTableCell
     }
@@ -1128,8 +1214,10 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.reuseIdentifier` struct is generated, and contains static references to 8 reuse identifiers.
+  /// This `R.reuseIdentifier` struct is generated, and contains static references to 10 reuse identifiers.
   struct reuseIdentifier {
+    /// Reuse identifier `ComicEpisodeThumbnailCollectionCell`.
+    static let comicEpisodeThumbnailCollectionCell: Rswift.ReuseIdentifier<ComicEpisodeThumbnailCollectionCell> = Rswift.ReuseIdentifier(identifier: "ComicEpisodeThumbnailCollectionCell")
     /// Reuse identifier `ComicEpisodeThumbnailTableCell`.
     static let comicEpisodeThumbnailTableCell: Rswift.ReuseIdentifier<ComicEpisodeThumbnailTableCell> = Rswift.ReuseIdentifier(identifier: "ComicEpisodeThumbnailTableCell")
     /// Reuse identifier `ComicRankTableCell`.
@@ -1144,6 +1232,8 @@ struct R: Rswift.Validatable {
     static let searchHistoryCollectionCell: Rswift.ReuseIdentifier<SearchHistoryCollectionCell> = Rswift.ReuseIdentifier(identifier: "SearchHistoryCollectionCell")
     /// Reuse identifier `SearchResultComicCollectionCell`.
     static let searchResultComicCollectionCell: Rswift.ReuseIdentifier<SearchResultComicCollectionCell> = Rswift.ReuseIdentifier(identifier: "SearchResultComicCollectionCell")
+    /// Reuse identifier `categoryChipCollectionCell`.
+    static let categoryChipCollectionCell: Rswift.ReuseIdentifier<CategoryChipCollectionCell> = Rswift.ReuseIdentifier(identifier: "categoryChipCollectionCell")
     /// Reuse identifier `singleButtonFooterReusableView`.
     static let singleButtonFooterReusableView: Rswift.ReuseIdentifier<SingleButtonFooterReusableView> = Rswift.ReuseIdentifier(identifier: "singleButtonFooterReusableView")
 
@@ -1430,6 +1520,34 @@ struct _R: Rswift.Validatable {
       try _SearchHistoryCollectionCell.validate()
     }
 
+    struct _CategoryChipCollectionCell: Rswift.NibResourceType, Rswift.ReuseIdentifierType {
+      typealias ReusableType = CategoryChipCollectionCell
+
+      let bundle = R.hostingBundle
+      let identifier = "categoryChipCollectionCell"
+      let name = "CategoryChipCollectionCell"
+
+      func firstView(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> CategoryChipCollectionCell? {
+        return instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? CategoryChipCollectionCell
+      }
+
+      fileprivate init() {}
+    }
+
+    struct _ComicEpisodeThumbnailCollectionCell: Rswift.NibResourceType, Rswift.ReuseIdentifierType {
+      typealias ReusableType = ComicEpisodeThumbnailCollectionCell
+
+      let bundle = R.hostingBundle
+      let identifier = "ComicEpisodeThumbnailCollectionCell"
+      let name = "ComicEpisodeThumbnailCollectionCell"
+
+      func firstView(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> ComicEpisodeThumbnailCollectionCell? {
+        return instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? ComicEpisodeThumbnailCollectionCell
+      }
+
+      fileprivate init() {}
+    }
+
     struct _ComicEpisodeThumbnailTableCell: Rswift.NibResourceType, Rswift.ReuseIdentifierType {
       typealias ReusableType = ComicEpisodeThumbnailTableCell
 
@@ -1562,6 +1680,9 @@ struct _R: Rswift.Validatable {
       try bookmark.validate()
       #endif
       #if os(iOS) || os(tvOS)
+      try comicCategory.validate()
+      #endif
+      #if os(iOS) || os(tvOS)
       try comicDetail.validate()
       #endif
       #if os(iOS) || os(tvOS)
@@ -1614,6 +1735,29 @@ struct _R: Rswift.Validatable {
     #endif
 
     #if os(iOS) || os(tvOS)
+    struct comicCategory: Rswift.StoryboardResourceWithInitialControllerType, Rswift.Validatable {
+      typealias InitialController = UIKit.UINavigationController
+
+      let bundle = R.hostingBundle
+      let comicCategoryStoryboard = StoryboardViewControllerResource<ComicCategoryViewController>(identifier: "ComicCategoryStoryboard")
+      let name = "ComicCategory"
+
+      func comicCategoryStoryboard(_: Void = ()) -> ComicCategoryViewController? {
+        return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: comicCategoryStoryboard)
+      }
+
+      static func validate() throws {
+        if #available(iOS 11.0, tvOS 11.0, *) {
+          if UIKit.UIColor(named: "BackgroundWhite", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'BackgroundWhite' is used in storyboard 'ComicCategory', but couldn't be loaded.") }
+        }
+        if _R.storyboard.comicCategory().comicCategoryStoryboard() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'comicCategoryStoryboard' could not be loaded from storyboard 'ComicCategory' as 'ComicCategoryViewController'.") }
+      }
+
+      fileprivate init() {}
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
     struct comicDetail: Rswift.StoryboardResourceWithInitialControllerType, Rswift.Validatable {
       typealias InitialController = ComicDetailViewController
 
@@ -1634,7 +1778,6 @@ struct _R: Rswift.Validatable {
           if UIKit.UIColor(named: "TextBlack", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'TextBlack' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
           if UIKit.UIColor(named: "TextBlack-light", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'TextBlack-light' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
           if UIKit.UIColor(named: "TextBlack-lighter", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'TextBlack-lighter' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
-          if UIKit.UIColor(named: "TextWhite", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'TextWhite' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
         }
         if _R.storyboard.comicDetail().comicDetailStoryboard() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'comicDetailStoryboard' could not be loaded from storyboard 'ComicDetail' as 'ComicDetailViewController'.") }
       }

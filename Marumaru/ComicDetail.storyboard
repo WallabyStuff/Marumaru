@@ -36,7 +36,7 @@
                                 <rect key="frame" x="0.0" y="297" width="414" height="599"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1D4-wB-rc5" customClass="ThumbnailView" customModule="Marumaru" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1D4-wB-rc5" customClass="ThumbnailPlaceholderView" customModule="Marumaru" customModuleProvider="target">
                                 <rect key="frame" x="20" y="72" width="120" height="160"/>
                                 <color key="backgroundColor" name="BackgroundWhite-lighter"/>
                                 <constraints>
@@ -69,8 +69,8 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="updateCycle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EAb-jD-8vo" customClass="TagLabel" customModule="Marumaru" customModuleProvider="target">
-                                <rect key="frame" x="156" y="147.5" width="91.5" height="19.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <rect key="frame" x="156" y="151.5" width="83.5" height="17"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                 <color key="textColor" name="TextBlack-lighter"/>
                                 <nil key="highlightedColor"/>
                                 <userDefinedRuntimeAttributes>
@@ -95,7 +95,7 @@
                                     <constraint firstAttribute="height" constant="40" id="yfJ-EY-Z1z"/>
                                     <constraint firstAttribute="width" constant="124" id="zTi-Dg-gfq"/>
                                 </constraints>
-                                <color key="tintColor" name="TextWhite"/>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="첫화보기 💥"/>
                             </button>
@@ -137,7 +137,7 @@
                             <constraint firstItem="exS-Qj-xsj" firstAttribute="trailing" secondItem="UfP-1z-GxZ" secondAttribute="trailing" constant="-8" id="hls-p0-lXF"/>
                             <constraint firstItem="UfP-1z-GxZ" firstAttribute="leading" secondItem="1D4-wB-rc5" secondAttribute="leading" id="iVy-6Z-kE6"/>
                             <constraint firstItem="J2n-c3-kwj" firstAttribute="top" secondItem="w3Q-oB-Dox" secondAttribute="top" id="l5t-9c-Jw7"/>
-                            <constraint firstItem="EAb-jD-8vo" firstAttribute="top" secondItem="N4Z-JQ-SBA" secondAttribute="bottom" constant="8" id="qO7-dn-sOy"/>
+                            <constraint firstItem="EAb-jD-8vo" firstAttribute="top" secondItem="N4Z-JQ-SBA" secondAttribute="bottom" constant="12" id="qO7-dn-sOy"/>
                             <constraint firstItem="w3Q-oB-Dox" firstAttribute="bottom" secondItem="NmN-fc-OG9" secondAttribute="bottom" constant="24" id="sYT-Ri-Sbg"/>
                             <constraint firstItem="N4Z-JQ-SBA" firstAttribute="leading" secondItem="eli-yo-fW8" secondAttribute="leading" id="t5l-Ud-uhh"/>
                             <constraint firstItem="1D4-wB-rc5" firstAttribute="leading" secondItem="kr3-QC-Kcp" secondAttribute="leading" constant="20" id="tmB-TJ-UvL"/>
@@ -182,9 +182,6 @@
         </namedColor>
         <namedColor name="TextBlack-lighter">
             <color red="0.68599998950958252" green="0.69800001382827759" blue="0.69800001382827759" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="TextWhite">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>
