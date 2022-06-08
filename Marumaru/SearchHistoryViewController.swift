@@ -114,8 +114,8 @@ class SearchHistoryViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func configureSearchHistoryCollectionViewInsets() {
-        searchHistoryCollectionView.contentInset = UIEdgeInsets(top: searchResultCollectionViewTopInset,
-                                                               left: 0, bottom: 40, right: 0)
+        searchHistoryCollectionView.contentInset = UIEdgeInsets.inset(top: searchResultCollectionViewTopInset,
+                                                                      bottom: 40)
     }
     
     

@@ -79,8 +79,7 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
         registerWatchHistoryFooter()
         
         watchHistoryCollectionView.collectionViewLayout = flowLayout()
-        watchHistoryCollectionView.contentInset = UIEdgeInsets(top: compactAppbarHeight + view.safeAreaInsets.top + 24,
-                                                               left: 0, bottom: 0, right: 0)
+        watchHistoryCollectionView.contentInset = UIEdgeInsets.top(compactAppbarHeight + view.safeAreaInsets.top + 24)
     }
     
     private func registerWatchHistoryCollectionCell() {

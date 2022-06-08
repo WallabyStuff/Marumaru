@@ -84,7 +84,7 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
     private func setupComicCollectionCell() {
         registerComicCollectionCell()
         comicCollectionView.collectionViewLayout = comicsCollectionViewLayout()
-        comicCollectionView.contentInset = .init(top: 88, left: 0, bottom: 24, right: 0)
+        comicCollectionView.contentInset = UIEdgeInsets.inset(top: 88, bottom: 24)
     }
     
     private func registerComicCollectionCell() {

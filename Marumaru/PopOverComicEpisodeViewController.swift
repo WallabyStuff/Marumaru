@@ -70,7 +70,7 @@ class PopOverComicEpisodeViewController: BaseViewController, ViewModelInjectable
     
     private func setupEpisodeTableView() {
         registerEpisodeTableCell()
-        episodeTableView.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+        episodeTableView.separatorInset = UIEdgeInsets.leftAndRight(16)
         episodeTableView.tableFooterView = UIView()
     }
     

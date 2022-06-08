@@ -104,8 +104,8 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func configureSearchResultCollectionViewInsets() {
-        searchResultCollectionView.contentInset = UIEdgeInsets(top: searchResultCollectionViewTopInset,
-                                                               left: 0, bottom: 40, right: 0)
+        searchResultCollectionView.contentInset = UIEdgeInsets.inset(top: searchResultCollectionViewTopInset,
+                                                                     bottom: 40)
     }
     
     
