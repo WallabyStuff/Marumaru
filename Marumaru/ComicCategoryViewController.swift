@@ -95,7 +95,7 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
     private func setupComicCategoryCollectionView() {
         registerComicCategoryCollectionCell()
         comicCategoryCollectionView.collectionViewLayout = comicCategoryCollectionViewLayout()
-        comicCategoryCollectionView.contentInset = .init(top: 12, left: 20, bottom: 12, right: 20)
+        comicCategoryCollectionView.contentInset = .init(top: 12, left: 20, bottom: 12, right: -40)
         comicCategoryCollectionView.delegate = self
     }
     
@@ -310,9 +310,8 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
 
 extension ComicCategoryViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        let width = viewModel.categoryItem(indexPath).title.size(withAttributes: nil)
-            .width
+        let sideInset: CGFloat = 20
+        let width = viewModel.categoryItem(indexPath).title.size(withAttributes: nil).width + sideInset * 2
         return .init(width: width, height: 40)
     }
 }

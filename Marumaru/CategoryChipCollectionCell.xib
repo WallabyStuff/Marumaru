@@ -30,19 +30,20 @@
                         </subviews>
                         <color key="backgroundColor" name="BackgroundWhite"/>
                         <constraints>
-                            <constraint firstItem="Qgh-gB-38r" firstAttribute="leading" secondItem="7zM-cu-BMx" secondAttribute="leading" constant="20" id="6LP-zk-kKA"/>
-                            <constraint firstItem="Qgh-gB-38r" firstAttribute="centerY" secondItem="7zM-cu-BMx" secondAttribute="centerY" id="Wyh-ef-NLL"/>
-                            <constraint firstAttribute="trailing" secondItem="Qgh-gB-38r" secondAttribute="trailing" constant="20" id="hSZ-ys-1gu"/>
+                            <constraint firstItem="Qgh-gB-38r" firstAttribute="leading" secondItem="7zM-cu-BMx" secondAttribute="leading" constant="20" id="8PA-ST-Qh1"/>
+                            <constraint firstAttribute="trailing" secondItem="Qgh-gB-38r" secondAttribute="trailing" constant="20" id="H2z-T4-pAj"/>
+                            <constraint firstItem="Qgh-gB-38r" firstAttribute="centerY" secondItem="7zM-cu-BMx" secondAttribute="centerY" id="PQk-GR-Mod"/>
+                            <constraint firstAttribute="height" constant="40" id="jSU-3B-HEO"/>
                         </constraints>
                     </view>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
-                <constraint firstItem="7zM-cu-BMx" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="D1B-Ae-ag3"/>
-                <constraint firstAttribute="bottom" secondItem="7zM-cu-BMx" secondAttribute="bottom" id="PJd-BR-a9o"/>
-                <constraint firstAttribute="trailing" secondItem="7zM-cu-BMx" secondAttribute="trailing" id="qq8-ug-5Pl"/>
-                <constraint firstItem="7zM-cu-BMx" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="xUo-pS-HcL"/>
+                <constraint firstItem="7zM-cu-BMx" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="4ko-ws-c7o"/>
+                <constraint firstAttribute="trailing" secondItem="7zM-cu-BMx" secondAttribute="trailing" id="QyF-Wa-6jX"/>
+                <constraint firstItem="7zM-cu-BMx" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="dBb-hH-Tea"/>
+                <constraint firstAttribute="bottom" secondItem="7zM-cu-BMx" secondAttribute="bottom" id="fyn-78-90k"/>
             </constraints>
             <size key="customSize" width="153" height="45"/>
             <connections>
