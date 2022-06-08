@@ -229,15 +229,10 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
             cell.titleLabel.text = comicInfo.title
             cell.thumbnailImagePlaceholderLabel.text = comicInfo.title
             cell.authorLabel.text = comicInfo.author.isEmpty ? "작가정보 없음" : comicInfo.author
-            cell.uploadCycleLabel.text = comicInfo.updateCycle
-            
-            if comicInfo.updateCycle.contains("미분류") {
-                cell.uploadCycleLabel.setBackgroundHighlight(with: .systemTeal,
-                                                             textColor: .white)
-            } else {
-                cell.uploadCycleLabel.setBackgroundHighlight(with: .systemTeal,
-                                                             textColor: .white)
-            }
+            cell.updateCycleLabel.text = comicInfo.updateCycle
+            cell.updateCycleLabel.makeRoundedBackground(cornerRadius: 6,
+                                                   backgroundColor: UpdateCycle(rawValue: comicInfo.updateCycle)?.color,
+                                                   foregroundColor: .white)
             
             let url = self.viewModel.getImageURL(comicInfo.thumbnailImagePath)
             cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { result in

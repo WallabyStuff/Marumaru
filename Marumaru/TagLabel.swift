@@ -26,12 +26,14 @@ class TagLabel: UILabel {
 }
 
 extension TagLabel {
-    func makeRoundedBackground(cornerRadius: CGFloat, backgroundColor: UIColor, foregroundColor: UIColor) {
+    func makeRoundedBackground(cornerRadius: CGFloat,
+                               backgroundColor: UIColor?,
+                               foregroundColor: UIColor?) {
         self.clipsToBounds = true
         self.backgroundColor = backgroundColor
         self.textColor = foregroundColor
         self.layer.cornerRadius = cornerRadius
-        self.text = "  \(self.text!)  "
+        self.text = "\(self.text!)"
     }
     
     func removeRoundedBackground(foregroundColor: UIColor) {

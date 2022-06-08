@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -75,8 +77,8 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="upload cycle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oXZ-Qt-h69" customClass="TagLabel" customModule="Marumaru" customModuleProvider="target">
-                                <rect key="frame" x="104" y="73" width="72" height="15"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <rect key="frame" x="104" y="73" width="73.5" height="15"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
                                 <color key="textColor" name="TextBlack-light"/>
                                 <nil key="highlightedColor"/>
                                 <userDefinedRuntimeAttributes>
@@ -132,7 +134,7 @@
                 <outlet property="thumbnailImagePlaceholderView" destination="LOY-QT-njR" id="8A2-do-vuC"/>
                 <outlet property="thumbnailImageView" destination="KNs-oS-8vM" id="pQF-7C-iK5"/>
                 <outlet property="titleLabel" destination="WWF-UW-Luv" id="fIM-63-S6D"/>
-                <outlet property="uploadCycleLabel" destination="oXZ-Qt-h69" id="LHz-qO-hr4"/>
+                <outlet property="updateCycleLabel" destination="oXZ-Qt-h69" id="LHz-qO-hr4"/>
             </connections>
             <point key="canvasLocation" x="343.47826086956525" y="109.82142857142857"/>
         </collectionViewCell>

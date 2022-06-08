@@ -27,7 +27,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     @IBOutlet weak var thumbnailImageView: UIImageView!
     @IBOutlet weak var comicTitleLabel: UILabel!
     @IBOutlet weak var authorLabel: UILabel!
-    @IBOutlet weak var updateCycleLabel: UILabel!
+    @IBOutlet weak var updateCycleLabel: TagLabel!
     @IBOutlet weak var episodeAmountLabel: UILabel!
     @IBOutlet weak var comicEpisodeTableView: UITableView!
     @IBOutlet weak var bookmarkButton: UIButton!
@@ -89,8 +89,9 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
         updateCycleLabel.text = viewModel.comicInfo.updateCycle
         thumbnailImageView.layer.cornerRadius = 8
         thumbnailImagePlaceholderLabel.text = viewModel.comicInfo.title
-        updateCycleLabel.setBackgroundHighlight(with: UpdateCycle(rawValue: viewModel.comicInfo.updateCycle)?.color,
-                                                textColor: .white)
+        updateCycleLabel.makeRoundedBackground(cornerRadius: 6,
+                                               backgroundColor: UpdateCycle(rawValue: viewModel.comicInfo.updateCycle)?.color,
+                                               foregroundColor: .white)
         
         if viewModel.comicInfo.thumbnailImage != nil {
             thumbnailImageView.image = viewModel.comicInfo.thumbnailImage
