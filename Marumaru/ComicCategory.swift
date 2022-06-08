@@ -7,7 +7,8 @@
 
 import Foundation
 
-enum ComicCategory {
+enum ComicCategory: CaseIterable {
+    case all
     case action
     case ordinaryLife
     case loveComedy
@@ -44,8 +45,10 @@ enum ComicCategory {
 }
 
 extension ComicCategory {
-    var id: String {
+    var title: String {
         switch self {
+        case .all:
+            return "전체"
         case .action:
             return "액션"
         case .ordinaryLife:
@@ -122,7 +125,7 @@ extension ComicCategory {
     }
     
     public var path: String {
-        return "\(idPrefix)\(self.id)"
+        return "\(idPrefix)\(self.title)"
     }
 }
 

@@ -16,21 +16,47 @@ class ComicCategoryViewModel {
     // MARK: - Properties
     private var disposeBag = DisposeBag()
     
+    public var noticeMessageObservable = PublishRelay<String>()
+    public var presentComicDetailVCObservable = PublishRelay<ComicInfo>()
+    
     private var comicSections = [ComicInfoSection]()
     public var comicSectionsObservable = BehaviorRelay<[ComicInfoSection]>(value: [])
     public var isLoadingComics = BehaviorRelay<Bool>(value: true)
     
-    public var noticeMessageObservable = PublishRelay<String>()
-    
-    public var presentComicDetailVCObservable = PublishRelay<ComicInfo>()
+    private var comicCategories = ComicCategory.allCases
+    public var comicCategoriesObservable = BehaviorRelay<[ComicCategory]>(value: ComicCategory.allCases)
+    public var selectedCategory = BehaviorRelay<ComicCategory>(value: .all)
 }
 
 extension ComicCategoryViewModel {
-    public func updateComicCategory() {
-        isLoadingComics.accept(true)
+    public func updateComicCategory(_ category: ComicCategory) {
         let fakeSections = fakeComicSections(sectionCount: 6, rowCount: 10)
         comicSections = fakeSections
         comicSectionsObservable.accept(fakeSections)
+        isLoadingComics.accept(true)
+        
+        MarumaruApiService.shared
+            .getComicCategory(category)
+            .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
+            .observe(on: MainScheduler.instance)
+            .subscribe(with: self, onSuccess: { strongSelf, comics in
+                let sections = strongSelf.groupComicsBySection(comics)
+                strongSelf.comicSections = sections
+                strongSelf.comicSectionsObservable.accept(sections)
+                strongSelf.isLoadingComics.accept(false)
+            }, onFailure: { strongSelf, _ in
+                strongSelf.comicSectionsObservable.accept([])
+                strongSelf.noticeMessageObservable.accept("message.serverError".localized())
+                strongSelf.isLoadingComics.accept(false)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    public func updateComicCategory() {
+        let fakeSections = fakeComicSections(sectionCount: 6, rowCount: 10)
+        comicSections = fakeSections
+        comicSectionsObservable.accept(fakeSections)
+        isLoadingComics.accept(true)
         
         MarumaruApiService.shared
             .getComicCategory()
@@ -42,9 +68,9 @@ extension ComicCategoryViewModel {
                 strongSelf.comicSectionsObservable.accept(sections)
                 strongSelf.isLoadingComics.accept(false)
             }, onFailure: { strongSelf, _ in
-                strongSelf.isLoadingComics.accept(false)
                 strongSelf.comicSectionsObservable.accept([])
                 strongSelf.noticeMessageObservable.accept("message.serverError".localized())
+                strongSelf.isLoadingComics.accept(false)
             })
             .disposed(by: disposeBag)
     }
@@ -52,15 +78,16 @@ extension ComicCategoryViewModel {
 
 extension ComicCategoryViewModel {
     private func groupComicsBySection(_ comics: [ComicInfo]) -> [ComicInfoSection] {
-        var comics = comics
+        var comics: [ComicInfo] = comics.reversed()
         var sections = [ComicInfoSection]()
         
         for _ in (0..<3) {
             var section = ComicInfoSection(items: [])
             
             for _ in (0..<6) {
-                let comic = comics.removeFirst()
-                section.items.append(comic)
+                if let comic = comics.popLast() {
+                    section.items.append(comic)
+                }
             }
             
             sections.append(section)
@@ -71,7 +98,7 @@ extension ComicCategoryViewModel {
 }
 
 extension ComicCategoryViewModel {
-    public func tapComicItem(_ indexPath: IndexPath) {
+    public func didTapComicItem(_ indexPath: IndexPath) {
         let comicInfo = comicSections[indexPath.section].items[indexPath.row]
         presentComicDetailVCObservable.accept(comicInfo)
     }
@@ -102,13 +129,22 @@ extension ComicCategoryViewModel {
 }
 
 extension ComicCategoryViewModel {
-    public var alignIndexPath: IndexPath? {
-        if comicSections.count >= 2 {
-            let lastItem = comicSections[1].items.count - 1
-            let indexPath = IndexPath(row: lastItem, section: 1)
-            return indexPath
-        }
+    public func categoryItem(_ indexPath: IndexPath) -> ComicCategory {
+        return comicCategories[indexPath.row]
+    }
+}
+
+extension ComicCategoryViewModel {
+    public func categoryItemSelected(_ indexPath: IndexPath) {
+        let category = comicCategories[indexPath.row]
+        if selectedCategory.value == category { return }
         
-        return nil
+        selectedCategory.accept(category)
+        
+        if indexPath.row == 0 {
+            updateComicCategory()
+        } else {
+            updateComicCategory(category)
+        }
     }
 }

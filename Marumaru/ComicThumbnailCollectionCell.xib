@@ -12,71 +12,105 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ComicThumbnailCollectionCell" id="gTV-IL-0wX" customClass="ComicThumbnailCollectionCell" customModule="Marumaru" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="136" height="236"/>
+            <rect key="frame" x="0.0" y="0.0" width="120" height="224"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="136" height="236"/>
+                <rect key="frame" x="0.0" y="0.0" width="120" height="224"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xaf-0b-TKa">
-                        <rect key="frame" x="0.0" y="0.0" width="136" height="236"/>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HVN-U4-wA7">
+                        <rect key="frame" x="0.0" y="0.0" width="120" height="224"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hdb-Dm-Zes" customClass="ThumbnailPlaceholderView" customModule="Marumaru" customModuleProvider="target">
-                                <rect key="frame" x="8" y="8" width="120" height="172"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hJ5-zT-EEI" customClass="ThumbnailPlaceholderView" customModule="Marumaru" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="120" height="160"/>
                                 <color key="backgroundColor" name="BackgroundWhite-lighter"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="Hdb-Dm-Zes" secondAttribute="height" multiplier="30:43" id="MsK-pQ-SeI"/>
+                                    <constraint firstAttribute="width" secondItem="hJ5-zT-EEI" secondAttribute="height" multiplier="3:4" id="YEY-cV-HFc"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="placeholder" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c4q-bC-PYC">
-                                <rect key="frame" x="16" y="85.5" width="104" height="17"/>
-                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                <color key="textColor" name="TextBlack-lighter"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LaN-El-vAv">
+                                <rect key="frame" x="8" y="71.5" width="104" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" name="IconBlack-lighter"/>
                                 <nil key="highlightedColor"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isHiddenWhenSkeletonIsActive" value="YES"/>
-                                </userDefinedRuntimeAttributes>
                             </label>
-                            <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Rui-tn-hTc">
-                                <rect key="frame" x="8" y="8" width="120" height="172"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="3cA-dr-YCW">
+                                <rect key="frame" x="0.0" y="0.0" width="120" height="160"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="skeletonCornerRadius">
-                                        <real key="value" value="8"/>
-                                    </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </imageView>
-                            <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="title" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lkd-Eo-k8Q">
-                                <rect key="frame" x="8" y="192" width="120" height="17"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qbU-uc-IFb">
+                                <rect key="frame" x="0.0" y="172" width="120" height="17"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                 <color key="textColor" name="TextBlack"/>
                                 <nil key="highlightedColor"/>
                                 <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="useFontLineHeight" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="linesCornerRadius">
                                         <integer key="value" value="4"/>
                                     </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="author" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T5U-sj-Bht">
+                                <rect key="frame" x="0.0" y="193" width="120" height="15"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="15" id="sws-Tu-9c7"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" name="TextBlack-lighter"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="linesCornerRadius">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isHiddenWhenSkeletonIsActive" value="NO"/>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Bp-ZN-KxK">
+                                <rect key="frame" x="73" y="0.0" width="47" height="28"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="cycle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZAa-wb-1U5">
+                                        <rect key="frame" x="8" y="6.5" width="31" height="15"/>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" name="AccentOrange"/>
+                                <constraints>
+                                    <constraint firstItem="ZAa-wb-1U5" firstAttribute="centerY" secondItem="4Bp-ZN-KxK" secondAttribute="centerY" id="EMi-w9-Fd7"/>
+                                    <constraint firstAttribute="height" constant="28" id="iyH-Lp-3g0"/>
+                                    <constraint firstItem="ZAa-wb-1U5" firstAttribute="leading" secondItem="4Bp-ZN-KxK" secondAttribute="leading" constant="8" id="jfh-kr-qVF"/>
+                                    <constraint firstAttribute="trailing" secondItem="ZAa-wb-1U5" secondAttribute="trailing" constant="8" id="kQx-gc-mud"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isHiddenWhenSkeletonIsActive" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                         </subviews>
+                        <color key="backgroundColor" name="BackgroundWhite"/>
                         <constraints>
-                            <constraint firstItem="c4q-bC-PYC" firstAttribute="centerY" secondItem="Rui-tn-hTc" secondAttribute="centerY" id="6Uj-rd-08l"/>
-                            <constraint firstItem="lkd-Eo-k8Q" firstAttribute="top" secondItem="Hdb-Dm-Zes" secondAttribute="bottom" constant="12" id="6uL-93-Csn"/>
-                            <constraint firstAttribute="trailing" secondItem="Hdb-Dm-Zes" secondAttribute="trailing" constant="8" id="7Im-Nb-KLP"/>
-                            <constraint firstItem="Rui-tn-hTc" firstAttribute="trailing" secondItem="Hdb-Dm-Zes" secondAttribute="trailing" id="9Rs-bD-XJL"/>
-                            <constraint firstItem="Hdb-Dm-Zes" firstAttribute="leading" secondItem="Xaf-0b-TKa" secondAttribute="leading" constant="8" id="HdQ-P5-vOb"/>
-                            <constraint firstItem="Rui-tn-hTc" firstAttribute="leading" secondItem="Hdb-Dm-Zes" secondAttribute="leading" id="KDG-0e-cob"/>
-                            <constraint firstItem="Hdb-Dm-Zes" firstAttribute="centerX" secondItem="Xaf-0b-TKa" secondAttribute="centerX" id="LeM-tk-KZf"/>
-                            <constraint firstItem="Rui-tn-hTc" firstAttribute="bottom" secondItem="Hdb-Dm-Zes" secondAttribute="bottom" id="Y9h-iW-tUJ"/>
-                            <constraint firstItem="Hdb-Dm-Zes" firstAttribute="top" secondItem="Xaf-0b-TKa" secondAttribute="top" constant="8" id="f7s-E2-O1D"/>
-                            <constraint firstAttribute="trailing" secondItem="lkd-Eo-k8Q" secondAttribute="trailing" constant="8" id="gVL-Ug-aPK"/>
-                            <constraint firstItem="lkd-Eo-k8Q" firstAttribute="leading" secondItem="Xaf-0b-TKa" secondAttribute="leading" constant="8" id="iON-g1-K77"/>
-                            <constraint firstItem="Rui-tn-hTc" firstAttribute="width" secondItem="Hdb-Dm-Zes" secondAttribute="width" id="ktR-1w-dUN"/>
-                            <constraint firstItem="Rui-tn-hTc" firstAttribute="top" secondItem="Hdb-Dm-Zes" secondAttribute="top" id="mqU-wk-C4p"/>
-                            <constraint firstItem="c4q-bC-PYC" firstAttribute="trailing" secondItem="Rui-tn-hTc" secondAttribute="trailing" constant="-8" id="sPS-m8-hqm"/>
-                            <constraint firstItem="Rui-tn-hTc" firstAttribute="height" secondItem="Hdb-Dm-Zes" secondAttribute="height" id="vYZ-vH-FiR"/>
-                            <constraint firstItem="c4q-bC-PYC" firstAttribute="leading" secondItem="Rui-tn-hTc" secondAttribute="leading" constant="8" id="wHs-8h-nj9"/>
+                            <constraint firstItem="qbU-uc-IFb" firstAttribute="top" secondItem="hJ5-zT-EEI" secondAttribute="bottom" constant="12" id="0cQ-Ew-Fb0"/>
+                            <constraint firstItem="T5U-sj-Bht" firstAttribute="leading" secondItem="HVN-U4-wA7" secondAttribute="leading" id="4Xp-0T-uXh"/>
+                            <constraint firstAttribute="trailing" secondItem="qbU-uc-IFb" secondAttribute="trailing" id="5cA-2Q-OSG"/>
+                            <constraint firstItem="3cA-dr-YCW" firstAttribute="centerX" secondItem="hJ5-zT-EEI" secondAttribute="centerX" id="Ete-NG-0eM"/>
+                            <constraint firstItem="hJ5-zT-EEI" firstAttribute="top" secondItem="HVN-U4-wA7" secondAttribute="top" id="FvI-uk-NbT"/>
+                            <constraint firstItem="LaN-El-vAv" firstAttribute="leading" secondItem="hJ5-zT-EEI" secondAttribute="leading" constant="8" id="ICC-Zw-nAK"/>
+                            <constraint firstItem="3cA-dr-YCW" firstAttribute="width" secondItem="hJ5-zT-EEI" secondAttribute="width" id="JMr-ot-eOt"/>
+                            <constraint firstAttribute="trailing" secondItem="T5U-sj-Bht" secondAttribute="trailing" id="RAI-0K-n14"/>
+                            <constraint firstItem="qbU-uc-IFb" firstAttribute="leading" secondItem="HVN-U4-wA7" secondAttribute="leading" id="Sd0-yx-36z"/>
+                            <constraint firstAttribute="trailing" secondItem="4Bp-ZN-KxK" secondAttribute="trailing" id="aHX-Yk-FhI"/>
+                            <constraint firstItem="4Bp-ZN-KxK" firstAttribute="top" secondItem="HVN-U4-wA7" secondAttribute="top" id="cm2-b1-FOh"/>
+                            <constraint firstItem="T5U-sj-Bht" firstAttribute="top" secondItem="qbU-uc-IFb" secondAttribute="bottom" constant="4" id="gaM-dY-hWf"/>
+                            <constraint firstItem="3cA-dr-YCW" firstAttribute="centerY" secondItem="hJ5-zT-EEI" secondAttribute="centerY" id="k6l-KQ-gOi"/>
+                            <constraint firstItem="hJ5-zT-EEI" firstAttribute="leading" secondItem="HVN-U4-wA7" secondAttribute="leading" id="mee-6g-cVp"/>
+                            <constraint firstItem="LaN-El-vAv" firstAttribute="trailing" secondItem="hJ5-zT-EEI" secondAttribute="trailing" constant="-8" id="nZa-7u-Oor"/>
+                            <constraint firstItem="LaN-El-vAv" firstAttribute="centerY" secondItem="hJ5-zT-EEI" secondAttribute="centerY" id="o8Z-8b-Uob"/>
+                            <constraint firstItem="3cA-dr-YCW" firstAttribute="height" secondItem="hJ5-zT-EEI" secondAttribute="height" id="pot-Rb-Hp2"/>
+                            <constraint firstAttribute="trailing" secondItem="hJ5-zT-EEI" secondAttribute="trailing" id="z4U-qI-9eE"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
@@ -86,27 +120,39 @@
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="Xaf-0b-TKa" secondAttribute="trailing" id="15j-Vn-gaW"/>
-                <constraint firstAttribute="bottom" secondItem="Xaf-0b-TKa" secondAttribute="bottom" id="MGX-BQ-eAP"/>
-                <constraint firstItem="Xaf-0b-TKa" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="Ui9-xN-YWm"/>
-                <constraint firstItem="Xaf-0b-TKa" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="bFn-G9-mze"/>
+                <constraint firstAttribute="trailing" secondItem="HVN-U4-wA7" secondAttribute="trailing" id="Dpd-bb-b3t"/>
+                <constraint firstAttribute="bottom" secondItem="HVN-U4-wA7" secondAttribute="bottom" id="UzU-bs-blu"/>
+                <constraint firstItem="HVN-U4-wA7" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="eLS-mP-ODU"/>
+                <constraint firstItem="HVN-U4-wA7" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="sS5-2x-COQ"/>
             </constraints>
-            <size key="customSize" width="196" height="294"/>
+            <size key="customSize" width="184" height="281"/>
             <userDefinedRuntimeAttributes>
                 <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
             </userDefinedRuntimeAttributes>
             <connections>
-                <outlet property="thumbnailImagePlaceholderLabel" destination="c4q-bC-PYC" id="c5l-zH-RDW"/>
-                <outlet property="thumbnailImagePlaceholderView" destination="Hdb-Dm-Zes" id="Feq-9C-vtq"/>
-                <outlet property="thumbnailImageView" destination="Rui-tn-hTc" id="4UC-wf-qEY"/>
-                <outlet property="titleLabel" destination="lkd-Eo-k8Q" id="Eb9-H3-qV2"/>
+                <outlet property="authorLabel" destination="T5U-sj-Bht" id="CAM-ae-aup"/>
+                <outlet property="thumbnailImagePlaceholderLabel" destination="LaN-El-vAv" id="qUA-ie-WnR"/>
+                <outlet property="thumbnailImagePlaceholderView" destination="hJ5-zT-EEI" id="9Wx-Lw-1af"/>
+                <outlet property="thumbnailImageView" destination="3cA-dr-YCW" id="iFI-us-dw6"/>
+                <outlet property="titleLabel" destination="qbU-uc-IFb" id="xsj-DM-gee"/>
+                <outlet property="updateCycleLabel" destination="ZAa-wb-1U5" id="Pf1-se-hwy"/>
+                <outlet property="updateCycleView" destination="4Bp-ZN-KxK" id="0oB-JM-Lk5"/>
             </connections>
-            <point key="canvasLocation" x="243.47826086956525" y="193.52678571428569"/>
+            <point key="canvasLocation" x="233" y="229"/>
         </collectionViewCell>
     </objects>
     <resources>
+        <namedColor name="AccentOrange">
+            <color red="1" green="0.6470000147819519" blue="0.15299999713897705" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="BackgroundWhite">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="BackgroundWhite-lighter">
             <color red="0.9649999737739563" green="0.9649999737739563" blue="0.9649999737739563" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="IconBlack-lighter">
+            <color red="0.68599998950958252" green="0.69800001382827759" blue="0.69800001382827759" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="TextBlack">
             <color red="0.13300000131130219" green="0.15700000524520874" blue="0.16500000655651093" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

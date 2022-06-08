@@ -1068,10 +1068,12 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.nib` struct is generated, and contains static references to 9 nibs.
+  /// This `R.nib` struct is generated, and contains static references to 10 nibs.
   struct nib {
-    /// Nib `CategoryThumbnailCollectionCell`.
-    static let categoryThumbnailCollectionCell = _R.nib._CategoryThumbnailCollectionCell()
+    /// Nib `CategoryChipCollectionCell`.
+    static let categoryChipCollectionCell = _R.nib._CategoryChipCollectionCell()
+    /// Nib `ComicEpisodeThumbnailCollectionCell`.
+    static let comicEpisodeThumbnailCollectionCell = _R.nib._ComicEpisodeThumbnailCollectionCell()
     /// Nib `ComicEpisodeThumbnailTableCell`.
     static let comicEpisodeThumbnailTableCell = _R.nib._ComicEpisodeThumbnailTableCell()
     /// Nib `ComicRankTableCell`.
@@ -1090,10 +1092,18 @@ struct R: Rswift.Validatable {
     static let singleButtonFooterReusableView = _R.nib._SingleButtonFooterReusableView()
 
     #if os(iOS) || os(tvOS)
-    /// `UINib(name: "CategoryThumbnailCollectionCell", in: bundle)`
-    @available(*, deprecated, message: "Use UINib(resource: R.nib.categoryThumbnailCollectionCell) instead")
-    static func categoryThumbnailCollectionCell(_: Void = ()) -> UIKit.UINib {
-      return UIKit.UINib(resource: R.nib.categoryThumbnailCollectionCell)
+    /// `UINib(name: "CategoryChipCollectionCell", in: bundle)`
+    @available(*, deprecated, message: "Use UINib(resource: R.nib.categoryChipCollectionCell) instead")
+    static func categoryChipCollectionCell(_: Void = ()) -> UIKit.UINib {
+      return UIKit.UINib(resource: R.nib.categoryChipCollectionCell)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UINib(name: "ComicEpisodeThumbnailCollectionCell", in: bundle)`
+    @available(*, deprecated, message: "Use UINib(resource: R.nib.comicEpisodeThumbnailCollectionCell) instead")
+    static func comicEpisodeThumbnailCollectionCell(_: Void = ()) -> UIKit.UINib {
+      return UIKit.UINib(resource: R.nib.comicEpisodeThumbnailCollectionCell)
     }
     #endif
 
@@ -1161,8 +1171,12 @@ struct R: Rswift.Validatable {
     }
     #endif
 
-    static func categoryThumbnailCollectionCell(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> CategoryThumbnailCollectionCell? {
-      return R.nib.categoryThumbnailCollectionCell.instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? CategoryThumbnailCollectionCell
+    static func categoryChipCollectionCell(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> CategoryChipCollectionCell? {
+      return R.nib.categoryChipCollectionCell.instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? CategoryChipCollectionCell
+    }
+
+    static func comicEpisodeThumbnailCollectionCell(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> ComicEpisodeThumbnailCollectionCell? {
+      return R.nib.comicEpisodeThumbnailCollectionCell.instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? ComicEpisodeThumbnailCollectionCell
     }
 
     static func comicEpisodeThumbnailTableCell(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> ComicEpisodeThumbnailTableCell? {
@@ -1200,8 +1214,10 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.reuseIdentifier` struct is generated, and contains static references to 9 reuse identifiers.
+  /// This `R.reuseIdentifier` struct is generated, and contains static references to 10 reuse identifiers.
   struct reuseIdentifier {
+    /// Reuse identifier `ComicEpisodeThumbnailCollectionCell`.
+    static let comicEpisodeThumbnailCollectionCell: Rswift.ReuseIdentifier<ComicEpisodeThumbnailCollectionCell> = Rswift.ReuseIdentifier(identifier: "ComicEpisodeThumbnailCollectionCell")
     /// Reuse identifier `ComicEpisodeThumbnailTableCell`.
     static let comicEpisodeThumbnailTableCell: Rswift.ReuseIdentifier<ComicEpisodeThumbnailTableCell> = Rswift.ReuseIdentifier(identifier: "ComicEpisodeThumbnailTableCell")
     /// Reuse identifier `ComicRankTableCell`.
@@ -1216,8 +1232,8 @@ struct R: Rswift.Validatable {
     static let searchHistoryCollectionCell: Rswift.ReuseIdentifier<SearchHistoryCollectionCell> = Rswift.ReuseIdentifier(identifier: "SearchHistoryCollectionCell")
     /// Reuse identifier `SearchResultComicCollectionCell`.
     static let searchResultComicCollectionCell: Rswift.ReuseIdentifier<SearchResultComicCollectionCell> = Rswift.ReuseIdentifier(identifier: "SearchResultComicCollectionCell")
-    /// Reuse identifier `categoryThumbnailCollectionCell`.
-    static let categoryThumbnailCollectionCell: Rswift.ReuseIdentifier<CategoryThumbnailCollectionCell> = Rswift.ReuseIdentifier(identifier: "categoryThumbnailCollectionCell")
+    /// Reuse identifier `categoryChipCollectionCell`.
+    static let categoryChipCollectionCell: Rswift.ReuseIdentifier<CategoryChipCollectionCell> = Rswift.ReuseIdentifier(identifier: "categoryChipCollectionCell")
     /// Reuse identifier `singleButtonFooterReusableView`.
     static let singleButtonFooterReusableView: Rswift.ReuseIdentifier<SingleButtonFooterReusableView> = Rswift.ReuseIdentifier(identifier: "singleButtonFooterReusableView")
 
@@ -1504,15 +1520,29 @@ struct _R: Rswift.Validatable {
       try _SearchHistoryCollectionCell.validate()
     }
 
-    struct _CategoryThumbnailCollectionCell: Rswift.NibResourceType, Rswift.ReuseIdentifierType {
-      typealias ReusableType = CategoryThumbnailCollectionCell
+    struct _CategoryChipCollectionCell: Rswift.NibResourceType, Rswift.ReuseIdentifierType {
+      typealias ReusableType = CategoryChipCollectionCell
 
       let bundle = R.hostingBundle
-      let identifier = "categoryThumbnailCollectionCell"
-      let name = "CategoryThumbnailCollectionCell"
+      let identifier = "categoryChipCollectionCell"
+      let name = "CategoryChipCollectionCell"
 
-      func firstView(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> CategoryThumbnailCollectionCell? {
-        return instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? CategoryThumbnailCollectionCell
+      func firstView(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> CategoryChipCollectionCell? {
+        return instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? CategoryChipCollectionCell
+      }
+
+      fileprivate init() {}
+    }
+
+    struct _ComicEpisodeThumbnailCollectionCell: Rswift.NibResourceType, Rswift.ReuseIdentifierType {
+      typealias ReusableType = ComicEpisodeThumbnailCollectionCell
+
+      let bundle = R.hostingBundle
+      let identifier = "ComicEpisodeThumbnailCollectionCell"
+      let name = "ComicEpisodeThumbnailCollectionCell"
+
+      func firstView(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> ComicEpisodeThumbnailCollectionCell? {
+        return instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? ComicEpisodeThumbnailCollectionCell
       }
 
       fileprivate init() {}

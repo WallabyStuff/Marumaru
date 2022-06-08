@@ -19,7 +19,8 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
     static let identifier = R.storyboard.comicCategory.comicCategoryStoryboard.identifier
     typealias ViewModel = ComicCategoryViewModel
     
-    @IBOutlet weak var categoryCollectionView: UICollectionView!
+    @IBOutlet weak var comicCollectionView: UICollectionView!
+    @IBOutlet weak var comicCategoryCollectionView: UICollectionView!
     
     var viewModel: ComicCategoryViewModel
     private var dataSource: RxCollectionViewSectionedAnimatedDataSource<ComicInfoSection>?
@@ -50,6 +51,15 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
         bind()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4, execute: {
+            self.comicCategoryCollectionView.collectionViewLayout.invalidateLayout()
+            self.comicCategoryCollectionView.reloadData()
+        })
+    }
+    
     
     // MARK: - Setups
     
@@ -67,29 +77,98 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func setupView() {
-        setupCategoryCollectionCell()
+        setupComicCollectionCell()
+        setupComicCategoryCollectionView()
     }
     
-    private func setupCategoryCollectionCell() {
-        registerCategoryCollectionCell()
-        categoryCollectionView.collectionViewLayout = flowLayout()
-        categoryCollectionView.contentInset = .init(top: 24, left: 0, bottom: 24, right: 0)
+    private func setupComicCollectionCell() {
+        registerComicCollectionCell()
+        comicCollectionView.collectionViewLayout = comicsCollectionViewLayout()
+        comicCollectionView.contentInset = .init(top: 88, left: 0, bottom: 24, right: 0)
     }
     
-    private func registerCategoryCollectionCell() {
-        let nibName = UINib(nibName: R.nib.categoryThumbnailCollectionCell.name, bundle: nil)
-        categoryCollectionView.register(nibName, forCellWithReuseIdentifier: CategoryThumbnailCollectionCell.identifier)
+    private func registerComicCollectionCell() {
+        let nibName = UINib(nibName: R.nib.comicThumbnailCollectionCell.name, bundle: nil)
+        comicCollectionView.register(nibName, forCellWithReuseIdentifier: ComicThumbnailCollectionCell.identifier)
+    }
+    
+    private func setupComicCategoryCollectionView() {
+        registerComicCategoryCollectionCell()
+        comicCategoryCollectionView.collectionViewLayout = comicCategoryCollectionViewLayout()
+        comicCategoryCollectionView.contentInset = .init(top: 12, left: 20, bottom: 12, right: 20)
+        comicCategoryCollectionView.delegate = self
+    }
+    
+    private func registerComicCategoryCollectionCell() {
+        let nibName = UINib(nibName: R.nib.categoryChipCollectionCell.name, bundle: nil)
+        comicCategoryCollectionView.register(nibName, forCellWithReuseIdentifier: CategoryChipCollectionCell.identifier)
     }
     
     
     // MARK: - Binds
     
     private func bind() {
+        bindComicsCollectionView()
+        bindComicsCollectionCell()
+        
+        bindComicCategoryCollectionView()
+        bindComicCategoryCollectionCell()
+        
         bindNoticeLabel()
-        ComicCategoryCollectionView()
-        bindComicCategoryCell()
         bindPresentComicDetailVC()
-        setupComicCategoryLoadingState()
+        bindComicCategoryLoadingState()
+    }
+    
+    private func bindComicsCollectionView() {
+        guard let dataSource = dataSource else {
+            return
+        }
+
+        viewModel.comicSectionsObservable
+            .bind(to: comicCollectionView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindComicsCollectionCell() {
+        comicCollectionView.rx.itemSelected
+            .asDriver()
+            .drive(with: self, onNext: { vc, indexPath in
+                vc.viewModel.didTapComicItem(indexPath)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindComicCategoryCollectionView() {
+        viewModel.comicCategoriesObservable
+            .bind(to: comicCategoryCollectionView.rx.items(cellIdentifier: CategoryChipCollectionCell.identifier,
+                                                           cellType: CategoryChipCollectionCell.self)) { [weak self] _, category, cell  in
+                guard let self = self else { return }
+                
+                cell.titleLabel.text = category.title
+                
+                // Do not bind 'selectedCategory' for stability
+                // bind 'selectedCategory' from 'bindComicCategoryCollectionCell()' and reload collectionView
+                if self.viewModel.selectedCategory.value == category {
+                    cell.setSelected()
+                } else {
+                    cell.setDeselected()
+                }
+            }.disposed(by: disposeBag)
+    }
+    
+    private func bindComicCategoryCollectionCell() {
+        comicCategoryCollectionView.rx.itemSelected
+            .asDriver()
+            .drive(with: self, onNext: { vc, indexPath in
+                vc.viewModel.categoryItemSelected(indexPath)
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.selectedCategory
+            .subscribe(with: self, onNext: { vc, _ in
+                vc.comicCategoryCollectionView.reloadData()
+            })
+            .disposed(by: disposeBag)
     }
     
     private func bindNoticeLabel() {
@@ -100,39 +179,24 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
             .disposed(by: disposeBag)
     }
     
-    private func ComicCategoryCollectionView() {
-        guard let dataSource = dataSource else {
-            return
-        }
-
-        viewModel.comicSectionsObservable
-            .bind(to: categoryCollectionView.rx.items(dataSource: dataSource))
-            .disposed(by: disposeBag)
-    }
-    
-    private func bindComicCategoryCell() {
-        categoryCollectionView.rx.itemSelected
-            .asDriver()
-            .drive(with: self, onNext: { vc, indexPath in
-                vc.viewModel.tapComicItem(indexPath)
-            })
-            .disposed(by: disposeBag)
-    }
-    
-    private func setupComicCategoryLoadingState() {
+    private func bindComicCategoryLoadingState() {
         viewModel.isLoadingComics
             .subscribe(with: self, onNext: { vc, isLoading in
-                vc.categoryCollectionView.layoutIfNeeded()
-                vc.alignComicCategoryCollectionView()
+                vc.comicCollectionView.layoutIfNeeded()
                 
                 if isLoading {
-                    vc.categoryCollectionView.isUserInteractionEnabled = false
-                    vc.categoryCollectionView.visibleCells.forEach { cell in
+                    vc.comicCollectionView.isUserInteractionEnabled = false
+                    vc.disableComicCategoryCollectionView()
+                    
+                    vc.comicCollectionView.visibleCells.forEach { cell in
                         cell.showCustomSkeleton()
                     }
+                    
                 } else {
-                    vc.categoryCollectionView.isUserInteractionEnabled = true
-                    vc.categoryCollectionView.visibleCells.forEach { cell in
+                    vc.comicCollectionView.isUserInteractionEnabled = true
+                    vc.enableComicCategoryCollectionView()
+                    
+                    vc.comicCollectionView.visibleCells.forEach { cell in
                         cell.hideSkeleton()
                     }
                 }
@@ -154,7 +218,7 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
     private func configureDataSource() -> RxCollectionViewSectionedAnimatedDataSource<ComicInfoSection> {
         let dataSource = RxCollectionViewSectionedAnimatedDataSource<ComicInfoSection>(configureCell: { [weak self] _, cv, indexPath, item in
             guard let self = self,
-                  let cell = cv.dequeueReusableCell(withReuseIdentifier: CategoryThumbnailCollectionCell.identifier, for: indexPath) as? CategoryThumbnailCollectionCell else {
+                  let cell = cv.dequeueReusableCell(withReuseIdentifier: ComicThumbnailCollectionCell.identifier, for: indexPath) as? ComicThumbnailCollectionCell else {
                 return UICollectionViewCell()
             }
             
@@ -188,7 +252,7 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
         return dataSource
     }
     
-    private func flowLayout() -> UICollectionViewCompositionalLayout {
+    private func comicsCollectionViewLayout() -> UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout { _, _ in
             let itemSize = NSCollectionLayoutSize(
                 widthDimension: .absolute(120),
@@ -214,6 +278,14 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
         return layout
     }
     
+    private func comicCategoryCollectionViewLayout() -> UICollectionViewFlowLayout {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+        flowLayout.estimatedItemSize = .init(width: 68, height: 40)
+        flowLayout.minimumInteritemSpacing = 12
+        return flowLayout
+    }
+    
     private func presentComicDetailVC(_ comicInfo: ComicInfo) {
         let storyboard = UIStoryboard(name: R.storyboard.comicDetail.name, bundle: nil)
         let comicDetailVC = storyboard.instantiateViewController(identifier: ComicDetailViewController.identifier,
@@ -225,9 +297,22 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
         present(comicDetailVC, animated: true, completion: nil)
     }
     
-    private func alignComicCategoryCollectionView() {
-        if let indexPath = viewModel.alignIndexPath {
-            categoryCollectionView.scrollToItem(at: indexPath, at: .right, animated: false)
-        }
+    private func enableComicCategoryCollectionView() {
+        comicCategoryCollectionView.isUserInteractionEnabled = true
+        comicCategoryCollectionView.alpha = 1
+    }
+    
+    private func disableComicCategoryCollectionView() {
+        comicCategoryCollectionView.isUserInteractionEnabled = false
+        comicCategoryCollectionView.alpha = 0.5
+    }
+}
+
+extension ComicCategoryViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let width = viewModel.categoryItem(indexPath).title.size(withAttributes: nil)
+            .width
+        return .init(width: width, height: 40)
     }
 }

@@ -84,8 +84,8 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func registerWatchHistoryCollectionCell() {
-        let nibName = UINib(nibName: ComicThumbnailCollectionCell.identifier, bundle: nil)
-        watchHistoryCollectionView.register(nibName, forCellWithReuseIdentifier: ComicThumbnailCollectionCell.identifier)
+        let nibName = UINib(nibName: ComicEpisodeThumbnailCollectionCell.identifier, bundle: nil)
+        watchHistoryCollectionView.register(nibName, forCellWithReuseIdentifier: ComicEpisodeThumbnailCollectionCell.identifier)
     }
     
     private func registerWatchHistoryHeader() {
@@ -181,8 +181,8 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
             if comicEpisode.isInvalidated { return UICollectionViewCell() }
             
             guard let self = self,
-                  let cell = cv.dequeueReusableCell(withReuseIdentifier: ComicThumbnailCollectionCell.identifier, for: indexPath)
-                    as? ComicThumbnailCollectionCell else {
+                  let cell = cv.dequeueReusableCell(withReuseIdentifier: ComicEpisodeThumbnailCollectionCell.identifier, for: indexPath)
+                    as? ComicEpisodeThumbnailCollectionCell else {
                 return UICollectionViewCell()
             }
             

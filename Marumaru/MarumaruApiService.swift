@@ -436,6 +436,30 @@ extension MarumaruApiService {
 // MARK: - Comic Category
 
 extension MarumaruApiService {
+    public func getComicCategory(_ category: ComicCategory) -> Single<[ComicInfo]> {
+        return Single.create { [weak self] observer in
+            guard let self = self else {
+                return Disposables.create()
+            }
+            
+            let url = self.getComicCategoryURL(category)
+            self.getDocument(url, caching: true)
+                .subscribe(with: self, onSuccess: { strongSelf, doc in
+                    do {
+                        let comics = try strongSelf.parseComicCategory(with: doc)
+                        observer(.success(comics))
+                    } catch {
+                        observer(.failure(error))
+                    }
+                }, onFailure: { _, error in
+                    observer(.failure(error))
+                })
+                .disposed(by: self.disposeBag)
+            
+            return Disposables.create()
+        }
+    }
+    
     public func getComicCategory() -> Single<[ComicInfo]> {
         return Single.create { [weak self] observer in
             guard let self = self else {
@@ -553,12 +577,16 @@ extension MarumaruApiService {
     }
     
     private func getComicCategoryURL(_ category: ComicCategory, _ page: Int = 1) -> URL? {
-        guard var endPoint = getComicCategoryURL() else {
+        guard var endPoint = getComicCategoryURL()?.description else {
             return nil
         }
         
-        endPoint.appendPathComponent(category.path(page: page))
-        return endPoint
+        endPoint = "\(endPoint.description)\(category.path(page: page))"
+        if let urlComponent = transformURLString(endPoint) {
+            return URL(string: urlComponent.description)
+        }
+        
+        return nil
     }
     
     private func getComicCategoryURL() -> URL? {

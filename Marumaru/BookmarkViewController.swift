@@ -79,8 +79,8 @@ class BookmarkViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func registerBookmarkCollectionCell() {
-        let nibName = UINib(nibName: R.nib.comicThumbnailCollectionCell.name, bundle: nil)
-        bookmarkCollectionView.register(nibName, forCellWithReuseIdentifier: ComicThumbnailCollectionCell.identifier)
+        let nibName = UINib(nibName: R.nib.comicEpisodeThumbnailCollectionCell.name, bundle: nil)
+        bookmarkCollectionView.register(nibName, forCellWithReuseIdentifier: ComicEpisodeThumbnailCollectionCell.identifier)
     }
     
     
@@ -95,7 +95,7 @@ class BookmarkViewController: BaseViewController, ViewModelInjectable {
     
     private func bindBookmarks() {
         viewModel.bookmarksObservable
-            .bind(to: bookmarkCollectionView.rx.items(cellIdentifier: ComicThumbnailCollectionCell.identifier, cellType: ComicThumbnailCollectionCell.self)) { [weak self] _, bookmark, cell in
+            .bind(to: bookmarkCollectionView.rx.items(cellIdentifier: ComicEpisodeThumbnailCollectionCell.identifier, cellType: ComicEpisodeThumbnailCollectionCell.self)) { [weak self] _, bookmark, cell in
                 guard let self = self else { return }
                 
                 cell.thumbnailImageView.layer.cornerRadius = 6
