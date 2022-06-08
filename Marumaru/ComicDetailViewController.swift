@@ -131,6 +131,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     
     private func setupEpisodeTableView() {
         registerEpisodeTableCell()
+        comicEpisodeTableView.contentInset = UIEdgeInsets.bottom(60 + view.safeAreaInsets.bottom)
     }
     
     private func registerEpisodeTableCell() {

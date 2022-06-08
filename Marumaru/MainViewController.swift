@@ -120,7 +120,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     
     private func setupUpdatedComicCollectionView() {
         registerNewEpisodeCollecionCell()
-        newComicEpisodeCollectionView.contentInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
+        newComicEpisodeCollectionView.contentInset = UIEdgeInsets.leftAndRight(12)
         newComicEpisodeCollectionView.clipsToBounds = false
         newComicEpisodeCollectionView.decelerationRate = .fast
     }
@@ -133,7 +133,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     private func setupWatchHistoryCollectionView() {
         registerWatchHistoryCollectionCell()
         watchHistoryCollectionView.clipsToBounds = false
-        watchHistoryCollectionView.contentInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
+        watchHistoryCollectionView.contentInset = UIEdgeInsets.leftAndRight(12)
         watchHistoryCollectionView.decelerationRate = .fast
     }
     
@@ -167,10 +167,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func configureMainContentViewInsets() {
-        mainScrollView.contentInset = UIEdgeInsets(top: regularAppbarHeight + 24,
-                                                   left: 0,
-                                                   bottom: 0,
-                                                   right: 0)
+        mainScrollView.contentInset = UIEdgeInsets.top(regularAppbarHeight + 24)
     }
     
     
