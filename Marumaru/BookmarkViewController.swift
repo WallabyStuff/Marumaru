@@ -103,7 +103,7 @@ class BookmarkViewController: BaseViewController, ViewModelInjectable {
                 cell.titleLabel.text = bookmark.title
                 
                 let url = self.viewModel.getImageURL(bookmark.thumbnailImagePath)
-                cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { result in
+                cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3)), .forceTransition]) { result in
                     do {
                         let result = try result.get()
                         let image = result.image

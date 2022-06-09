@@ -265,7 +265,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
                 cell.titleLabel.text = episode.title
                 
                 let url = self.viewModel.getImageURL(episode.thumbnailImagePath)
-                cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { result in
+                cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3)), .forceTransition]) { result in
                     do {
                         let result = try result.get()
                         let image = result.image
@@ -340,7 +340,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
                 cell.titleLabel.text = episode.title
                 
                 let url = self.viewModel.getImageURL(episode.thumbnailImagePath)
-                cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { result in
+                cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3)), .forceTransition]) { result in
                     do {
                         let result = try result.get()
                         let image = result.image

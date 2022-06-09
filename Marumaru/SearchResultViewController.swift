@@ -235,7 +235,7 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
                                                    foregroundColor: .white)
             
             let url = self.viewModel.getImageURL(comicInfo.thumbnailImagePath)
-            cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { result in
+            cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3)), .forceTransition]) { result in
                 do {
                     let result = try result.get()
                     let image = result.image
