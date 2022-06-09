@@ -135,10 +135,6 @@ class ComicStripScrollView: UIScrollView {
     // MARK: - Methods
     
     private func loadScenes(_ scenes: [ComicStripScene]) {
-        // Append empty scene to load last scene image view
-        var scenes = scenes
-        scenes.append(emptyScene)
-        
         if scenes.count == 0 {
             contentView.isHidden = true
             return
@@ -154,7 +150,6 @@ class ComicStripScrollView: UIScrollView {
             }
         }
 
-        removeLastScene()
         updateContentViewHeight()
     }
 }
@@ -189,26 +184,24 @@ extension ComicStripScrollView {
                                             heightConstraint: heightConstraint)
         sceneImageViews.append(sceneImageView)
         
-        viewModel.prepareForRequestImage()
-        viewModel.imageRequestResults[index - 1]
-            .subscribe(with: self, onNext: { strongSelf, resultImage in
-                DispatchQueue.main.async {
-                    // set previous scene image
-                    let previouseScene = strongSelf.sceneImageViews[index - 1]
-                    previouseScene.imageView.image = resultImage
-                    previouseScene.imageView.backgroundColor = R.color.backgroundWhite()!
-                    
-                    // Resize image view by iamge resolution
-                    previouseScene.heightConstraint.constant = strongSelf.fitHeight(resultImage)
-                    strongSelf.updateContentViewHeight()
-                    
-                    // Update spacing
-                    topConstraint.constant = strongSelf.spacing
-                }
+        let url = viewModel.getImageURL(scene.imagePath)
+        imageView.kf.setImage(with: url) { [weak self] result in
+            guard let self = self else { return }
+            
+            do {
+                let result = try result.get()
+                let resultImage = result.image
                 
-                strongSelf.viewModel.requestImage(index, scene.imagePath)
-            })
-            .disposed(by: disposeBag)
+                // Resize image view by iamge resolution
+                heightConstraint.constant = self.fitHeight(resultImage)
+                self.updateContentViewHeight()
+                
+                // Update spacing
+                topConstraint.constant = self.spacing
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
     }
     
     private func appendFirstScene(_ scene: ComicStripScene) {
@@ -237,8 +230,22 @@ extension ComicStripScrollView {
                                             trailingConstraint: trailingConstraint,
                                             heightConstraint: heightConstraint)
         sceneImageViews.append(sceneImageView)
-        viewModel.prepareForRequestImage()
-        viewModel.requestImage(0, scene.imagePath)
+        
+        let url = viewModel.getImageURL(scene.imagePath)
+        imageView.kf.setImage(with: url) { [weak self] result in
+            guard let self = self else { return }
+
+            do {
+                let result = try result.get()
+                let resultImage = result.image
+                
+                // Resize image view by iamge resolution
+                heightConstraint.constant = self.fitHeight(resultImage)
+                self.updateContentViewHeight()
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
     }
     
     private func updateContentViewHeight() {
@@ -265,19 +272,6 @@ extension ComicStripScrollView {
         
         sceneImageViews.removeAll()
         scrollToTop(topInset: contentInset.top, animated: false)
-    }
-}
-
-extension ComicStripScrollView {
-    private var emptyScene: ComicStripScene {
-        return .init(imagePath: "")
-    }
-    
-    private func removeLastScene() {
-        if let emptyScene = sceneImageViews.last {
-            emptyScene.imageView.removeFromSuperview()
-            sceneImageViews.removeLast()
-        }
     }
 }
 

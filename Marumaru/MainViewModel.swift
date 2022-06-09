@@ -9,7 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class MainViewModel: MarumaruApiServiceViewModel {
+class MainViewModel {
     
     
     // MARK: - Properteis

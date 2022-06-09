@@ -36,7 +36,6 @@
 		76F912EB26CFFE9700B39BE7 /* ComicStripScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F912EA26CFFE9700B39BE7 /* ComicStripScene.swift */; };
 		76F912F526D160FA00B39BE7 /* loading_cat_radial.json in Resources */ = {isa = PBXBuildFile; fileRef = 76F912F426D160FA00B39BE7 /* loading_cat_radial.json */; };
 		7B54B4D15373A9E0D08F0BE0 /* Pods_MarumaruTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0229FADB2A974ECF39EF5097 /* Pods_MarumaruTests.framework */; };
-		8E1569862847AEF800BF1008 /* ImageSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1569852847AEF800BF1008 /* ImageSessionManager.swift */; };
 		8E3192CB283A15B900C350F9 /* PopOverComicEpisodeTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E3192C9283A15B900C350F9 /* PopOverComicEpisodeTableCell.xib */; };
 		8E319309283B540900C350F9 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E319308283B540900C350F9 /* BaseViewController.swift */; };
 		8E33F3E32850917B00B6E6EE /* CategoryChipCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E33F3E12850917B00B6E6EE /* CategoryChipCollectionCell.swift */; };
@@ -79,7 +78,6 @@
 		8E52CA60284F22FF007844E0 /* ComicCategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E52CA5F284F22FF007844E0 /* ComicCategoryViewModel.swift */; };
 		8E52CA66284F2EA3007844E0 /* ComicCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E52CA65284F2EA3007844E0 /* ComicCategory.swift */; };
 		8E52CA6A284F5A5C007844E0 /* URL+RawAppendPathComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E52CA69284F5A5C007844E0 /* URL+RawAppendPathComponent.swift */; };
-		8E553E6E2845CF0F00B7F5BC /* MarumaruApiServiceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E553E6D2845CF0F00B7F5BC /* MarumaruApiServiceViewModel.swift */; };
 		8E553E702846132200B7F5BC /* SearchHistorySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E553E6F2846132200B7F5BC /* SearchHistorySection.swift */; };
 		8E553E7328461D7700B7F5BC /* DescriptionHeaderReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E553E7128461D7700B7F5BC /* DescriptionHeaderReusableView.swift */; };
 		8E553E7428461D7700B7F5BC /* DescriptionHeaderReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E553E7228461D7700B7F5BC /* DescriptionHeaderReusableView.xib */; };
@@ -184,7 +182,6 @@
 		76F912E826CFDFA000B39BE7 /* ComicEpisode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicEpisode.swift; sourceTree = "<group>"; };
 		76F912EA26CFFE9700B39BE7 /* ComicStripScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicStripScene.swift; sourceTree = "<group>"; };
 		76F912F426D160FA00B39BE7 /* loading_cat_radial.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading_cat_radial.json; sourceTree = "<group>"; };
-		8E1569852847AEF800BF1008 /* ImageSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSessionManager.swift; sourceTree = "<group>"; };
 		8E3192C9283A15B900C350F9 /* PopOverComicEpisodeTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PopOverComicEpisodeTableCell.xib; sourceTree = "<group>"; };
 		8E319308283B540900C350F9 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		8E33F3E12850917B00B6E6EE /* CategoryChipCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryChipCollectionCell.swift; sourceTree = "<group>"; };
@@ -227,7 +224,6 @@
 		8E52CA5F284F22FF007844E0 /* ComicCategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicCategoryViewModel.swift; sourceTree = "<group>"; };
 		8E52CA65284F2EA3007844E0 /* ComicCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicCategory.swift; sourceTree = "<group>"; };
 		8E52CA69284F5A5C007844E0 /* URL+RawAppendPathComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+RawAppendPathComponent.swift"; sourceTree = "<group>"; };
-		8E553E6D2845CF0F00B7F5BC /* MarumaruApiServiceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarumaruApiServiceViewModel.swift; sourceTree = "<group>"; };
 		8E553E6F2846132200B7F5BC /* SearchHistorySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHistorySection.swift; sourceTree = "<group>"; };
 		8E553E7128461D7700B7F5BC /* DescriptionHeaderReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionHeaderReusableView.swift; sourceTree = "<group>"; };
 		8E553E7228461D7700B7F5BC /* DescriptionHeaderReusableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DescriptionHeaderReusableView.xib; sourceTree = "<group>"; };
@@ -432,7 +428,6 @@
 			isa = PBXGroup;
 			children = (
 				76C9A1B82631BC7F000F801C /* MarumaruApiService.swift */,
-				8E1569852847AEF800BF1008 /* ImageSessionManager.swift */,
 				76C9A2792636A842000F801C /* WatchHistoryManager.swift */,
 				8E414673284398770005BCFD /* SearchHistoryManager.swift */,
 				8E5C9FD2284D2344008FE961 /* ComicBookmarkManager.swift */,
@@ -564,7 +559,6 @@
 		8E88515C27A9400800126701 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				8E553E6D2845CF0F00B7F5BC /* MarumaruApiServiceViewModel.swift */,
 				8E3C72FA27A983EC00F057DA /* MainViewModel.swift */,
 				8ED2466127AAC82B00226F2D /* SearchComicViewModel.swift */,
 				8E8D381A27ABA4C700E82FE2 /* ComicDetailViewModel.swift */,
@@ -953,7 +947,6 @@
 				8E52CA60284F22FF007844E0 /* ComicCategoryViewModel.swift in Sources */,
 				765C8B2D261CA2C30056C83B /* MainViewController.swift in Sources */,
 				8E33F3F02851450300B6E6EE /* ShowComicOptionAlertViewModel.swift in Sources */,
-				8E553E6E2845CF0F00B7F5BC /* MarumaruApiServiceViewModel.swift in Sources */,
 				8E553E702846132200B7F5BC /* SearchHistorySection.swift in Sources */,
 				8E553E762846260C00B7F5BC /* ComicInfoSection.swift in Sources */,
 				8E5C9FCF284D204C008FE961 /* CRUDable.swift in Sources */,
@@ -984,7 +977,6 @@
 				8E52CA66284F2EA3007844E0 /* ComicCategory.swift in Sources */,
 				8ED56F3427AEFBAA00E78A8A /* ThumbnailPlaceholderView.swift in Sources */,
 				8E33F3EA2851432000B6E6EE /* ShowComicOptionAlertViewController.swift in Sources */,
-				8E1569862847AEF800BF1008 /* ImageSessionManager.swift in Sources */,
 				8ED56F3827AEFDD400E78A8A /* UIView+Animation.swift in Sources */,
 				8EFCD0EA2840DB3900685503 /* WatchHistorySection.swift in Sources */,
 				8E33F3F228514CF500B6E6EE /* ShowComicOptionFloatinPanelLayout.swift in Sources */,
