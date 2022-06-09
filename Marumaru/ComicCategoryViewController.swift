@@ -23,7 +23,8 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
     @IBOutlet weak var comicCategoryCollectionView: UICollectionView!
     
     var viewModel: ComicCategoryViewModel
-    private var dataSource: RxCollectionViewSectionedAnimatedDataSource<ComicInfoSection>?
+    private var dataSource: RxCollectionViewSectionedReloadDataSource<ComicInfoSection>?
+    private let comicCategoryCollectionViewTopInset: CGFloat = 72
     
     required init(_ viewModel: ComicCategoryViewModel) {
         self.viewModel = viewModel
@@ -84,7 +85,8 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
     private func setupComicCollectionCell() {
         registerComicCollectionCell()
         comicCollectionView.collectionViewLayout = comicsCollectionViewLayout()
-        comicCollectionView.contentInset = UIEdgeInsets.inset(top: 72, bottom: 24)
+        comicCollectionView.contentInset = UIEdgeInsets.inset(top: comicCategoryCollectionViewTopInset,
+                                                              bottom: 24)
     }
     
     private func registerComicCollectionCell() {
@@ -182,6 +184,9 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
     private func bindComicCategoryLoadingState() {
         viewModel.isLoadingComics
             .subscribe(with: self, onNext: { vc, isLoading in
+                vc.comicCollectionView.scrollToTop(topInset: vc.comicCategoryCollectionViewTopInset,
+                                                   animated: false)
+                vc.comicCollectionView.reloadData()
                 vc.comicCollectionView.layoutIfNeeded()
                 
                 if isLoading {
@@ -199,6 +204,8 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
                     vc.comicCollectionView.visibleCells.forEach { cell in
                         cell.hideSkeleton()
                     }
+                    
+                    // Re
                 }
             })
             .disposed(by: disposeBag)
@@ -215,8 +222,8 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
     
     // MARK: - Methods
     
-    private func configureDataSource() -> RxCollectionViewSectionedAnimatedDataSource<ComicInfoSection> {
-        let dataSource = RxCollectionViewSectionedAnimatedDataSource<ComicInfoSection>(configureCell: { [weak self] _, cv, indexPath, item in
+    private func configureDataSource() -> RxCollectionViewSectionedReloadDataSource<ComicInfoSection> {
+        let dataSource = RxCollectionViewSectionedReloadDataSource<ComicInfoSection>(configureCell: { [weak self] _, cv, indexPath, item in
             guard let self = self,
                   let cell = cv.dequeueReusableCell(withReuseIdentifier: ComicThumbnailCollectionCell.identifier, for: indexPath) as? ComicThumbnailCollectionCell else {
                 return UICollectionViewCell()
@@ -261,16 +268,15 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
             
             let groupSize = NSCollectionLayoutSize(
                 widthDimension: .absolute(120),
-                heightDimension: .absolute(224))
+                heightDimension: .absolute(248))
             
             let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-            group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
-            group.interItemSpacing = .fixed(16)
+            group.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 0)
             
             let section = NSCollectionLayoutSection(group: group)
             section.orthogonalScrollingBehavior = .continuous
             section.interGroupSpacing = 16
-            section.contentInsets = .init(top: 12, leading: 0, bottom: 12, trailing: 40)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
             
             return section
         }
@@ -283,6 +289,7 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
         flowLayout.scrollDirection = .horizontal
         flowLayout.estimatedItemSize = .init(width: 60, height: 36)
         flowLayout.minimumInteritemSpacing = 12
+        
         return flowLayout
     }
     

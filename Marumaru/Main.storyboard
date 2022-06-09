@@ -399,7 +399,7 @@
                                                     <color key="textColor" name="TextBlack-lighter"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="magnifying-glass-filled" translatesAutoresizingMaskIntoConstraints="NO" id="d7k-x0-smd">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="magnifying-glass" translatesAutoresizingMaskIntoConstraints="NO" id="d7k-x0-smd">
                                                     <rect key="frame" x="352" y="14" width="20" height="20"/>
                                                     <color key="tintColor" name="IconBlack-lighter"/>
                                                     <constraints>
@@ -492,7 +492,7 @@
     </scenes>
     <resources>
         <image name="arrow.clockwise" catalog="system" width="115" height="128"/>
-        <image name="magnifying-glass-filled" width="50" height="50"/>
+        <image name="magnifying-glass" width="50" height="50"/>
         <namedColor name="BackgroundWhite">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

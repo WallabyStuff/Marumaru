@@ -1875,7 +1875,7 @@ struct _R: Rswift.Validatable {
 
       static func validate() throws {
         if #available(iOS 13.0, *) { if UIKit.UIImage(systemName: "arrow.clockwise") == nil { throw Rswift.ValidationError(description: "[R.swift] System image named 'arrow.clockwise' is used in storyboard 'Main', but couldn't be loaded.") } }
-        if UIKit.UIImage(named: "magnifying-glass-filled", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Image named 'magnifying-glass-filled' is used in storyboard 'Main', but couldn't be loaded.") }
+        if UIKit.UIImage(named: "magnifying-glass", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Image named 'magnifying-glass' is used in storyboard 'Main', but couldn't be loaded.") }
         if #available(iOS 11.0, tvOS 11.0, *) {
           if UIKit.UIColor(named: "BackgroundWhite", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'BackgroundWhite' is used in storyboard 'Main', but couldn't be loaded.") }
           if UIKit.UIColor(named: "BackgroundWhite-lighter", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'BackgroundWhite-lighter' is used in storyboard 'Main', but couldn't be loaded.") }
@@ -1926,7 +1926,7 @@ struct _R: Rswift.Validatable {
 
       static func validate() throws {
         if UIKit.UIImage(named: "arrow-left", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Image named 'arrow-left' is used in storyboard 'SearchComic', but couldn't be loaded.") }
-        if UIKit.UIImage(named: "magnifying-glass-filled", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Image named 'magnifying-glass-filled' is used in storyboard 'SearchComic', but couldn't be loaded.") }
+        if UIKit.UIImage(named: "magnifying-glass", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Image named 'magnifying-glass' is used in storyboard 'SearchComic', but couldn't be loaded.") }
         if #available(iOS 11.0, tvOS 11.0, *) {
           if UIKit.UIColor(named: "BackgroundWhite", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'BackgroundWhite' is used in storyboard 'SearchComic', but couldn't be loaded.") }
           if UIKit.UIColor(named: "BackgroundWhite-lighter", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'BackgroundWhite-lighter' is used in storyboard 'SearchComic', but couldn't be loaded.") }
