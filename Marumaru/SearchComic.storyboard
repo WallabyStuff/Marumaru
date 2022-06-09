@@ -44,7 +44,7 @@
                                             </constraints>
                                             <color key="tintColor" name="IconBlack-lighter"/>
                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                            <state key="normal" image="magnifying-glass-filled"/>
+                                            <state key="normal" image="magnifying-glass"/>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KY9-xo-3ee">
                                             <rect key="frame" x="20" y="28" width="24" height="24"/>
@@ -122,7 +122,7 @@
     </scenes>
     <resources>
         <image name="arrow-left" width="75" height="75"/>
-        <image name="magnifying-glass-filled" width="75" height="75"/>
+        <image name="magnifying-glass" width="75" height="75"/>
         <namedColor name="BackgroundWhite">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

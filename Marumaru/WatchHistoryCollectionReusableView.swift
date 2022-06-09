@@ -62,8 +62,8 @@ class WatchHistoryCollectionReusableView: UICollectionReusableView {
     // MARK: - Setup Constraints
     private func setupDateLabelConstraints() {
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
-        dateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 20).isActive = true
+        dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+        dateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
         dateLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
     }
 }

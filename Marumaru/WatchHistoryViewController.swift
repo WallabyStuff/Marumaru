@@ -306,8 +306,7 @@ extension WatchHistoryViewController {
                 heightDimension: .absolute(236))
             
             let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-            group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12)
-            group.interItemSpacing = .fixed(12)
+            group.interItemSpacing = .fixed(16)
             
             let supplymentaryItemSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(environment.container.contentSize.width),
@@ -318,6 +317,7 @@ extension WatchHistoryViewController {
             section.orthogonalScrollingBehavior = .continuous
             section.boundarySupplementaryItems = [supplymentaryItem]
             section.interGroupSpacing = 4
+            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
             
             return section
         }
