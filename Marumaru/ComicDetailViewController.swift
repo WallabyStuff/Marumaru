@@ -64,6 +64,11 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
         bind()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.updateWatchHistories()
+    }
+    
     
     // MARK: - Setup
     
@@ -73,7 +78,6 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func setupData() {
-        viewModel.updateWatchHistories()
         viewModel.updateComicInfoAndEpisodes()
         viewModel.setBookmarkState()
         
