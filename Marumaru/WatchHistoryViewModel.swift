@@ -18,7 +18,7 @@ class WatchHistoryViewModel {
     public var watchHistoriesObservable = PublishRelay<[WatchHistorySection]>()
     public var failToLoadWatchHistories = PublishRelay<Bool>()
     
-    public var presentComicStrip = PublishRelay<WatchHistory>()
+    public var presentComicDetailVC = PublishRelay<ComicEpisode>()
 }
 
 extension WatchHistoryViewModel {
@@ -69,8 +69,13 @@ extension WatchHistoryViewModel {
 
 extension WatchHistoryViewModel {
     public func comicItemSelected(_ indexPath: IndexPath) {
-        let selectedComic = watchHistories[indexPath.section].items[indexPath.row]
-        presentComicStrip.accept(selectedComic)
+        let selectedItem = watchHistories[indexPath.section].items[indexPath.row]
+        let comicEpisode = ComicEpisode(comicSN: selectedItem.comicSN,
+                                        episodeSN: selectedItem.episodeSN,
+                                        title: selectedItem.title,
+                                        description: selectedItem.description,
+                                        thumbnailImagePath: selectedItem.thumbnailImagePath)
+        presentComicDetailVC.accept(comicEpisode)
     }
     
     public func sectionHeader(_ indexPath: IndexPath) -> String {

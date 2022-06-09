@@ -64,11 +64,6 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
         bind()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        viewModel.updateWatchHistories()
-    }
-    
     
     // MARK: - Setup
     
@@ -78,43 +73,19 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func setupData() {
-        setupComicInfoData()
-        viewModel.updateComicEpisodes()
+        viewModel.updateWatchHistories()
+        viewModel.updateComicInfoAndEpisodes()
         viewModel.setBookmarkState()
-    }
-    
-    private func setupComicInfoData() {
-        comicTitleLabel.text = viewModel.comicInfo.title
-        authorLabel.text = viewModel.comicInfo.author
-        updateCycleLabel.text = viewModel.comicInfo.updateCycle
-        thumbnailImageView.layer.cornerRadius = 8
-        thumbnailImagePlaceholderLabel.text = viewModel.comicInfo.title
-        updateCycleLabel.makeRoundedBackground(cornerRadius: 6,
-                                               backgroundColor: UpdateCycle(rawValue: viewModel.comicInfo.updateCycle)?.color,
-                                               foregroundColor: .white)
         
-        if viewModel.comicInfo.thumbnailImage != nil {
-            thumbnailImageView.image = viewModel.comicInfo.thumbnailImage
-            thumbnailImageView.layer.borderColor = viewModel.comicInfo.thumbnailImage?.averageColor?.cgColor
-        } else {
-            let url = viewModel.getThumbnailImageURL()
-            thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { [weak self] result in
-                guard let self = self else { return }
-                
-                do {
-                    let result = try result.get()
-                    let image = result.image
-                    self.thumbnailImagePlaceholderView.makeThumbnailShadow(with: image.averageColor)
-                    self.thumbnailImagePlaceholderLabel.isHidden = true
-                } catch {
-                    self.thumbnailImagePlaceholderLabel.isHidden = false
-                }
-            }
+        // Do not call setInitailComicInfo() in viewDidAppear() with modal style
+        DispatchQueue.main.async { [weak self] in
+            self?.viewModel.setInitailComicInfo()
         }
     }
     
     private func setupView() {
         setupThumbnailImagePlaceholderView()
+        setupThumbnailImageView()
         setupEpisodeTableView()
         setupBookmarkButton()
         setupPlayFirstEpisodeButton()
@@ -162,6 +133,8 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     // MARK: - Bind
     
     private func bind() {
+        bindComicInfo()
+        
         bindComicEpisodeTableView()
         bindComicEpisodeTableViewCell()
         bindComicEpisodeLoadingState()
@@ -172,6 +145,48 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
         
         bindBookmarkState()
         bindPlayFirstEpisodeButton()
+    }
+    
+    private func bindComicInfo() {
+        viewModel.comicInfoObservable
+            .distinctUntilChanged()
+            .subscribe(with: self, onNext: { vc, comicInfo in
+                if comicInfo.title != "" {
+                    vc.view.hideSkeleton()
+                }
+                
+                vc.comicTitleLabel.text = comicInfo.title
+                vc.authorLabel.text = comicInfo.author
+                vc.updateCycleLabel.text = comicInfo.updateCycle
+                vc.thumbnailImagePlaceholderLabel.text = comicInfo.title
+                
+                vc.updateCycleLabel.makeRoundedBackground(cornerRadius: 6,
+                                                       backgroundColor: UpdateCycle(rawValue: comicInfo.updateCycle)?.color,
+                                                       foregroundColor: .white)
+                
+                if vc.thumbnailImageView.image != nil {
+                    return
+                }
+                
+                if comicInfo.thumbnailImage != nil {
+                    vc.thumbnailImageView.image = comicInfo.thumbnailImage
+                } else {
+                    let url = vc.viewModel.getImageURL(comicInfo.thumbnailImagePath)
+                    vc.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { [weak self] result in
+                        guard let self = self else { return }
+                        
+                        do {
+                            let result = try result.get()
+                            let image = result.image
+                            self.thumbnailImagePlaceholderView.makeThumbnailShadow(with: image.averageColor)
+                            self.thumbnailImagePlaceholderLabel.isHidden = true
+                        } catch {
+                            self.thumbnailImagePlaceholderLabel.isHidden = false
+                        }
+                    }
+                }
+            })
+            .disposed(by: disposeBag)
     }
     
     private func bindComicEpisodeTableView() {
@@ -225,6 +240,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
                 vc.comicEpisodeTableView.layoutSubviews()
                 
                 if isLoading {
+                    vc.view.showCustomSkeleton()
                     vc.comicEpisodeTableView.isUserInteractionEnabled = false
                     vc.episodeAmountLabel.showCustomSkeleton()
                     vc.comicEpisodeTableView.visibleCells.forEach { cell in
@@ -233,6 +249,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
                     
                     vc.playFirstEpisodeButton.isHidden = true
                 } else {
+                    vc.view.hideSkeleton()
                     vc.comicEpisodeTableView.isUserInteractionEnabled = true
                     vc.episodeAmountLabel.hideSkeleton()
                     vc.comicEpisodeTableView.visibleCells.forEach { cell in

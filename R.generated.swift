@@ -89,7 +89,7 @@ struct R: Rswift.Validatable {
   }
 
   #if os(iOS) || os(tvOS)
-  /// This `R.storyboard` struct is generated, and contains static references to 11 storyboards.
+  /// This `R.storyboard` struct is generated, and contains static references to 12 storyboards.
   struct storyboard {
     /// Storyboard `Bookmark`.
     static let bookmark = _R.storyboard.bookmark()
@@ -111,6 +111,8 @@ struct R: Rswift.Validatable {
     static let searchHistory = _R.storyboard.searchHistory()
     /// Storyboard `SearchResult`.
     static let searchResult = _R.storyboard.searchResult()
+    /// Storyboard `ShowComicOption`.
+    static let showComicOption = _R.storyboard.showComicOption()
     /// Storyboard `WatchHistory`.
     static let watchHistory = _R.storyboard.watchHistory()
 
@@ -181,6 +183,13 @@ struct R: Rswift.Validatable {
     /// `UIStoryboard(name: "SearchResult", bundle: ...)`
     static func searchResult(_: Void = ()) -> UIKit.UIStoryboard {
       return UIKit.UIStoryboard(resource: R.storyboard.searchResult)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIStoryboard(name: "ShowComicOption", bundle: ...)`
+    static func showComicOption(_: Void = ()) -> UIKit.UIStoryboard {
+      return UIKit.UIStoryboard(resource: R.storyboard.showComicOption)
     }
     #endif
 
@@ -695,12 +704,14 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.file` struct is generated, and contains static references to 11 files.
+  /// This `R.file` struct is generated, and contains static references to 12 files.
   struct file {
     /// Resource file `.swiftlint.yml`.
     static let swiftlintYml = Rswift.FileResource(bundle: R.hostingBundle, name: ".swiftlint", pathExtension: "yml")
     /// Resource file `acrobatic_cat.json`.
     static let acrobatic_catJson = Rswift.FileResource(bundle: R.hostingBundle, name: "acrobatic_cat", pathExtension: "json")
+    /// Resource file `bodybuilder_dancer.json`.
+    static let bodybuilder_dancerJson = Rswift.FileResource(bundle: R.hostingBundle, name: "bodybuilder_dancer", pathExtension: "json")
     /// Resource file `bubble_tea_cat.json`.
     static let bubble_tea_catJson = Rswift.FileResource(bundle: R.hostingBundle, name: "bubble_tea_cat", pathExtension: "json")
     /// Resource file `coming_soon.json`.
@@ -729,6 +740,12 @@ struct R: Rswift.Validatable {
     /// `bundle.url(forResource: "acrobatic_cat", withExtension: "json")`
     static func acrobatic_catJson(_: Void = ()) -> Foundation.URL? {
       let fileResource = R.file.acrobatic_catJson
+      return fileResource.bundle.url(forResource: fileResource)
+    }
+
+    /// `bundle.url(forResource: "bodybuilder_dancer", withExtension: "json")`
+    static func bodybuilder_dancerJson(_: Void = ()) -> Foundation.URL? {
+      let fileResource = R.file.bodybuilder_dancerJson
       return fileResource.bundle.url(forResource: fileResource)
     }
 
@@ -789,7 +806,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.image` struct is generated, and contains static references to 27 images.
+  /// This `R.image` struct is generated, and contains static references to 28 images.
   struct image {
     /// Image `arrow-down`.
     static let arrowDown = Rswift.ImageResource(bundle: R.hostingBundle, name: "arrow-down")
@@ -809,6 +826,8 @@ struct R: Rswift.Validatable {
     static let chevronDown = Rswift.ImageResource(bundle: R.hostingBundle, name: "chevron-down")
     /// Image `chevron-up`.
     static let chevronUp = Rswift.ImageResource(bundle: R.hostingBundle, name: "chevron-up")
+    /// Image `close`.
+    static let close = Rswift.ImageResource(bundle: R.hostingBundle, name: "close")
     /// Image `home-filled`.
     static let homeFilled = Rswift.ImageResource(bundle: R.hostingBundle, name: "home-filled")
     /// Image `home`.
@@ -906,6 +925,13 @@ struct R: Rswift.Validatable {
     /// `UIImage(named: "chevron-up", bundle: ..., traitCollection: ...)`
     static func chevronUp(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.chevronUp, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "close", bundle: ..., traitCollection: ...)`
+    static func close(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.close, compatibleWith: traitCollection)
     }
     #endif
 
@@ -1707,6 +1733,9 @@ struct _R: Rswift.Validatable {
       try searchResult.validate()
       #endif
       #if os(iOS) || os(tvOS)
+      try showComicOption.validate()
+      #endif
+      #if os(iOS) || os(tvOS)
       try watchHistory.validate()
       #endif
     }
@@ -1948,6 +1977,35 @@ struct _R: Rswift.Validatable {
           if UIKit.UIColor(named: "BackgroundWhite", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'BackgroundWhite' is used in storyboard 'SearchResult', but couldn't be loaded.") }
         }
         if _R.storyboard.searchResult().searchResultStoryboard() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'searchResultStoryboard' could not be loaded from storyboard 'SearchResult' as 'SearchResultViewController'.") }
+      }
+
+      fileprivate init() {}
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    struct showComicOption: Rswift.StoryboardResourceWithInitialControllerType, Rswift.Validatable {
+      typealias InitialController = ShowComicOptionAlertViewController
+
+      let bundle = R.hostingBundle
+      let name = "ShowComicOption"
+      let showComicOptionStoryboard = StoryboardViewControllerResource<ShowComicOptionAlertViewController>(identifier: "showComicOptionStoryboard")
+
+      func showComicOptionStoryboard(_: Void = ()) -> ShowComicOptionAlertViewController? {
+        return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: showComicOptionStoryboard)
+      }
+
+      static func validate() throws {
+        if UIKit.UIImage(named: "close", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Image named 'close' is used in storyboard 'ShowComicOption', but couldn't be loaded.") }
+        if #available(iOS 11.0, tvOS 11.0, *) {
+          if UIKit.UIColor(named: "AccentYellow", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'AccentYellow' is used in storyboard 'ShowComicOption', but couldn't be loaded.") }
+          if UIKit.UIColor(named: "BackgroundWhite", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'BackgroundWhite' is used in storyboard 'ShowComicOption', but couldn't be loaded.") }
+          if UIKit.UIColor(named: "IconBlack-lightest", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'IconBlack-lightest' is used in storyboard 'ShowComicOption', but couldn't be loaded.") }
+          if UIKit.UIColor(named: "TextBlack", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'TextBlack' is used in storyboard 'ShowComicOption', but couldn't be loaded.") }
+          if UIKit.UIColor(named: "TextBlack-light", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'TextBlack-light' is used in storyboard 'ShowComicOption', but couldn't be loaded.") }
+          if UIKit.UIColor(named: "TextBlack-lighter", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'TextBlack-lighter' is used in storyboard 'ShowComicOption', but couldn't be loaded.") }
+        }
+        if _R.storyboard.showComicOption().showComicOptionStoryboard() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'showComicOptionStoryboard' could not be loaded from storyboard 'ShowComicOption' as 'ShowComicOptionAlertViewController'.") }
       }
 
       fileprivate init() {}

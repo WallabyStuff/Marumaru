@@ -11,11 +11,16 @@ import RxCocoa
 
 class ComicDetailViewModel {
     
-    public var comicInfo: ComicInfo
+    
+    // MARK: - Properties
+    
+    private var comicInfo: ComicInfo
     
     private var disposeBag = DisposeBag()
     private let watchHistoryManager = WatchHistoryManager()
     private let comicBookmarkManager = ComicBookmarkManager()
+    
+    public var comicInfoObservable = PublishRelay<ComicInfo>()
     
     private var comicEpisodes = [ComicEpisode]()
     public var comicEpisodesObservable = BehaviorRelay<[ComicEpisode]>(value: [])
@@ -32,6 +37,9 @@ class ComicDetailViewModel {
     
     public var bookmarkState = BehaviorRelay<Bool>(value: false)
     
+    
+    // MARK: - Initializers
+    
     init(comicInfo: ComicInfo) {
         self.comicInfo = comicInfo
     }
@@ -42,7 +50,7 @@ class ComicDetailViewModel {
 }
 
 extension ComicDetailViewModel {
-    public func updateComicEpisodes() {
+    public func updateComicInfoAndEpisodes() {
         comicEpisodes = fakeEpisodeCells(15)
         comicEpisodesObservable.accept(comicEpisodes)
         isLoadingComicEpisodes.accept(true)
@@ -51,20 +59,40 @@ extension ComicDetailViewModel {
         MarumaruApiService.shared.getEpisodes(comicInfo.comicSN)
             .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
             .observe(on: MainScheduler.instance)
-            .subscribe(with: self, onSuccess: { strongSelf, comics in
-                strongSelf.comicEpisodes = comics
+            .subscribe(with: self, onSuccess: { strongSelf, result in
+                let comicInfo = strongSelf.replaceComicInfoProperties(result.comicInfo)
+                strongSelf.comicInfoObservable.accept(comicInfo)
+                
+                strongSelf.comicEpisodes = result.episodes
+                strongSelf.comicEpisodesObservable.accept(result.episodes)
                 strongSelf.isLoadingComicEpisodes.accept(false)
-                strongSelf.comicEpisodesObservable.accept(comics)
             }, onFailure: { strongSelf, _ in
                 strongSelf.comicEpisodesObservable.accept([])
-                strongSelf.isLoadingComicEpisodes.accept(false)
                 strongSelf.failedToLoadingComicEpisodes.accept(true)
+                strongSelf.isLoadingComicEpisodes.accept(false)
             }).disposed(by: self.disposeBag)
     }
     
     public func comicItemSelected(_ indexPath: IndexPath) {
         let selectedComic = comicEpisodes[indexPath.row]
         presentComicStripVCObservable.accept(selectedComic)
+    }
+}
+
+extension ComicDetailViewModel {
+    public func setInitailComicInfo() {
+        comicInfoObservable.accept(comicInfo)
+    }
+    
+    // To leave out updating update cycle
+    // ComicInfo from getEpisodes() can't parse updateCycle data
+    private func replaceComicInfoProperties(_ newComicInfo: ComicInfo) -> ComicInfo {
+        var comicInfo = self.comicInfo
+        comicInfo.title = newComicInfo.title
+        comicInfo.author = newComicInfo.author
+        comicInfo.thumbnailImagePath = newComicInfo.thumbnailImagePath
+        
+        return comicInfo
     }
 }
 
@@ -95,10 +123,6 @@ extension ComicDetailViewModel {
 }
 
 extension ComicDetailViewModel {
-    public func getThumbnailImageURL() -> URL? {
-        return getImageURL(comicInfo.thumbnailImagePath)
-    }
-    
     public func getImageURL(_ imagePath: String?) -> URL? {
         guard let imagePath = imagePath else {
             return nil

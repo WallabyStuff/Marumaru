@@ -55,7 +55,10 @@ extension SearchResultViewModel {
     }
     
     public func selectComicItem(_ indexPath: IndexPath) {
-        let selectedComic = searchResultComics[indexPath.row]
+        var selectedComic = searchResultComics[indexPath.row]
+        if selectedComic.author != "작가정보 없음" {
+            selectedComic.author = "작가 : \(selectedComic.author)"
+        }
         presentComicDetailVC.accept(selectedComic)
     }
 }
@@ -76,6 +79,6 @@ extension SearchResultViewModel {
     }
     
     private var fakeSearchResultComic: ComicInfo {
-        return .init(comicSN: "", title: "", author: "", updateCycle: "미분류")
+        return .init(comicSN: "", title: "")
     }
 }

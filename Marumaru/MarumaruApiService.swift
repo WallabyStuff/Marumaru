@@ -254,10 +254,13 @@ extension MarumaruApiService {
                     }
                 }
                 
+                let author = descriptions[0] == "" ? "작가정보 없음" : descriptions[0]
+                let updatecycle = descriptions[1] == "" ? "미분류" : descriptions[1]
+                
                 let comicInfo = ComicInfo(comicSN: comicSN,
                                           title: title,
-                                          author: descriptions[0],
-                                          updateCycle: descriptions[1],
+                                          author: author,
+                                          updateCycle: updatecycle,
                                           thumbnailImage: nil,
                                           thumbnailImagePath: imagePath)
                 
@@ -275,7 +278,9 @@ extension MarumaruApiService {
 // MARK: - Comic episodes
 
 extension MarumaruApiService {
-    public func getEpisodes(_ comicSN: String) -> Single<[ComicEpisode]> {
+    typealias ComicInfoWithEpisodes = (comicInfo: ComicInfo, episodes: [ComicEpisode])
+    
+    public func getEpisodes(_ comicSN: String) -> Single<ComicInfoWithEpisodes> {
         return Single.create { [weak self] observer in
             guard let self = self else { return Disposables.create() }
             
@@ -297,10 +302,28 @@ extension MarumaruApiService {
         }
     }
     
-    private func parseEpisodes(with document: Document) throws -> [ComicEpisode] {
+    private func parseEpisodes(with document: Document) throws -> ComicInfoWithEpisodes {
         do {
+            var comicInfo = ComicInfo(comicSN: "",
+                                      title: "",
+                                      author: "")
             var episodes = [ComicEpisode]()
             
+            
+            // Parse informations
+            if let comicInfoElements = try document.getElementsByClass("col-md-12").first() {
+                let texts = try comicInfoElements.getElementsByClass("text-left")
+                
+                let amountOfEpisode = try texts.select("span").removeAttr("style").first()?.text() ?? ""
+                let title = try texts.first()?.text().replacingOccurrences(of: amountOfEpisode, with: "").trimmingCharacters(in: .whitespaces) ?? ""
+                comicInfo.title = title
+                
+                let author = try texts.last()?.text().trimmingCharacters(in: .whitespaces) ?? ""
+                comicInfo.author = author == "작가 :" ? "작가정보 없음" : author
+                comicInfo.thumbnailImagePath = try comicInfoElements.select("img").attr("src")
+            }
+            
+            // Parse episodes
             let headElement = try document.getElementsByClass("list-wrap")
             if let superElement = headElement.first() {
                 let tbody = try superElement.getElementsByTag("tbody")
@@ -329,7 +352,7 @@ extension MarumaruApiService {
                 }
             }
             
-            return episodes
+            return ComicInfoWithEpisodes(comicInfo, episodes)
         } catch {
             throw MarumaruApiError.failToParse
         }

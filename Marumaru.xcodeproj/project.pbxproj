@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		43799AA2209028912C9500E7 /* Pods_MarumaruTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65C798793CC3D721071DC869 /* Pods_MarumaruTests.framework */; };
-		6B1ED755F0C59B60BA4F1AF9 /* Pods_Marumaru_MarumaruUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0E2F23C10B67B2F153ED776 /* Pods_Marumaru_MarumaruUITests.framework */; };
+		15C6CB6992079FB69DAB64E7 /* Pods_Marumaru.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE15A1528A62E585B08B91E9 /* Pods_Marumaru.framework */; };
+		65DD0FAF602C9F854AD10F56 /* Pods_Marumaru_MarumaruUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B4B184C3384578183079B496 /* Pods_Marumaru_MarumaruUITests.framework */; };
 		7641C3AF2646826100A79A79 /* PopOverComicEpisodeTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641C3AE2646826100A79A79 /* PopOverComicEpisodeTableCell.swift */; };
 		7641C3B1264682B900A79A79 /* PopOverComicEpisodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641C3B0264682B900A79A79 /* PopOverComicEpisodeViewController.swift */; };
 		7641C3B32646874300A79A79 /* EpisodeItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641C3B22646874300A79A79 /* EpisodeItem.swift */; };
@@ -35,12 +35,18 @@
 		76F912E926CFDFA100B39BE7 /* ComicEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F912E826CFDFA000B39BE7 /* ComicEpisode.swift */; };
 		76F912EB26CFFE9700B39BE7 /* ComicStripScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F912EA26CFFE9700B39BE7 /* ComicStripScene.swift */; };
 		76F912F526D160FA00B39BE7 /* loading_cat_radial.json in Resources */ = {isa = PBXBuildFile; fileRef = 76F912F426D160FA00B39BE7 /* loading_cat_radial.json */; };
+		7B54B4D15373A9E0D08F0BE0 /* Pods_MarumaruTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0229FADB2A974ECF39EF5097 /* Pods_MarumaruTests.framework */; };
 		8E1569862847AEF800BF1008 /* ImageSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1569852847AEF800BF1008 /* ImageSessionManager.swift */; };
 		8E3192CB283A15B900C350F9 /* PopOverComicEpisodeTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E3192C9283A15B900C350F9 /* PopOverComicEpisodeTableCell.xib */; };
 		8E319309283B540900C350F9 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E319308283B540900C350F9 /* BaseViewController.swift */; };
 		8E33F3E32850917B00B6E6EE /* CategoryChipCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E33F3E12850917B00B6E6EE /* CategoryChipCollectionCell.swift */; };
 		8E33F3E42850917B00B6E6EE /* CategoryChipCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E33F3E22850917B00B6E6EE /* CategoryChipCollectionCell.xib */; };
 		8E33F3E62850D18900B6E6EE /* UIView+ConvenienceInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E33F3E52850D18900B6E6EE /* UIView+ConvenienceInsets.swift */; };
+		8E33F3EA2851432000B6E6EE /* ShowComicOptionAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E33F3E92851432000B6E6EE /* ShowComicOptionAlertViewController.swift */; };
+		8E33F3EC2851432C00B6E6EE /* ShowComicOption.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E33F3EB2851432C00B6E6EE /* ShowComicOption.storyboard */; };
+		8E33F3F02851450300B6E6EE /* ShowComicOptionAlertViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E33F3EF2851450300B6E6EE /* ShowComicOptionAlertViewModel.swift */; };
+		8E33F3F228514CF500B6E6EE /* ShowComicOptionFloatinPanelLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E33F3F128514CF500B6E6EE /* ShowComicOptionFloatinPanelLayout.swift */; };
+		8E33F3F6285164E600B6E6EE /* bodybuilder_dancer.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E33F3F5285164E600B6E6EE /* bodybuilder_dancer.json */; };
 		8E3A896627AB9FB00014303D /* TagLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3A896527AB9FB00014303D /* TagLabel.swift */; };
 		8E3C72FB27A983EC00F057DA /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3C72FA27A983EC00F057DA /* MainViewModel.swift */; };
 		8E400FC6284FA61C00F48E95 /* UpdateCycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E400FC5284FA61C00F48E95 /* UpdateCycle.swift */; };
@@ -86,7 +92,6 @@
 		8E5C9FD5284D4C90008FE961 /* BookmarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5C9FD4284D4C90008FE961 /* BookmarkViewController.swift */; };
 		8E5C9FD7284D4CAB008FE961 /* BookmarkViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5C9FD6284D4CAB008FE961 /* BookmarkViewModel.swift */; };
 		8E5C9FD9284D4CB8008FE961 /* Bookmark.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E5C9FD8284D4CB8008FE961 /* Bookmark.storyboard */; };
-		8E656232284BCCD6000FF0A4 /* Pods_Marumaru.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA2BBEC6D1E3D4200654F131 /* Pods_Marumaru.framework */; };
 		8E662DEB27AC2FF40048BF39 /* WatchHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E662DEA27AC2FF40048BF39 /* WatchHistoryViewModel.swift */; };
 		8E828F65284B52870065FA2F /* notification_bell.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E828F64284B52870065FA2F /* notification_bell.json */; };
 		8E82D73F27B25701008230BE /* UIView+Insets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E82D73E27B25701008230BE /* UIView+Insets.swift */; };
@@ -143,10 +148,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		38EBA91B9EDAEE6B8214F7AB /* Pods-Marumaru-MarumaruUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Marumaru-MarumaruUITests.release.xcconfig"; path = "Target Support Files/Pods-Marumaru-MarumaruUITests/Pods-Marumaru-MarumaruUITests.release.xcconfig"; sourceTree = "<group>"; };
-		3973B1872784EB3A55259E62 /* Pods-Marumaru-MarumaruUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Marumaru-MarumaruUITests.debug.xcconfig"; path = "Target Support Files/Pods-Marumaru-MarumaruUITests/Pods-Marumaru-MarumaruUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		5053DE916A9DA84FEEDB7569 /* Pods-MarumaruTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MarumaruTests.release.xcconfig"; path = "Target Support Files/Pods-MarumaruTests/Pods-MarumaruTests.release.xcconfig"; sourceTree = "<group>"; };
-		65C798793CC3D721071DC869 /* Pods_MarumaruTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MarumaruTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0229FADB2A974ECF39EF5097 /* Pods_MarumaruTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MarumaruTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0B83C7005C66D5C417A41D21 /* Pods-Marumaru-MarumaruUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Marumaru-MarumaruUITests.debug.xcconfig"; path = "Target Support Files/Pods-Marumaru-MarumaruUITests/Pods-Marumaru-MarumaruUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		16F1984D6C24BF16CDA77878 /* Pods-MarumaruTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MarumaruTests.release.xcconfig"; path = "Target Support Files/Pods-MarumaruTests/Pods-MarumaruTests.release.xcconfig"; sourceTree = "<group>"; };
+		3C5223BD6E5F857BC18C07F7 /* Pods-MarumaruTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MarumaruTests.debug.xcconfig"; path = "Target Support Files/Pods-MarumaruTests/Pods-MarumaruTests.debug.xcconfig"; sourceTree = "<group>"; };
 		7641C3AE2646826100A79A79 /* PopOverComicEpisodeTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopOverComicEpisodeTableCell.swift; sourceTree = "<group>"; };
 		7641C3B0264682B900A79A79 /* PopOverComicEpisodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopOverComicEpisodeViewController.swift; sourceTree = "<group>"; };
 		7641C3B22646874300A79A79 /* EpisodeItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeItem.swift; sourceTree = "<group>"; };
@@ -185,6 +190,11 @@
 		8E33F3E12850917B00B6E6EE /* CategoryChipCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryChipCollectionCell.swift; sourceTree = "<group>"; };
 		8E33F3E22850917B00B6E6EE /* CategoryChipCollectionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CategoryChipCollectionCell.xib; sourceTree = "<group>"; };
 		8E33F3E52850D18900B6E6EE /* UIView+ConvenienceInsets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+ConvenienceInsets.swift"; sourceTree = "<group>"; };
+		8E33F3E92851432000B6E6EE /* ShowComicOptionAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowComicOptionAlertViewController.swift; sourceTree = "<group>"; };
+		8E33F3EB2851432C00B6E6EE /* ShowComicOption.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ShowComicOption.storyboard; sourceTree = "<group>"; };
+		8E33F3EF2851450300B6E6EE /* ShowComicOptionAlertViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowComicOptionAlertViewModel.swift; sourceTree = "<group>"; };
+		8E33F3F128514CF500B6E6EE /* ShowComicOptionFloatinPanelLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowComicOptionFloatinPanelLayout.swift; sourceTree = "<group>"; };
+		8E33F3F5285164E600B6E6EE /* bodybuilder_dancer.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = bodybuilder_dancer.json; sourceTree = "<group>"; };
 		8E3A896527AB9FB00014303D /* TagLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagLabel.swift; sourceTree = "<group>"; };
 		8E3C72FA27A983EC00F057DA /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		8E400FC5284FA61C00F48E95 /* UpdateCycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateCycle.swift; sourceTree = "<group>"; };
@@ -266,11 +276,11 @@
 		8EFCD0E628408A3A00685503 /* UIView+StickyLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+StickyLabel.swift"; sourceTree = "<group>"; };
 		8EFCD0E92840DB3900685503 /* WatchHistorySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchHistorySection.swift; sourceTree = "<group>"; };
 		8EFCD0EB2841F0E600685503 /* Array+IsInBound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+IsInBound.swift"; sourceTree = "<group>"; };
-		9405BE8377B1EBDC1104FC67 /* Pods-MarumaruTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MarumaruTests.debug.xcconfig"; path = "Target Support Files/Pods-MarumaruTests/Pods-MarumaruTests.debug.xcconfig"; sourceTree = "<group>"; };
-		CC0674A5C3F57E36F6D37803 /* Pods-Marumaru.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Marumaru.debug.xcconfig"; path = "Target Support Files/Pods-Marumaru/Pods-Marumaru.debug.xcconfig"; sourceTree = "<group>"; };
-		D4F9B5AC85869760886B4343 /* Pods-Marumaru.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Marumaru.release.xcconfig"; path = "Target Support Files/Pods-Marumaru/Pods-Marumaru.release.xcconfig"; sourceTree = "<group>"; };
-		EA2BBEC6D1E3D4200654F131 /* Pods_Marumaru.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Marumaru.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F0E2F23C10B67B2F153ED776 /* Pods_Marumaru_MarumaruUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Marumaru_MarumaruUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B4B184C3384578183079B496 /* Pods_Marumaru_MarumaruUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Marumaru_MarumaruUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE15A1528A62E585B08B91E9 /* Pods_Marumaru.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Marumaru.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E91C14DA410359FB04EB8054 /* Pods-Marumaru-MarumaruUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Marumaru-MarumaruUITests.release.xcconfig"; path = "Target Support Files/Pods-Marumaru-MarumaruUITests/Pods-Marumaru-MarumaruUITests.release.xcconfig"; sourceTree = "<group>"; };
+		F38E662BA2E8E4A156FBD918 /* Pods-Marumaru.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Marumaru.release.xcconfig"; path = "Target Support Files/Pods-Marumaru/Pods-Marumaru.release.xcconfig"; sourceTree = "<group>"; };
+		F72E37B05A88C33716DFCD7E /* Pods-Marumaru.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Marumaru.debug.xcconfig"; path = "Target Support Files/Pods-Marumaru/Pods-Marumaru.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -278,7 +288,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8E656232284BCCD6000FF0A4 /* Pods_Marumaru.framework in Frameworks */,
+				15C6CB6992079FB69DAB64E7 /* Pods_Marumaru.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -286,7 +296,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43799AA2209028912C9500E7 /* Pods_MarumaruTests.framework in Frameworks */,
+				7B54B4D15373A9E0D08F0BE0 /* Pods_MarumaruTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -294,34 +304,34 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6B1ED755F0C59B60BA4F1AF9 /* Pods_Marumaru_MarumaruUITests.framework in Frameworks */,
+				65DD0FAF602C9F854AD10F56 /* Pods_Marumaru_MarumaruUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0C0D7BF5880A3D098F2C3162 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CE15A1528A62E585B08B91E9 /* Pods_Marumaru.framework */,
+				B4B184C3384578183079B496 /* Pods_Marumaru_MarumaruUITests.framework */,
+				0229FADB2A974ECF39EF5097 /* Pods_MarumaruTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		5A67613C88A4F68AD84818F9 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				CC0674A5C3F57E36F6D37803 /* Pods-Marumaru.debug.xcconfig */,
-				D4F9B5AC85869760886B4343 /* Pods-Marumaru.release.xcconfig */,
-				3973B1872784EB3A55259E62 /* Pods-Marumaru-MarumaruUITests.debug.xcconfig */,
-				38EBA91B9EDAEE6B8214F7AB /* Pods-Marumaru-MarumaruUITests.release.xcconfig */,
-				9405BE8377B1EBDC1104FC67 /* Pods-MarumaruTests.debug.xcconfig */,
-				5053DE916A9DA84FEEDB7569 /* Pods-MarumaruTests.release.xcconfig */,
+				F72E37B05A88C33716DFCD7E /* Pods-Marumaru.debug.xcconfig */,
+				F38E662BA2E8E4A156FBD918 /* Pods-Marumaru.release.xcconfig */,
+				0B83C7005C66D5C417A41D21 /* Pods-Marumaru-MarumaruUITests.debug.xcconfig */,
+				E91C14DA410359FB04EB8054 /* Pods-Marumaru-MarumaruUITests.release.xcconfig */,
+				3C5223BD6E5F857BC18C07F7 /* Pods-MarumaruTests.debug.xcconfig */,
+				16F1984D6C24BF16CDA77878 /* Pods-MarumaruTests.release.xcconfig */,
 			);
 			path = Pods;
-			sourceTree = "<group>";
-		};
-		65AA3A1D4D5A1F31A3E84B40 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				EA2BBEC6D1E3D4200654F131 /* Pods_Marumaru.framework */,
-				F0E2F23C10B67B2F153ED776 /* Pods_Marumaru_MarumaruUITests.framework */,
-				65C798793CC3D721071DC869 /* Pods_MarumaruTests.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		765A0FC326BED7ED005DDD8B /* Storyboards */ = {
@@ -337,6 +347,7 @@
 				8E41467D28439DA20005BCFD /* SearchResult.storyboard */,
 				8E5C9FD8284D4CB8008FE961 /* Bookmark.storyboard */,
 				8E52CA59284F15B7007844E0 /* ComicCategory.storyboard */,
+				8E33F3EB2851432C00B6E6EE /* ShowComicOption.storyboard */,
 			);
 			name = Storyboards;
 			sourceTree = "<group>";
@@ -349,7 +360,7 @@
 				765C8B4C261CA2C50056C83B /* MarumaruUITests */,
 				765C8B26261CA2C30056C83B /* Products */,
 				5A67613C88A4F68AD84818F9 /* Pods */,
-				65AA3A1D4D5A1F31A3E84B40 /* Frameworks */,
+				0C0D7BF5880A3D098F2C3162 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -455,6 +466,7 @@
 				8E3A896527AB9FB00014303D /* TagLabel.swift */,
 				8E87CE6127ACEAD0008CD9C9 /* WatchHistoryCollectionReusableView.swift */,
 				8ED56F3327AEFBAA00E78A8A /* ThumbnailPlaceholderView.swift */,
+				8E33F3F128514CF500B6E6EE /* ShowComicOptionFloatinPanelLayout.swift */,
 				765C8C81261F1AA10056C83B /* Cells */,
 				765A0FC326BED7ED005DDD8B /* Storyboards */,
 				8E4FFE1F2844F0AB00A7ED7B /* LottieAnimationView.swift */,
@@ -465,6 +477,7 @@
 		76BEEB4B2622D80000642001 /* LottieAnimations */ = {
 			isa = PBXGroup;
 			children = (
+				8E33F3F5285164E600B6E6EE /* bodybuilder_dancer.json */,
 				8E41466D284394AA0005BCFD /* coming_soon.json */,
 				8E4FFE1B2844F04B00A7ED7B /* eyes_blinking.json */,
 				8E4FFE212844F6B600A7ED7B /* trophy.json */,
@@ -492,6 +505,7 @@
 				8E41467F28439DAE0005BCFD /* SearchResultViewController.swift */,
 				8E5C9FD4284D4C90008FE961 /* BookmarkViewController.swift */,
 				8E52CA57284F15A5007844E0 /* ComicCategoryViewController.swift */,
+				8E33F3E92851432000B6E6EE /* ShowComicOptionAlertViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -561,6 +575,7 @@
 				8E41468128439ED00005BCFD /* SearchResultViewModel.swift */,
 				8E5C9FD6284D4CAB008FE961 /* BookmarkViewModel.swift */,
 				8E52CA5F284F22FF007844E0 /* ComicCategoryViewModel.swift */,
+				8E33F3EF2851450300B6E6EE /* ShowComicOptionAlertViewModel.swift */,
 			);
 			name = ViewModel;
 			sourceTree = "<group>";
@@ -602,13 +617,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 765C8B52261CA2C50056C83B /* Build configuration list for PBXNativeTarget "Marumaru" */;
 			buildPhases = (
-				35D7FACFF415291800F1424D /* [CP] Check Pods Manifest.lock */,
+				D03ACC212FD57E1E875921D0 /* [CP] Check Pods Manifest.lock */,
 				8E8851A027A9530300126701 /* R.Swift */,
 				765C8B21261CA2C30056C83B /* Sources */,
 				765C8B22261CA2C30056C83B /* Frameworks */,
 				765C8B23261CA2C30056C83B /* Resources */,
 				7684F3CE26C590A00012BD8E /* Swift Lint */,
-				937F77DFB5B86E2B7BF922A5 /* [CP] Embed Pods Frameworks */,
+				52E0B7801A7BA1BF7CCAB1D8 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -623,7 +638,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 765C8B55261CA2C50056C83B /* Build configuration list for PBXNativeTarget "MarumaruTests" */;
 			buildPhases = (
-				E97C46DFD455F3AC586085FD /* [CP] Check Pods Manifest.lock */,
+				A0C10F8B7152325E43A471E6 /* [CP] Check Pods Manifest.lock */,
 				765C8B3A261CA2C50056C83B /* Sources */,
 				765C8B3B261CA2C50056C83B /* Frameworks */,
 				765C8B3C261CA2C50056C83B /* Resources */,
@@ -642,11 +657,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 765C8B58261CA2C50056C83B /* Build configuration list for PBXNativeTarget "MarumaruUITests" */;
 			buildPhases = (
-				CFD5F08AD239AF35872A225F /* [CP] Check Pods Manifest.lock */,
+				885AE4A574FB5E603C5E55F0 /* [CP] Check Pods Manifest.lock */,
 				765C8B45261CA2C50056C83B /* Sources */,
 				765C8B46261CA2C50056C83B /* Frameworks */,
 				765C8B47261CA2C50056C83B /* Resources */,
-				D2BFD2AF98D3D6088D0BAB46 /* [CP] Embed Pods Frameworks */,
+				A42BF0237EF3868F060EC7D8 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -723,6 +738,7 @@
 				8EA6B5B928392BD30019B590 /* PopOverComicEpisode.storyboard in Resources */,
 				7684F3EA26CB5F6A0012BD8E /* ComicEpisodeThumbnailTableCell.xib in Resources */,
 				8EA6B5B728392BA70019B590 /* ComicStrip.storyboard in Resources */,
+				8E33F3EC2851432C00B6E6EE /* ShowComicOption.storyboard in Resources */,
 				8EAFD06D283CAA2500FD569F /* SearchResultComicCollectionCell.xib in Resources */,
 				8E92C01A283EA3E500E0CD82 /* rainbow_cat.json in Resources */,
 				8ECAB666283911F3008E531D /* ComicDetail.storyboard in Resources */,
@@ -733,6 +749,7 @@
 				8E4FFE222844F6B600A7ED7B /* trophy.json in Resources */,
 				8ECAB66228390F6B008E531D /* WatchHistory.storyboard in Resources */,
 				8E41467E28439DA20005BCFD /* SearchResult.storyboard in Resources */,
+				8E33F3F6285164E600B6E6EE /* bodybuilder_dancer.json in Resources */,
 				8E88519F27A952A900126701 /* .swiftlint.yml in Resources */,
 				8E41466E284394AA0005BCFD /* coming_soon.json in Resources */,
 				8E41467828439AFF0005BCFD /* SearchHistoryCollectionCell.xib in Resources */,
@@ -759,26 +776,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		35D7FACFF415291800F1424D /* [CP] Check Pods Manifest.lock */ = {
+		52E0B7801A7BA1BF7CCAB1D8 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Marumaru/Pods-Marumaru-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
+			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Marumaru-checkManifestLockResult.txt",
+				"${PODS_ROOT}/Target Support Files/Pods-Marumaru/Pods-Marumaru-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Marumaru/Pods-Marumaru-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		7684F3CE26C590A00012BD8E /* Swift Lint */ = {
@@ -799,44 +811,7 @@
 			shellPath = /bin/sh;
 			shellScript = "${PODS_ROOT}/SwiftLint/swiftlint\n";
 		};
-		8E8851A027A9530300126701 /* R.Swift */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = R.Swift;
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				$SRCROOT/R.generated.swift,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT/R.generated.swift\"\n";
-		};
-		937F77DFB5B86E2B7BF922A5 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Marumaru/Pods-Marumaru-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Marumaru/Pods-Marumaru-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Marumaru/Pods-Marumaru-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		CFD5F08AD239AF35872A225F /* [CP] Check Pods Manifest.lock */ = {
+		885AE4A574FB5E603C5E55F0 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -858,7 +833,49 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D2BFD2AF98D3D6088D0BAB46 /* [CP] Embed Pods Frameworks */ = {
+		8E8851A027A9530300126701 /* R.Swift */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = R.Swift;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				$SRCROOT/R.generated.swift,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT/R.generated.swift\"\n";
+		};
+		A0C10F8B7152325E43A471E6 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MarumaruTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A42BF0237EF3868F060EC7D8 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -875,7 +892,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Marumaru-MarumaruUITests/Pods-Marumaru-MarumaruUITests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E97C46DFD455F3AC586085FD /* [CP] Check Pods Manifest.lock */ = {
+		D03ACC212FD57E1E875921D0 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -890,7 +907,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MarumaruTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Marumaru-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -935,6 +952,7 @@
 				8E52CA6A284F5A5C007844E0 /* URL+RawAppendPathComponent.swift in Sources */,
 				8E52CA60284F22FF007844E0 /* ComicCategoryViewModel.swift in Sources */,
 				765C8B2D261CA2C30056C83B /* MainViewController.swift in Sources */,
+				8E33F3F02851450300B6E6EE /* ShowComicOptionAlertViewModel.swift in Sources */,
 				8E553E6E2845CF0F00B7F5BC /* MarumaruApiServiceViewModel.swift in Sources */,
 				8E553E702846132200B7F5BC /* SearchHistorySection.swift in Sources */,
 				8E553E762846260C00B7F5BC /* ComicInfoSection.swift in Sources */,
@@ -965,9 +983,11 @@
 				8EAFD069283B78B700FD569F /* MainTabBarController.swift in Sources */,
 				8E52CA66284F2EA3007844E0 /* ComicCategory.swift in Sources */,
 				8ED56F3427AEFBAA00E78A8A /* ThumbnailPlaceholderView.swift in Sources */,
+				8E33F3EA2851432000B6E6EE /* ShowComicOptionAlertViewController.swift in Sources */,
 				8E1569862847AEF800BF1008 /* ImageSessionManager.swift in Sources */,
 				8ED56F3827AEFDD400E78A8A /* UIView+Animation.swift in Sources */,
 				8EFCD0EA2840DB3900685503 /* WatchHistorySection.swift in Sources */,
+				8E33F3F228514CF500B6E6EE /* ShowComicOptionFloatinPanelLayout.swift in Sources */,
 				8E414672284397E20005BCFD /* SearchHistory.swift in Sources */,
 				8E41468228439ED00005BCFD /* SearchResultViewModel.swift in Sources */,
 				8E96129728493707009422BE /* ComicStripScrollViewModel.swift in Sources */,
@@ -1147,7 +1167,7 @@
 		};
 		765C8B53261CA2C50056C83B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CC0674A5C3F57E36F6D37803 /* Pods-Marumaru.debug.xcconfig */;
+			baseConfigurationReference = F72E37B05A88C33716DFCD7E /* Pods-Marumaru.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1172,7 +1192,7 @@
 		};
 		765C8B54261CA2C50056C83B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D4F9B5AC85869760886B4343 /* Pods-Marumaru.release.xcconfig */;
+			baseConfigurationReference = F38E662BA2E8E4A156FBD918 /* Pods-Marumaru.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1197,7 +1217,7 @@
 		};
 		765C8B56261CA2C50056C83B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9405BE8377B1EBDC1104FC67 /* Pods-MarumaruTests.debug.xcconfig */;
+			baseConfigurationReference = 3C5223BD6E5F857BC18C07F7 /* Pods-MarumaruTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1220,7 +1240,7 @@
 		};
 		765C8B57261CA2C50056C83B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5053DE916A9DA84FEEDB7569 /* Pods-MarumaruTests.release.xcconfig */;
+			baseConfigurationReference = 16F1984D6C24BF16CDA77878 /* Pods-MarumaruTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1243,7 +1263,7 @@
 		};
 		765C8B59261CA2C50056C83B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3973B1872784EB3A55259E62 /* Pods-Marumaru-MarumaruUITests.debug.xcconfig */;
+			baseConfigurationReference = 0B83C7005C66D5C417A41D21 /* Pods-Marumaru-MarumaruUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -1264,7 +1284,7 @@
 		};
 		765C8B5A261CA2C50056C83B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 38EBA91B9EDAEE6B8214F7AB /* Pods-Marumaru-MarumaruUITests.release.xcconfig */;
+			baseConfigurationReference = E91C14DA410359FB04EB8054 /* Pods-Marumaru-MarumaruUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;

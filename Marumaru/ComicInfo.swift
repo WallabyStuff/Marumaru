@@ -11,8 +11,8 @@ import RxDataSources
 struct ComicInfo: Equatable {
     var comicSN: String
     var title: String
-    var author: String
-    var updateCycle: String
+    var author: String = "작가정보 없음"
+    var updateCycle: String = "미분류"
     var thumbnailImage: UIImage?
     var thumbnailImagePath: String?
 }
