@@ -42,7 +42,7 @@ class CategoryChipCollectionCell: UICollectionViewCell {
     }
     
     private func setupContentView() {
-        chipContentView.layer.cornerRadius = 12
+        chipContentView.layer.cornerRadius = 10
         chipContentView.layer.borderWidth = 1
         chipContentView.layer.borderColor = R.color.lineGrayLighter()!.cgColor
     }

@@ -172,7 +172,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
                     vc.thumbnailImageView.image = comicInfo.thumbnailImage
                 } else {
                     let url = vc.viewModel.getImageURL(comicInfo.thumbnailImagePath)
-                    vc.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { [weak self] result in
+                    vc.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3)), .forceTransition]) { [weak self] result in
                         guard let self = self else { return }
                         
                         do {
@@ -212,7 +212,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
                 }
                 
                 let url = self.viewModel.getImageURL(episode.thumbnailImagePath)
-                cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))])
+                cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3)), .forceTransition])
                 
                 cell.onReuse = {
                     cell.thumbnailImageView.kf.cancelDownloadTask()

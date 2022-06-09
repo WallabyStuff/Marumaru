@@ -84,7 +84,7 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
     private func setupComicCollectionCell() {
         registerComicCollectionCell()
         comicCollectionView.collectionViewLayout = comicsCollectionViewLayout()
-        comicCollectionView.contentInset = UIEdgeInsets.inset(top: 88, bottom: 24)
+        comicCollectionView.contentInset = UIEdgeInsets.inset(top: 72, bottom: 24)
     }
     
     private func registerComicCollectionCell() {
@@ -95,7 +95,7 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
     private func setupComicCategoryCollectionView() {
         registerComicCategoryCollectionCell()
         comicCategoryCollectionView.collectionViewLayout = comicCategoryCollectionViewLayout()
-        comicCategoryCollectionView.contentInset = .init(top: 12, left: 20, bottom: 12, right: -40)
+        comicCategoryCollectionView.contentInset = .init(top: 8, left: 20, bottom: 8, right: -40)
         comicCategoryCollectionView.delegate = self
     }
     
@@ -230,7 +230,7 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
             cell.updateCycleView.backgroundColor = UpdateCycle(rawValue: item.updateCycle)?.color
             
             let url = self.viewModel.getImageURL(item.thumbnailImagePath)
-            cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { result in
+            cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3)), .forceTransition]) { result in
                 do {
                     let result = try result.get()
                     let image = result.image
@@ -281,7 +281,7 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
     private func comicCategoryCollectionViewLayout() -> UICollectionViewFlowLayout {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
-        flowLayout.estimatedItemSize = .init(width: 68, height: 40)
+        flowLayout.estimatedItemSize = .init(width: 60, height: 36)
         flowLayout.minimumInteritemSpacing = 12
         return flowLayout
     }
@@ -310,8 +310,8 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
 
 extension ComicCategoryViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let sideInset: CGFloat = 20
+        let sideInset: CGFloat = 16
         let width = viewModel.categoryItem(indexPath).title.size(withAttributes: nil).width + sideInset * 2
-        return .init(width: width, height: 40)
+        return .init(width: width, height: 36)
     }
 }
