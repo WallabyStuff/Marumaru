@@ -10,6 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import RxDataSources
+import FloatingPanel
 
 class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
         
@@ -26,6 +27,7 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
     static let identifier = R.storyboard.watchHistory.watchHistoryStoryboard.identifier
     var viewModel: ViewModel
     private var dataSource: RxCollectionViewSectionedAnimatedDataSource<WatchHistorySection>?
+    private var fpc = FloatingPanelController()
     
     
     // MARK: - Initializers
@@ -71,6 +73,7 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
     private func setupView() {
         setupWatchHistoryCollectionView()
         setupClearHistoryButton()
+        setupFloatingPanelView()
     }
     
     private func setupWatchHistoryCollectionView() {
@@ -102,6 +105,20 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
     private func setupClearHistoryButton() {
         clearHistoryButton.layer.masksToBounds = true
         clearHistoryButton.layer.cornerRadius = 8
+    }
+    
+    private func setupFloatingPanelView() {
+        fpc.layout = ShowComicOptionFloatingPanelLayout()
+        
+        let appearance = SurfaceAppearance()
+        appearance.cornerRadius = 16
+        fpc.surfaceView.appearance = appearance
+        
+        fpc.surfaceView.backgroundColor = R.color.backgroundWhite()
+        fpc.surfaceView.grabberHandle.isHidden = true
+        
+        fpc.backdropView.dismissalTapGestureRecognizer.isEnabled = true
+        fpc.isRemovalInteractionEnabled = true
     }
     
     
@@ -151,9 +168,9 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
                 vc.viewModel.comicItemSelected(indexPath)
             }).disposed(by: disposeBag)
         
-        viewModel.presentComicStrip
-            .subscribe(with: self, onNext: { vc, comic in
-                vc.presentComicStripVC(comic)
+        viewModel.presentComicDetailVC
+            .subscribe(with: self, onNext: { vc, comicEpisode in
+                vc.presentShowComicOptionAlertFPC(comicEpisode)
             })
             .disposed(by: disposeBag)
         
@@ -233,22 +250,43 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
         self.present(deleteMenu, animated: true)
     }
     
-    private func presentComicStripVC(_ episode: WatchHistory) {
+    private func presentShowComicOptionAlertFPC(_ comicEpisode: ComicEpisode) {
+        let storyboard = UIStoryboard(name: R.storyboard.showComicOption.name, bundle: nil)
+        let comicDetailVC = storyboard.instantiateViewController(identifier: ShowComicOptionAlertViewController.identifier,
+                                                                creator: { coder -> ShowComicOptionAlertViewController in
+            let viewModel = ShowComicOptionAlertViewModel(currentEpisode: comicEpisode)
+            return .init(coder, viewModel) ?? ShowComicOptionAlertViewController(viewModel)
+        })
+        
+        comicDetailVC.delegate = self
+        fpc.set(contentViewController: comicDetailVC)
+        
+        makeImpactFeedback(.light)
+        self.present(fpc, animated: true)
+    }
+    
+    private func presentComicStripVC(_ comicEpisode: ComicEpisode) {
         let storyboard = UIStoryboard(name: R.storyboard.comicStrip.name, bundle: nil)
         let comicStripVC = storyboard.instantiateViewController(identifier: ComicStripViewController.identifier,
                                                                 creator: { coder -> ComicStripViewController in
-            let comicEpisode = ComicEpisode(comicSN: episode.comicSN,
-                                            episodeSN: episode.episodeSN,
-                                            title: episode.title,
-                                            description: nil,
-                                            thumbnailImagePath: episode.thumbnailImagePath)
             let viewModel = ComicStripViewModel(currentEpisode: comicEpisode)
-            
+
             return .init(coder, viewModel) ?? ComicStripViewController(viewModel)
         })
-        
+
         comicStripVC.modalPresentationStyle = .fullScreen
         navigationController?.pushViewController(comicStripVC, animated: true)
+    }
+    
+    private func presentComicDetailVC(_ comicInfo: ComicInfo) {
+        let storybaord = UIStoryboard(name: R.storyboard.comicDetail.name, bundle: nil)
+        let comicStripVC = storybaord.instantiateViewController(identifier: ComicDetailViewController.identifier,
+                                                                creator: { coder -> ComicDetailViewController in
+            let viewModel = ComicDetailViewModel(comicInfo: comicInfo)
+            return .init(coder, viewModel) ?? ComicDetailViewController(viewModel)
+        })
+        
+        present(comicStripVC, animated: true)
     }
 }
 
@@ -285,5 +323,15 @@ extension WatchHistoryViewController {
         }
         
         return layout
+    }
+}
+
+extension WatchHistoryViewController: ShowComicOptionAlertViewDelegate {
+    func didTapShowComicStripButton(_ comicEpisode: ComicEpisode) {
+        presentComicStripVC(comicEpisode)
+    }
+    
+    func didTapShowComicDetailButton(_ comicInfo: ComicInfo) {
+        presentComicDetailVC(comicInfo)
     }
 }

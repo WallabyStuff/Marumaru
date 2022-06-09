@@ -15,6 +15,7 @@ import RxCocoa
 import RealmSwift
 import SkeletonView
 import Kingfisher
+import FloatingPanel
 
 class MainViewController: BaseViewController, ViewModelInjectable {
     
@@ -42,6 +43,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     
     static let identifier = R.storyboard.main.mainStoryboard.identifier
     var viewModel: ViewModel
+    private var fpc = FloatingPanelController()
     
     
     // MARK: - Initializers
@@ -107,6 +109,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
         setupUpdatedComicCollectionView()
         setupWatchHistoryCollectionView()
         setupComicRankTableView()
+        setupFloatingPanelView()
     }
     
     private func setupSearchBarView() {
@@ -153,6 +156,20 @@ class MainViewController: BaseViewController, ViewModelInjectable {
         comicRankTableView.register(nibName, forCellReuseIdentifier: ComicRankTableCell.identifier)
     }
     
+    private func setupFloatingPanelView() {
+        fpc.layout = ShowComicOptionFloatingPanelLayout()
+        
+        let appearance = SurfaceAppearance()
+        appearance.cornerRadius = 16
+        fpc.surfaceView.appearance = appearance
+        
+        fpc.surfaceView.backgroundColor = R.color.backgroundWhite()
+        fpc.surfaceView.grabberHandle.isHidden = true
+        
+        fpc.backdropView.dismissalTapGestureRecognizer.isEnabled = true
+        fpc.isRemovalInteractionEnabled = true
+    }
+    
         
     // MARK: - Constraints
     
@@ -189,6 +206,9 @@ class MainViewController: BaseViewController, ViewModelInjectable {
         bindComicRankCollctionView()
         bindComicRankCollectionCell()
         bindComicRankFailState()
+        
+        bindPresentComicStripVC()
+        bindPresentComicDetailVC()
     }
     
     private func bindSearchButton() {
@@ -374,12 +394,6 @@ class MainViewController: BaseViewController, ViewModelInjectable {
                 vc.viewModel.comicRankItemSelected(indexPath)
             })
             .disposed(by: disposeBag)
-        
-        viewModel.presentComicStripVCObservable
-            .subscribe(with: self, onNext: { vc, comicEpisode in
-                vc.presentComicStripVC(comicEpisode)
-            })
-            .disposed(by: disposeBag)
     }
     
     private func bindComicRankLoadingLoadingState() {
@@ -417,10 +431,26 @@ class MainViewController: BaseViewController, ViewModelInjectable {
             .disposed(by: disposeBag)
     }
     
+    private func bindPresentComicStripVC() {
+        viewModel.presentComicStripVCObservable
+            .subscribe(with: self, onNext: { vc, comicEpisode in
+                vc.presentComicStripVC(comicEpisode)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindPresentComicDetailVC() {
+        viewModel.presentComicDetailVC
+            .subscribe(with: self, onNext: { vc, comicEpisode in
+                vc.presentShowComicOptionAlertFPC(comicEpisode)
+            })
+            .disposed(by: disposeBag)
+    }
+    
     
     // MARK: - Methods
     
-    func presentComicStripVC(_ comicEpisode: ComicEpisode) {
+    private func presentComicStripVC(_ comicEpisode: ComicEpisode) {
         let storyboard = UIStoryboard(name: R.storyboard.comicStrip.name, bundle: nil)
         let comicStripVC = storyboard.instantiateViewController(identifier: ComicStripViewController.identifier,
                                                                 creator: { coder -> ComicStripViewController in
@@ -431,7 +461,22 @@ class MainViewController: BaseViewController, ViewModelInjectable {
         navigationController?.pushViewController(comicStripVC, animated: true)
     }
     
-    func presentSearchComicVC() {
+    private func presentShowComicOptionAlertFPC(_ comicEpisode: ComicEpisode) {
+        let storyboard = UIStoryboard(name: R.storyboard.showComicOption.name, bundle: nil)
+        let comicDetailVC = storyboard.instantiateViewController(identifier: ShowComicOptionAlertViewController.identifier,
+                                                                creator: { coder -> ShowComicOptionAlertViewController in
+            let viewModel = ShowComicOptionAlertViewModel(currentEpisode: comicEpisode)
+            return .init(coder, viewModel) ?? ShowComicOptionAlertViewController(viewModel)
+        })
+        
+        comicDetailVC.delegate = self
+        fpc.set(contentViewController: comicDetailVC)
+        
+        makeImpactFeedback(.light)
+        self.present(fpc, animated: true)
+    }
+    
+    private func presentSearchComicVC() {
         let storyboard = UIStoryboard(name: R.storyboard.searchComic.name, bundle: nil)
         let searchComicVC = storyboard.instantiateViewController(identifier: SearchComicViewController.identifier,
                                                                   creator: { coder -> SearchComicViewController in
@@ -442,7 +487,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
         navigationController?.pushViewController(searchComicVC, animated: true)
     }
     
-    func presentWatchHistoryVC() {
+    private func presentWatchHistoryVC() {
         let storyboard = UIStoryboard(name: R.storyboard.watchHistory.name, bundle: nil)
         let watchHistoryVC = storyboard.instantiateViewController(identifier: WatchHistoryViewController.identifier,
                                                                   creator: { coder -> WatchHistoryViewController in
@@ -451,6 +496,17 @@ class MainViewController: BaseViewController, ViewModelInjectable {
         })
         
         navigationController?.pushViewController(watchHistoryVC, animated: true)
+    }
+    
+    private func presentComicDetailVC(_ comicInfo: ComicInfo) {
+        let storybaord = UIStoryboard(name: R.storyboard.comicDetail.name, bundle: nil)
+        let comicStripVC = storybaord.instantiateViewController(identifier: ComicDetailViewController.identifier,
+                                                                creator: { coder -> ComicDetailViewController in
+            let viewModel = ComicDetailViewModel(comicInfo: comicInfo)
+            return .init(coder, viewModel) ?? ComicDetailViewController(viewModel)
+        })
+        
+        present(comicStripVC, animated: true)
     }
     
     private func playAllHeaderAnimations() {
@@ -463,5 +519,15 @@ class MainViewController: BaseViewController, ViewModelInjectable {
         newUpdateComicHeaderAnimationView.stop()
         watchHistoryHeaderAnimationView.stop()
         comicRankHeaderAnimationView.stop()
+    }
+}
+
+extension MainViewController: ShowComicOptionAlertViewDelegate {
+    func didTapShowComicStripButton(_ comicEpisode: ComicEpisode) {
+        presentComicStripVC(comicEpisode)
+    }
+    
+    func didTapShowComicDetailButton(_ comicInfo: ComicInfo) {
+        presentComicDetailVC(comicInfo)
     }
 }

@@ -31,6 +31,7 @@ class MainViewModel: MarumaruApiServiceViewModel {
     public var failToGetComicRank = BehaviorRelay<Bool>(value: false)
     
     public var presentComicStripVCObservable = PublishRelay<ComicEpisode>()
+    public var presentComicDetailVC = PublishRelay<ComicEpisode>()
 }
 
 
@@ -59,8 +60,14 @@ extension MainViewModel {
     }
     
     public func newComicEpisodeItemSelected(_ indexPath: IndexPath) {
-        let selectedComic = newComicEpisodes[indexPath.row]
-        presentComicStripVCObservable.accept(selectedComic)
+        let selectedItem = newComicEpisodes[indexPath.row]
+        let comicEpisode = ComicEpisode(comicSN: selectedItem.comicSN,
+                                        episodeSN: selectedItem.episodeSN,
+                                        title: selectedItem.title,
+                                        description: selectedItem.description,
+                                        thumbnailImagePath: selectedItem.thumbnailImagePath)
+        
+        presentComicStripVCObservable.accept(comicEpisode)
     }
 }
 
@@ -84,14 +91,14 @@ extension MainViewModel {
     }
     
     public func watchHistoryItemSelected(_ indexPath: IndexPath) {
-        let selectedComicEpisode = watchHistories[indexPath.row]
-        let comicEpisode = ComicEpisode(comicSN: selectedComicEpisode.comicSN,
-                                        episodeSN: selectedComicEpisode.episodeSN,
-                                        title: selectedComicEpisode.title,
-                                        description: nil,
-                                        thumbnailImagePath: selectedComicEpisode.thumbnailImagePath)
+        let selectedItem = watchHistories[indexPath.row]
+        let comicEpisode = ComicEpisode(comicSN: selectedItem.comicSN,
+                                        episodeSN: selectedItem.episodeSN,
+                                        title: selectedItem.title,
+                                        description: selectedItem.description,
+                                        thumbnailImagePath: selectedItem.thumbnailImagePath)
         
-        presentComicStripVCObservable.accept(comicEpisode)
+        presentComicDetailVC.accept(comicEpisode)
     }
     
 }
@@ -121,10 +128,10 @@ extension MainViewModel {
     }
     
     public func comicRankItemSelected(_ indexPath: IndexPath) {
-        let selectedComicEpisode = comicRank[indexPath.row]
-        let comicEpisode = ComicEpisode(comicSN: selectedComicEpisode.comicSN,
-                                        episodeSN: selectedComicEpisode.episodeSN,
-                                        title: selectedComicEpisode.title,
+        let selectedItem = comicRank[indexPath.row]
+        let comicEpisode = ComicEpisode(comicSN: selectedItem.comicSN,
+                                        episodeSN: selectedItem.episodeSN,
+                                        title: selectedItem.title,
                                         description: nil,
                                         thumbnailImagePath: nil)
         
