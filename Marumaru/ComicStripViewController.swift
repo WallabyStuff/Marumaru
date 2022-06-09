@@ -85,11 +85,18 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func setupView() {
+        setupBaseView()
         setupSceneScrollView()
         setupBottomIndicatorView()
         setupPreviousEpisodeButton()
         setupShowEpisodeListButton()
         setupNextEpisodeButton()
+    }
+    
+    private func setupBaseView() {
+        let edgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(didSwipeEdgeOfScreen(_:)))
+        edgePan.edges = .left
+        view.addGestureRecognizer(edgePan)
     }
     
     private func setupSceneScrollView() {
@@ -322,6 +329,11 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
         comicEpisodePopOverVC.presentationController?.delegate = self
         comicEpisodePopOverVC.delegate = self
         present(comicEpisodePopOverVC, animated: true, completion: nil)
+    }
+    
+    @objc
+    private func didSwipeEdgeOfScreen(_ sender: UIScreenEdgePanGestureRecognizer) {
+        dismiss(animated: true)
     }
 }
 
