@@ -157,6 +157,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
             .subscribe(with: self, onNext: { vc, comicInfo in
                 if comicInfo.title != "" {
                     vc.view.hideSkeleton()
+                    vc.episodeAmountLabel.showCustomSkeleton()
                 }
                 
                 vc.comicTitleLabel.text = comicInfo.title
@@ -246,7 +247,6 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
                 if isLoading {
                     vc.view.showCustomSkeleton()
                     vc.comicEpisodeTableView.isUserInteractionEnabled = false
-                    vc.episodeAmountLabel.showCustomSkeleton()
                     vc.comicEpisodeTableView.visibleCells.forEach { cell in
                         cell.showCustomSkeleton()
                     }
@@ -255,7 +255,6 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
                 } else {
                     vc.view.hideSkeleton()
                     vc.comicEpisodeTableView.isUserInteractionEnabled = true
-                    vc.episodeAmountLabel.hideSkeleton()
                     vc.comicEpisodeTableView.visibleCells.forEach { cell in
                         cell.hideSkeleton()
                     }
