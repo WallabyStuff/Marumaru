@@ -65,7 +65,7 @@ class ComicStripScrollView: UIScrollView {
     }
     
     private func setupContentView() {
-        contentView.backgroundColor = R.color.backgroundWhite()!
+        contentView.backgroundColor = .white
         
         addSubview(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
@@ -271,7 +271,8 @@ extension ComicStripScrollView {
         }
         
         sceneImageViews.removeAll()
-        scrollToTop(topInset: contentInset.top, animated: false)
+        scrollToTop(topInset: AppbarHeight.compactAppbarHeight.rawValue,
+                    animated: false)
     }
 }
 

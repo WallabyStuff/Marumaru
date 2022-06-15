@@ -10,11 +10,16 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+enum AppbarHeight: CGFloat {
+    case regularAppbarHeight = 72
+    case compactAppbarHeight = 52
+}
+
 class BaseViewController: UIViewController {
     
     var disposeBag = DisposeBag()
-    let regularAppbarHeight: CGFloat = 72
-    let compactAppbarHeight: CGFloat = 52
+    let regularAppbarHeight = AppbarHeight.regularAppbarHeight.rawValue
+    let compactAppbarHeight = AppbarHeight.compactAppbarHeight.rawValue
     
     var previousBaseFrameSize: CGRect = .zero
     let baseFrameSizeViewSizeDidChange = BehaviorRelay<CGRect>(value: .zero)
