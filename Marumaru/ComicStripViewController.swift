@@ -316,7 +316,7 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
                                                                          creator: { [weak self] coder -> PopOverComicEpisodeViewController in
             let dumpVC = PopOverComicEpisodeViewController(.init("", []))
             guard let self = self else { return dumpVC }
-            let viewModel = ComicEpisodePopOverViewModel(self.viewModel.serialNumber,
+            let viewModel = PopOverComicEpisodeViewModel(self.viewModel.serialNumber,
                                                          self.viewModel.comicEpisodes)
             return .init(coder, viewModel) ?? dumpVC
         })

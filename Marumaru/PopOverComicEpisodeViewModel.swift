@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class ComicEpisodePopOverViewModel {
+class PopOverComicEpisodeViewModel {
     
     public var currentEpisodeSN: String
     public var episodes: [EpisodeItem]
@@ -22,7 +22,7 @@ class ComicEpisodePopOverViewModel {
     }
 }
 
-extension ComicEpisodePopOverViewModel {
+extension PopOverComicEpisodeViewModel {
     public func numberOfRowsInSection(_ section: Int) -> Int {
         if section == 0 {
             return episodes.count
@@ -36,7 +36,7 @@ extension ComicEpisodePopOverViewModel {
     }
 }
 
-extension ComicEpisodePopOverViewModel {
+extension PopOverComicEpisodeViewModel {
     public var currentEpisodeIndex: Int? {
         for (index, episode) in episodes.enumerated() where episode.episodeSN == currentEpisodeSN {
             return index
