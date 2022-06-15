@@ -100,7 +100,7 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func setupSceneScrollView() {
-        comicStripScrollView.contentInset = UIEdgeInsets.inset(top: compactAppbarHeight + safeAreaInsets.top,
+        comicStripScrollView.contentInset = UIEdgeInsets.inset(top: compactAppbarHeight,
                                                                bottom: bottomIndicatorView.frame.height)
         comicStripScrollView.delegate = self
     }
