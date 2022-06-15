@@ -11,7 +11,7 @@ class ShowComicOptionFloatingPanelLayout: FloatingPanelLayout {
     var position: FloatingPanelPosition = .bottom
     var initialState: FloatingPanelState = .tip
     
-    var anchors: [FloatingPanelState : FloatingPanelLayoutAnchoring] {
+    var anchors: [FloatingPanelState: FloatingPanelLayoutAnchoring] {
         return [
             .full: FloatingPanelLayoutAnchor(absoluteInset: 352, edge: .bottom, referenceGuide: .safeArea),
             .half: FloatingPanelLayoutAnchor(absoluteInset: 352, edge: .bottom, referenceGuide: .safeArea),

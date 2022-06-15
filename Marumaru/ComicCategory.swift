@@ -121,7 +121,11 @@ extension ComicCategory {
 
 extension ComicCategory {
     public func path(page: Int) -> String {
-        return "\(path)\(pagePrefix)\(page)"
+        if self == .all {
+            return "\(idPrefix)\(pagePrefix)\(page)"
+        } else {
+            return "\(path)\(pagePrefix)\(page)"
+        }
     }
     
     public var path: String {
