@@ -18,13 +18,13 @@ class PopOverComicEpisodeViewController: BaseViewController, ViewModelInjectable
     
     
     // MARK: - Properties
-    typealias ViewModel = ComicEpisodePopOverViewModel
+    typealias ViewModel = PopOverComicEpisodeViewModel
     
     @IBOutlet weak var episodeTableView: UITableView!
     
     static let identifier = R.storyboard.popOverComicEpisode.popOverComicEpisodeStoryboard.identifier
     weak var delegate: PopOverComicEpisodeViewDelegate?
-    var viewModel: ComicEpisodePopOverViewModel
+    var viewModel: PopOverComicEpisodeViewModel
     
     
     // MARK: - Initializers
@@ -92,11 +92,11 @@ class PopOverComicEpisodeViewController: BaseViewController, ViewModelInjectable
         viewModel.episodesObservable
             .bind(to: episodeTableView.rx.items(cellIdentifier: PopOverComicEpisodeTableCell.identifier,
                                                 cellType: PopOverComicEpisodeTableCell.self)) { _, episode, cell in
-                cell.episodeTitleLabel.text = episode.title
-                
                 if episode.episodeSN == self.viewModel.currentEpisodeSN {
+                    cell.episodeTitleLabel.text = "👉 \(episode.title)"
                     cell.setHighlighted()
                 } else {
+                    cell.episodeTitleLabel.text = episode.title
                     cell.setUnHighlighted()
                 }
             }.disposed(by: disposeBag)

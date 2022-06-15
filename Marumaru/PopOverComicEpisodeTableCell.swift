@@ -28,17 +28,6 @@ class PopOverComicEpisodeTableCell: UITableViewCell {
     }
     
     
-    // MARK: - Overrides
-    
-    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        if highlighted {
-            contentView.backgroundColor = R.color.backgroundWhiteLight()
-        } else {
-            contentView.backgroundColor = R.color.backgroundWhite()
-        }
-    }
-    
-    
     // MARK: - Setups
     
     private func setup() {
@@ -65,9 +54,11 @@ class PopOverComicEpisodeTableCell: UITableViewCell {
     
     func setHighlighted() {
         episodeTitleLabel.textColor = R.color.accentGreen()
+        episodeTitleLabel.font = UIFont.systemFont(ofSize: 17, weight: .medium)
     }
     
     func setUnHighlighted() {
         episodeTitleLabel.textColor = R.color.textBlack()
+        episodeTitleLabel.font = UIFont.systemFont(ofSize: 17, weight: .regular)
     }
 }

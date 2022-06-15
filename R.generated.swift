@@ -1933,7 +1933,6 @@ struct _R: Rswift.Validatable {
 
       static func validate() throws {
         if #available(iOS 11.0, tvOS 11.0, *) {
-          if UIKit.UIColor(named: "BackgroundWhite", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'BackgroundWhite' is used in storyboard 'PopOverComicEpisode', but couldn't be loaded.") }
         }
         if _R.storyboard.popOverComicEpisode().popOverComicEpisodeStoryboard() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'popOverComicEpisodeStoryboard' could not be loaded from storyboard 'PopOverComicEpisode' as 'PopOverComicEpisodeViewController'.") }
       }
