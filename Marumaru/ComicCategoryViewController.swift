@@ -84,6 +84,7 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
     
     private func setupComicCollectionCell() {
         registerComicCollectionCell()
+        registerComicFooterView()
         comicCollectionView.collectionViewLayout = comicsCollectionViewLayout()
         comicCollectionView.contentInset = UIEdgeInsets.inset(top: comicCategoryCollectionViewTopInset,
                                                               bottom: 24)
@@ -92,6 +93,13 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
     private func registerComicCollectionCell() {
         let nibName = UINib(nibName: R.nib.comicThumbnailCollectionCell.name, bundle: nil)
         comicCollectionView.register(nibName, forCellWithReuseIdentifier: ComicThumbnailCollectionCell.identifier)
+    }
+    
+    private func registerComicFooterView() {
+        let nibName = UINib(nibName: R.nib.showMoreReusableView.name, bundle: nil)
+        comicCollectionView.register(nibName,
+                                     forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
+                                     withReuseIdentifier: ShowMoreReusableView.identifier)
     }
     
     private func setupComicCategoryCollectionView() {
@@ -162,7 +170,7 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
         comicCategoryCollectionView.rx.itemSelected
             .asDriver()
             .drive(with: self, onNext: { vc, indexPath in
-                vc.viewModel.categoryItemSelected(indexPath)
+                vc.viewModel.categoryItemSelectAction(indexPath)
             })
             .disposed(by: disposeBag)
         
@@ -254,13 +262,43 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
             }
             
             return cell
+        }, configureSupplementaryView: { [weak self] _, cv, kind, indexPath in
+            guard let self = self else {
+                return UICollectionReusableView()
+            }
+            
+            if kind != UICollectionView.elementKindSectionFooter {
+                return UICollectionReusableView()
+            }
+            
+            guard let footerView = cv.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter,
+                                                                       withReuseIdentifier: ShowMoreReusableView.identifier,
+                                                                       for: indexPath)
+                    as? ShowMoreReusableView else {
+                return UICollectionReusableView()
+            }
+            
+            footerView.showMoreButtonTapAction = { [weak self] in
+                self?.viewModel.showNextPage()
+            }
+            
+            self.viewModel.isLoadingNextPage
+                .subscribe(onNext: { isLoading in
+                    if isLoading {
+                        footerView.showMoreButton.startLoading()
+                    } else {
+                        footerView.showMoreButton.stopLoading()
+                    }
+                })
+                .disposed(by: self.disposeBag)
+            return footerView
         })
         
         return dataSource
     }
     
     private func comicsCollectionViewLayout() -> UICollectionViewCompositionalLayout {
-        let layout = UICollectionViewCompositionalLayout { _, _ in
+        let layout = UICollectionViewCompositionalLayout { [weak self ] sectionIndex, _ in
             let itemSize = NSCollectionLayoutSize(
                 widthDimension: .absolute(120),
                 heightDimension: .absolute(224))
@@ -278,9 +316,19 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
             section.interGroupSpacing = 16
             section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
             
+            if let amountOfComicSection = self?.viewModel.amountOfComicSection,
+               sectionIndex == amountOfComicSection - 1 {
+                let footerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                        heightDimension: .absolute(72))
+                let sectionFooter = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: footerSize,
+                                                                                elementKind: UICollectionView.elementKindSectionFooter,
+                                                                                alignment: .bottom)
+                section.boundarySupplementaryItems = [sectionFooter]
+            }
+            
             return section
         }
-        
+
         return layout
     }
     

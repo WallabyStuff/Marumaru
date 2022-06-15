@@ -1094,7 +1094,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.nib` struct is generated, and contains static references to 10 nibs.
+  /// This `R.nib` struct is generated, and contains static references to 11 nibs.
   struct nib {
     /// Nib `CategoryChipCollectionCell`.
     static let categoryChipCollectionCell = _R.nib._CategoryChipCollectionCell()
@@ -1114,6 +1114,8 @@ struct R: Rswift.Validatable {
     static let searchHistoryCollectionCell = _R.nib._SearchHistoryCollectionCell()
     /// Nib `SearchResultComicCollectionCell`.
     static let searchResultComicCollectionCell = _R.nib._SearchResultComicCollectionCell()
+    /// Nib `ShowMoreReusableView`.
+    static let showMoreReusableView = _R.nib._ShowMoreReusableView()
     /// Nib `SingleButtonFooterReusableView`.
     static let singleButtonFooterReusableView = _R.nib._SingleButtonFooterReusableView()
 
@@ -1190,6 +1192,14 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(iOS) || os(tvOS)
+    /// `UINib(name: "ShowMoreReusableView", in: bundle)`
+    @available(*, deprecated, message: "Use UINib(resource: R.nib.showMoreReusableView) instead")
+    static func showMoreReusableView(_: Void = ()) -> UIKit.UINib {
+      return UIKit.UINib(resource: R.nib.showMoreReusableView)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
     /// `UINib(name: "SingleButtonFooterReusableView", in: bundle)`
     @available(*, deprecated, message: "Use UINib(resource: R.nib.singleButtonFooterReusableView) instead")
     static func singleButtonFooterReusableView(_: Void = ()) -> UIKit.UINib {
@@ -1233,6 +1243,10 @@ struct R: Rswift.Validatable {
       return R.nib.searchResultComicCollectionCell.instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? SearchResultComicCollectionCell
     }
 
+    static func showMoreReusableView(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> ShowMoreReusableView? {
+      return R.nib.showMoreReusableView.instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? ShowMoreReusableView
+    }
+
     static func singleButtonFooterReusableView(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> SingleButtonFooterReusableView? {
       return R.nib.singleButtonFooterReusableView.instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? SingleButtonFooterReusableView
     }
@@ -1240,7 +1254,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.reuseIdentifier` struct is generated, and contains static references to 10 reuse identifiers.
+  /// This `R.reuseIdentifier` struct is generated, and contains static references to 11 reuse identifiers.
   struct reuseIdentifier {
     /// Reuse identifier `ComicEpisodeThumbnailCollectionCell`.
     static let comicEpisodeThumbnailCollectionCell: Rswift.ReuseIdentifier<ComicEpisodeThumbnailCollectionCell> = Rswift.ReuseIdentifier(identifier: "ComicEpisodeThumbnailCollectionCell")
@@ -1258,6 +1272,8 @@ struct R: Rswift.Validatable {
     static let searchHistoryCollectionCell: Rswift.ReuseIdentifier<SearchHistoryCollectionCell> = Rswift.ReuseIdentifier(identifier: "SearchHistoryCollectionCell")
     /// Reuse identifier `SearchResultComicCollectionCell`.
     static let searchResultComicCollectionCell: Rswift.ReuseIdentifier<SearchResultComicCollectionCell> = Rswift.ReuseIdentifier(identifier: "SearchResultComicCollectionCell")
+    /// Reuse identifier `ShowMoreReusableView`.
+    static let showMoreReusableView: Rswift.ReuseIdentifier<ShowMoreReusableView> = Rswift.ReuseIdentifier(identifier: "ShowMoreReusableView")
     /// Reuse identifier `categoryChipCollectionCell`.
     static let categoryChipCollectionCell: Rswift.ReuseIdentifier<CategoryChipCollectionCell> = Rswift.ReuseIdentifier(identifier: "categoryChipCollectionCell")
     /// Reuse identifier `singleButtonFooterReusableView`.
@@ -1676,6 +1692,20 @@ struct _R: Rswift.Validatable {
 
       func firstView(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> SearchResultComicCollectionCell? {
         return instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? SearchResultComicCollectionCell
+      }
+
+      fileprivate init() {}
+    }
+
+    struct _ShowMoreReusableView: Rswift.NibResourceType, Rswift.ReuseIdentifierType {
+      typealias ReusableType = ShowMoreReusableView
+
+      let bundle = R.hostingBundle
+      let identifier = "ShowMoreReusableView"
+      let name = "ShowMoreReusableView"
+
+      func firstView(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> ShowMoreReusableView? {
+        return instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? ShowMoreReusableView
       }
 
       fileprivate init() {}

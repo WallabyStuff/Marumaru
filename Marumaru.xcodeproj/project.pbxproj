@@ -46,6 +46,9 @@
 		8E33F3F02851450300B6E6EE /* ShowComicOptionAlertViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E33F3EF2851450300B6E6EE /* ShowComicOptionAlertViewModel.swift */; };
 		8E33F3F228514CF500B6E6EE /* ShowComicOptionFloatinPanelLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E33F3F128514CF500B6E6EE /* ShowComicOptionFloatinPanelLayout.swift */; };
 		8E33F3F6285164E600B6E6EE /* bodybuilder_dancer.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E33F3F5285164E600B6E6EE /* bodybuilder_dancer.json */; };
+		8E33F40B2858FBA200B6E6EE /* ShowMoreReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E33F4092858FBA200B6E6EE /* ShowMoreReusableView.swift */; };
+		8E33F40C2858FBA200B6E6EE /* ShowMoreReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E33F40A2858FBA200B6E6EE /* ShowMoreReusableView.xib */; };
+		8E33F40E285984CB00B6E6EE /* IndicatorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E33F40D285984CB00B6E6EE /* IndicatorButton.swift */; };
 		8E3A896627AB9FB00014303D /* TagLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3A896527AB9FB00014303D /* TagLabel.swift */; };
 		8E3C72FB27A983EC00F057DA /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3C72FA27A983EC00F057DA /* MainViewModel.swift */; };
 		8E400FC6284FA61C00F48E95 /* UpdateCycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E400FC5284FA61C00F48E95 /* UpdateCycle.swift */; };
@@ -192,6 +195,9 @@
 		8E33F3EF2851450300B6E6EE /* ShowComicOptionAlertViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowComicOptionAlertViewModel.swift; sourceTree = "<group>"; };
 		8E33F3F128514CF500B6E6EE /* ShowComicOptionFloatinPanelLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowComicOptionFloatinPanelLayout.swift; sourceTree = "<group>"; };
 		8E33F3F5285164E600B6E6EE /* bodybuilder_dancer.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = bodybuilder_dancer.json; sourceTree = "<group>"; };
+		8E33F4092858FBA200B6E6EE /* ShowMoreReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowMoreReusableView.swift; sourceTree = "<group>"; };
+		8E33F40A2858FBA200B6E6EE /* ShowMoreReusableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ShowMoreReusableView.xib; sourceTree = "<group>"; };
+		8E33F40D285984CB00B6E6EE /* IndicatorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorButton.swift; sourceTree = "<group>"; };
 		8E3A896527AB9FB00014303D /* TagLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagLabel.swift; sourceTree = "<group>"; };
 		8E3C72FA27A983EC00F057DA /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		8E400FC5284FA61C00F48E95 /* UpdateCycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateCycle.swift; sourceTree = "<group>"; };
@@ -420,6 +426,8 @@
 				8E553E782846305A00B7F5BC /* SingleButtonFooterReusableView.xib */,
 				8E33F3E12850917B00B6E6EE /* CategoryChipCollectionCell.swift */,
 				8E33F3E22850917B00B6E6EE /* CategoryChipCollectionCell.xib */,
+				8E33F4092858FBA200B6E6EE /* ShowMoreReusableView.swift */,
+				8E33F40A2858FBA200B6E6EE /* ShowMoreReusableView.xib */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -462,6 +470,7 @@
 				8E87CE6127ACEAD0008CD9C9 /* WatchHistoryCollectionReusableView.swift */,
 				8ED56F3327AEFBAA00E78A8A /* ThumbnailPlaceholderView.swift */,
 				8E33F3F128514CF500B6E6EE /* ShowComicOptionFloatinPanelLayout.swift */,
+				8E33F40D285984CB00B6E6EE /* IndicatorButton.swift */,
 				765C8C81261F1AA10056C83B /* Cells */,
 				765A0FC326BED7ED005DDD8B /* Storyboards */,
 				8E4FFE1F2844F0AB00A7ED7B /* LottieAnimationView.swift */,
@@ -726,6 +735,7 @@
 				8E3192CB283A15B900C350F9 /* PopOverComicEpisodeTableCell.xib in Resources */,
 				765C8B35261CA2C50056C83B /* Assets.xcassets in Resources */,
 				8ECAB664283910F3008E531D /* SearchComic.storyboard in Resources */,
+				8E33F40C2858FBA200B6E6EE /* ShowMoreReusableView.xib in Resources */,
 				8E442E892846A039009A7E8D /* sleeping_cat.json in Resources */,
 				7684F3E226CAA49F0012BD8E /* ComicEpisodeThumbnailCollectionCell.xib in Resources */,
 				8E442E882846A039009A7E8D /* lying_cat.json in Resources */,
@@ -917,6 +927,7 @@
 			files = (
 				8E553E7328461D7700B7F5BC /* DescriptionHeaderReusableView.swift in Sources */,
 				8E3C72FB27A983EC00F057DA /* MainViewModel.swift in Sources */,
+				8E33F40B2858FBA200B6E6EE /* ShowMoreReusableView.swift in Sources */,
 				8ED2466227AAC82B00226F2D /* SearchComicViewModel.swift in Sources */,
 				8E400FC6284FA61C00F48E95 /* UpdateCycle.swift in Sources */,
 				76F9129D26CF6FAE00B39BE7 /* WatchHistory.swift in Sources */,
@@ -944,6 +955,7 @@
 				76F912E926CFDFA100B39BE7 /* ComicEpisode.swift in Sources */,
 				8E82D73F27B25701008230BE /* UIView+Insets.swift in Sources */,
 				8E52CA6A284F5A5C007844E0 /* URL+RawAppendPathComponent.swift in Sources */,
+				8E33F40E285984CB00B6E6EE /* IndicatorButton.swift in Sources */,
 				8E52CA60284F22FF007844E0 /* ComicCategoryViewModel.swift in Sources */,
 				765C8B2D261CA2C30056C83B /* MainViewController.swift in Sources */,
 				8E33F3F02851450300B6E6EE /* ShowComicOptionAlertViewModel.swift in Sources */,
