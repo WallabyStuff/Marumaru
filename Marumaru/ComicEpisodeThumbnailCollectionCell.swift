@@ -32,6 +32,7 @@ class ComicEpisodeThumbnailCollectionCell: UICollectionViewCell {
         super.prepareForReuse()
         onReuse()
         thumbnailImageView.image = nil
+        thumbnailImagePlaceholderLabel.isHidden = false
         thumbnailImagePlaceholderView.removeThumbnailShadow()
     }
     
