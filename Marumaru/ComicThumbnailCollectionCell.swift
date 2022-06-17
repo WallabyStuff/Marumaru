@@ -38,6 +38,7 @@ class ComicThumbnailCollectionCell: UICollectionViewCell {
     override func prepareForReuse() {
         onReuse()
         thumbnailImageView.image = nil
+        thumbnailImagePlaceholderLabel.isHidden = false
         thumbnailImagePlaceholderView.removeThumbnailShadow()
     }
     
