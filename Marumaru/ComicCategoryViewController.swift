@@ -134,7 +134,7 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
             return
         }
 
-        viewModel.comicSectionsObservable
+        viewModel.comicSections
             .bind(to: comicCollectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
     }
@@ -149,7 +149,7 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func bindComicCategoryCollectionView() {
-        viewModel.comicCategoriesObservable
+        viewModel.comicCategories
             .bind(to: comicCategoryCollectionView.rx.items(cellIdentifier: CategoryChipCollectionCell.identifier,
                                                            cellType: CategoryChipCollectionCell.self)) { [weak self] _, category, cell  in
                 guard let self = self else { return }

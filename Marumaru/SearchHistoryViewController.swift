@@ -133,7 +133,7 @@ class SearchHistoryViewController: BaseViewController, ViewModelInjectable {
             return
         }
 
-        viewModel.searchHistoriesObservable
+        viewModel.searchHistories
             .bind(to: searchHistoryCollectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
     }
@@ -182,7 +182,7 @@ class SearchHistoryViewController: BaseViewController, ViewModelInjectable {
             
             cell.titleLabel.text = historyItem.title
             cell.deleteButtonTapAction = { [weak self] in
-                self?.viewModel.deleteSearchHistoryItem(indexPath.row)
+                self?.viewModel.deleteSearchHistoryItem(indexPath)
             }
             
             return cell
@@ -195,7 +195,7 @@ class SearchHistoryViewController: BaseViewController, ViewModelInjectable {
                     return UICollectionReusableView()
                 }
                 
-                if self.viewModel.searchHistories.isEmpty {
+                if self.viewModel.isHistoryEmpty {
                     headerView.descriptionLabel.text = "message.noSearchHistory".localized()
                 } else {
                     headerView.descriptionLabel.text = "title.searchHistory".localized()
@@ -207,7 +207,7 @@ class SearchHistoryViewController: BaseViewController, ViewModelInjectable {
                     return UICollectionReusableView()
                 }
                 
-                if self.viewModel.searchHistories.isEmpty {
+                if self.viewModel.isHistoryEmpty {
                     footerView.mainButton.isHidden = true
                 } else {
                     footerView.mainButton.isHidden = false

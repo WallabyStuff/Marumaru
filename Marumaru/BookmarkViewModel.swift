@@ -17,24 +17,18 @@ class BookmarkViewModel {
     
     private var disposeBag = DisposeBag()
     private let comicBookmarkManager = ComicBookmarkManager()
-    
-    private var bookmarks = [ComicBookmark]()
-    public var bookmarksObservable = BehaviorRelay<[ComicBookmark]>(value: [])
-    
-    public var presentComicDetailVCObservable = PublishRelay<ComicInfo>()
+    public var bookmarks = BehaviorRelay<[ComicBookmark]>(value: [])
+    public var presentComicDetailVC = PublishRelay<ComicInfo>()
 }
 
 extension BookmarkViewModel {
     public func updateBookmarks() {
-        bookmarks.removeAll()
-        
         comicBookmarkManager.fetchData()
             .subscribe(with: self, onSuccess: { strongSelf, bookmarks in
                 let reversedItems: [ComicBookmark] = bookmarks.reversed()
-                strongSelf.bookmarks = reversedItems
-                strongSelf.bookmarksObservable.accept(reversedItems)
+                strongSelf.bookmarks.accept(reversedItems)
             }, onFailure: { strongSelf, _ in
-                strongSelf.bookmarksObservable.accept([])
+                strongSelf.bookmarks.accept([])
             })
             .disposed(by: disposeBag)
     }
@@ -44,12 +38,12 @@ extension BookmarkViewModel {
     }
     
     public func bookmarkItemSelected(_ indexPath: IndexPath) {
-        let bookmark = bookmarks[indexPath.row]
+        let bookmark = bookmarks.value[indexPath.row]
         let comicInfo = ComicInfo(comicSN: bookmark.comicSN,
                                   title: bookmark.title,
                                   author: bookmark.author,
                                   updateCycle: bookmark.updateCycle,
                                   thumbnailImagePath: bookmark.thumbnailImagePath)
-        presentComicDetailVCObservable.accept(comicInfo)
+        presentComicDetailVC.accept(comicInfo)
     }
 }

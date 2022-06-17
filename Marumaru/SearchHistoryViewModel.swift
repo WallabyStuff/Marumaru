@@ -17,34 +17,30 @@ class SearchHistoryViewModel {
     
     private var disposeBag = DisposeBag()
     private let searchHistoryManager = SearchHistoryManager()
-    public var searchHistories = [SearchHistory]()
-    public var searchHistoriesObservable = BehaviorRelay<[SearchHistorySection]>(value: [])
+    public var searchHistories = BehaviorRelay<[SearchHistorySection]>(value: [])
     public var didSelectedHistoryItem = PublishRelay<SearchHistory>()
 }
 
 extension SearchHistoryViewModel {
     public func updateSearchHistory() {
-        searchHistoriesObservable.accept([])
+        searchHistories.accept([])
         
         searchHistoryManager.fetchData()
             .subscribe(with: self, onSuccess: { strongSelf, histories in
                 let reversedHistories: [SearchHistory] = histories.sorted(by: { $0.date > $1.date })
-                strongSelf.searchHistories = reversedHistories
-                
                 let section = SearchHistorySection(items: reversedHistories)
-                strongSelf.searchHistoriesObservable.accept([section])
+                strongSelf.searchHistories.accept([section])
             })
             .disposed(by: disposeBag)
     }
     
-    public func deleteSearchHistoryItem(_ index: Int) {
-        let selectedItem = searchHistories[index]
+    public func deleteSearchHistoryItem(_ indexPath: IndexPath) {
+        let selectedItem = searchHistories.value[indexPath.section].items[indexPath.row]
         searchHistoryManager.deleteData(selectedItem)
             .subscribe(with: self, onCompleted: { strongSelf in
-                strongSelf.searchHistories.remove(at: index)
-                
-                let newSection = SearchHistorySection(items: strongSelf.searchHistories)
-                strongSelf.searchHistoriesObservable.accept([newSection])
+                var newSections = strongSelf.searchHistories.value
+                newSections[indexPath.section].items.remove(at: indexPath.row)
+                strongSelf.searchHistories.accept(newSections)
             })
             .disposed(by: disposeBag)
     }
@@ -58,7 +54,13 @@ extension SearchHistoryViewModel {
     }
     
     public func selectHistoryItem(_ indexPath: IndexPath) {
-        let selectedItem = searchHistories[indexPath.row]
+        let selectedItem = searchHistories.value[indexPath.section].items[indexPath.row]
         didSelectedHistoryItem.accept(selectedItem)
+    }
+}
+
+extension SearchHistoryViewModel {
+    public var isHistoryEmpty: Bool {
+        return searchHistories.value.first?.items.isEmpty ?? true
     }
 }

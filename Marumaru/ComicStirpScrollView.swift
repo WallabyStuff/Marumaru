@@ -189,6 +189,7 @@ extension ComicStripScrollView {
             guard let self = self else { return }
             
             do {
+                print("\(index) image called")
                 let result = try result.get()
                 let resultImage = result.image
                 
@@ -271,7 +272,8 @@ extension ComicStripScrollView {
         }
         
         sceneImageViews.removeAll()
-        scrollToTop(topInset: AppbarHeight.compactAppbarHeight.rawValue,
+        let safeAreaTop = UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0
+        scrollToTop(topInset: AppbarHeight.compactAppbarHeight.rawValue + safeAreaTop,
                     animated: false)
     }
 }

@@ -16,8 +16,8 @@ class ShowComicOptionAlertViewModel {
     // MARK: - Properties
     
     private var currentEpisode: ComicEpisode
-    public var presentComicStripVCObservable = PublishRelay<ComicEpisode>()
-    public var presentComicDetailVCObservable = PublishRelay<ComicInfo>()
+    public var presentComicStripVC = PublishRelay<ComicEpisode>()
+    public var presentComicDetailVC = PublishRelay<ComicInfo>()
     
     
     // MARK: - Initializers
@@ -29,7 +29,7 @@ class ShowComicOptionAlertViewModel {
 
 extension ShowComicOptionAlertViewModel {
     public func showComicStripAction() {
-        presentComicStripVCObservable.accept(currentEpisode)
+        presentComicStripVC.accept(currentEpisode)
     }
 }
 
@@ -40,7 +40,7 @@ extension ShowComicOptionAlertViewModel {
                                   author: "",
                                   updateCycle: "")
         
-        presentComicDetailVCObservable.accept(comicInfo)
+        presentComicDetailVC.accept(comicInfo)
     }
 }
 

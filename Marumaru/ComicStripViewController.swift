@@ -200,7 +200,7 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func bindComicStripScrollView() {
-        viewModel.comicStripScenesObservable
+        viewModel.comicStripScenes
             .subscribe(with: self, onNext: { vc, scenes in
                 vc.comicStripScrollView.reload(scenes: scenes)
                 vc.viewModel.saveToWatchHistory()

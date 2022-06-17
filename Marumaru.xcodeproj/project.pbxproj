@@ -471,9 +471,9 @@
 				8ED56F3327AEFBAA00E78A8A /* ThumbnailPlaceholderView.swift */,
 				8E33F3F128514CF500B6E6EE /* ShowComicOptionFloatinPanelLayout.swift */,
 				8E33F40D285984CB00B6E6EE /* IndicatorButton.swift */,
+				8E4FFE1F2844F0AB00A7ED7B /* LottieAnimationView.swift */,
 				765C8C81261F1AA10056C83B /* Cells */,
 				765A0FC326BED7ED005DDD8B /* Storyboards */,
-				8E4FFE1F2844F0AB00A7ED7B /* LottieAnimationView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
