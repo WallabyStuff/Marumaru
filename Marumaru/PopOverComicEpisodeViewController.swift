@@ -89,7 +89,7 @@ class PopOverComicEpisodeViewController: BaseViewController, ViewModelInjectable
     }
     
     private func bindEpisodeTableView() {
-        viewModel.episodesObservable
+        viewModel.episodes
             .bind(to: episodeTableView.rx.items(cellIdentifier: PopOverComicEpisodeTableCell.identifier,
                                                 cellType: PopOverComicEpisodeTableCell.self)) { _, episode, cell in
                 if episode.episodeSN == self.viewModel.currentEpisodeSN {

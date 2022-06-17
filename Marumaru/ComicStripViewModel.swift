@@ -11,6 +11,10 @@ import RxSwift
 import RxCocoa
 
 class ComicStripViewModel {
+    
+    
+    // MARK: - Properties
+    
     private var disposeBag = DisposeBag()
     private var currentEpisode: ComicEpisode
     
@@ -20,12 +24,14 @@ class ComicStripViewModel {
     public var makeToast = PublishRelay<String>()
     public var comicEpisodes = [EpisodeItem]()
 
-    private var comicStripScenes = [ComicStripScene]()
-    public var comicStripScenesObservable = PublishRelay<[ComicStripScene]>()
+    public var comicStripScenes = BehaviorRelay<[ComicStripScene]>(value: [])
     public var isLoadingScenes = BehaviorRelay<Bool>(value: false)
     public var failToLoadingScenes = BehaviorRelay<Bool>(value: false)
     
     public var updateRentWatchingEpisode = PublishRelay<String>()
+    
+    
+    // MARK: - Initializers
     
     init(currentEpisode: ComicEpisode) {
         self.currentEpisode = currentEpisode
@@ -38,7 +44,7 @@ extension ComicStripViewModel {
         currentEpisode.replaceEpisode(episode)
         
         episodeTitle.accept(currentEpisode.title)
-        comicStripScenesObservable.accept([])
+        comicStripScenes.accept([])
         failToLoadingScenes.accept(false)
         isLoadingScenes.accept(true)
         
@@ -53,11 +59,10 @@ extension ComicStripViewModel {
             .observe(on: MainScheduler.instance)
             .subscribe(with: self, onSuccess: { strongSelf, scenes in
                 strongSelf.isLoadingScenes.accept(false)
-                strongSelf.comicStripScenes = scenes
-                strongSelf.comicStripScenesObservable.accept(scenes)
+                strongSelf.comicStripScenes.accept(scenes)
                 strongSelf.updateComicEpisodes()
             }, onFailure: { strongSelf, _ in
-                strongSelf.comicStripScenesObservable.accept([])
+                strongSelf.comicStripScenes.accept([])
                 strongSelf.failToLoadingScenes.accept(true)
                 strongSelf.isLoadingScenes.accept(false)
             }).disposed(by: self.disposeBag)
@@ -109,12 +114,12 @@ extension ComicStripViewModel {
 
 extension ComicStripViewModel {
     private var firstSceneImageUrl: String? {
-        return comicStripScenes.first?.imagePath
+        return comicStripScenes.value.first?.imagePath
     }
     
     public func saveToWatchHistory() {
         let currentEpisode = currentEpisode
-        currentEpisode.thumbnailImagePath = comicStripScenes.first?.imagePath
+        currentEpisode.thumbnailImagePath = comicStripScenes.value.first?.imagePath
         
         watchHistoryHandler
             .addData(currentEpisode)

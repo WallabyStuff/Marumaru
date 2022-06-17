@@ -125,11 +125,11 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
             return
         }
 
-        viewModel.searchResultComicsObservable
+        viewModel.searchResultComics
             .bind(to: searchResultCollectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
         
-        viewModel.searchResultComicsObservable
+        viewModel.searchResultComics
             .subscribe(with: self, onNext: { vc, comics in
                 if comics.isEmpty {
                     vc.searchResultCollectionView.heightAnchor.constraint(equalToConstant: vc.view.frame.height).isActive = true

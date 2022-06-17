@@ -152,7 +152,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func bindComicInfo() {
-        viewModel.comicInfoObservable
+        viewModel.comicInfo
             .distinctUntilChanged()
             .subscribe(with: self, onNext: { vc, comicInfo in
                 if comicInfo.title != "" {
@@ -195,7 +195,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func bindComicEpisodeTableView() {
-        viewModel.comicEpisodesObservable
+        viewModel.comicEpisodes
             .bind(to: comicEpisodeTableView.rx.items(cellIdentifier: ComicEpisodeThumbnailTableCell.identifier,
                                                      cellType: ComicEpisodeThumbnailTableCell.self)) { [weak self] index, episode, cell in
                 guard let self = self else { return }
@@ -232,7 +232,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
                 vc.viewModel.comicItemSelected(indexPath)
             }).disposed(by: disposeBag)
         
-        viewModel.presentComicStripVCObservable
+        viewModel.presentComicStripVC
             .subscribe(with: self, onNext: { vc, comic in
                 vc.presentComicStripVC(comic)
             })
@@ -280,7 +280,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func bindEpisodeAmountLabel() {
-        viewModel.comicEpisodesObservable
+        viewModel.comicEpisodes
             .subscribe(with: self, onNext: { vc, comics in
                 vc.episodeAmountLabel.text  = "총 \(comics.count)화"
             })

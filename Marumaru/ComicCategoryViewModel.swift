@@ -20,21 +20,18 @@ class ComicCategoryViewModel {
     public var noticeMessageObservable = PublishRelay<String>()
     public var presentComicDetailVCObservable = PublishRelay<ComicInfo>()
     
-    private var comicSections = [ComicInfoSection]()
-    public var comicSectionsObservable = BehaviorRelay<[ComicInfoSection]>(value: [])
+    public var comicSections = BehaviorRelay<[ComicInfoSection]>(value: [])
     public var isLoadingComics = BehaviorRelay<Bool>(value: true)
     public var isLoadingNextPage = PublishRelay<Bool>()
     
-    private var comicCategories = ComicCategory.allCases
-    public var comicCategoriesObservable = BehaviorRelay<[ComicCategory]>(value: ComicCategory.allCases)
+    public var comicCategories = BehaviorRelay<[ComicCategory]>(value: ComicCategory.allCases)
     public var selectedCategory = BehaviorRelay<ComicCategory>(value: .all)
 }
 
 extension ComicCategoryViewModel {
     public func updateComicCategory(_ category: ComicCategory) {
         let fakeSections = fakeComicSections(sectionCount: 6, rowCount: 10)
-        comicSections = fakeSections
-        comicSectionsObservable.accept(fakeSections)
+        comicSections.accept(fakeSections)
         isLoadingComics.accept(true)
 
         MarumaruApiService.shared
@@ -43,11 +40,10 @@ extension ComicCategoryViewModel {
             .observe(on: MainScheduler.instance)
             .subscribe(with: self, onSuccess: { strongSelf, comics in
                 let sections = strongSelf.groupComicsBySection(comics)
-                strongSelf.comicSections = sections
-                strongSelf.comicSectionsObservable.accept(sections)
+                strongSelf.comicSections.accept(sections)
                 strongSelf.isLoadingComics.accept(false)
             }, onFailure: { strongSelf, _ in
-                strongSelf.comicSectionsObservable.accept([])
+                strongSelf.comicSections.accept([])
                 strongSelf.noticeMessageObservable.accept("message.serverError".localized())
                 strongSelf.isLoadingComics.accept(false)
             })
@@ -56,8 +52,7 @@ extension ComicCategoryViewModel {
     
     public func updateComicCategory() {
         let fakeSections = fakeComicSections(sectionCount: 6, rowCount: 10)
-        comicSections = fakeSections
-        comicSectionsObservable.accept(fakeSections)
+        comicSections.accept(fakeSections)
         isLoadingComics.accept(true)
         
         MarumaruApiService.shared
@@ -66,11 +61,10 @@ extension ComicCategoryViewModel {
             .observe(on: MainScheduler.instance)
             .subscribe(with: self, onSuccess: { strongSelf, comics in
                 let sections = strongSelf.groupComicsBySection(comics)
-                strongSelf.comicSections = sections
-                strongSelf.comicSectionsObservable.accept(sections)
+                strongSelf.comicSections.accept(sections)
                 strongSelf.isLoadingComics.accept(false)
             }, onFailure: { strongSelf, _ in
-                strongSelf.comicSectionsObservable.accept([])
+                strongSelf.comicSections.accept([])
                 strongSelf.noticeMessageObservable.accept("message.serverError".localized())
                 strongSelf.isLoadingComics.accept(false)
             })
@@ -90,9 +84,9 @@ extension ComicCategoryViewModel {
             .subscribe(with: self, onSuccess: { strongSelf, comics in
                 if !comics.isEmpty {
                     strongSelf.currentPage = nextPage
-                    let oldSections = strongSelf.comicSectionsObservable.value
+                    let oldSections = strongSelf.comicSections.value
                     let newSections = oldSections + strongSelf.groupComicsBySection(comics)
-                    strongSelf.comicSectionsObservable.accept(newSections)
+                    strongSelf.comicSections.accept(newSections)
                 }
                 
                 strongSelf.isLoadingNextPage.accept(false)
@@ -126,7 +120,7 @@ extension ComicCategoryViewModel {
 
 extension ComicCategoryViewModel {
     public func didTapComicItem(_ indexPath: IndexPath) {
-        let comicInfo = comicSections[indexPath.section].items[indexPath.row]
+        let comicInfo = comicSections.value[indexPath.section].items[indexPath.row]
         presentComicDetailVCObservable.accept(comicInfo)
     }
 }
@@ -157,13 +151,13 @@ extension ComicCategoryViewModel {
 
 extension ComicCategoryViewModel {
     public func categoryItem(_ indexPath: IndexPath) -> ComicCategory {
-        return comicCategories[indexPath.row]
+        return comicCategories.value[indexPath.section]
     }
 }
 
 extension ComicCategoryViewModel {
     public func categoryItemSelectAction(_ indexPath: IndexPath) {
-        let category = comicCategories[indexPath.row]
+        let category = comicCategories.value[indexPath.row]
         if selectedCategory.value == category { return }
         
         selectedCategory.accept(category)
@@ -179,6 +173,6 @@ extension ComicCategoryViewModel {
 
 extension ComicCategoryViewModel {
     public var amountOfComicSection: Int {
-        return comicSectionsObservable.value.count
+        return comicSections.value.count
     }
 }

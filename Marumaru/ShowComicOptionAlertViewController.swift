@@ -103,7 +103,7 @@ class ShowComicOptionAlertViewController: BaseViewController, ViewModelInjectabl
             })
             .disposed(by: disposeBag)
         
-        viewModel.presentComicStripVCObservable
+        viewModel.presentComicStripVC
             .subscribe(with: self, onNext: { vc, comicEpisode in
                 vc.presentComicStripVC(comicEpisode)
             })
@@ -118,7 +118,7 @@ class ShowComicOptionAlertViewController: BaseViewController, ViewModelInjectabl
             })
             .disposed(by: disposeBag)
         
-        viewModel.presentComicDetailVCObservable
+        viewModel.presentComicDetailVC
             .subscribe(with: self, onNext: { vc, comicInfo in
                 vc.presentComicDetailVC(comicInfo)
             })

@@ -94,7 +94,7 @@ class BookmarkViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func bindBookmarks() {
-        viewModel.bookmarksObservable
+        viewModel.bookmarks
             .bind(to: bookmarkCollectionView.rx.items(cellIdentifier: ComicEpisodeThumbnailCollectionCell.identifier, cellType: ComicEpisodeThumbnailCollectionCell.self)) { [weak self] _, bookmark, cell in
                 guard let self = self else { return }
                 
@@ -129,7 +129,7 @@ class BookmarkViewController: BaseViewController, ViewModelInjectable {
             })
             .disposed(by: disposeBag)
         
-        viewModel.presentComicDetailVCObservable
+        viewModel.presentComicDetailVC
             .subscribe(with: self, onNext: { vc, comicInfo in
                 vc.presentComicDetailVC(comicInfo)
             })
@@ -137,7 +137,7 @@ class BookmarkViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func bindNoticeLabel() {
-        viewModel.bookmarksObservable
+        viewModel.bookmarks
             .subscribe(with: self, onNext: { vc, bookmarks in
                 if bookmarks.isEmpty {
                     vc.view.makeNoticeLabel("message.emptyBookmark".localized())

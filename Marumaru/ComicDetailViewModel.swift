@@ -14,23 +14,19 @@ class ComicDetailViewModel {
     
     // MARK: - Properties
     
-    private var comicInfo: ComicInfo
-    
     private var disposeBag = DisposeBag()
     private let watchHistoryManager = WatchHistoryManager()
     private let comicBookmarkManager = ComicBookmarkManager()
     
-    public var comicInfoObservable = PublishRelay<ComicInfo>()
-    
-    private var comicEpisodes = [ComicEpisode]()
-    public var comicEpisodesObservable = BehaviorRelay<[ComicEpisode]>(value: [])
+    public var comicInfo = BehaviorRelay<ComicInfo>(value: .init(comicSN: "", title: ""))
+    public var comicEpisodes = BehaviorRelay<[ComicEpisode]>(value: [])
     public var isLoadingComicEpisodes = BehaviorRelay<Bool>(value: false)
     public var failedToLoadingComicEpisodes = BehaviorRelay<Bool>(value: false)
     
-    private var watchHistories = [String: String]()
-    public var watchHistoriesObservable = PublishRelay<[WatchHistory]>()
+    private var watchHistoryDictionary = [String: String]()
+    public var watchHistories = PublishRelay<[WatchHistory]>()
     
-    public var presentComicStripVCObservable = PublishRelay<ComicEpisode>()
+    public var presentComicStripVC = PublishRelay<ComicEpisode>()
     
     public var recentWatchingEpisodeSN: String?
     public var recentWatchingEpisodeUpdated = PublishRelay<IndexPath>()
@@ -41,7 +37,7 @@ class ComicDetailViewModel {
     // MARK: - Initializers
     
     init(comicInfo: ComicInfo) {
-        self.comicInfo = comicInfo
+        self.comicInfo.accept(comicInfo)
     }
     
     convenience init() {
@@ -51,43 +47,41 @@ class ComicDetailViewModel {
 
 extension ComicDetailViewModel {
     public func updateComicInfoAndEpisodes() {
-        comicEpisodes = fakeEpisodeCells(15)
-        comicEpisodesObservable.accept(comicEpisodes)
+        let fakeItems = fakeEpisodeCells(15)
+        comicEpisodes.accept(fakeItems)
         isLoadingComicEpisodes.accept(true)
         failedToLoadingComicEpisodes.accept(false)
         
-        MarumaruApiService.shared.getEpisodes(comicInfo.comicSN)
+        MarumaruApiService.shared.getEpisodes(comicInfo.value.comicSN)
             .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
             .observe(on: MainScheduler.instance)
             .subscribe(with: self, onSuccess: { strongSelf, result in
                 let comicInfo = strongSelf.replaceComicInfoProperties(result.comicInfo)
-                strongSelf.comicInfoObservable.accept(comicInfo)
-                
-                strongSelf.comicEpisodes = result.episodes
-                strongSelf.comicEpisodesObservable.accept(result.episodes)
+                strongSelf.comicInfo.accept(comicInfo)
+                strongSelf.comicEpisodes.accept(result.episodes)
                 strongSelf.isLoadingComicEpisodes.accept(false)
             }, onFailure: { strongSelf, _ in
-                strongSelf.comicEpisodesObservable.accept([])
+                strongSelf.comicEpisodes.accept([])
                 strongSelf.failedToLoadingComicEpisodes.accept(true)
                 strongSelf.isLoadingComicEpisodes.accept(false)
             }).disposed(by: self.disposeBag)
     }
     
     public func comicItemSelected(_ indexPath: IndexPath) {
-        let selectedComic = comicEpisodes[indexPath.row]
-        presentComicStripVCObservable.accept(selectedComic)
+        let selectedComic = comicEpisodes.value[indexPath.row]
+        presentComicStripVC.accept(selectedComic)
     }
 }
 
 extension ComicDetailViewModel {
     public func setInitailComicInfo() {
-        comicInfoObservable.accept(comicInfo)
+        comicInfo.accept(comicInfo.value)
     }
     
     // To leave out updating update cycle
     // ComicInfo from getEpisodes() can't parse updateCycle data
     private func replaceComicInfoProperties(_ newComicInfo: ComicInfo) -> ComicInfo {
-        var comicInfo = self.comicInfo
+        var comicInfo = self.comicInfo.value
         comicInfo.title = newComicInfo.title
         comicInfo.author = newComicInfo.author
         comicInfo.thumbnailImagePath = newComicInfo.thumbnailImagePath
@@ -98,27 +92,28 @@ extension ComicDetailViewModel {
 
 extension ComicDetailViewModel {
     public func updateWatchHistories() {
-        watchHistories.removeAll()
-        watchHistoriesObservable.accept([])
+        watchHistoryDictionary.removeAll()
+        watchHistories.accept([])
         
         watchHistoryManager.fetchData()
             .subscribe(with: self, onSuccess: { strongSelf, comics in
-                strongSelf.watchHistories =  Dictionary(uniqueKeysWithValues: comics.map { ($0.episodeSN, $0.episodeSN) })
+                strongSelf.watchHistoryDictionary =  Dictionary(uniqueKeysWithValues: comics.map { ($0.episodeSN, $0.episodeSN) })
             }, onFailure: { strongSelf, _ in
-                strongSelf.watchHistoriesObservable.accept([])
+                strongSelf.watchHistories.accept([])
             }).disposed(by: self.disposeBag)
     }
     
     public func ifAlreadyWatched(_ index: Int) -> Bool {
-        return watchHistories[comicEpisodes[index].episodeSN] == nil ? false : true
+        let comic = comicEpisodes.value[index]
+        return watchHistoryDictionary[comic.episodeSN] == nil ? false : true
     }
     
     public func comicEpisodeIndex(_ index: Int) -> Int {
-        return comicEpisodes.count - index
+        return comicEpisodes.value.count - index
     }
     
     public var comicEpisodeAmount: Int {
-        return comicEpisodes.count
+        return comicEpisodes.value.count
     }
 }
 
@@ -146,7 +141,7 @@ extension ComicDetailViewModel {
     public func updateRecentWatchingEpisode(_ episodeSN: String) {
         recentWatchingEpisodeSN = episodeSN
         
-        if let index = comicEpisodes.firstIndex(where: { $0.episodeSN == episodeSN }) {
+        if let index = comicEpisodes.value.firstIndex(where: { $0.episodeSN == episodeSN }) {
             let indexPath = IndexPath(row: index, section: 0)
             recentWatchingEpisodeUpdated.accept(indexPath)
         }
@@ -160,7 +155,7 @@ extension ComicDetailViewModel {
     
     private func toggleBookmarkState() {
         comicBookmarkManager
-            .fetchData(comicInfo.comicSN)
+            .fetchData(comicInfo.value.comicSN)
             .subscribe(with: self, onSuccess: { strongSelf, item in
                 strongSelf.deleteBookmark(item)
             }, onFailure: { strongSelf, _ in
@@ -171,7 +166,7 @@ extension ComicDetailViewModel {
     
     public func setBookmarkState() {
         comicBookmarkManager
-            .fetchData(comicInfo.comicSN)
+            .fetchData(comicInfo.value.comicSN)
             .subscribe(with: self, onSuccess: { strongSelf, _ in
                 strongSelf.bookmarkState.accept(true)
             }, onFailure: { strongSelf, _ in
@@ -181,6 +176,7 @@ extension ComicDetailViewModel {
     }
     
     public func addBookmark() {
+        let comicInfo = comicInfo.value
         let item = ComicBookmark(comicSN: comicInfo.comicSN,
                                  title: comicInfo.title,
                                  author: comicInfo.author,
@@ -204,9 +200,9 @@ extension ComicDetailViewModel {
 
 extension ComicDetailViewModel {
     func playFirstComic() {
-        if let firstEpisode = comicEpisodes.last {
+        if let firstEpisode = comicEpisodes.value.last {
             if !firstEpisode.comicSN.isEmpty {
-                presentComicStripVCObservable.accept(firstEpisode)
+                presentComicStripVC.accept(firstEpisode)
             }
         }
     }

@@ -18,21 +18,18 @@ class SearchResultViewModel {
     private var disposeBag = DisposeBag()
     
     public var searchKeyword = ""
-    private var searchResultComics = [ComicInfo]()
-    public var searchResultComicsObservable = BehaviorRelay<[ComicInfoSection]>(value: [])
+    public var searchResultComics = BehaviorRelay<[ComicInfoSection]>(value: [])
     public var isLoadingSearchResultComics = PublishRelay<Bool>()
     public var failToLoadSearchResult = BehaviorRelay<Bool>(value: false)
-    
     public var presentComicDetailVC = PublishRelay<ComicInfo>()
 }
 
 extension SearchResultViewModel {
     public func updateSearchResult(_ title: String) {
         searchKeyword = title
-        searchResultComics = fakeSearchResultComics(15)
-        
-        let fakeSection = ComicInfoSection(items: searchResultComics)
-        searchResultComicsObservable.accept([fakeSection])
+        let fakeItems = fakeSearchResultComics(15)
+        let fakeSection = ComicInfoSection(items: fakeItems)
+        searchResultComics.accept([fakeSection])
         
         failToLoadSearchResult.accept(false)
         isLoadingSearchResultComics.accept(true)
@@ -42,20 +39,18 @@ extension SearchResultViewModel {
             .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .background))
             .observe(on: MainScheduler.instance)
             .subscribe(with: self, onSuccess: { strongSelf, comics in
-                strongSelf.searchResultComics = comics
-                
                 let section = ComicInfoSection(items: comics)
-                strongSelf.searchResultComicsObservable.accept([section])
+                strongSelf.searchResultComics.accept([section])
                 strongSelf.isLoadingSearchResultComics.accept(false)
             }, onFailure: { strongSelf, _ in
-                strongSelf.searchResultComicsObservable.accept([])
+                strongSelf.searchResultComics.accept([])
                 strongSelf.isLoadingSearchResultComics.accept(false)
                 strongSelf.failToLoadSearchResult.accept(true)
             }).disposed(by: self.disposeBag)
     }
     
     public func selectComicItem(_ indexPath: IndexPath) {
-        var selectedComic = searchResultComics[indexPath.row]
+        var selectedComic = searchResultComics.value[indexPath.section].items[indexPath.row]
         if selectedComic.author != "작가정보 없음" {
             selectedComic.author = "작가 : \(selectedComic.author)"
         }

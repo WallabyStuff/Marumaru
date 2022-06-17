@@ -254,7 +254,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func bindNewComicEpisodeCollectionView() {
-        viewModel.newComicEpisodesObservable
+        viewModel.newComicEpisodes
             .bind(to: newComicEpisodeCollectionView.rx
                 .items(cellIdentifier: ComicEpisodeThumbnailCollectionCell.identifier,
                        cellType: ComicEpisodeThumbnailCollectionCell.self)) { [weak self] _, episode, cell in
@@ -330,7 +330,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func bindWatchHistoryCollectionView() {
-        viewModel.watchHistoriesObservable
+        viewModel.watchHistories
             .bind(to: watchHistoryCollectionView.rx.items(cellIdentifier: ComicEpisodeThumbnailCollectionCell.identifier,
                                                           cellType: ComicEpisodeThumbnailCollectionCell.self)) { [weak self] _, episode, cell in
                 guard let self = self else { return }
@@ -356,7 +356,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
                 }
             }.disposed(by: disposeBag)
         
-        viewModel.watchHistoriesObservable
+        viewModel.watchHistories
             .subscribe(with: self, onNext: { vc, comicEpisodes in
                 if comicEpisodes.isEmpty {
                     vc.watchHistoryCollectionView.makeNoticeLabel("message.emptyWatchHistory".localized(),
@@ -378,7 +378,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func bindComicRankCollctionView() {
-        viewModel.comicRankObservable
+        viewModel.comicRank
             .bind(to: comicRankTableView.rx.items(cellIdentifier: ComicRankTableCell.identifier,
                                                   cellType: ComicRankTableCell.self)) { index, episode, cell in
                 cell.hideSkeleton()
@@ -432,7 +432,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func bindPresentComicStripVC() {
-        viewModel.presentComicStripVCObservable
+        viewModel.presentComicStripVC
             .subscribe(with: self, onNext: { vc, comicEpisode in
                 vc.presentComicStripVC(comicEpisode)
             })

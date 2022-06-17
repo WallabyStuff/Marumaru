@@ -318,8 +318,9 @@ extension MarumaruApiService {
                 let title = try texts.first()?.text().replacingOccurrences(of: amountOfEpisode, with: "").trimmingCharacters(in: .whitespaces) ?? ""
                 comicInfo.title = title
                 
-                let author = try texts.last()?.text().trimmingCharacters(in: .whitespaces) ?? ""
-                comicInfo.author = author == "작가 :" ? "작가정보 없음" : author
+                var author = try texts.last()?.text().trimmingCharacters(in: .whitespaces) ?? ""
+                author = author.replacingOccurrences(of: "작가 :", with: "")
+                comicInfo.author = author.isEmpty ? "작가정보 없음" : author
                 comicInfo.thumbnailImagePath = try comicInfoElements.select("img").attr("src")
             }
             
@@ -629,7 +630,6 @@ extension MarumaruApiService {
         }
         
         endPoint = "\(endPoint)\(category.path(page: page))"
-        print(endPoint)
         if let urlComponent = transformURLString(endPoint) {
             return URL(string: urlComponent.description)
         }
