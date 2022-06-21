@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="L0Y-9U-2JT">
-    <device id="retina6_0" orientation="portrait" appearance="dark"/>
+    <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
@@ -20,76 +20,71 @@
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y2K-m9-81V">
                                 <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                             </containerView>
-                            <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hKu-Fo-WR9">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="spF-uh-SFI">
                                 <rect key="frame" x="0.0" y="0.0" width="390" height="72"/>
-                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="drq-GV-fuu">
-                                    <rect key="frame" x="0.0" y="0.0" width="390" height="72"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <subviews>
-                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="만화 제목으로 검색해보세요!" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="f6V-W2-Udq">
-                                            <rect key="frame" x="56" y="16" width="314" height="48"/>
-                                            <color key="backgroundColor" name="BackgroundWhite-lighter"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="48" id="hdS-ev-n4F"/>
-                                            </constraints>
-                                            <color key="textColor" name="TextBlack"/>
-                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
-                                            <textInputTraits key="textInputTraits"/>
-                                        </textField>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z8L-cW-kYr">
-                                            <rect key="frame" x="334" y="30" width="20" height="20"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="20" id="epS-VQ-xfd"/>
-                                                <constraint firstAttribute="width" constant="20" id="iKv-jE-Bfc"/>
-                                            </constraints>
-                                            <color key="tintColor" name="IconBlack-lighter"/>
-                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                            <state key="normal" image="magnifying-glass"/>
-                                        </button>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KY9-xo-3ee">
-                                            <rect key="frame" x="20" y="28" width="24" height="24"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="24" id="GZJ-Dm-1PL"/>
-                                                <constraint firstAttribute="height" constant="24" id="PVm-c9-nZP"/>
-                                            </constraints>
-                                            <color key="tintColor" name="IconBlack"/>
-                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                            <state key="normal" image="arrow-left"/>
-                                        </button>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="KY9-xo-3ee" firstAttribute="leading" secondItem="drq-GV-fuu" secondAttribute="leading" constant="20" id="BLU-rd-7LB"/>
-                                        <constraint firstItem="z8L-cW-kYr" firstAttribute="trailing" secondItem="f6V-W2-Udq" secondAttribute="trailing" constant="-16" id="EaZ-VO-8jQ"/>
-                                        <constraint firstItem="z8L-cW-kYr" firstAttribute="centerY" secondItem="f6V-W2-Udq" secondAttribute="centerY" id="GOO-nL-efx"/>
-                                        <constraint firstAttribute="bottom" secondItem="f6V-W2-Udq" secondAttribute="bottom" constant="8" id="NWf-G1-8eq"/>
-                                        <constraint firstItem="f6V-W2-Udq" firstAttribute="leading" secondItem="KY9-xo-3ee" secondAttribute="trailing" constant="12" id="Tpc-oI-B5E"/>
-                                        <constraint firstItem="KY9-xo-3ee" firstAttribute="centerY" secondItem="f6V-W2-Udq" secondAttribute="centerY" id="ytv-0Z-xVu"/>
-                                        <constraint firstAttribute="trailing" secondItem="f6V-W2-Udq" secondAttribute="trailing" constant="20" id="zeK-45-TkH"/>
-                                    </constraints>
-                                </view>
+                                <subviews>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="만화 제목으로 검색해보세요!" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="f6V-W2-Udq">
+                                        <rect key="frame" x="56" y="12" width="314" height="48"/>
+                                        <color key="backgroundColor" name="BackgroundWhite-lighter"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="48" id="hdS-ev-n4F"/>
+                                        </constraints>
+                                        <color key="textColor" name="TextBlack"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z8L-cW-kYr">
+                                        <rect key="frame" x="334" y="26" width="20" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="epS-VQ-xfd"/>
+                                            <constraint firstAttribute="width" constant="20" id="iKv-jE-Bfc"/>
+                                        </constraints>
+                                        <color key="tintColor" name="IconBlack-lighter"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" image="magnifying-glass"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KY9-xo-3ee">
+                                        <rect key="frame" x="20" y="24" width="24" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="24" id="GZJ-Dm-1PL"/>
+                                            <constraint firstAttribute="height" constant="24" id="PVm-c9-nZP"/>
+                                        </constraints>
+                                        <color key="tintColor" name="IconBlack"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" image="arrow-left"/>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" name="BackgroundWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="72" id="SRe-KC-UvJ"/>
+                                    <constraint firstItem="z8L-cW-kYr" firstAttribute="trailing" secondItem="f6V-W2-Udq" secondAttribute="trailing" constant="-16" id="49D-8w-OMh"/>
+                                    <constraint firstAttribute="trailing" secondItem="f6V-W2-Udq" secondAttribute="trailing" constant="20" id="7qW-pg-du9"/>
+                                    <constraint firstItem="z8L-cW-kYr" firstAttribute="centerY" secondItem="f6V-W2-Udq" secondAttribute="centerY" id="LBs-dL-1TI"/>
+                                    <constraint firstItem="KY9-xo-3ee" firstAttribute="leading" secondItem="spF-uh-SFI" secondAttribute="leading" constant="20" id="Qgl-Ys-ktM"/>
+                                    <constraint firstItem="KY9-xo-3ee" firstAttribute="centerY" secondItem="f6V-W2-Udq" secondAttribute="centerY" id="b6l-Sn-aGF"/>
+                                    <constraint firstAttribute="bottom" secondItem="f6V-W2-Udq" secondAttribute="bottom" constant="12" id="hn7-tQ-raa"/>
+                                    <constraint firstAttribute="height" constant="72" id="iMY-ad-EJI"/>
+                                    <constraint firstItem="f6V-W2-Udq" firstAttribute="leading" secondItem="KY9-xo-3ee" secondAttribute="trailing" constant="12" id="mWb-5S-Bfa"/>
                                 </constraints>
-                                <blurEffect style="regular"/>
-                            </visualEffectView>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="4zu-Cd-AXH"/>
                         <color key="backgroundColor" name="BackgroundWhite"/>
                         <constraints>
                             <constraint firstItem="y2K-m9-81V" firstAttribute="trailing" secondItem="4zu-Cd-AXH" secondAttribute="trailing" id="9Ie-Vh-38L"/>
-                            <constraint firstItem="hKu-Fo-WR9" firstAttribute="leading" secondItem="4zu-Cd-AXH" secondAttribute="leading" id="BDf-HE-R39"/>
+                            <constraint firstItem="y2K-m9-81V" firstAttribute="top" secondItem="LkL-Kq-1oJ" secondAttribute="top" id="Jdj-JY-PMk"/>
                             <constraint firstItem="y2K-m9-81V" firstAttribute="leading" secondItem="4zu-Cd-AXH" secondAttribute="leading" id="MNf-d5-8j8"/>
-                            <constraint firstItem="hKu-Fo-WR9" firstAttribute="trailing" secondItem="4zu-Cd-AXH" secondAttribute="trailing" id="YEb-SL-HXe"/>
-                            <constraint firstItem="hKu-Fo-WR9" firstAttribute="top" secondItem="LkL-Kq-1oJ" secondAttribute="top" id="aoI-4j-2y8"/>
-                            <constraint firstItem="y2K-m9-81V" firstAttribute="top" secondItem="LkL-Kq-1oJ" secondAttribute="top" id="g8b-3H-gWK"/>
+                            <constraint firstItem="spF-uh-SFI" firstAttribute="top" secondItem="LkL-Kq-1oJ" secondAttribute="top" id="NWT-4A-oeS"/>
+                            <constraint firstItem="4zu-Cd-AXH" firstAttribute="trailing" secondItem="spF-uh-SFI" secondAttribute="trailing" id="hh3-wb-w8G"/>
                             <constraint firstAttribute="bottom" secondItem="y2K-m9-81V" secondAttribute="bottom" id="kPf-IJ-3KB"/>
+                            <constraint firstItem="spF-uh-SFI" firstAttribute="leading" secondItem="4zu-Cd-AXH" secondAttribute="leading" id="tKf-Gl-7Xb"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="lb3-BG-6ym"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <nil key="simulatedBottomBarMetrics"/>
+                    <size key="freeformSize" width="390" height="844"/>
                     <connections>
-                        <outlet property="appbarViewHeightConstraint" destination="SRe-KC-UvJ" id="iDq-ZZ-FMI"/>
+                        <outlet property="appbarViewHeightConstraint" destination="iMY-ad-EJI" id="iem-h0-8Qi"/>
                         <outlet property="backButton" destination="KY9-xo-3ee" id="aGk-eC-gOR"/>
                         <outlet property="mainContainerView" destination="y2K-m9-81V" id="Zgj-3W-wd9"/>
                         <outlet property="searchButton" destination="z8L-cW-kYr" id="Bm1-Ry-PGE"/>

@@ -184,7 +184,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func configureMainContentViewInsets() {
-        mainScrollView.contentInset = UIEdgeInsets.top(regularAppbarHeight + 24)
+        mainScrollView.contentInset = UIEdgeInsets.top(24)
     }
     
     

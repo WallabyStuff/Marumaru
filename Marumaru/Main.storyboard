@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IQz-28-dsB">
-                                <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                                <rect key="frame" x="0.0" y="72" width="428" height="854"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FUc-n8-T3p" userLabel="ContentView">
                                         <rect key="frame" x="0.0" y="0.0" width="428" height="1300"/>
@@ -384,63 +384,57 @@
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </scrollView>
-                            <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MfK-Lr-soA">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Udz-B5-6fT">
                                 <rect key="frame" x="0.0" y="0.0" width="428" height="72"/>
-                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="jxk-o0-BDn">
-                                    <rect key="frame" x="0.0" y="0.0" width="428" height="72"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <subviews>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vHw-eb-i9G">
-                                            <rect key="frame" x="20" y="16" width="388" height="48"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="어떤 만화를 보고싶으신가요?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sfx-5a-mKM">
-                                                    <rect key="frame" x="16" y="15.5" width="324" height="17"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
-                                                    <color key="textColor" name="TextBlack-lighter"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="magnifying-glass" translatesAutoresizingMaskIntoConstraints="NO" id="d7k-x0-smd">
-                                                    <rect key="frame" x="352" y="14" width="20" height="20"/>
-                                                    <color key="tintColor" name="IconBlack-lighter"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="20" id="niu-3T-Eak"/>
-                                                        <constraint firstAttribute="height" constant="20" id="pWK-1e-XP1"/>
-                                                    </constraints>
-                                                </imageView>
-                                            </subviews>
-                                            <color key="backgroundColor" name="BackgroundWhite-lighter"/>
-                                            <constraints>
-                                                <constraint firstItem="d7k-x0-smd" firstAttribute="centerY" secondItem="vHw-eb-i9G" secondAttribute="centerY" id="4fd-3M-Hn9"/>
-                                                <constraint firstAttribute="trailing" secondItem="d7k-x0-smd" secondAttribute="trailing" constant="16" id="Qt6-Do-7rm"/>
-                                                <constraint firstAttribute="height" constant="48" id="Vof-3z-e7L"/>
-                                                <constraint firstItem="d7k-x0-smd" firstAttribute="leading" secondItem="Sfx-5a-mKM" secondAttribute="trailing" constant="12" id="bkP-gY-2EX"/>
-                                                <constraint firstItem="Sfx-5a-mKM" firstAttribute="leading" secondItem="vHw-eb-i9G" secondAttribute="leading" constant="16" id="cao-UN-fLC"/>
-                                                <constraint firstItem="Sfx-5a-mKM" firstAttribute="centerY" secondItem="vHw-eb-i9G" secondAttribute="centerY" id="sGH-At-lpi"/>
-                                            </constraints>
-                                        </view>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="vHw-eb-i9G" firstAttribute="leading" secondItem="jxk-o0-BDn" secondAttribute="leading" constant="20" id="knv-cy-YBi"/>
-                                        <constraint firstAttribute="trailing" secondItem="vHw-eb-i9G" secondAttribute="trailing" constant="20" id="pZU-e2-UUP"/>
-                                        <constraint firstAttribute="bottom" secondItem="vHw-eb-i9G" secondAttribute="bottom" constant="8" id="ykA-eJ-87p"/>
-                                    </constraints>
-                                </view>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vHw-eb-i9G">
+                                        <rect key="frame" x="20" y="12" width="388" height="48"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="어떤 만화를 보고싶으신가요?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sfx-5a-mKM">
+                                                <rect key="frame" x="16" y="15.5" width="324" height="17"/>
+                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
+                                                <color key="textColor" name="TextBlack-lighter"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="magnifying-glass" translatesAutoresizingMaskIntoConstraints="NO" id="d7k-x0-smd">
+                                                <rect key="frame" x="352" y="14" width="20" height="20"/>
+                                                <color key="tintColor" name="IconBlack-lighter"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="20" id="niu-3T-Eak"/>
+                                                    <constraint firstAttribute="height" constant="20" id="pWK-1e-XP1"/>
+                                                </constraints>
+                                            </imageView>
+                                        </subviews>
+                                        <color key="backgroundColor" name="BackgroundWhite-lighter"/>
+                                        <constraints>
+                                            <constraint firstItem="d7k-x0-smd" firstAttribute="centerY" secondItem="vHw-eb-i9G" secondAttribute="centerY" id="4fd-3M-Hn9"/>
+                                            <constraint firstAttribute="trailing" secondItem="d7k-x0-smd" secondAttribute="trailing" constant="16" id="Qt6-Do-7rm"/>
+                                            <constraint firstAttribute="height" constant="48" id="Vof-3z-e7L"/>
+                                            <constraint firstItem="d7k-x0-smd" firstAttribute="leading" secondItem="Sfx-5a-mKM" secondAttribute="trailing" constant="12" id="bkP-gY-2EX"/>
+                                            <constraint firstItem="Sfx-5a-mKM" firstAttribute="leading" secondItem="vHw-eb-i9G" secondAttribute="leading" constant="16" id="cao-UN-fLC"/>
+                                            <constraint firstItem="Sfx-5a-mKM" firstAttribute="centerY" secondItem="vHw-eb-i9G" secondAttribute="centerY" id="sGH-At-lpi"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" name="BackgroundWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="72" id="NQ8-NP-Cbd"/>
+                                    <constraint firstAttribute="height" constant="72" id="Qf0-H4-ttL"/>
+                                    <constraint firstItem="vHw-eb-i9G" firstAttribute="leading" secondItem="Udz-B5-6fT" secondAttribute="leading" constant="20" id="Rbd-Ig-yTU"/>
+                                    <constraint firstAttribute="trailing" secondItem="vHw-eb-i9G" secondAttribute="trailing" constant="20" id="n3a-xH-3JO"/>
+                                    <constraint firstAttribute="bottom" secondItem="vHw-eb-i9G" secondAttribute="bottom" constant="12" id="qFx-xY-AdL"/>
                                 </constraints>
-                                <blurEffect style="regular"/>
-                            </visualEffectView>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" name="BackgroundWhite"/>
                         <constraints>
                             <constraint firstItem="FUc-n8-T3p" firstAttribute="width" secondItem="IQz-28-dsB" secondAttribute="width" id="8da-Ez-4EW"/>
-                            <constraint firstItem="MfK-Lr-soA" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Ch1-q3-WGM"/>
-                            <constraint firstItem="IQz-28-dsB" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Tx7-oo-WWd"/>
+                            <constraint firstItem="Udz-B5-6fT" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="FRn-iu-ABc"/>
+                            <constraint firstItem="Udz-B5-6fT" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="RSI-wV-AFn"/>
+                            <constraint firstItem="Udz-B5-6fT" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="XhH-oa-hLa"/>
                             <constraint firstItem="IQz-28-dsB" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="cM6-Oz-Yxf"/>
-                            <constraint firstItem="MfK-Lr-soA" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="cq0-4g-xd4"/>
-                            <constraint firstItem="MfK-Lr-soA" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="ffF-ac-qnJ"/>
                             <constraint firstAttribute="bottom" secondItem="IQz-28-dsB" secondAttribute="bottom" id="jcK-6Y-8On"/>
+                            <constraint firstItem="IQz-28-dsB" firstAttribute="top" secondItem="Udz-B5-6fT" secondAttribute="bottom" id="oeP-1U-cRa"/>
                             <constraint firstItem="IQz-28-dsB" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="yfM-qQ-bO2"/>
                         </constraints>
                     </view>
@@ -451,7 +445,7 @@
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <size key="freeformSize" width="428" height="926"/>
                     <connections>
-                        <outlet property="appbarViewHeightConstraint" destination="NQ8-NP-Cbd" id="36B-OW-6ib"/>
+                        <outlet property="appbarViewHeightConstraint" destination="Qf0-H4-ttL" id="Cfo-n0-tTa"/>
                         <outlet property="comicRankHeaderAnimationView" destination="b9s-u7-Enj" id="r6e-2l-QNr"/>
                         <outlet property="comicRankTableView" destination="QoE-Qg-aZ4" id="9ry-8Q-425"/>
                         <outlet property="mainScrollView" destination="IQz-28-dsB" id="P8U-Bf-Ghm"/>
@@ -468,7 +462,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1753.7383177570093" y="53.779697624190071"/>
+            <point key="canvasLocation" x="1753.6231884057972" y="53.571428571428569"/>
         </scene>
         <!--홈-->
         <scene sceneID="nNj-5Q-p4T">
