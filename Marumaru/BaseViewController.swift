@@ -33,6 +33,14 @@ class BaseViewController: UIViewController {
             previousBaseFrameSize = currentBaseViewSize
         }
     }
+    
+    
+    // MARK: - LifeCycles
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setNavigationBarStatic()
+    }
 }
 
 extension BaseViewController {
@@ -44,5 +52,23 @@ extension BaseViewController {
     func makeImpactFeedback(_ style: UIImpactFeedbackGenerator.FeedbackStyle) {
         let impactFeedback = UIImpactFeedbackGenerator(style: style)
         impactFeedback.impactOccurred()
+    }
+}
+
+
+// MARK: - NavigationBar STYLE
+
+extension BaseViewController {
+    private func setNavigationBarStatic() {
+        if #available(iOS 15, *) {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithDefaultBackground()
+            appearance.shadowColor = .clear
+            appearance.backgroundColor = R.color.backgroundWhite()!
+            UINavigationBar.appearance().standardAppearance = appearance
+            UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        }
+        
+        navigationController?.navigationBar.isTranslucent = false
     }
 }
