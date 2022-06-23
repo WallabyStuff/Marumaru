@@ -51,7 +51,7 @@ class CategoryChipCollectionCell: UICollectionViewCell {
     // MARK: - Methods
     
     public func setSelected() {
-        chipContentView.backgroundColor = R.color.accentOrange()!
+        chipContentView.backgroundColor = R.color.accentIndigo()!
         chipContentView.layer.borderWidth = 0
         titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         titleLabel.textColor = .white
@@ -62,5 +62,13 @@ class CategoryChipCollectionCell: UICollectionViewCell {
         chipContentView.layer.borderWidth = 1
         titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         titleLabel.textColor = R.color.textBlackLight()!
+    }
+    
+    
+    // MARK: - TraitCollection
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        chipContentView.layer.borderColor = R.color.lineGrayLighter()!.cgColor
     }
 }

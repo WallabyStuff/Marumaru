@@ -241,8 +241,14 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
             cell.titleLabel.text = item.title
             cell.thumbnailImagePlaceholderLabel.text = item.title
             cell.authorLabel.text = item.author
-            cell.updateCycleLabel.text = item.updateCycle
-            cell.updateCycleView.backgroundColor = UpdateCycle(rawValue: item.updateCycle)?.color
+            
+            if item.updateCycle == UpdateCycle.notClassified.rawValue {
+                cell.updateCycleView.isHidden = true
+                cell.updateCycleLabel.text = ""
+            } else {
+                cell.updateCycleView.isHidden = false
+                cell.updateCycleLabel.text = item.updateCycle
+            }
             
             let url = self.viewModel.getImageURL(item.thumbnailImagePath)
             cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3)), .forceTransition]) { result in

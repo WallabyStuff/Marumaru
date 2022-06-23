@@ -189,7 +189,6 @@ extension ComicStripScrollView {
             guard let self = self else { return }
             
             do {
-                print("\(index) image called")
                 let result = try result.get()
                 let resultImage = result.image
                 
