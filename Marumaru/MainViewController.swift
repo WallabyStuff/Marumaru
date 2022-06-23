@@ -298,12 +298,14 @@ class MainViewController: BaseViewController, ViewModelInjectable {
                 vc.newComicEpisodeCollectionView.layoutIfNeeded()
                 
                 if isLoading {
+                    vc.refreshNewUpdateComicButton.isUserInteractionEnabled = false
                     vc.newComicEpisodeCollectionView.isUserInteractionEnabled = false
                     vc.newComicEpisodeCollectionView.visibleCells
                         .forEach({ cell in
                             cell.showCustomSkeleton()
                         })
                 } else {
+                    vc.refreshNewUpdateComicButton.isUserInteractionEnabled = true
                     vc.newComicEpisodeCollectionView.isUserInteractionEnabled = true
                     vc.newComicEpisodeCollectionView.visibleCells
                         .forEach({ cell in
@@ -402,12 +404,14 @@ class MainViewController: BaseViewController, ViewModelInjectable {
                 vc.comicRankTableView.layoutIfNeeded()
                 
                 if isLoading {
+                    vc.refreshComicRankButton.isUserInteractionEnabled = false
                     vc.comicRankTableView.isUserInteractionEnabled = false
                     vc.comicRankTableView.visibleCells
                         .forEach({ cell in
                             cell.showCustomSkeleton()
                         })
                 } else {
+                    vc.refreshComicRankButton.isUserInteractionEnabled = true
                     vc.comicRankTableView.isUserInteractionEnabled = true
                     vc.comicRankTableView.visibleCells
                         .forEach({ cell in
