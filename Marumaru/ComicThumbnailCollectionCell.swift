@@ -18,7 +18,7 @@ class ComicThumbnailCollectionCell: UICollectionViewCell {
     @IBOutlet weak var thumbnailImagePlaceholderLabel: UILabel!
     @IBOutlet weak var thumbnailImageView: UIImageView!
     
-    @IBOutlet weak var updateCycleView: UIView!
+    @IBOutlet weak var updateCycleView: UIVisualEffectView!
     @IBOutlet weak var updateCycleLabel: UILabel!
     
     @IBOutlet weak var titleLabel: UILabel!
@@ -71,6 +71,7 @@ class ComicThumbnailCollectionCell: UICollectionViewCell {
     
     private func setupUpdateCycleView() {
         updateCycleView.layer.cornerRadius = 8
+        updateCycleView.clipsToBounds = true
         updateCycleView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner]
     }
 }

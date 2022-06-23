@@ -82,7 +82,7 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
         registerWatchHistoryFooter()
         
         watchHistoryCollectionView.collectionViewLayout = flowLayout()
-        watchHistoryCollectionView.contentInset = UIEdgeInsets.top(24)
+        watchHistoryCollectionView.contentInset = UIEdgeInsets.inset(top: 24, bottom: 24)
     }
     
     private func registerWatchHistoryCollectionCell() {
@@ -146,7 +146,6 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
     private func bindBackButton() {
         backButton.rx.tap
             .asDriver()
-            .debug()
             .drive(with: self, onNext: { vc, _  in
                 vc.navigationController?.popViewController(animated: true)
             }).disposed(by: disposeBag)
