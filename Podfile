@@ -19,6 +19,7 @@ target 'Marumaru' do
   pod 'SkeletonView'
   pod 'Kingfisher'
   pod 'FloatingPanel'
+  pod 'SafeAreaBrush'
   
   target 'MarumaruTests' do
     inherit! :search_paths

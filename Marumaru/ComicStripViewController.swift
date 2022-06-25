@@ -13,6 +13,7 @@ import Toast
 import RxSwift
 import RxCocoa
 import RxGesture
+import SafeAreaBrush
 
 
 protocol ComicStripViewDelegate: AnyObject {
@@ -86,6 +87,7 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     
     private func setupView() {
         setupBaseView()
+        setupTopSafeAreaView()
         setupSceneScrollView()
         setupBottomIndicatorView()
         setupPreviousEpisodeButton()
@@ -97,6 +99,10 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
         let edgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(didSwipeEdgeOfScreen(_:)))
         edgePan.edges = .left
         view.addGestureRecognizer(edgePan)
+    }
+    
+    private func setupTopSafeAreaView() {
+        fillSafeArea(position: .top, blur: .light, gradient: true, insertAt: 2)
     }
     
     private func setupSceneScrollView() {
