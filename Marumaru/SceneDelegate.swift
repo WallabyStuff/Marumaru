@@ -20,6 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
+        updateBasePath()
         window = UIWindow(windowScene: windowScene)
         window?.rootViewController = instantiateMainViewController()
         window?.makeKeyAndVisible()
@@ -32,5 +33,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let tabBarController = MainTabBarController()
         let navigationController = UINavigationController(rootViewController: tabBarController)
         return navigationController
+    }
+    
+    func updateBasePath() {
+        let basePathManager = BasePathManager()
+        basePathManager.replaceToValidBasePath()
     }
 }

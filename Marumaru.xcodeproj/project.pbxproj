@@ -69,6 +69,8 @@
 		8E442E882846A039009A7E8D /* lying_cat.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E442E842846A039009A7E8D /* lying_cat.json */; };
 		8E442E892846A039009A7E8D /* sleeping_cat.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E442E852846A039009A7E8D /* sleeping_cat.json */; };
 		8E442E8A2846A039009A7E8D /* bubble_tea_cat.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E442E862846A039009A7E8D /* bubble_tea_cat.json */; };
+		8E491A7028756E1400E4D267 /* BasePathManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E491A6F28756E1400E4D267 /* BasePathManager.swift */; };
+		8E491A7D2877FFAC00E4D267 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E491A7C2877FFAC00E4D267 /* UserDefaultsManager.swift */; };
 		8E4FFE1D2844F04B00A7ED7B /* eyes_blinking.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E4FFE1B2844F04B00A7ED7B /* eyes_blinking.json */; };
 		8E4FFE202844F0AB00A7ED7B /* LottieAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4FFE1F2844F0AB00A7ED7B /* LottieAnimationView.swift */; };
 		8E4FFE222844F6B600A7ED7B /* trophy.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E4FFE212844F6B600A7ED7B /* trophy.json */; };
@@ -222,6 +224,8 @@
 		8E442E842846A039009A7E8D /* lying_cat.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lying_cat.json; sourceTree = "<group>"; };
 		8E442E852846A039009A7E8D /* sleeping_cat.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sleeping_cat.json; sourceTree = "<group>"; };
 		8E442E862846A039009A7E8D /* bubble_tea_cat.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = bubble_tea_cat.json; sourceTree = "<group>"; };
+		8E491A6F28756E1400E4D267 /* BasePathManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePathManager.swift; sourceTree = "<group>"; };
+		8E491A7C2877FFAC00E4D267 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		8E4FFE1B2844F04B00A7ED7B /* eyes_blinking.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = eyes_blinking.json; sourceTree = "<group>"; };
 		8E4FFE1F2844F0AB00A7ED7B /* LottieAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationView.swift; sourceTree = "<group>"; };
 		8E4FFE212844F6B600A7ED7B /* trophy.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = trophy.json; sourceTree = "<group>"; };
@@ -430,6 +434,8 @@
 				8E414673284398770005BCFD /* SearchHistoryManager.swift */,
 				8E5C9FD2284D2344008FE961 /* ComicBookmarkManager.swift */,
 				8E5C9FCE284D204C008FE961 /* CRUDable.swift */,
+				8E491A6F28756E1400E4D267 /* BasePathManager.swift */,
+				8E491A7C2877FFAC00E4D267 /* UserDefaultsManager.swift */,
 			);
 			name = Services;
 			sourceTree = "<group>";
@@ -868,7 +874,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$SRCROOT/R.generated.swift",
+				$SRCROOT/R.generated.swift,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -936,6 +942,7 @@
 				8ED56F3027ADACD000E78A8A /* PopOverComicEpisodeViewModel.swift in Sources */,
 				76BEEBA926248A1600642001 /* SearchComicViewController.swift in Sources */,
 				8E442E8128466B5F009A7E8D /* UILabe+Underline.swift in Sources */,
+				8E491A7028756E1400E4D267 /* BasePathManager.swift in Sources */,
 				8E5C9FD1284D2332008FE961 /* ComicBookmark.swift in Sources */,
 				8E87CE6227ACEAD0008CD9C9 /* WatchHistoryCollectionReusableView.swift in Sources */,
 				8E41467728439AFF0005BCFD /* SearchHistoryCollectionCell.swift in Sources */,
@@ -980,6 +987,7 @@
 				7641C3AF2646826100A79A79 /* PopOverComicEpisodeTableCell.swift in Sources */,
 				7641C3B32646874300A79A79 /* EpisodeItem.swift in Sources */,
 				8E33F3E62850D18900B6E6EE /* UIView+ConvenienceInsets.swift in Sources */,
+				8E491A7D2877FFAC00E4D267 /* UserDefaultsManager.swift in Sources */,
 				76BEEBB02624B64E00642001 /* ComicEpisodeThumbnailCollectionCell.swift in Sources */,
 				8E414670284394DF0005BCFD /* ComingSoonViewController.swift in Sources */,
 				8E961293284929CA009422BE /* EmptyViewController.swift in Sources */,

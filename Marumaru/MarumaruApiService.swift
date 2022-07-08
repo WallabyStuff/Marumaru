@@ -43,7 +43,7 @@ class MarumaruApiService {
     typealias ComicAndEpisodeSN = (comicSN: String, episodeSN: String)
     typealias URLToDoc = (url: URL, doc: Document)
     
-    var basePath = "https://marumaru265.com"
+    public var basePath = BasePathManager.defaultBasePath
     static let searchPath = "/bbs/search.php?url=%2Fbbs%2Fsearch.php&stx="
     static let comicPath = "/bbs/cmoic"
     static let categoryPath = "/bbs/page.php?hid=comicC"
@@ -57,7 +57,16 @@ class MarumaruApiService {
         }
     }
     
-    private init() { }
+    private init() {
+        configureBasePath()
+    }
+    
+    private func configureBasePath() {
+        if let basePath = MyUserDefault.basePath.getValue() as? String {
+            self.basePath = basePath
+            print("Log.i The basePath is \(basePath)")
+        }
+    }
 }
 
 
@@ -569,7 +578,7 @@ extension MarumaruApiService {
 extension MarumaruApiService {
     
     private var baseURL: URL? {
-        if let baseURL = URL(string: basePath) {
+        if let baseURL = URL(string: self.basePath) {
             return baseURL
         }
         
@@ -586,7 +595,7 @@ extension MarumaruApiService {
     }
     
     private func getComicURL(_ comicSN: String) -> URL? {
-        guard var endPoint = URL(string: basePath) else {
+        guard var endPoint = URL(string: self.basePath) else {
             return nil
         }
         
@@ -611,7 +620,7 @@ extension MarumaruApiService {
     
     private func getSearchURL(_ title: String) -> URL? {
         // Note: Do not make search urlPath with (URL). (appendPathComponent) makes wrong urlPath
-        var endPoint = basePath
+        var endPoint = self.basePath
         let transformedTitle = title.replacingOccurrences(of: " ", with: "+")
         let searchPath = "\(Self.searchPath)\(transformedTitle)"
         endPoint.append(searchPath)
@@ -638,7 +647,7 @@ extension MarumaruApiService {
     }
     
     private func getComicCategoryURL() -> URL? {
-        guard var endPoint = URL(string: basePath) else {
+        guard var endPoint = URL(string: self.basePath) else {
             return nil
         }
         
@@ -648,7 +657,7 @@ extension MarumaruApiService {
     }
     
     public func getImageURL(_ imagePath: String) -> URL? {
-        guard var endPoint = URL(string: basePath) else {
+        guard var endPoint = URL(string: self.basePath) else {
             return nil
         }
 
