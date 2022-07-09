@@ -179,6 +179,12 @@ class MainViewController: BaseViewController, ViewModelInjectable {
         configureMainContentViewInsets()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        newComicEpisodeCollectionView.reloadData()
+        watchHistoryCollectionView.reloadData()
+    }
+    
     private func configureAppbarViewConstraints() {
         appbarViewHeightConstraint.constant = view.safeAreaInsets.top + regularAppbarHeight
     }
