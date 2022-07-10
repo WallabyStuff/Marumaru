@@ -179,12 +179,6 @@ class MainViewController: BaseViewController, ViewModelInjectable {
         configureMainContentViewInsets()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        newComicEpisodeCollectionView.reloadData()
-        watchHistoryCollectionView.reloadData()
-    }
-    
     private func configureAppbarViewConstraints() {
         appbarViewHeightConstraint.constant = view.safeAreaInsets.top + regularAppbarHeight
     }
@@ -266,6 +260,12 @@ class MainViewController: BaseViewController, ViewModelInjectable {
                        cellType: ComicEpisodeThumbnailCollectionCell.self)) { _, episode, cell in
                 cell.configure(with: episode)
             }.disposed(by: disposeBag)
+        
+        newComicEpisodeCollectionView.rx.observe(CGRect.self, #keyPath(UIView.bounds))
+            .subscribe(onNext: { [weak self] _ in
+                self?.newComicEpisodeCollectionView.reloadData()
+            })
+            .disposed(by: disposeBag)
     }
     
     private func bindNewComicEpisodeCollectionCell() {
@@ -274,6 +274,12 @@ class MainViewController: BaseViewController, ViewModelInjectable {
             .asDriver()
             .drive(onNext: { [weak self] indexPath in
                 self?.viewModel.newComicEpisodeItemSelected(indexPath)
+            })
+            .disposed(by: disposeBag)
+        
+        newComicEpisodeContentsView.rx.observe(CGRect.self, #keyPath(UIView.bounds))
+            .subscribe(onNext: { [weak self] _ in
+                self?.newComicEpisodeCollectionView.reloadData()
             })
             .disposed(by: disposeBag)
     }
