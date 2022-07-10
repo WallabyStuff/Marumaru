@@ -91,14 +91,9 @@ class PopOverComicEpisodeViewController: BaseViewController, ViewModelInjectable
     private func bindEpisodeTableView() {
         viewModel.episodes
             .bind(to: episodeTableView.rx.items(cellIdentifier: PopOverComicEpisodeTableCell.identifier,
-                                                cellType: PopOverComicEpisodeTableCell.self)) { _, episode, cell in
-                if episode.episodeSN == self.viewModel.currentEpisodeSN {
-                    cell.episodeTitleLabel.text = "👉 \(episode.title)"
-                    cell.setHighlighted()
-                } else {
-                    cell.episodeTitleLabel.text = episode.title
-                    cell.setUnHighlighted()
-                }
+                                                cellType: PopOverComicEpisodeTableCell.self)) { [weak self] _, episodeItem, cell in
+                guard let self = self else { return }
+                cell.configure(with: episodeItem, currentSN: self.viewModel.currentEpisodeSN)
             }.disposed(by: disposeBag)
     }
     

@@ -200,12 +200,9 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
                                                      cellType: ComicEpisodeThumbnailTableCell.self)) { [weak self] index, episode, cell in
                 guard let self = self else { return }
                 
-                cell.hideSkeleton()
-                cell.titleLabel.text = episode.title
-                cell.authorLabel.text = episode.description
-                cell.indexLabel.text = self.viewModel.comicEpisodeIndex(index).description
-                cell.thumbnailImageView.image = nil
-                
+                let episodeIndex = self.viewModel.comicEpisodeIndex(index)
+                cell.configure(with: episode, index: episodeIndex)
+
                 if self.viewModel.ifAlreadyWatched(index) {
                     cell.setWatched()
                 }
@@ -214,13 +211,6 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
                     if episode.episodeSN == recentWatchingEpisodSN {
                         cell.recentWatchingIndicatorView.isHidden = false
                     }
-                }
-                
-                let url = self.viewModel.getImageURL(episode.thumbnailImagePath)
-                cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3)), .forceTransition])
-                
-                cell.onReuse = {
-                    cell.thumbnailImageView.kf.cancelDownloadTask()
                 }
             }.disposed(by: disposeBag)
     }

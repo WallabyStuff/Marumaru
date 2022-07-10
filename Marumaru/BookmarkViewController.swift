@@ -95,28 +95,8 @@ class BookmarkViewController: BaseViewController, ViewModelInjectable {
     
     private func bindBookmarks() {
         viewModel.bookmarks
-            .bind(to: bookmarkCollectionView.rx.items(cellIdentifier: ComicEpisodeThumbnailCollectionCell.identifier, cellType: ComicEpisodeThumbnailCollectionCell.self)) { [weak self] _, bookmark, cell in
-                guard let self = self else { return }
-                
-                cell.thumbnailImageView.layer.cornerRadius = 6
-                cell.thumbnailImagePlaceholderLabel.text = bookmark.title
-                cell.titleLabel.text = bookmark.title
-                
-                let url = self.viewModel.getImageURL(bookmark.thumbnailImagePath)
-                cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3)), .forceTransition]) { result in
-                    do {
-                        let result = try result.get()
-                        let image = result.image
-                        cell.thumbnailImagePlaceholderView.makeThumbnailShadow(with: image.averageColor)
-                        cell.thumbnailImagePlaceholderLabel.isHidden = true
-                    } catch {
-                        cell.thumbnailImagePlaceholderLabel.isHidden = false
-                    }
-                }
-                
-                cell.onReuse = {
-                    cell.thumbnailImageView.kf.cancelDownloadTask()
-                }
+            .bind(to: bookmarkCollectionView.rx.items(cellIdentifier: ComicEpisodeThumbnailCollectionCell.identifier, cellType: ComicEpisodeThumbnailCollectionCell.self)) { _, bookmark, cell in
+                cell.configure(with: bookmark.convertToComicEpisode())
             }
             .disposed(by: disposeBag)
     }

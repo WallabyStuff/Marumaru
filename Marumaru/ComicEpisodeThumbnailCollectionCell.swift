@@ -20,7 +20,7 @@ class ComicEpisodeThumbnailCollectionCell: UICollectionViewCell {
     @IBOutlet weak var thumbnailImagePlaceholderLabel: UILabel!
     
     public var onReuse: () -> Void = {}
-
+    
     
     // MARK: - LifeCycle
     
@@ -60,5 +60,38 @@ class ComicEpisodeThumbnailCollectionCell: UICollectionViewCell {
     
     private func setupThumbnailImageBaseView() {
         thumbnailImagePlaceholderView.layer.cornerRadius = 8
+    }
+    
+    
+    // MARK: - Methods
+    
+    public func configure(with episode: ComicEpisode) {
+        self.hideSkeleton()
+        thumbnailImagePlaceholderLabel.text = episode.title
+        titleLabel.text = episode.title
+        setThumbnailImage(episode.thumbnailImagePath)
+    }
+    
+    private func setThumbnailImage(_ imagePath: String?) {
+        guard let imageURL = MarumaruApiService.shared.getImageURL(imagePath) else {
+            return
+        }
+        
+        thumbnailImageView.kf.setImage(with: imageURL, options: [.transition(.fade(0.3)), .forceTransition]) { [weak self] result in
+            guard let self = self else { return }
+            
+            do {
+                let result = try result.get()
+                let image = result.image
+                self.thumbnailImagePlaceholderView.makeThumbnailShadow(with: image.averageColor)
+                self.thumbnailImagePlaceholderLabel.isHidden = true
+            } catch {
+                self.thumbnailImagePlaceholderLabel.isHidden = false
+            }
+        }
+        
+        onReuse = { [weak self] in
+            self?.thumbnailImageView.kf.cancelDownloadTask()
+        }
     }
 }

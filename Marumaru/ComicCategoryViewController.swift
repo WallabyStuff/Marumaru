@@ -231,42 +231,12 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
     // MARK: - Methods
     
     private func configureDataSource() -> RxCollectionViewSectionedReloadDataSource<ComicInfoSection> {
-        let dataSource = RxCollectionViewSectionedReloadDataSource<ComicInfoSection>(configureCell: { [weak self] _, cv, indexPath, item in
-            guard let self = self,
-                  let cell = cv.dequeueReusableCell(withReuseIdentifier: ComicThumbnailCollectionCell.identifier, for: indexPath) as? ComicThumbnailCollectionCell else {
+        let dataSource = RxCollectionViewSectionedReloadDataSource<ComicInfoSection>(configureCell: { _, cv, indexPath, comicInfo in
+            guard let cell = cv.dequeueReusableCell(withReuseIdentifier: ComicThumbnailCollectionCell.identifier, for: indexPath) as? ComicThumbnailCollectionCell else {
                 return UICollectionViewCell()
             }
             
-            cell.hideSkeleton()
-            cell.titleLabel.text = item.title
-            cell.thumbnailImagePlaceholderLabel.text = item.title
-            cell.authorLabel.text = item.author
-            
-            if item.updateCycle == UpdateCycle.notClassified.rawValue {
-                cell.updateCycleView.isHidden = true
-                cell.updateCycleLabel.text = ""
-            } else {
-                cell.updateCycleView.isHidden = false
-                cell.updateCycleLabel.text = item.updateCycle
-            }
-            
-            let url = self.viewModel.getImageURL(item.thumbnailImagePath)
-            cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3)), .forceTransition]) { result in
-                do {
-                    let result = try result.get()
-                    let image = result.image
-                    
-                    cell.thumbnailImagePlaceholderLabel.isHidden = true
-                    cell.thumbnailImagePlaceholderView.makeThumbnailShadow(with: image.averageColor)
-                } catch {
-                    cell.thumbnailImagePlaceholderLabel.isHidden = false
-                }
-            }
-            
-            cell.onReuse = {
-                cell.thumbnailImageView.kf.cancelDownloadTask()
-            }
-            
+            cell.configure(with: comicInfo)
             return cell
         }, configureSupplementaryView: { [weak self] _, cv, kind, indexPath in
             guard let self = self else {

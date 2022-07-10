@@ -61,6 +61,31 @@ class ComicEpisodeThumbnailTableCell: UITableViewCell {
         thumbnailImageView.layer.cornerRadius = 6
         thumbnailImageView.layer.masksToBounds = true
     }
+    
+    
+    // MARK: - Methods
+    
+    public func configure(with episode: ComicEpisode, index: Int) {
+        hideSkeleton()
+        
+        titleLabel.text = episode.title
+        authorLabel.text = episode.description
+        indexLabel.text = index.description
+        thumbnailImageView.image = nil
+        setThumbnailImage(episode.thumbnailImagePath)
+    }
+    
+    private func setThumbnailImage(_ imagePath: String?) {
+        guard let imageURL = MarumaruApiService.shared.getImageURL(imagePath) else {
+            return
+        }
+        
+        thumbnailImageView.kf.setImage(with: imageURL, options: [.transition(.fade(0.3)), .forceTransition])
+        
+        onReuse = { [weak self] in
+            self?.thumbnailImageView.kf.cancelDownloadTask()
+        }
+    }
 }
 
 extension ComicEpisodeThumbnailTableCell {

@@ -65,3 +65,15 @@ extension WatchHistory: IdentifiableType {
         }
     }
 }
+
+extension WatchHistory {
+    public func convertToComicEpisode() -> ComicEpisode {
+        let comicEpisode = ComicEpisode(comicSN: comicSN,
+                                        episodeSN: episodeSN,
+                                        title: title,
+                                        description: description,
+                                        thumbnailImagePath: thumbnailImagePath)
+        
+        return comicEpisode
+    }
+}

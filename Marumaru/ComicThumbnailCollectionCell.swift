@@ -74,4 +74,50 @@ class ComicThumbnailCollectionCell: UICollectionViewCell {
         updateCycleView.clipsToBounds = true
         updateCycleView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner]
     }
+    
+    
+    // MARK: - Methods
+
+    public func configure(with comicInfo: ComicInfo) {
+        hideSkeleton()
+        titleLabel.text = comicInfo.title
+        thumbnailImagePlaceholderLabel.text = comicInfo.title
+        authorLabel.text = comicInfo.author
+        setUpdateCycle(UpdateCycle(rawValue: comicInfo.updateCycle) ?? .notClassified)
+        setThumbnailImage(comicInfo.thumbnailImagePath)
+    }
+    
+    private func setThumbnailImage(_ imagePath: String?) {
+        guard let imageURL = MarumaruApiService.shared.getImageURL(imagePath) else {
+            return
+        }
+        
+        thumbnailImageView.kf.setImage(with: imageURL, options: [.transition(.fade(0.3)), .forceTransition]) { [weak self] result in
+            guard let self = self else { return }
+            
+            do {
+                let result = try result.get()
+                let image = result.image
+                
+                self.thumbnailImagePlaceholderLabel.isHidden = true
+                self.thumbnailImagePlaceholderView.makeThumbnailShadow(with: image.averageColor)
+            } catch {
+                self.thumbnailImagePlaceholderLabel.isHidden = false
+            }
+        }
+        
+        onReuse = { [weak self] in
+            self?.thumbnailImageView.kf.cancelDownloadTask()
+        }
+    }
+    
+    private func setUpdateCycle(_ updateCycle: UpdateCycle) {
+        if updateCycle == .notClassified {
+            updateCycleView.isHidden = true
+            updateCycleLabel.text = ""
+        } else {
+            updateCycleView.isHidden = false
+            updateCycleLabel.text = updateCycle.rawValue
+        }
+    }
 }

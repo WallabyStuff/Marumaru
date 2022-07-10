@@ -38,4 +38,11 @@ class SearchHistoryCollectionCell: UICollectionViewCell {
             })
             .disposed(by: disposeBag)
     }
+    
+    
+    // MARK: - Methods
+    
+    public func configure(title: String) {
+        titleLabel.text = title
+    }
 }

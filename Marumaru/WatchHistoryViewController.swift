@@ -192,30 +192,16 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
     // MARK: - Methods
     
     private func dataSourceFactory() -> RxCollectionViewSectionedAnimatedDataSource<WatchHistorySection> {
-        let dataSource = RxCollectionViewSectionedAnimatedDataSource<WatchHistorySection>(configureCell: { [weak self] _, cv, indexPath, comicEpisode in
-            if comicEpisode.isInvalidated { return UICollectionViewCell() }
+        let dataSource = RxCollectionViewSectionedAnimatedDataSource<WatchHistorySection>(configureCell: { _, cv, indexPath, episode in
+            if episode.isInvalidated { return UICollectionViewCell() }
             
-            guard let self = self,
-                  let cell = cv.dequeueReusableCell(withReuseIdentifier: ComicEpisodeThumbnailCollectionCell.identifier, for: indexPath)
+            guard let cell = cv.dequeueReusableCell(withReuseIdentifier: ComicEpisodeThumbnailCollectionCell.identifier, for: indexPath)
                     as? ComicEpisodeThumbnailCollectionCell else {
                 return UICollectionViewCell()
             }
             
-            cell.titleLabel.text = comicEpisode.title
-            cell.thumbnailImagePlaceholderLabel.text = comicEpisode.title
+            cell.configure(with: episode.convertToComicEpisode())
             
-            let url = self.viewModel.getImageURL(comicEpisode.thumbnailImagePath)
-            cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3)), .forceTransition]) { result in
-                do {
-                    let result = try result.get()
-                    let image = result.image
-                    cell.thumbnailImagePlaceholderView.makeThumbnailShadow(with: image.averageColor)
-                    cell.thumbnailImagePlaceholderLabel.isHidden = true
-                } catch {
-                    cell.thumbnailImagePlaceholderLabel.isHidden = false
-                }
-            }
-             
             return cell
         }, configureSupplementaryView: { [weak self] _, cv, _, indexPath in
             guard let self = self else { return .init() }

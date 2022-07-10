@@ -209,8 +209,8 @@ class MainViewController: BaseViewController, ViewModelInjectable {
         bindWatchHistoryCollectionView()
         bindWatchHistoryCollectionCell()
         
-        bindComicRankCollctionView()
-        bindComicRankCollectionCell()
+        bindComicRankTableView()
+        bindComicRankTableCell()
         bindComicRankFailState()
         
         bindPresentComicStripVC()
@@ -263,28 +263,8 @@ class MainViewController: BaseViewController, ViewModelInjectable {
         viewModel.newComicEpisodes
             .bind(to: newComicEpisodeCollectionView.rx
                 .items(cellIdentifier: ComicEpisodeThumbnailCollectionCell.identifier,
-                       cellType: ComicEpisodeThumbnailCollectionCell.self)) { [weak self] _, episode, cell in
-                guard let self = self else { return }
-                
-                cell.hideSkeleton()
-                cell.thumbnailImagePlaceholderLabel.text = episode.title
-                cell.titleLabel.text = episode.title
-                
-                let url = self.viewModel.getImageURL(episode.thumbnailImagePath)
-                cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3)), .forceTransition]) { result in
-                    do {
-                        let result = try result.get()
-                        let image = result.image
-                        cell.thumbnailImagePlaceholderView.makeThumbnailShadow(with: image.averageColor)
-                        cell.thumbnailImagePlaceholderLabel.isHidden = true
-                    } catch {
-                        cell.thumbnailImagePlaceholderLabel.isHidden = false
-                    }
-                }
-                
-                cell.onReuse = {
-                    cell.thumbnailImageView.kf.cancelDownloadTask()
-                }
+                       cellType: ComicEpisodeThumbnailCollectionCell.self)) { _, episode, cell in
+                cell.configure(with: episode)
             }.disposed(by: disposeBag)
     }
     
@@ -340,28 +320,8 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     private func bindWatchHistoryCollectionView() {
         viewModel.watchHistories
             .bind(to: watchHistoryCollectionView.rx.items(cellIdentifier: ComicEpisodeThumbnailCollectionCell.identifier,
-                                                          cellType: ComicEpisodeThumbnailCollectionCell.self)) { [weak self] _, episode, cell in
-                guard let self = self else { return }
-                
-                cell.hideSkeleton()
-                cell.thumbnailImagePlaceholderLabel.text = episode.title
-                cell.titleLabel.text = episode.title
-                
-                let url = self.viewModel.getImageURL(episode.thumbnailImagePath)
-                cell.thumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3)), .forceTransition]) { result in
-                    do {
-                        let result = try result.get()
-                        let image = result.image
-                        cell.thumbnailImagePlaceholderView.makeThumbnailShadow(with: image.averageColor)
-                        cell.thumbnailImagePlaceholderLabel.isHidden = true
-                    } catch {
-                        cell.thumbnailImagePlaceholderLabel.isHidden = false
-                    }
-                }
-
-                cell.onReuse = {
-                    cell.thumbnailImageView.kf.cancelDownloadTask()
-                }
+                                                          cellType: ComicEpisodeThumbnailCollectionCell.self)) { _, episode, cell in
+                cell.configure(with: episode.convertToComicEpisode())
             }.disposed(by: disposeBag)
         
         viewModel.watchHistories
@@ -385,17 +345,15 @@ class MainViewController: BaseViewController, ViewModelInjectable {
             .disposed(by: disposeBag)
     }
     
-    private func bindComicRankCollctionView() {
+    private func bindComicRankTableView() {
         viewModel.comicRank
             .bind(to: comicRankTableView.rx.items(cellIdentifier: ComicRankTableCell.identifier,
                                                   cellType: ComicRankTableCell.self)) { index, episode, cell in
-                cell.hideSkeleton()
-                cell.titleLabel.text = episode.title
-                cell.rankLabel.text = "\(index + 1)"
+                cell.configure(with: episode, rank: index + 1)
             }.disposed(by: disposeBag)
     }
     
-    private func bindComicRankCollectionCell() {
+    private func bindComicRankTableCell() {
         comicRankTableView.rx.itemSelected
             .asDriver()
             .drive(with: self, onNext: { vc, indexPath in
