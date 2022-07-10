@@ -20,23 +20,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
-        updateBasePath()
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = instantiateMainViewController()
+        window?.rootViewController = splashViewController()
         window?.makeKeyAndVisible()
     }
     
-    
-    // MARK: - Methods
-    
-    func instantiateMainViewController() -> UINavigationController {
-        let tabBarController = MainTabBarController()
-        let navigationController = UINavigationController(rootViewController: tabBarController)
-        return navigationController
-    }
-    
-    func updateBasePath() {
-        let basePathManager = BasePathManager()
-        basePathManager.replaceToValidBasePath()
+    private func splashViewController() -> SplashViewController {
+        let viewModel = SplashViewModel()
+        let viewController = SplashViewController(viewModel)
+        return viewController
     }
 }

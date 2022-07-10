@@ -28,25 +28,35 @@ class BasePathManager {
     
     // MARK: - Methods
     
-    public func replaceToValidBasePath() {
-        if let basePath = MyUserDefault.basePath.getValue() as? String {
-            Self.defaultBasePath = basePath
-        } else {
-            MyUserDefault.basePath.setValue(Self.defaultBasePath)
+    public func replaceToValidBasePath() -> Completable {
+        Completable.create { [weak self] observer in
+            guard let self = self else { return Disposables.create() }
+            
+            if let basePath = MyUserDefault.basePath.getValue() as? String {
+                Self.defaultBasePath = basePath
+            } else {
+                MyUserDefault.basePath.setValue(Self.defaultBasePath)
+            }
+            
+            self.checkIsBasePathValid()
+                .retry(self.maxRetryCount)
+                .observe(on: MainScheduler.instance)
+                .subscribe(with: self, onCompleted: { strongSelf in
+                    // This is a necessary proccess to check wheter legacy basePath is available or not.
+                    // Cuz new basePath and legacy basePath are both valid when basePath just updated.
+                    strongSelf.increaseBasePathNumber()
+                    strongSelf.checkIsBasePathValid()
+                        .subscribe(onCompleted: {
+                            observer(.completed)
+                        }, onError: { _ in
+                            observer(.completed)
+                        })
+                        .disposed(by: strongSelf.disposeBag)
+                })
+                .disposed(by: self.disposeBag)
+            
+            return Disposables.create()
         }
-        
-        checkIsBasePathValid()
-            .retry(maxRetryCount)
-            .observe(on: MainScheduler.instance)
-            .subscribe(with: self, onCompleted: { strongSelf in
-                // This is a necessary proccess to check wheter legacy basePath is available or not.
-                // Cuz new basePath and legacy basePath are both valid when basePath just updated.
-                strongSelf.increaseBasePathNumber()
-                strongSelf.checkIsBasePathValid()
-                    .subscribe()
-                    .disposed(by: strongSelf.disposeBag)
-            })
-            .disposed(by: disposeBag)
     }
     
     private func checkIsBasePathValid() -> Completable {
