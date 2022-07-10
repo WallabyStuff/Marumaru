@@ -68,4 +68,13 @@ class ComicRankTableCell: UITableViewCell {
     private func setupTitleLabel() {
         titleLabel.text = ""
     }
+    
+    
+    // MARK: - Methods
+    
+    public func configure(with episode: ComicEpisode, rank: Int) {
+        hideSkeleton()
+        titleLabel.text = episode.title
+        rankLabel.text = rank.description
+    }
 }

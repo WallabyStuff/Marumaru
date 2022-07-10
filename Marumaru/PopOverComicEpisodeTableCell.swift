@@ -52,12 +52,22 @@ class PopOverComicEpisodeTableCell: UITableViewCell {
     
     // MARK: - Methods
     
-    func setHighlighted() {
+    public func configure(with episode: EpisodeItem, currentSN: String) {
+        if episode.episodeSN == currentSN {
+            episodeTitleLabel.text = "👉 \(episode.title)"
+            setHighlighted()
+        } else {
+            episodeTitleLabel.text = episode.title
+            setUnHighlighted()
+        }
+    }
+    
+    public func setHighlighted() {
         episodeTitleLabel.textColor = R.color.accentGreen()
         episodeTitleLabel.font = UIFont.systemFont(ofSize: 17, weight: .medium)
     }
     
-    func setUnHighlighted() {
+    public func setUnHighlighted() {
         episodeTitleLabel.textColor = R.color.textBlack()
         episodeTitleLabel.font = UIFont.systemFont(ofSize: 17, weight: .regular)
     }

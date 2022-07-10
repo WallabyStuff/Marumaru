@@ -180,7 +180,7 @@ class SearchHistoryViewController: BaseViewController, ViewModelInjectable {
                 return UICollectionViewCell()
             }
             
-            cell.titleLabel.text = historyItem.title
+            cell.configure(title: historyItem.title)
             cell.deleteButtonTapAction = { [weak self] in
                 self?.viewModel.deleteSearchHistoryItem(indexPath)
             }

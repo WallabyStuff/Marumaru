@@ -111,4 +111,43 @@ class SearchResultComicCollectionCell: UICollectionViewCell {
         thumbnailImageView.layer.cornerRadius = 8
         thumbnailImageView.contentMode = .scaleAspectFill
     }
+    
+    
+    // MARK: - Methods
+    
+    public func configure(with comicInfo: ComicInfo) {
+        hideSkeleton()
+        
+        titleLabel.text = comicInfo.title
+        thumbnailImagePlaceholderLabel.text = comicInfo.title
+        authorLabel.text = comicInfo.author.isEmpty ? "작가정보 없음" : comicInfo.author
+        updateCycleLabel.text = comicInfo.updateCycle
+        updateCycleLabel.makeRoundedBackground(cornerRadius: 6,
+                                               backgroundColor: UpdateCycle(rawValue: comicInfo.updateCycle)?.color,
+                                               foregroundColor: .white)
+        setThumbnailImage(comicInfo.thumbnailImagePath)
+    }
+    
+    private func setThumbnailImage(_ imagePath: String?) {
+        guard let thumbnailImageURL = MarumaruApiService.shared.getImageURL(imagePath) else {
+            return
+        }
+        
+        thumbnailImageView.kf.setImage(with: thumbnailImageURL, options: [.transition(.fade(0.3)), .forceTransition]) { [weak self] result in
+            guard let self = self else { return }
+            
+            do {
+                let result = try result.get()
+                let image = result.image
+                self.thumbnailImagePlaceholderView.makeThumbnailShadow(with: image.averageColor)
+                self.thumbnailImagePlaceholderLabel.isHidden = true
+            } catch {
+                self.thumbnailImagePlaceholderLabel.isHidden = false
+            }
+        }
+        
+        onReuse = { [weak self] in
+            self?.thumbnailImageView.kf.cancelDownloadTask()
+        }
+    }
 }

@@ -53,3 +53,14 @@ extension ComicBookmark: IdentifiableType {
         }
     }
 }
+
+extension ComicBookmark {
+    public func convertToComicEpisode() -> ComicEpisode {
+        let comicEpisode = ComicEpisode(comicSN: comicSN,
+                                        episodeSN: "",
+                                        title: title,
+                                        description: description,
+                                        thumbnailImagePath: thumbnailImagePath)
+        return comicEpisode
+    }
+}

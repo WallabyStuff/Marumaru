@@ -656,8 +656,9 @@ extension MarumaruApiService {
         return endPoint
     }
     
-    public func getImageURL(_ imagePath: String) -> URL? {
-        guard var endPoint = URL(string: self.basePath) else {
+    public func getImageURL(_ imagePath: String?) -> URL? {
+        guard let imagePath = imagePath,
+              var endPoint = URL(string: self.basePath) else {
             return nil
         }
 
