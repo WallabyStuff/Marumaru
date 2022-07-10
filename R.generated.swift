@@ -1912,6 +1912,7 @@ struct _R: Rswift.Validatable {
 
       static func validate() throws {
         if #available(iOS 11.0, tvOS 11.0, *) {
+          if UIKit.UIColor(named: "AccentDarkGray", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'AccentDarkGray' is used in storyboard 'LaunchScreen', but couldn't be loaded.") }
         }
       }
 
