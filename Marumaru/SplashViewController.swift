@@ -60,6 +60,10 @@ class SplashViewController: BaseViewController, ViewModelInjectable {
     
     // MARK: - Setups
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     private func setup() {
         setupView()
     }
