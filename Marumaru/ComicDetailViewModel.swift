@@ -154,8 +154,8 @@ extension ComicDetailViewModel {
     }
     
     private func toggleBookmarkState() {
-        if isLoadingComicEpisodes.value == true {
-            // Block bookmark while loading datas
+        if comicInfo.value.title.isEmpty {
+            // Block bookmark while
             return
         }
         
