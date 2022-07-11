@@ -30,7 +30,7 @@ class ComicCategoryViewModel {
 
 extension ComicCategoryViewModel {
     public func updateComicCategory(_ category: ComicCategory) {
-        let fakeSections = fakeComicSections(sectionCount: 6, rowCount: 10)
+        let fakeSections = ComicInfoSection.fakeSections(numberOfSection: 6, numberOfItem: 10)
         comicSections.accept(fakeSections)
         isLoadingComics.accept(true)
 
@@ -51,7 +51,7 @@ extension ComicCategoryViewModel {
     }
     
     public func updateComicCategory() {
-        let fakeSections = fakeComicSections(sectionCount: 6, rowCount: 10)
+        let fakeSections = ComicInfoSection.fakeSections(numberOfSection: 6, numberOfItem: 10)
         comicSections.accept(fakeSections)
         isLoadingComics.accept(true)
         
@@ -102,8 +102,10 @@ extension ComicCategoryViewModel {
         var comics: [ComicInfo] = comics.reversed()
         var sections = [ComicInfoSection]()
         
-        for _ in (0..<3) {
-            var section = ComicInfoSection(items: [])
+        for row in (0..<3) {
+            let identity = "\(currentPage)-\(row)"
+            var section = ComicInfoSection(identity: identity,
+                                           items: [])
             
             for _ in (0..<6) {
                 if let comic = comics.popLast() {
@@ -132,20 +134,6 @@ extension ComicCategoryViewModel {
         }
         
         return nil
-    }
-}
-
-extension ComicCategoryViewModel {
-    private func fakeComicSections(sectionCount: Int, rowCount: Int) -> [ComicInfoSection] {
-        return [ComicInfoSection](repeating: fakeComicSection(rowCount), count: sectionCount)
-    }
-    
-    private func fakeComicSection(_ rowCount: Int) -> ComicInfoSection {
-        return .init(items: [ComicInfo](repeating: fakeComicItem, count: rowCount))
-    }
-    
-    private var fakeComicItem: ComicInfo {
-        return .init(comicSN: "", title: "", author: "", updateCycle: "")
     }
 }
 

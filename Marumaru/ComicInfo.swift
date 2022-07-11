@@ -8,7 +8,7 @@
 import UIKit
 import RxDataSources
 
-struct ComicInfo: Equatable {
+struct ComicInfo {
     var comicSN: String
     var title: String
     var author: String = "작가정보 없음"
@@ -20,7 +20,36 @@ struct ComicInfo: Equatable {
 extension ComicInfo: IdentifiableType {
     typealias Identity = String
     
-    var identity: String {
-        return UUID().uuidString
+    var identity: Identity {
+        return comicSN
+    }
+}
+
+extension ComicInfo: Equatable {
+    static func == (lhs: ComicInfo, rhs: ComicInfo) -> Bool {
+        if lhs.comicSN == rhs.comicSN {
+            return true
+        } else {
+            return false
+        }
+    }
+}
+
+extension ComicInfo: ItemPlaceHoldable {
+    static func fakeItems(count: Int) -> [ComicInfo] {
+        var items = [ComicInfo]()
+        
+        for _ in 0..<count {
+            items.append(Self.fakeItem)
+        }
+        
+        return items
+    }
+    
+    static var fakeItem: ComicInfo {
+        return .init(comicSN: UUID().uuidString,
+                     title: "",
+                     author: "",
+                     updateCycle: "미분류")
     }
 }

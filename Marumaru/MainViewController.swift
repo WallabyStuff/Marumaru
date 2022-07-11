@@ -261,7 +261,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
                 cell.configure(with: episode)
             }.disposed(by: disposeBag)
         
-        newComicEpisodeCollectionView.rx.observe(CGRect.self, #keyPath(UIView.bounds))
+        newComicEpisodeCollectionView.rx.observe(CGRect.self, #keyPath(UIView.frame))
             .subscribe(onNext: { [weak self] _ in
                 self?.newComicEpisodeCollectionView.reloadData()
             })
@@ -277,7 +277,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
             })
             .disposed(by: disposeBag)
         
-        newComicEpisodeContentsView.rx.observe(CGRect.self, #keyPath(UIView.bounds))
+        newComicEpisodeContentsView.rx.observe(CGRect.self, #keyPath(UIView.frame))
             .subscribe(onNext: { [weak self] _ in
                 self?.newComicEpisodeCollectionView.reloadData()
             })

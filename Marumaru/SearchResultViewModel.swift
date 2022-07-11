@@ -27,8 +27,8 @@ class SearchResultViewModel {
 extension SearchResultViewModel {
     public func updateSearchResult(_ title: String) {
         searchKeyword = title
-        let fakeItems = fakeSearchResultComics(15)
-        let fakeSection = ComicInfoSection(items: fakeItems)
+        let fakeItems = ComicInfo.fakeItems(count: 15)
+        let fakeSection = ComicInfoSection(identity: UUID().uuidString, items: fakeItems)
         searchResultComics.accept([fakeSection])
         
         failToLoadSearchResult.accept(false)
@@ -39,7 +39,7 @@ extension SearchResultViewModel {
             .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .background))
             .observe(on: MainScheduler.instance)
             .subscribe(with: self, onSuccess: { strongSelf, comics in
-                let section = ComicInfoSection(items: comics)
+                let section = ComicInfoSection(identity: UUID().uuidString, items: comics)
                 strongSelf.searchResultComics.accept([section])
                 strongSelf.isLoadingSearchResultComics.accept(false)
             }, onFailure: { strongSelf, _ in
@@ -65,15 +65,5 @@ extension SearchResultViewModel {
         }
 
         return MarumaruApiService.shared.getImageURL(imagePath)
-    }
-}
-
-extension SearchResultViewModel {
-    private func fakeSearchResultComics(_ count: Int) -> [ComicInfo] {
-        return [ComicInfo](repeating: fakeSearchResultComic, count: count)
-    }
-    
-    private var fakeSearchResultComic: ComicInfo {
-        return .init(comicSN: "", title: "")
     }
 }
