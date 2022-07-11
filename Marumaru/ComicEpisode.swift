@@ -33,3 +33,29 @@ extension ComicEpisode {
         self.episodeSN = newEpisode.episodeSN
     }
 }
+
+extension ComicEpisode: Equatable {
+    static func == (lhs: ComicEpisode, rhs: ComicEpisode) -> Bool {
+        if lhs.comicSN == rhs.comicSN {
+            return true
+        } else {
+            return false
+        }
+    }
+}
+
+extension ComicEpisode: ItemPlaceHoldable {
+    static func fakeItems(count: Int) -> [ComicEpisode] {
+        var items = [ComicEpisode]()
+        
+        for _ in 0..<count {
+            items.append(Self.fakeItem)
+        }
+        
+        return items
+    }
+    
+    static var fakeItem: ComicEpisode {
+        return .init(comicSN: UUID().uuidString, title: "")
+    }
+}

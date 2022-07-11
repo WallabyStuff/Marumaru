@@ -47,7 +47,7 @@ class ComicDetailViewModel {
 
 extension ComicDetailViewModel {
     public func updateComicInfoAndEpisodes() {
-        let fakeItems = fakeEpisodeCells(15)
+        let fakeItems = ComicEpisode.fakeItems(count: 15)
         comicEpisodes.accept(fakeItems)
         isLoadingComicEpisodes.accept(true)
         failedToLoadingComicEpisodes.accept(false)
@@ -124,16 +124,6 @@ extension ComicDetailViewModel {
         }
         
         return MarumaruApiService.shared.getImageURL(imagePath)
-    }
-}
-
-extension ComicDetailViewModel {
-    private func fakeEpisodeCells(_ count: Int) -> [ComicEpisode] {
-        return [ComicEpisode](repeating: fakeEpisodeCell, count: count)
-    }
-    
-    private var fakeEpisodeCell: ComicEpisode {
-        return .init(comicSN: "", title: "")
     }
 }
 

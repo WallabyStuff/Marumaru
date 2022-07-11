@@ -34,7 +34,7 @@ class MainViewModel {
 
 extension MainViewModel {
     public func updateNewComicEpisodes() {
-        let fakeEpisodes = fakeEpisodeItems(15)
+        let fakeEpisodes = ComicEpisode.fakeItems(count: 15)
         newComicEpisodes.accept(fakeEpisodes)
         isLoadingNewComicEpisode.accept(true)
         failToGetNewComicEpisode.accept(false)
@@ -100,7 +100,7 @@ extension MainViewModel {
 
 extension MainViewModel {
     public func updateComicRank() {
-        let fakeEpisodes = fakeEpisodeItems(15)
+        let fakeEpisodes = ComicEpisode.fakeItems(count: 15)
         comicRank.accept(fakeEpisodes)
         isLoadingComicRank.accept(true)
         failToGetComicRank.accept(false)
@@ -137,15 +137,5 @@ extension MainViewModel {
         }
 
         return MarumaruApiService.shared.getImageURL(imageName)
-    }
-}
-
-extension MainViewModel {
-    public func fakeEpisodeItems(_ count: Int) -> [ComicEpisode] {
-        return [ComicEpisode](repeating: fakeEpisodeItem, count: count)
-    }
-    
-    public var fakeEpisodeItem: ComicEpisode {
-        return .init(comicSN: "", title: "")
     }
 }

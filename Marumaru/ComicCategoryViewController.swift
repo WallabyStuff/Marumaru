@@ -23,7 +23,7 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
     @IBOutlet weak var comicCategoryCollectionView: UICollectionView!
     
     var viewModel: ComicCategoryViewModel
-    private var dataSource: RxCollectionViewSectionedReloadDataSource<ComicInfoSection>?
+    private var dataSource: RxCollectionViewSectionedAnimatedDataSource<ComicInfoSection>?
     private let comicCategoryCollectionViewTopInset: CGFloat = 72
     
     required init(_ viewModel: ComicCategoryViewModel) {
@@ -230,8 +230,8 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
     
     // MARK: - Methods
     
-    private func configureDataSource() -> RxCollectionViewSectionedReloadDataSource<ComicInfoSection> {
-        let dataSource = RxCollectionViewSectionedReloadDataSource<ComicInfoSection>(configureCell: { _, cv, indexPath, comicInfo in
+    private func configureDataSource() -> RxCollectionViewSectionedAnimatedDataSource<ComicInfoSection> {
+        let dataSource = RxCollectionViewSectionedAnimatedDataSource<ComicInfoSection>(configureCell: { _, cv, indexPath, comicInfo in
             guard let cell = cv.dequeueReusableCell(withReuseIdentifier: ComicThumbnailCollectionCell.identifier, for: indexPath) as? ComicThumbnailCollectionCell else {
                 return UICollectionViewCell()
             }
@@ -269,6 +269,10 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
                 .disposed(by: self.disposeBag)
             return footerView
         })
+        
+        dataSource.animationConfiguration = .init(insertAnimation: .none,
+                                                  reloadAnimation: .none,
+                                                  deleteAnimation: .none)
         
         return dataSource
     }
