@@ -72,17 +72,16 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
         setup()
         bind()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        viewModel.renderCurrentEpisodeScenes()
+    }
 
     
     // MARK: - Setups
     
     private func setup() {
-        setupData()
         setupView()
-    }
-    
-    private func setupData() {
-        viewModel.renderCurrentEpisodeScenes()
     }
     
     private func setupView() {
