@@ -1,12 +1,36 @@
 {
   "images" : [
     {
-      "filename" : "home@1x.svg",
-      "idiom" : "universal"
+      "filename" : "tabbar-home.png",
+      "idiom" : "universal",
+      "scale" : "1x"
     },
     {
-      "filename" : "home@1x-1.svg",
+      "filename" : "tabbar-home@2x.png",
       "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "tabbar-home@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    },
+    {
+      "filename" : "tabbar-home-compact.png",
+      "idiom" : "universal",
+      "scale" : "1x",
+      "width-class" : "compact"
+    },
+    {
+      "filename" : "tabbar-home-compact@2x.png",
+      "idiom" : "universal",
+      "scale" : "2x",
+      "width-class" : "compact"
+    },
+    {
+      "filename" : "tabbar-home-compact@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x",
       "width-class" : "compact"
     }
   ],
@@ -15,6 +39,6 @@
     "version" : 1
   },
   "properties" : {
-    "template-rendering-intent" : "template"
+    "template-rendering-intent" : "original"
   }
 }

@@ -1,12 +1,36 @@
 {
   "images" : [
     {
-      "filename" : "category@1x.svg",
-      "idiom" : "universal"
+      "filename" : "tabbar-category.png",
+      "idiom" : "universal",
+      "scale" : "1x"
     },
     {
-      "filename" : "category@1x-1.svg",
+      "filename" : "tabbar-category@2x.png",
       "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "tabbar-category@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    },
+    {
+      "filename" : "tabbar-category-compact.png",
+      "idiom" : "universal",
+      "scale" : "1x",
+      "width-class" : "compact"
+    },
+    {
+      "filename" : "tabbar-category-compact@2x.png",
+      "idiom" : "universal",
+      "scale" : "2x",
+      "width-class" : "compact"
+    },
+    {
+      "filename" : "tabbar-category-compact@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x",
       "width-class" : "compact"
     }
   ],
@@ -15,6 +39,6 @@
     "version" : 1
   },
   "properties" : {
-    "template-rendering-intent" : "template"
+    "template-rendering-intent" : "original"
   }
 }
