@@ -17,20 +17,11 @@ class ComicStripScrollViewModel {
     
     private var disposeBag = DisposeBag()
     
-    private var scenes = [ComicStripScene]()
-    public var scenesObservable = BehaviorRelay<[ComicStripScene]>(value: [])
+    public var scenes = BehaviorRelay<[ComicStripScene]>(value: [])
 }
 
 extension ComicStripScrollViewModel {
     public func updateScenes(_ newScenes: [ComicStripScene]) {
-        scenes = newScenes
-        scenesObservable.accept(newScenes)
-    }
-}
-
-extension ComicStripScrollViewModel {
-    
-    public func getImageURL(_ imagePath: String) -> URL? {
-        return MarumaruApiService.shared.getImageURL(imagePath)
+        scenes.accept(newScenes)
     }
 }

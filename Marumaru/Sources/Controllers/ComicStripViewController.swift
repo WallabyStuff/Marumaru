@@ -73,8 +73,8 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
         bind()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        viewModel.renderCurrentEpisodeScenes()
+    override func viewWillEnterForeground() {
+        comicStripScrollView.resumeLoadingScenes()
     }
 
     
@@ -82,6 +82,11 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     
     private func setup() {
         setupView()
+        setupData()
+    }
+    
+    private func setupData() {
+        viewModel.renderCurrentEpisodeScenes()
     }
     
     private func setupView() {
@@ -207,7 +212,7 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     private func bindComicStripScrollView() {
         viewModel.comicStripScenes
             .subscribe(with: self, onNext: { vc, scenes in
-                vc.comicStripScrollView.reload(scenes: scenes)
+                vc.comicStripScrollView.setScenes(scenes)
                 vc.viewModel.saveToWatchHistory()
             })
             .disposed(by: disposeBag)

@@ -88,7 +88,7 @@ class ComicStripScrollView: UIScrollView {
     }
     
     private func bindScenes() {
-        viewModel.scenesObservable
+        viewModel.scenes
             .subscribe(with: self, onNext: { strongSelf, scenes in
                 strongSelf.loadScenes(scenes)
             })
@@ -184,7 +184,7 @@ extension ComicStripScrollView {
                                             heightConstraint: heightConstraint)
         sceneImageViews.append(sceneImageView)
         
-        let url = viewModel.getImageURL(scene.imagePath)
+        let url = MarumaruApiService.shared.getImageURL(scene.imagePath)
         imageView.kf.setImage(with: url) { [weak self] result in
             guard let self = self else { return }
             
@@ -231,7 +231,7 @@ extension ComicStripScrollView {
                                             heightConstraint: heightConstraint)
         sceneImageViews.append(sceneImageView)
         
-        let url = viewModel.getImageURL(scene.imagePath)
+        let url = MarumaruApiService.shared.getImageURL(scene.imagePath)
         imageView.kf.setImage(with: url) { [weak self] result in
             guard let self = self else { return }
 
@@ -260,7 +260,7 @@ extension ComicStripScrollView {
 }
 
 extension ComicStripScrollView {
-    public func reload(scenes: [ComicStripScene]) {
+    public func setScenes(_ scenes: [ComicStripScene]) {
         clearScenes()
         viewModel.updateScenes(scenes)
     }
@@ -274,6 +274,18 @@ extension ComicStripScrollView {
         let safeAreaTop = UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0
         scrollToTop(topInset: AppbarHeight.compactAppbarHeight.rawValue + safeAreaTop,
                     animated: false)
+    }
+}
+
+extension ComicStripScrollView {
+    public func stopLoadingScenes() {
+        sceneImageViews.forEach { sceneImageView in
+            sceneImageView.imageView.kf.cancelDownloadTask()
+        }
+    }
+    
+    public func resumeLoadingScenes() {
+        loadScenes(viewModel.scenes.value)
     }
 }
 
