@@ -95,11 +95,17 @@ class SplashViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func bindPreProcccesses() {
-        Observable.combineLatest(viewModel.isFinishStartAnimation, viewModel.isFinishPreProccess)
-            .subscribe(onNext: { [weak self] _ in
-                self?.startDecreaseLogoAnimation(completion: { [weak self] in
-                    self?.presentMainTabbarViewController()
-                })
+        Observable.combineLatest(viewModel.isFinishStartAnimation,
+                                 viewModel.isFinishPreProccess,
+                                 resultSelector: {
+            return ($0 == true) && ($1 == true)
+        })
+            .subscribe(onNext: { [weak self] isPreProccessFinished in
+                if isPreProccessFinished {
+                    self?.startDecreaseLogoAnimation(completion: { [weak self] in
+                        self?.presentMainTabbarViewController()
+                    })
+                }
             })
             .disposed(by: disposeBag)
     }

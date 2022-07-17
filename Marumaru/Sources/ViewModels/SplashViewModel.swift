@@ -16,7 +16,7 @@ class SplashViewModel {
     // MARK: - Properties
     
     private var disposeBag = DisposeBag()
-    public var isFinishStartAnimation = PublishRelay<Bool>()
+    public var isFinishStartAnimation = BehaviorRelay<Bool>(value: false)
     public var isFinishPreProccess = BehaviorRelay<Bool>(value: false)
 }
 
