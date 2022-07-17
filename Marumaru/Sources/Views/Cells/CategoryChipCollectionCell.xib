@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="categoryChipCollectionCell" id="gTV-IL-0wX" customClass="CategoryChipCollectionCell" customModule="Marumaru" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="108" height="36"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="108" height="36"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7zM-cu-BMx">
+                        <rect key="frame" x="0.0" y="0.0" width="108" height="36"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qgh-gB-38r">
+                                <rect key="frame" x="16" y="8" width="76" height="20"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <color key="textColor" name="TextBlack-light"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" name="BackgroundWhite"/>
+                        <constraints>
+                            <constraint firstItem="Qgh-gB-38r" firstAttribute="leading" secondItem="7zM-cu-BMx" secondAttribute="leading" constant="16" id="8PA-ST-Qh1"/>
+                            <constraint firstAttribute="trailing" secondItem="Qgh-gB-38r" secondAttribute="trailing" constant="16" id="H2z-T4-pAj"/>
+                            <constraint firstItem="Qgh-gB-38r" firstAttribute="centerY" secondItem="7zM-cu-BMx" secondAttribute="centerY" id="PQk-GR-Mod"/>
+                            <constraint firstAttribute="height" constant="36" id="jSU-3B-HEO"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstItem="7zM-cu-BMx" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="4ko-ws-c7o"/>
+                <constraint firstAttribute="trailing" secondItem="7zM-cu-BMx" secondAttribute="trailing" id="QyF-Wa-6jX"/>
+                <constraint firstItem="7zM-cu-BMx" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="dBb-hH-Tea"/>
+                <constraint firstAttribute="bottom" secondItem="7zM-cu-BMx" secondAttribute="bottom" id="fyn-78-90k"/>
+            </constraints>
+            <size key="customSize" width="153" height="45"/>
+            <connections>
+                <outlet property="chipContentView" destination="7zM-cu-BMx" id="rVC-Vn-Hpa"/>
+                <outlet property="titleLabel" destination="Qgh-gB-38r" id="7Rp-6N-xaV"/>
+            </connections>
+            <point key="canvasLocation" x="211.59420289855075" y="150.66964285714286"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <namedColor name="BackgroundWhite">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="TextBlack-light">
+            <color red="0.4779999852180481" green="0.49399998784065247" blue="0.49799999594688416" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

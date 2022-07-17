@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="singleButtonFooterReusableView" id="U6b-Vx-4bR" customClass="SingleButtonFooterReusableView" customModule="Marumaru" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="100"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fCL-Km-dAY">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="100"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MyD-n8-DUQ">
+                            <rect key="frame" x="120" y="28" width="80" height="44"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="80" id="eM0-Ef-zoj"/>
+                                <constraint firstAttribute="height" constant="44" id="vuM-Lp-UcZ"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" title="button">
+                                <color key="titleColor" name="TextBlack-light"/>
+                            </state>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" name="BackgroundWhite"/>
+                    <constraints>
+                        <constraint firstItem="MyD-n8-DUQ" firstAttribute="centerX" secondItem="fCL-Km-dAY" secondAttribute="centerX" id="SLl-zn-MkZ"/>
+                        <constraint firstItem="MyD-n8-DUQ" firstAttribute="centerY" secondItem="fCL-Km-dAY" secondAttribute="centerY" id="vjw-t2-aU4"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="VXr-Tz-HHm"/>
+            <constraints>
+                <constraint firstItem="VXr-Tz-HHm" firstAttribute="trailing" secondItem="fCL-Km-dAY" secondAttribute="trailing" id="OLm-WY-HuC"/>
+                <constraint firstItem="fCL-Km-dAY" firstAttribute="top" secondItem="U6b-Vx-4bR" secondAttribute="top" id="P57-9n-hm1"/>
+                <constraint firstItem="fCL-Km-dAY" firstAttribute="leading" secondItem="U6b-Vx-4bR" secondAttribute="leading" id="XXV-wx-M7D"/>
+                <constraint firstAttribute="bottom" secondItem="fCL-Km-dAY" secondAttribute="bottom" id="aJN-TY-3tv"/>
+            </constraints>
+            <connections>
+                <outlet property="mainButton" destination="MyD-n8-DUQ" id="Et7-oz-CPl"/>
+            </connections>
+            <point key="canvasLocation" x="139" y="144"/>
+        </collectionReusableView>
+    </objects>
+    <resources>
+        <namedColor name="BackgroundWhite">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="TextBlack-light">
+            <color red="0.4779999852180481" green="0.49399998784065247" blue="0.49799999594688416" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

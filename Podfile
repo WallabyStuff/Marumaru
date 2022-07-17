@@ -7,15 +7,20 @@ target 'Marumaru' do
 
   # Pods for Marumaru
   pod 'SwiftSoup'
-  pod 'Toast'
-  pod 'lottie-ios'
-  pod 'Hero'
   pod 'SwiftLint'
+  pod 'lottie-ios'
   pod 'RealmSwift'
   pod 'RxSwift'
   pod 'RxCocoa'
   pod 'RxGesture'
-
+  pod 'R.swift'
+  pod 'Toast'
+  pod 'RxDataSources'
+  pod 'SkeletonView'
+  pod 'Kingfisher'
+  pod 'FloatingPanel'
+  pod 'SafeAreaBrush'
+  
   target 'MarumaruTests' do
     inherit! :search_paths
     # Pods for testing

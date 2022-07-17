@@ -1,28 +1,12 @@
-<img src="https://user-images.githubusercontent.com/63496607/131101666-02dca9a8-bdf9-4427-8799-c7a8d806f61e.png" width="100">
+<div align="center">
+ <img src="https://user-images.githubusercontent.com/63496607/172176175-968b2cde-7224-4b38-b703-97c2519b2d80.png" width="100">
+ <h1>MaruMaru</h1>
+</div>
 
-# MaruMaru
 
-<br><br>
-## Screenshots 📱
+<img src="https://user-images.githubusercontent.com/63496607/172176270-446aaeae-e031-4b39-9cc3-3eaf5baf0d1f.png"></img>
 
-### iPhone
-
-![Marumaru iPhone.png](https://user-images.githubusercontent.com/63496607/131101688-ed771edc-73a1-41f7-8c39-2923874898c5.png)
-
-### iPad
-
-![Frame 2-2.png](https://user-images.githubusercontent.com/63496607/131101740-39164939-1f19-4497-bc81-59a81fa3b4d7.png)
-
-### gif
-
-<img src="https://github.com/Avocado34/Marumaru/blob/develop/RunningGif/Main.gif" width="150"></img> ~
-<img src="https://github.com/Avocado34/Marumaru/blob/develop/RunningGif/Search.gif" width="150"></img> ~
-<img src="https://github.com/Avocado34/Marumaru/blob/develop/RunningGif/Episode.gif" width="150"></img> ~
-<img src="https://github.com/Avocado34/Marumaru/blob/develop/RunningGif/View.gif" width="150"></img>
-
-[🎨디자인 변천사](https://www.notion.so/ffed3289a9024ae8a58dbb7614dd553a)
-
----
+### ⚠️이 앱은 배포용으로 만들어진 앱이 아닙니다.
 
 <br><br>
 ## Why I made this 🤔
@@ -54,12 +38,11 @@
 [👆싱글탭 더블탭 중복되지 않게 같이 사용하기](https://www.notion.so/0453e27d43db4265b8640608ceff8210) <br>
 [🖼Dynamic Image height TableView](https://www.notion.so/Dynamic-Image-height-TableView-8ba75d52f4f9430487fef5f8276e0637) <br>
 [💾이미지 캐싱](https://www.notion.so/6327f97c06974c35ae0b4180ded110df) <br>
-[💾도큐먼트 캐싱](https://cautious-smash-7a0.notion.site/fb0cdf7a04484a129e92d11a1a3e991c) <br>
 
 <br><br>
 ## Used Tools 🛠
 
 - **Appicon** - figma
 - **Design** - figma
-- **Script** - Xcode12(swift / storyboard)
+- **Script** - Xcode13(swift / storyboard)
 - **Preview Images** - figma
