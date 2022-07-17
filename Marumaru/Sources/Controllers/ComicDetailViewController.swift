@@ -153,7 +153,6 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     
     private func bindComicInfo() {
         viewModel.comicInfo
-            .distinctUntilChanged()
             .subscribe(with: self, onNext: { vc, comicInfo in
                 if comicInfo.title != "" {
                     vc.view.hideSkeleton()
