@@ -37,9 +37,24 @@ class BaseViewController: UIViewController {
     
     // MARK: - LifeCycles
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        addViewWillEnterForegroundObserver()
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNavigationBarStatic()
+    }
+    
+    private func addViewWillEnterForegroundObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(viewWillEnterForeground),
+                                               name: UIApplication.willEnterForegroundNotification,
+                                               object: nil)
+    }
+    
+    @objc func viewWillEnterForeground() {
+        // override point
     }
 }
 
