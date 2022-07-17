@@ -651,7 +651,6 @@ extension MarumaruApiService {
             return nil
         }
         
-        
         endPoint.appendRawPathComponent(Self.categoryPath)
         return endPoint
     }
