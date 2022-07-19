@@ -1,0 +1,18 @@
+disabled_rules:
+- line_length
+- type_body_length
+- trailing_whitespace
+- force_cast
+- inclusive_language
+- identifier_name
+- cyclomatic_complexity
+- type_name
+- file_length
+- syntactic_sugar
+- vertical_whitespace
+- implicit_getter
+
+excluded:
+- Carthage
+- Pods
+- R.generated.swift

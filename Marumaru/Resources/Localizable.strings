@@ -1,0 +1,17 @@
+"message.emptyWatchHistory" = "아직 시청기록이 없습니다.";
+"message.emptyResult" = "검색결과가 없습니다.";
+"message.serverError" = "🛠서버 점검중입니다.\n나중에 다시 시도해주세요.";
+"message.searchKeywordConstraint" = "최소 두 글자 이상의 단어로 검색해주세요";
+"message.removeHistory" = "삭제 버튼을 눌러 시청 기록을 삭제할 수 있습니다.\n삭제 후 데이터 복원은 어렵습니다.";
+"message.firstEpisode" = "첫 화 입니다.";
+"message.lastEpisode" = "마지막 화 입니다.";
+"message.searching" = "검색중...";
+"message.noSearchHistory" = "검색기록이 없습니다.";
+"message.emptyBookmark" = "아직 북마크한 컨텐츠가 없습니다.";
+
+"title.remove" = "삭제";
+"title.cancel" = "취소";
+"title.removeHistory" = "기록삭제";
+"title.searchHistory" = "검색기록";
+"title.searchResultHeader" = "에 대한 검색결과";
+"title.deleteAll" = "전체삭제";
