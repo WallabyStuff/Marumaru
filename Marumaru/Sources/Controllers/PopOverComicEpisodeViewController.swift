@@ -18,13 +18,17 @@ class PopOverComicEpisodeViewController: BaseViewController, ViewModelInjectable
     
     
     // MARK: - Properties
-    typealias ViewModel = PopOverComicEpisodeViewModel
-    
-    @IBOutlet weak var episodeTableView: UITableView!
     
     static let identifier = R.storyboard.popOverComicEpisode.popOverComicEpisodeStoryboard.identifier
-    weak var delegate: PopOverComicEpisodeViewDelegate?
+    typealias ViewModel = PopOverComicEpisodeViewModel
+    
     var viewModel: PopOverComicEpisodeViewModel
+    weak var delegate: PopOverComicEpisodeViewDelegate?
+    
+    
+    // MARK: - UI
+    
+    @IBOutlet weak var episodeTableView: UITableView!
     
     
     // MARK: - Initializers

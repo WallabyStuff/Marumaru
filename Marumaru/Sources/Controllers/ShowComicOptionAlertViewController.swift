@@ -23,13 +23,16 @@ class ShowComicOptionAlertViewController: BaseViewController, ViewModelInjectabl
     static let identifier = R.storyboard.showComicOption.showComicOptionStoryboard.identifier
     typealias ViewModel = ShowComicOptionAlertViewModel
     
+    var viewModel: ShowComicOptionAlertViewModel
+    weak var delegate: ShowComicOptionAlertViewDelegate?
+    
+    
+    // MARK: - UI
+    
     @IBOutlet weak var episodeTitleLabel: UILabel!
     @IBOutlet weak var showComicStripButton: UIButton!
     @IBOutlet weak var showComicDetailButton: UIButton!
     @IBOutlet weak var closeButton: UIButton!
-    
-    var viewModel: ShowComicOptionAlertViewModel
-    weak var delegate: ShowComicOptionAlertViewDelegate?
     
     
     // MARK: - Initializers

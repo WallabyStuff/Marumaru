@@ -17,16 +17,20 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
     
     // MARK: - Properties
     
+    static let identifier = R.storyboard.watchHistory.watchHistoryStoryboard.identifier
     typealias ViewModel = WatchHistoryViewModel
+    typealias DataSource = RxCollectionViewSectionedAnimatedDataSource<WatchHistorySection>
+    
+    var viewModel: ViewModel
+    private var dataSource: DataSource?
+    
+    
+    // MARK: - UI
     
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var watchHistoryCollectionView: UICollectionView!
     @IBOutlet weak var clearHistoryButton: UIButton!
     @IBOutlet weak var appbarViewHeightConstraint: NSLayoutConstraint!
-    
-    static let identifier = R.storyboard.watchHistory.watchHistoryStoryboard.identifier
-    var viewModel: ViewModel
-    private var dataSource: RxCollectionViewSectionedAnimatedDataSource<WatchHistorySection>?
     private var fpc = FloatingPanelController()
     
     
@@ -191,8 +195,8 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
     
     // MARK: - Methods
     
-    private func dataSourceFactory() -> RxCollectionViewSectionedAnimatedDataSource<WatchHistorySection> {
-        let dataSource = RxCollectionViewSectionedAnimatedDataSource<WatchHistorySection>(configureCell: { _, cv, indexPath, episode in
+    private func dataSourceFactory() -> DataSource {
+        let dataSource = DataSource(configureCell: { _, cv, indexPath, episode in
             if episode.isInvalidated { return UICollectionViewCell() }
             
             guard let cell = cv.dequeueReusableCell(withReuseIdentifier: ComicEpisodeThumbnailCollectionCell.identifier, for: indexPath)

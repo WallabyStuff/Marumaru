@@ -16,23 +16,26 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
     
     // MARK: - Properties
     
+    static let identifier = R.storyboard.searchComic.searchComicStoryboard.identifier
     typealias ViewModel = SearchComicViewModel
+    
+    enum ContentType {
+        case searchHistory
+        case searchResult
+    }
+    var viewModel: ViewModel
+    
+    
+    // MARK: - UI
     
     @IBOutlet weak var appbarViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var searchTextField: UITextField!
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var mainContainerView: UIView!
+    
     private var searchHistoryVC: SearchHistoryViewController?
     private var searchResultVC: SearchResultViewController?
-    
-    static let identifier = R.storyboard.searchComic.searchComicStoryboard.identifier
-    var viewModel: ViewModel
-    
-    enum ContentType {
-        case searchHistory
-        case searchResult
-    }
     
     
     // MARK: - Initializers

@@ -18,17 +18,21 @@ class SearchHistoryViewController: BaseViewController, ViewModelInjectable {
     
     // MARK: - Properties
     
-    typealias ViewModel = SearchHistoryViewModel
     static let identifier = R.storyboard.searchHistory.searchHistoryStoryboard.identifier
+    typealias ViewModel = SearchHistoryViewModel
+    typealias DataSource = RxCollectionViewSectionedReloadDataSource<SearchHistorySection>
     
-    @IBOutlet weak var searchHistoryCollectionView: UICollectionView!
-    
-    weak var delegate: SearchHistoryViewDelegate?
     var viewModel: SearchHistoryViewModel
-    private var dataSource: RxCollectionViewSectionedReloadDataSource<SearchHistorySection>?
+    weak var delegate: SearchHistoryViewDelegate?
+    private var dataSource: DataSource?
     private var searchResultCollectionViewTopInset: CGFloat {
         return regularAppbarHeight
     }
+    
+    
+    // MARK: - UI
+    
+    @IBOutlet weak var searchHistoryCollectionView: UICollectionView!
     
     
     // MARK: - Initializers
@@ -173,8 +177,8 @@ class SearchHistoryViewController: BaseViewController, ViewModelInjectable {
     
     // MARK: - Methods
     
-    private func dataSourceFactory() -> RxCollectionViewSectionedReloadDataSource<SearchHistorySection> {
-        let dataSource = RxCollectionViewSectionedReloadDataSource<SearchHistorySection>(configureCell: { _, cv, indexPath, historyItem in
+    private func dataSourceFactory() -> DataSource {
+        let dataSource = DataSource(configureCell: { _, cv, indexPath, historyItem in
             guard let cell = cv.dequeueReusableCell(withReuseIdentifier: SearchHistoryCollectionCell.identifier,
                                                     for: indexPath) as? SearchHistoryCollectionCell else {
                 return UICollectionViewCell()

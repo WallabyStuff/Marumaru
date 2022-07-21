@@ -22,7 +22,13 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     
     // MARK: - Properties
     
+    static let identifier = R.storyboard.main.mainStoryboard.identifier
     typealias ViewModel = MainViewModel
+    
+    var viewModel: ViewModel
+
+    
+    // MARK: - UI
     
     @IBOutlet weak var appbarViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var mainScrollView: UIScrollView!
@@ -40,9 +46,6 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     @IBOutlet weak var comicRankTableView: UITableView!
     @IBOutlet weak var refreshComicRankButton: UIButton!
     @IBOutlet weak var comicRankHeaderAnimationView: LottieAnimationView!
-    
-    static let identifier = R.storyboard.main.mainStoryboard.identifier
-    var viewModel: ViewModel
     private var fpc = FloatingPanelController()
     
     

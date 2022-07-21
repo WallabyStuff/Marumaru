@@ -25,7 +25,16 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     
     // MARK: - Properties
     
+    static let identifier = R.storyboard.comicStrip.comicStripStroyboard.identifier
     typealias ViewModel = ComicStripViewModel
+    
+    var viewModel: ViewModel
+    weak var delegate: ComicStripViewDelegate?
+    private var isSceneZoomed = false
+    private var sceneDoubleTapGestureRecognizer = UITapGestureRecognizer()
+    
+    
+    // MARK: - UI
     
     @IBOutlet weak var appbarView: UIVisualEffectView!
     @IBOutlet weak var episodeTitleLabel: UILabel!
@@ -36,15 +45,6 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     @IBOutlet weak var bottomIndicatorView: UIView!
     @IBOutlet weak var appbarViewHieghtConstraint: NSLayoutConstraint!
     @IBOutlet weak var comicStripScrollView: ComicStripScrollView!
-    
-    static let identifier = R.storyboard.comicStrip.comicStripStroyboard.identifier
-    
-    var viewModel: ViewModel
-    weak var delegate: ComicStripViewDelegate?
-    private var cellHeightDictionary: NSMutableDictionary = [:]
-    private let safeAreaInsets = UIApplication.shared.windows[0].safeAreaInsets
-    private var isSceneZoomed = false
-    private var sceneDoubleTapGestureRecognizer = UITapGestureRecognizer()
     
     
     // MARK: - Initializers
