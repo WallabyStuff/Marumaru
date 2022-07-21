@@ -18,13 +18,20 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
     
     static let identifier = R.storyboard.comicCategory.comicCategoryStoryboard.identifier
     typealias ViewModel = ComicCategoryViewModel
+    typealias DataSource = RxCollectionViewSectionedAnimatedDataSource<ComicInfoSection>
+    
+    var viewModel: ComicCategoryViewModel
+    private var dataSource: DataSource?
+    private let comicCategoryCollectionViewTopInset: CGFloat = 72
+    
+    
+    // MARK: - UI
     
     @IBOutlet weak var comicCollectionView: UICollectionView!
     @IBOutlet weak var comicCategoryCollectionView: UICollectionView!
     
-    var viewModel: ComicCategoryViewModel
-    private var dataSource: RxCollectionViewSectionedAnimatedDataSource<ComicInfoSection>?
-    private let comicCategoryCollectionViewTopInset: CGFloat = 72
+    
+    // MARK: - Initializers
     
     required init(_ viewModel: ComicCategoryViewModel) {
         self.viewModel = viewModel
@@ -230,8 +237,8 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
     
     // MARK: - Methods
     
-    private func configureDataSource() -> RxCollectionViewSectionedAnimatedDataSource<ComicInfoSection> {
-        let dataSource = RxCollectionViewSectionedAnimatedDataSource<ComicInfoSection>(configureCell: { _, cv, indexPath, comicInfo in
+    private func configureDataSource() -> DataSource {
+        let dataSource = DataSource(configureCell: { _, cv, indexPath, comicInfo in
             guard let cell = cv.dequeueReusableCell(withReuseIdentifier: ComicThumbnailCollectionCell.identifier, for: indexPath) as? ComicThumbnailCollectionCell else {
                 return UICollectionViewCell()
             }

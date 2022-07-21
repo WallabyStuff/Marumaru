@@ -18,20 +18,24 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
     
     // MARK: - Properties
     
-    typealias ViewModel = SearchResultViewModel
     static let identifier = R.storyboard.searchResult.searchResultStoryboard.identifier
+    typealias ViewModel = SearchResultViewModel
+    typealias DataSource = RxCollectionViewSectionedAnimatedDataSource<ComicInfoSection>
     
-    @IBOutlet weak var searchResultCollectionView: UICollectionView!
-    
-    weak var delegate: SearchResultViewDelegate?
     var viewModel: ViewModel
-    private var dataSource: RxCollectionViewSectionedAnimatedDataSource<ComicInfoSection>?
+    private var dataSource: DataSource?
+    weak var delegate: SearchResultViewDelegate?
     private var searchResultCollectionViewTopInset: CGFloat {
         return regularAppbarHeight
     }
     private var actualSearchResultCollectionViewTopInset: CGFloat {
         return searchResultCollectionViewTopInset + view.safeAreaInsets.top
     }
+    
+    
+    // MARK: - UI
+    
+    @IBOutlet weak var searchResultCollectionView: UICollectionView!
     
     
     // MARK: - LifeCycle
@@ -217,8 +221,8 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
         viewModel.updateSearchResult(title)
     }
     
-    private func configureDataSource() -> RxCollectionViewSectionedAnimatedDataSource<ComicInfoSection> {
-        let dataSource = RxCollectionViewSectionedAnimatedDataSource<ComicInfoSection>(configureCell: { _, cv, indexPath, comicInfo in
+    private func configureDataSource() -> DataSource {
+        let dataSource = DataSource(configureCell: { _, cv, indexPath, comicInfo in
             guard let cell = cv.dequeueReusableCell(withReuseIdentifier: SearchResultComicCollectionCell.identifier, for: indexPath) as? SearchResultComicCollectionCell else {
                 return UICollectionViewCell()
             }

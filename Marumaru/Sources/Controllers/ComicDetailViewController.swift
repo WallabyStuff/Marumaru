@@ -20,7 +20,14 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     
     // MARK: - Properties
     
+    static let identifier = R.storyboard.comicDetail.comicDetailStoryboard.identifier
     typealias ViewModel = ComicDetailViewModel
+    
+    var viewModel: ViewModel
+    weak var delegate: ComicDetailViewDelegate?
+    
+    
+    // MARK: - UI
     
     @IBOutlet weak var thumbnailImagePlaceholderView: ThumbnailPlaceholderView!
     @IBOutlet weak var thumbnailImagePlaceholderLabel: UILabel!
@@ -32,10 +39,6 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     @IBOutlet weak var comicEpisodeTableView: UITableView!
     @IBOutlet weak var bookmarkButton: UIButton!
     @IBOutlet weak var playFirstEpisodeButton: UIButton!
-    
-    static let identifier = R.storyboard.comicDetail.comicDetailStoryboard.identifier
-    weak var delegate: ComicDetailViewDelegate?
-    var viewModel: ViewModel
     
     
     // MARK: - Initializers

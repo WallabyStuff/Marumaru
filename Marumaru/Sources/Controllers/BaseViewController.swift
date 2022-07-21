@@ -17,12 +17,18 @@ enum AppbarHeight: CGFloat {
 
 class BaseViewController: UIViewController {
     
+    
+    // MARK: - Properties
+    
     var disposeBag = DisposeBag()
     let regularAppbarHeight = AppbarHeight.regularAppbarHeight.rawValue
     let compactAppbarHeight = AppbarHeight.compactAppbarHeight.rawValue
     
     var previousBaseFrameSize: CGRect = .zero
     let baseFrameSizeViewSizeDidChange = BehaviorRelay<CGRect>(value: .zero)
+    
+    
+    // MARK: - Layout subviews
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
