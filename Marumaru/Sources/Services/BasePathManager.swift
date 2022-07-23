@@ -24,7 +24,7 @@ class BasePathManager {
     private let testImagePath = "/img/logo2.png"
     private let remoteBasePath = "https://raw.githubusercontent.com/WallabyStuff/Marumaru/develop/Marumaru/Sources/SupportingFiles/basePath.rtf"
     private var disposeBag = DisposeBag()
-    private let maxRetryCount = 20
+    private let maxRetryCount = 200
     
     
     // MARK: - Methods
