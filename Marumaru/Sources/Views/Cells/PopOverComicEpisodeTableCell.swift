@@ -13,6 +13,10 @@ class PopOverComicEpisodeTableCell: UITableViewCell {
     // MARK: - Properties
     
     static let identifier = R.reuseIdentifier.popOverComicEpisodeTableCell.identifier
+    
+    
+    // MARK: - UI
+    
     @IBOutlet weak var episodeTitleLabel: UILabel!
     
     

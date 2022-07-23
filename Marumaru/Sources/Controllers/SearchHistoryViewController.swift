@@ -82,7 +82,6 @@ class SearchHistoryViewController: BaseViewController, ViewModelInjectable {
         registerSearchHistoryHeader()
         registerSearchHistoryFooter()
         searchHistoryCollectionView.collectionViewLayout = flowLayout()
-        
         searchHistoryCollectionView.clipsToBounds = false
         searchHistoryCollectionView.alwaysBounceVertical = true
         configureSearchHistoryCollectionViewInsets()
@@ -113,13 +112,12 @@ class SearchHistoryViewController: BaseViewController, ViewModelInjectable {
     // MARK: - Constraints
     
     override func updateViewConstraints() {
-        super.updateViewConstraints()
         configureSearchHistoryCollectionViewInsets()
+        super.updateViewConstraints()
     }
     
     private func configureSearchHistoryCollectionViewInsets() {
-        searchHistoryCollectionView.contentInset = UIEdgeInsets.inset(top: searchResultCollectionViewTopInset,
-                                                                      bottom: 40)
+        searchHistoryCollectionView.contentInset = UIEdgeInsets.inset(top: searchResultCollectionViewTopInset, bottom: 40)
     }
     
     

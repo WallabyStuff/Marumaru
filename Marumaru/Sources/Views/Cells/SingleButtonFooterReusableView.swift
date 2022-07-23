@@ -14,11 +14,13 @@ class SingleButtonFooterReusableView: UICollectionReusableView {
     // MARK: - Properties
     
     static let identifier = R.reuseIdentifier.singleButtonFooterReusableView.identifier
-    
-    @IBOutlet weak var mainButton: UIButton!
-    
     public var mainButtonTapAction: () -> Void = {}
     private var disposeBag = DisposeBag()
+    
+    
+    // MARK: - UI
+    
+    @IBOutlet weak var mainButton: UIButton!
     
     
     // MARK: - Lifecycle

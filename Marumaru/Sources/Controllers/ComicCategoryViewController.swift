@@ -93,8 +93,7 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
         registerComicCollectionCell()
         registerComicFooterView()
         comicCollectionView.collectionViewLayout = comicsCollectionViewLayout()
-        comicCollectionView.contentInset = UIEdgeInsets.inset(top: comicCategoryCollectionViewTopInset,
-                                                              bottom: 24)
+        comicCollectionView.contentInset = UIEdgeInsets.inset(top: comicCategoryCollectionViewTopInset, bottom: 24)
     }
     
     private func registerComicCollectionCell() {
@@ -127,10 +126,8 @@ class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
     private func bind() {
         bindComicsCollectionView()
         bindComicsCollectionCell()
-        
         bindComicCategoryCollectionView()
         bindComicCategoryCollectionCell()
-        
         bindNoticeLabel()
         bindPresentComicDetailVC()
         bindComicCategoryLoadingState()

@@ -76,7 +76,7 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
     
     private func setupView() {
         setupWatchHistoryCollectionView()
-        setupClearHistoryButton()
+//        setupClearHistoryButton()
         setupFloatingPanelView()
     }
     
@@ -84,9 +84,7 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
         registerWatchHistoryCollectionCell()
         registerWatchHistoryHeader()
         registerWatchHistoryFooter()
-        
         watchHistoryCollectionView.collectionViewLayout = flowLayout()
-        watchHistoryCollectionView.contentInset = UIEdgeInsets.inset(top: 24, bottom: 24)
     }
     
     private func registerWatchHistoryCollectionCell() {
@@ -106,21 +104,18 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
                                             withReuseIdentifier: WatchHistoryCollectionReusableView.identifier)
     }
     
-    private func setupClearHistoryButton() {
-        clearHistoryButton.layer.masksToBounds = true
-        clearHistoryButton.layer.cornerRadius = 8
-    }
+//    private func setupClearHistoryButton() {
+//        clearHistoryButton.layer.masksToBounds = true
+//        clearHistoryButton.layer.cornerRadius = 8
+//    }
     
     private func setupFloatingPanelView() {
         fpc.layout = ShowComicOptionFloatingPanelLayout()
-        
         let appearance = SurfaceAppearance()
         appearance.cornerRadius = 16
         fpc.surfaceView.appearance = appearance
-        
         fpc.surfaceView.backgroundColor = R.color.backgroundWhite()
         fpc.surfaceView.grabberHandle.isHidden = true
-        
         fpc.backdropView.dismissalTapGestureRecognizer.isEnabled = true
         fpc.isRemovalInteractionEnabled = true
     }
@@ -129,8 +124,8 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
     // MARK: - Configurations
     
     override func updateViewConstraints() {
-        super.updateViewConstraints()
         configureAppbarViewConstraints()
+        super.updateViewConstraints()
     }
     
     

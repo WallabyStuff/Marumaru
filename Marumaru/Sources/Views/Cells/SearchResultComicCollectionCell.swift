@@ -13,17 +13,7 @@ class SearchResultComicCollectionCell: UICollectionViewCell {
     // MARK: - Properties
     
     static let identifier = R.reuseIdentifier.searchResultComicCollectionCell.identifier
-    
-    @IBOutlet weak var cellContentView: UIView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var authorLabel: UILabel!
-    @IBOutlet weak var updateCycleLabel: TagLabel!
-    @IBOutlet weak var thumbnailImagePlaceholderView: ThumbnailPlaceholderView!
-    @IBOutlet weak var thumbnailImagePlaceholderLabel: UILabel!
-    @IBOutlet weak var thumbnailImageView: UIImageView!
-    
     public var onReuse: () -> Void = {}
-    
     override var isHighlighted: Bool {
         didSet {
             if isHighlighted == true {
@@ -33,6 +23,17 @@ class SearchResultComicCollectionCell: UICollectionViewCell {
             }
         }
     }
+    
+    
+    // MARK: - UI
+    
+    @IBOutlet weak var cellContentView: UIView!
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var authorLabel: UILabel!
+    @IBOutlet weak var updateCycleLabel: TagLabel!
+    @IBOutlet weak var thumbnailImagePlaceholderView: ThumbnailPlaceholderView!
+    @IBOutlet weak var thumbnailImagePlaceholderLabel: UILabel!
+    @IBOutlet weak var thumbnailImageView: UIImageView!
     
     
     // MARK: - LifeCycle
@@ -68,9 +69,7 @@ class SearchResultComicCollectionCell: UICollectionViewCell {
         setupTitleLabel()
         setupAuthorLabel()
         setupUploadCycleLabel()
-        setupThumbnailImagePlaceholderView()
         setupThumbnailImagePlaceholderHolderLabel()
-        setupThumbnailImageView()
     }
     
     private func setupCellContentView() {
@@ -99,19 +98,9 @@ class SearchResultComicCollectionCell: UICollectionViewCell {
                                                foregroundColor: .white)
     }
     
-    private func setupThumbnailImagePlaceholderView() {
-        thumbnailImagePlaceholderView.layer.cornerRadius = 8
-    }
-    
     private func setupThumbnailImagePlaceholderHolderLabel() {
         thumbnailImagePlaceholderLabel.text = ""
     }
-    
-    private func setupThumbnailImageView() {
-        thumbnailImageView.layer.cornerRadius = 8
-        thumbnailImageView.contentMode = .scaleAspectFill
-    }
-    
     
     // MARK: - Methods
     

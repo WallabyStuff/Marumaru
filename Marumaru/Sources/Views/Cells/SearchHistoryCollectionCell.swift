@@ -14,15 +14,18 @@ class SearchHistoryCollectionCell: UICollectionViewCell {
     // MARK: - Properties
     
     static let identifier = R.reuseIdentifier.searchHistoryCollectionCell.identifier
-    
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var deleteButton: UIButton!
-    
     private var disposeBag = DisposeBag()
     public var deleteButtonTapAction: () -> Void = {}
     
     
+    // MARK: - UI
+    
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var deleteButton: UIButton!
+    
+    
     // MARK: - LifeCycle
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         bind()

@@ -19,6 +19,9 @@ class ShowMoreReusableView: UICollectionReusableView {
     private var disposeBag = DisposeBag()
     public var showMoreButtonTapAction: () -> Void = {}
     
+    
+    // MARK: - UI
+    
     @IBOutlet weak var showMoreButton: IndicatorButton!
     
     
@@ -26,25 +29,7 @@ class ShowMoreReusableView: UICollectionReusableView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        setup()
         bind()
-    }
-    
-    
-    // MARK: - Setups
-    
-    private func setup() {
-        setupView()
-    }
-    
-    private func setupView() {
-        setupShowMoreButton()
-    }
-    
-    private func setupShowMoreButton() {
-        showMoreButton.layer.borderWidth = 1
-        showMoreButton.layer.borderColor = R.color.lineGrayLight()!.cgColor
-        showMoreButton.layer.cornerRadius = 10
     }
     
     

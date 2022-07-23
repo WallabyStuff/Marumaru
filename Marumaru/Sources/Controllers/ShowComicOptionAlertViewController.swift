@@ -69,15 +69,10 @@ class ShowComicOptionAlertViewController: BaseViewController, ViewModelInjectabl
     
     private func setupView() {
         setupEpisodeTitleLabel()
-        setupNextEpisodeButton()
     }
     
     private func setupEpisodeTitleLabel() {
         episodeTitleLabel.text = viewModel.episodeTitle
-    }
-    
-    private func setupNextEpisodeButton() {
-        showComicStripButton.layer.cornerRadius = 12
     }
     
     

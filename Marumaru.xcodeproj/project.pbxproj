@@ -130,6 +130,11 @@
 		8ED56F3627AEFCB300E78A8A /* UIColor+HEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED56F3527AEFCB300E78A8A /* UIColor+HEX.swift */; };
 		8ED56F3827AEFDD400E78A8A /* UIView+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED56F3727AEFDD400E78A8A /* UIView+Animation.swift */; };
 		8EF1BF7C2889DDB7008A8E08 /* EmptyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF1BF7B2889DDB7008A8E08 /* EmptyViewController.swift */; };
+		8EF1BF7E288BF8D5008A8E08 /* UIView+CornerRadius.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF1BF7D288BF8D5008A8E08 /* UIView+CornerRadius.swift */; };
+		8EF1BF80288BFAB1008A8E08 /* UIScrollView+ContentInset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF1BF7F288BFAB1008A8E08 /* UIScrollView+ContentInset.swift */; };
+		8EF1BF82288BFC85008A8E08 /* UITextField+Padding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF1BF81288BFC85008A8E08 /* UITextField+Padding.swift */; };
+		8EF1BF84288BFF3B008A8E08 /* UIView+Border.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF1BF83288BFF3B008A8E08 /* UIView+Border.swift */; };
+		8EF1BF86288BFFF3008A8E08 /* UIView+Shadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF1BF85288BFFF3008A8E08 /* UIView+Shadow.swift */; };
 		8EFCD0E728408A3A00685503 /* UIView+StickyLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFCD0E628408A3A00685503 /* UIView+StickyLabel.swift */; };
 		8EFCD0EA2840DB3900685503 /* WatchHistorySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFCD0E92840DB3900685503 /* WatchHistorySection.swift */; };
 		8EFCD0EC2841F0E600685503 /* Array+IsInBound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFCD0EB2841F0E600685503 /* Array+IsInBound.swift */; };
@@ -289,6 +294,11 @@
 		8ED56F3527AEFCB300E78A8A /* UIColor+HEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+HEX.swift"; sourceTree = "<group>"; };
 		8ED56F3727AEFDD400E78A8A /* UIView+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Animation.swift"; sourceTree = "<group>"; };
 		8EF1BF7B2889DDB7008A8E08 /* EmptyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyViewController.swift; sourceTree = "<group>"; };
+		8EF1BF7D288BF8D5008A8E08 /* UIView+CornerRadius.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+CornerRadius.swift"; sourceTree = "<group>"; };
+		8EF1BF7F288BFAB1008A8E08 /* UIScrollView+ContentInset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+ContentInset.swift"; sourceTree = "<group>"; };
+		8EF1BF81288BFC85008A8E08 /* UITextField+Padding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Padding.swift"; sourceTree = "<group>"; };
+		8EF1BF83288BFF3B008A8E08 /* UIView+Border.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Border.swift"; sourceTree = "<group>"; };
+		8EF1BF85288BFFF3008A8E08 /* UIView+Shadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Shadow.swift"; sourceTree = "<group>"; };
 		8EFCD0E628408A3A00685503 /* UIView+StickyLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+StickyLabel.swift"; sourceTree = "<group>"; };
 		8EFCD0E92840DB3900685503 /* WatchHistorySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchHistorySection.swift; sourceTree = "<group>"; };
 		8EFCD0EB2841F0E600685503 /* Array+IsInBound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+IsInBound.swift"; sourceTree = "<group>"; };
@@ -598,6 +608,11 @@
 				8E442E8028466B5F009A7E8D /* UILabe+Underline.swift */,
 				8E52CA69284F5A5C007844E0 /* URL+RawAppendPathComponent.swift */,
 				8E33F3E52850D18900B6E6EE /* UIView+ConvenienceInsets.swift */,
+				8EF1BF7D288BF8D5008A8E08 /* UIView+CornerRadius.swift */,
+				8EF1BF7F288BFAB1008A8E08 /* UIScrollView+ContentInset.swift */,
+				8EF1BF81288BFC85008A8E08 /* UITextField+Padding.swift */,
+				8EF1BF83288BFF3B008A8E08 /* UIView+Border.swift */,
+				8EF1BF85288BFFF3008A8E08 /* UIView+Shadow.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -954,6 +969,7 @@
 				8E41467C28439D880005BCFD /* SearchHistoryViewController.swift in Sources */,
 				8ED56F3027ADACD000E78A8A /* PopOverComicEpisodeViewModel.swift in Sources */,
 				76BEEBA926248A1600642001 /* SearchComicViewController.swift in Sources */,
+				8EF1BF80288BFAB1008A8E08 /* UIScrollView+ContentInset.swift in Sources */,
 				8E442E8128466B5F009A7E8D /* UILabe+Underline.swift in Sources */,
 				8E491A7028756E1400E4D267 /* BasePathManager.swift in Sources */,
 				8E5C9FD1284D2332008FE961 /* ComicBookmark.swift in Sources */,
@@ -970,6 +986,7 @@
 				8EFCD0E728408A3A00685503 /* UIView+StickyLabel.swift in Sources */,
 				8E8851A227A9534600126701 /* R.generated.swift in Sources */,
 				76F912EB26CFFE9700B39BE7 /* ComicStripScene.swift in Sources */,
+				8EF1BF86288BFFF3008A8E08 /* UIView+Shadow.swift in Sources */,
 				7684F3EC26CB6BBA0012BD8E /* ComicInfo.swift in Sources */,
 				7684F3D226C61B890012BD8E /* ImageCache.swift in Sources */,
 				8E662DEB27AC2FF40048BF39 /* WatchHistoryViewModel.swift in Sources */,
@@ -980,6 +997,7 @@
 				8E52CA60284F22FF007844E0 /* ComicCategoryViewModel.swift in Sources */,
 				765C8B2D261CA2C30056C83B /* MainViewController.swift in Sources */,
 				8E33F3F02851450300B6E6EE /* ShowComicOptionAlertViewModel.swift in Sources */,
+				8EF1BF84288BFF3B008A8E08 /* UIView+Border.swift in Sources */,
 				8EA09F0C287BDDB000864211 /* SectionPlaceHoldable.swift in Sources */,
 				8E553E702846132200B7F5BC /* SearchHistorySection.swift in Sources */,
 				8E553E762846260C00B7F5BC /* ComicInfoSection.swift in Sources */,
@@ -991,6 +1009,7 @@
 				8E319309283B540900C350F9 /* BaseViewController.swift in Sources */,
 				8E92C02C283F68ED00E0CD82 /* UIView+LottieAnimation.swift in Sources */,
 				765C8B2B261CA2C30056C83B /* SceneDelegate.swift in Sources */,
+				8EF1BF7E288BF8D5008A8E08 /* UIView+CornerRadius.swift in Sources */,
 				8E4FFE202844F0AB00A7ED7B /* LottieAnimationView.swift in Sources */,
 				8EA09F02287A9EF500864211 /* SplashViewController.swift in Sources */,
 				8E83DAD728426DBA00C0A10B /* UICollectionView+ScrollTo.swift in Sources */,
@@ -1025,6 +1044,7 @@
 				7641C3B1264682B900A79A79 /* PopOverComicEpisodeViewController.swift in Sources */,
 				8E33F3E32850917B00B6E6EE /* CategoryChipCollectionCell.swift in Sources */,
 				765C8C6D261F16880056C83B /* ComicStripViewController.swift in Sources */,
+				8EF1BF82288BFC85008A8E08 /* UITextField+Padding.swift in Sources */,
 				8E5C9FD7284D4CAB008FE961 /* BookmarkViewModel.swift in Sources */,
 				8E3A896627AB9FB00014303D /* TagLabel.swift in Sources */,
 				8ED56F3227AEFA7F00E78A8A /* UIImage+AverageColor.swift in Sources */,

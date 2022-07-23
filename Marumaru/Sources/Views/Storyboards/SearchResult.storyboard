@@ -20,6 +20,7 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="YOR-xC-YRv">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <color key="backgroundColor" name="BackgroundWhite"/>
+                                <inset key="scrollIndicatorInsets" minX="0.0" minY="72" maxX="0.0" maxY="0.0"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="L02-vG-mOy">
                                     <size key="itemSize" width="0.0" height="128"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>

@@ -80,7 +80,6 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
         registerSearchResultCell()
         registerSearchResultHeader()
         searchResultCollectionView.collectionViewLayout = flowLayout()
-        
         searchResultCollectionView.clipsToBounds = false
         searchResultCollectionView.alwaysBounceVertical = true
         searchResultCollectionView.keyboardDismissMode = .onDrag
@@ -103,13 +102,12 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
     // MARK: - Constraints
     
     override func updateViewConstraints() {
-        super.updateViewConstraints()
         configureSearchResultCollectionViewInsets()
+        super.updateViewConstraints()
     }
     
     private func configureSearchResultCollectionViewInsets() {
-        searchResultCollectionView.contentInset = UIEdgeInsets.inset(top: searchResultCollectionViewTopInset,
-                                                                     bottom: 40)
+        searchResultCollectionView.contentInset = UIEdgeInsets.inset(top: searchResultCollectionViewTopInset, bottom: 40)
     }
     
     
