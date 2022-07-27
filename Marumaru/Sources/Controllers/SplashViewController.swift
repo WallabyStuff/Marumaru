@@ -103,14 +103,14 @@ class SplashViewController: BaseViewController, ViewModelInjectable {
                                  resultSelector: {
             return ($0 == true) && ($1 == true)
         })
-            .subscribe(onNext: { [weak self] isPreProccessFinished in
-                if isPreProccessFinished {
-                    self?.startDecreaseLogoAnimation(completion: { [weak self] in
-                        self?.presentMainTabbarViewController()
-                    })
-                }
-            })
-            .disposed(by: disposeBag)
+        .subscribe(onNext: { [weak self] isPreProccessFinished in
+            if isPreProccessFinished {
+                self?.startDecreaseLogoAnimation(completion: { [weak self] in
+                    self?.presentMainTabbarViewController()
+                })
+            }
+        })
+        .disposed(by: disposeBag)
     }
     
     

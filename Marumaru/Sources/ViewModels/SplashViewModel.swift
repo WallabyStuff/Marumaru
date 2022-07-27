@@ -16,18 +16,21 @@ class SplashViewModel {
     // MARK: - Properties
     
     private var disposeBag = DisposeBag()
+    private let basePathManager = BasePathManager()
+    
     public var isFinishStartAnimation = BehaviorRelay<Bool>(value: false)
     public var isFinishPreProccess = BehaviorRelay<Bool>(value: false)
 }
 
 extension SplashViewModel {
     public func replaceBasePath() {
-        let basePathManager = BasePathManager()
         basePathManager.replaceToValidBasePath()
+            .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .background))
+            .observe(on: MainScheduler.instance)
             .subscribe(onCompleted: { [weak self] in
                 self?.isFinishPreProccess.accept(true)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: self.disposeBag)
     }
     
     public func finishStartAnimation() {
