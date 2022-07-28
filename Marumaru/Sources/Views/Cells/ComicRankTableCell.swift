@@ -14,6 +14,9 @@ class ComicRankTableCell: UITableViewCell {
     
     static let identifier = R.reuseIdentifier.comicRankTableCell.identifier
     
+    
+    // MARK: - UI
+    
     @IBOutlet weak var cellContentView: UIView!
     @IBOutlet weak var rankLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
@@ -52,13 +55,8 @@ class ComicRankTableCell: UITableViewCell {
 
     private func setupView() {
         selectionStyle = .none
-        setupCellContentView()
         setupRankLabel()
         setupTitleLabel()
-    }
-    
-    private func setupCellContentView() {
-        cellContentView.layer.cornerRadius = 12
     }
     
     private func setupRankLabel() {

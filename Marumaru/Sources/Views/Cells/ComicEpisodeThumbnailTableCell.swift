@@ -13,14 +13,16 @@ class ComicEpisodeThumbnailTableCell: UITableViewCell {
     // MARK: - Properties
     
     static let identifier = R.reuseIdentifier.comicEpisodeThumbnailTableCell.identifier
+    public var onReuse: () -> Void = { }
+    
+    
+    // MARK: - UI
     
     @IBOutlet weak var thumbnailImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var authorLabel: UILabel!
     @IBOutlet weak var indexLabel: UILabel!
     @IBOutlet weak var recentWatchingIndicatorView: UIView!
-    
-    public var onReuse: () -> Void = { }
     
     
     // MARK: - LifeCycle
@@ -45,21 +47,11 @@ class ComicEpisodeThumbnailTableCell: UITableViewCell {
     
     private func setup() {
         setupContentView()
-        setupView()
-    }
-    
-    private func setupView() {
-        setupThumbnailImageView()
     }
     
     private func setupContentView() {
         selectionStyle = .none
         selectedBackgroundView = UIView()
-    }
-    
-    private func setupThumbnailImageView() {
-        thumbnailImageView.layer.cornerRadius = 6
-        thumbnailImageView.layer.masksToBounds = true
     }
     
     

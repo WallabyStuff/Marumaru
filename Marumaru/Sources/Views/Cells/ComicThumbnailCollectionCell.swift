@@ -13,6 +13,10 @@ class ComicThumbnailCollectionCell: UICollectionViewCell {
     // MARK: - Properties
     
     static let identifier = R.reuseIdentifier.comicThumbnailCollectionCell.identifier
+    public var onReuse: () -> Void = {}
+    
+    
+    // MARK: - UI
     
     @IBOutlet weak var thumbnailImagePlaceholderView: ThumbnailPlaceholderView!
     @IBOutlet weak var thumbnailImagePlaceholderLabel: UILabel!
@@ -23,8 +27,6 @@ class ComicThumbnailCollectionCell: UICollectionViewCell {
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var authorLabel: UILabel!
-    
-    public var onReuse: () -> Void = {}
     
     
     // MARK: - LifeCycle
@@ -51,8 +53,6 @@ class ComicThumbnailCollectionCell: UICollectionViewCell {
     
     private func setupView() {
         setupContentView()
-        setupThumbnailImagePlaceholderView()
-        setupThumbnailImageView()
         setupUpdateCycleView()
     }
     
@@ -60,18 +60,7 @@ class ComicThumbnailCollectionCell: UICollectionViewCell {
         clipsToBounds = false
     }
     
-    private func setupThumbnailImagePlaceholderView() {
-        thumbnailImagePlaceholderView.layer.cornerRadius = 8
-    }
-    
-    private func setupThumbnailImageView() {
-        thumbnailImageView.layer.cornerRadius = 8
-        thumbnailImageView.clipsToBounds = true
-    }
-    
     private func setupUpdateCycleView() {
-        updateCycleView.layer.cornerRadius = 8
-        updateCycleView.clipsToBounds = true
         updateCycleView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner]
     }
     

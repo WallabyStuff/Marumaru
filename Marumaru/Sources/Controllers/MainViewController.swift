@@ -22,7 +22,13 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     
     // MARK: - Properties
     
+    static let identifier = R.storyboard.main.mainStoryboard.identifier
     typealias ViewModel = MainViewModel
+    
+    var viewModel: ViewModel
+
+    
+    // MARK: - UI
     
     @IBOutlet weak var appbarViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var mainScrollView: UIScrollView!
@@ -40,9 +46,6 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     @IBOutlet weak var comicRankTableView: UITableView!
     @IBOutlet weak var refreshComicRankButton: UIButton!
     @IBOutlet weak var comicRankHeaderAnimationView: LottieAnimationView!
-    
-    static let identifier = R.storyboard.main.mainStoryboard.identifier
-    var viewModel: ViewModel
     private var fpc = FloatingPanelController()
     
     
@@ -104,68 +107,36 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func setupView() {
-        setupSearchBarView()
-        setupRefreshNewUpdatedComicButton()
         setupUpdatedComicCollectionView()
         setupWatchHistoryCollectionView()
         setupComicRankTableView()
         setupFloatingPanelView()
     }
     
-    private func setupSearchBarView() {
-        searchBarView.layer.cornerRadius = 12
-    }
-    
-    private func setupRefreshNewUpdatedComicButton() {
-        refreshNewUpdateComicButton.imageEdgeInsets(with: 6)
-        refreshComicRankButton.imageEdgeInsets(with: 6)
-    }
-    
     private func setupUpdatedComicCollectionView() {
-        registerNewEpisodeCollecionCell()
-        newComicEpisodeCollectionView.contentInset = UIEdgeInsets.leftAndRight(12)
-        newComicEpisodeCollectionView.clipsToBounds = false
+        let nibName = UINib(nibName: R.nib.comicEpisodeThumbnailCollectionCell.name, bundle: nil)
+        newComicEpisodeCollectionView.register(nibName, forCellWithReuseIdentifier: ComicEpisodeThumbnailCollectionCell.identifier)
         newComicEpisodeCollectionView.decelerationRate = .fast
     }
     
-    private func registerNewEpisodeCollecionCell() {
-        let nibName = UINib(nibName: R.nib.comicEpisodeThumbnailCollectionCell.name, bundle: nil)
-        newComicEpisodeCollectionView.register(nibName, forCellWithReuseIdentifier: ComicEpisodeThumbnailCollectionCell.identifier)
-    }
-    
     private func setupWatchHistoryCollectionView() {
-        registerWatchHistoryCollectionCell()
-        watchHistoryCollectionView.clipsToBounds = false
-        watchHistoryCollectionView.contentInset = UIEdgeInsets.leftAndRight(12)
+        let nibName = UINib(nibName: R.nib.comicEpisodeThumbnailCollectionCell.name, bundle: nil)
+        watchHistoryCollectionView.register(nibName, forCellWithReuseIdentifier: ComicEpisodeThumbnailCollectionCell.identifier)
         watchHistoryCollectionView.decelerationRate = .fast
     }
     
-    private func registerWatchHistoryCollectionCell() {
-        let nibName = UINib(nibName: R.nib.comicEpisodeThumbnailCollectionCell.name, bundle: nil)
-        watchHistoryCollectionView.register(nibName, forCellWithReuseIdentifier: ComicEpisodeThumbnailCollectionCell.identifier)
-    }
-    
     private func setupComicRankTableView() {
-        registerComicRankTableCell()
-        comicRankTableView.layer.cornerRadius = 12
-        comicRankTableView.layer.masksToBounds = true
-    }
-    
-    private func registerComicRankTableCell() {
         let nibName = UINib(nibName: R.nib.comicRankTableCell.name, bundle: nil)
         comicRankTableView.register(nibName, forCellReuseIdentifier: ComicRankTableCell.identifier)
     }
     
     private func setupFloatingPanelView() {
         fpc.layout = ShowComicOptionFloatingPanelLayout()
-        
         let appearance = SurfaceAppearance()
         appearance.cornerRadius = 16
         fpc.surfaceView.appearance = appearance
-        
         fpc.surfaceView.backgroundColor = R.color.backgroundWhite()
         fpc.surfaceView.grabberHandle.isHidden = true
-        
         fpc.backdropView.dismissalTapGestureRecognizer.isEnabled = true
         fpc.isRemovalInteractionEnabled = true
     }
@@ -174,17 +145,12 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     // MARK: - Constraints
     
     override func updateViewConstraints() {
-        super.updateViewConstraints()
         configureAppbarViewConstraints()
-        configureMainContentViewInsets()
+        super.updateViewConstraints()
     }
     
     private func configureAppbarViewConstraints() {
         appbarViewHeightConstraint.constant = view.safeAreaInsets.top + regularAppbarHeight
-    }
-    
-    private func configureMainContentViewInsets() {
-        mainScrollView.contentInset = UIEdgeInsets.top(24)
     }
     
     

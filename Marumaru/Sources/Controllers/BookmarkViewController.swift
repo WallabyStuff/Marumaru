@@ -14,15 +14,18 @@ class BookmarkViewController: BaseViewController, ViewModelInjectable {
     
     static let identifier = R.storyboard.bookmark.bookmarkStoryboard.identifier
     typealias ViewModel = BookmarkViewModel
+
+    var viewModel: BookmarkViewModel
+    private let collectionViewSideInset: CGFloat = 12
+    private let collecitonViewTopInset: CGFloat = 24
+    private let collectionViewBottomInset: CGFloat = 24
+    private let cellSpacing: CGFloat = 0
+    private let cellLineSpacing: CGFloat = 12
+    
+    
+    // MARK: - UI
     
     @IBOutlet weak var bookmarkCollectionView: UICollectionView!
-    
-    var viewModel: BookmarkViewModel
-    let collectionViewSideInset: CGFloat = 12
-    let collecitonViewTopInset: CGFloat = 24
-    let collectionViewBottomInset: CGFloat = 24
-    let cellSpacing: CGFloat = 0
-    let cellLineSpacing: CGFloat = 12
     
     
     // MARK: - Initializers

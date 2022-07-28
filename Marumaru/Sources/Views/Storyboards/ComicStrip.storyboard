@@ -21,9 +21,10 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" maximumZoomScale="3" translatesAutoresizingMaskIntoConstraints="NO" id="2xc-Zd-6va" customClass="ComicStripScrollView" customModule="Marumaru" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="scrollIndicatorInsets" minX="0.0" minY="52" maxX="0.0" maxY="52"/>
                             </scrollView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CuR-0J-HJH">
-                                <rect key="frame" x="0.0" y="816" width="414" height="80"/>
+                                <rect key="frame" x="0.0" y="844" width="414" height="52"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Dz-pa-lqr">
                                         <rect key="frame" x="246" y="8" width="36" height="36"/>
@@ -32,6 +33,7 @@
                                             <constraint firstAttribute="width" constant="36" id="odP-sX-so8"/>
                                         </constraints>
                                         <color key="tintColor" name="IconBlack"/>
+                                        <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
                                         <state key="normal">
                                             <imageReference key="image" image="triangle-left" symbolScale="large"/>
                                         </state>
@@ -43,6 +45,7 @@
                                             <constraint firstAttribute="width" constant="36" id="nPd-DN-Tph"/>
                                         </constraints>
                                         <color key="tintColor" name="IconBlack"/>
+                                        <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
                                         <state key="normal">
                                             <imageReference key="image" image="menu" symbolScale="large"/>
                                         </state>
@@ -54,6 +57,7 @@
                                             <constraint firstAttribute="width" constant="36" id="sVx-jY-fsp"/>
                                         </constraints>
                                         <color key="tintColor" name="IconBlack"/>
+                                        <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
                                         <state key="normal">
                                             <imageReference key="image" image="triangle-right" symbolScale="large"/>
                                         </state>
@@ -87,7 +91,7 @@
                                     <constraint firstItem="3WN-1C-Dfr" firstAttribute="leading" secondItem="4Dz-pa-lqr" secondAttribute="trailing" constant="20" id="dvK-i6-qk0"/>
                                     <constraint firstAttribute="trailing" secondItem="zZg-Lg-daj" secondAttribute="trailing" constant="20" id="heh-JK-p9M"/>
                                     <constraint firstItem="zZg-Lg-daj" firstAttribute="top" secondItem="CuR-0J-HJH" secondAttribute="top" constant="18" id="k5f-Sp-6FE"/>
-                                    <constraint firstAttribute="height" constant="80" id="kj2-7L-daR">
+                                    <constraint firstAttribute="height" constant="52" id="kj2-7L-daR">
                                         <variation key="heightClass=compact-widthClass=compact" constant="60"/>
                                         <variation key="heightClass=compact-widthClass=regular" constant="70"/>
                                         <variation key="heightClass=regular-widthClass=regular" constant="70"/>
@@ -226,9 +230,10 @@
                     <size key="freeformSize" width="414" height="896"/>
                     <connections>
                         <outlet property="appbarView" destination="ZjP-lW-yQ7" id="w7f-z0-Jgz"/>
-                        <outlet property="appbarViewHieghtConstraint" destination="RNi-eI-Nuh" id="50a-P6-odD"/>
+                        <outlet property="appbarViewHeightConstraint" destination="RNi-eI-Nuh" id="50a-P6-odD"/>
                         <outlet property="backButton" destination="7RQ-n7-d6D" id="vdQ-Fa-vxH"/>
                         <outlet property="bottomIndicatorView" destination="CuR-0J-HJH" id="cda-gG-HDC"/>
+                        <outlet property="bottomIndicatorViewHeightConstraint" destination="kj2-7L-daR" id="eGh-R9-Aom"/>
                         <outlet property="comicStripScrollView" destination="2xc-Zd-6va" id="tVB-LK-t2A"/>
                         <outlet property="episodeTitleLabel" destination="zeR-bc-PAv" id="Z6A-4U-j2j"/>
                         <outlet property="nextEpisodeButton" destination="zZg-Lg-daj" id="bPN-3Z-82M"/>

@@ -14,6 +14,9 @@ class CategoryChipCollectionCell: UICollectionViewCell {
     
     static let identifier = R.reuseIdentifier.categoryChipCollectionCell.identifier
     
+    
+    // MARK: - UI
+    
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var chipContentView: UIView!
     
@@ -22,29 +25,11 @@ class CategoryChipCollectionCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        setup()
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
         setDeselected()
-    }
-    
-    
-    // MARK: - Setups
-    
-    private func setup() {
-        setupView()
-    }
-    
-    private func setupView() {
-        setupContentView()
-    }
-    
-    private func setupContentView() {
-        chipContentView.layer.cornerRadius = 10
-        chipContentView.layer.borderWidth = 1
-        chipContentView.layer.borderColor = R.color.lineGrayLighter()!.cgColor
     }
     
     

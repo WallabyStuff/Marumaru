@@ -25,7 +25,16 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     
     // MARK: - Properties
     
+    static let identifier = R.storyboard.comicStrip.comicStripStroyboard.identifier
     typealias ViewModel = ComicStripViewModel
+    
+    var viewModel: ViewModel
+    weak var delegate: ComicStripViewDelegate?
+    private var isSceneZoomed = false
+    private var sceneDoubleTapGestureRecognizer = UITapGestureRecognizer()
+    
+    
+    // MARK: - UI
     
     @IBOutlet weak var appbarView: UIVisualEffectView!
     @IBOutlet weak var episodeTitleLabel: UILabel!
@@ -34,17 +43,9 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     @IBOutlet weak var nextEpisodeButton: UIButton!
     @IBOutlet weak var previousEpisodeButton: UIButton!
     @IBOutlet weak var bottomIndicatorView: UIView!
-    @IBOutlet weak var appbarViewHieghtConstraint: NSLayoutConstraint!
+    @IBOutlet weak var appbarViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bottomIndicatorViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var comicStripScrollView: ComicStripScrollView!
-    
-    static let identifier = R.storyboard.comicStrip.comicStripStroyboard.identifier
-    
-    var viewModel: ViewModel
-    weak var delegate: ComicStripViewDelegate?
-    private var cellHeightDictionary: NSMutableDictionary = [:]
-    private let safeAreaInsets = UIApplication.shared.windows[0].safeAreaInsets
-    private var isSceneZoomed = false
-    private var sceneDoubleTapGestureRecognizer = UITapGestureRecognizer()
     
     
     // MARK: - Initializers
@@ -94,9 +95,6 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
         setupTopSafeAreaView()
         setupSceneScrollView()
         setupBottomIndicatorView()
-        setupPreviousEpisodeButton()
-        setupShowEpisodeListButton()
-        setupNextEpisodeButton()
     }
     
     private func setupBaseView() {
@@ -120,28 +118,21 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
         bottomIndicatorView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
     }
     
-    private func setupNextEpisodeButton() {
-        nextEpisodeButton.imageEdgeInsets(with: 8)
-    }
-    
-    private func setupPreviousEpisodeButton() {
-        previousEpisodeButton.imageEdgeInsets(with: 8)
-    }
-    
-    private func setupShowEpisodeListButton() {
-        showEpisodeListButton.imageEdgeInsets(with: 8)
-    }
-    
     
     // MARK: - Constraints
     
     override func updateViewConstraints() {
-        super.updateViewConstraints()
         configureAppbarViewConstraints()
+        configureBottomIndicatorViewConstraints()
+        super.updateViewConstraints()
     }
     
     private func configureAppbarViewConstraints() {
-        appbarViewHieghtConstraint.constant = view.safeAreaInsets.top + compactAppbarHeight
+        appbarViewHeightConstraint.constant = view.safeAreaInsets.top + compactAppbarHeight
+    }
+    
+    private func configureBottomIndicatorViewConstraints() {
+        bottomIndicatorViewHeightConstraint.constant = view.safeAreaInsets.bottom + compactAppbarHeight
     }
     
     

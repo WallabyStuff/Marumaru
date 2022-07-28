@@ -70,6 +70,9 @@
                             <userDefinedRuntimeAttribute type="number" keyPath="skeletonCornerRadius">
                                 <real key="value" value="10"/>
                             </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                <real key="value" value="12"/>
+                            </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </view>
                 </subviews>

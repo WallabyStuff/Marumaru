@@ -15,17 +15,20 @@ class SplashViewController: BaseViewController, ViewModelInjectable {
     
     // MARK: - Properties
     
-    private var logoImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = R.image.logo()
-        return imageView
-    }()
-    
     typealias ViewModel = SplashViewModel
     var viewModel: ViewModel
     private let logoImageViewSize = CGSize(width: 144, height: 144)
     private var logoImageViewWidthConstraint = NSLayoutConstraint()
     private var logoImageViewHeightConstraint = NSLayoutConstraint()
+    
+    
+    // MARK: - UI
+    
+    private var logoImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = R.image.logo()
+        return imageView
+    }()
     
     
     // MARK: - Initializers
@@ -100,14 +103,14 @@ class SplashViewController: BaseViewController, ViewModelInjectable {
                                  resultSelector: {
             return ($0 == true) && ($1 == true)
         })
-            .subscribe(onNext: { [weak self] isPreProccessFinished in
-                if isPreProccessFinished {
-                    self?.startDecreaseLogoAnimation(completion: { [weak self] in
-                        self?.presentMainTabbarViewController()
-                    })
-                }
-            })
-            .disposed(by: disposeBag)
+        .subscribe(onNext: { [weak self] isPreProccessFinished in
+            if isPreProccessFinished {
+                self?.startDecreaseLogoAnimation(completion: { [weak self] in
+                    self?.presentMainTabbarViewController()
+                })
+            }
+        })
+        .disposed(by: disposeBag)
     }
     
     

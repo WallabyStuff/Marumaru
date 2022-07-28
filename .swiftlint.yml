@@ -15,4 +15,4 @@ disabled_rules:
 excluded:
 - Carthage
 - Pods
-- R.generated.swift
+- ./Marumaru/Sources/SupportingFiles/R.generated.swift

@@ -16,23 +16,26 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
     
     // MARK: - Properties
     
+    static let identifier = R.storyboard.searchComic.searchComicStoryboard.identifier
     typealias ViewModel = SearchComicViewModel
+    
+    enum ContentType {
+        case searchHistory
+        case searchResult
+    }
+    var viewModel: ViewModel
+    
+    
+    // MARK: - UI
     
     @IBOutlet weak var appbarViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var searchTextField: UITextField!
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var mainContainerView: UIView!
+    
     private var searchHistoryVC: SearchHistoryViewController?
     private var searchResultVC: SearchResultViewController?
-    
-    static let identifier = R.storyboard.searchComic.searchComicStoryboard.identifier
-    var viewModel: ViewModel
-    
-    enum ContentType {
-        case searchHistory
-        case searchResult
-    }
     
     
     // MARK: - Initializers
@@ -78,33 +81,13 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
     
     private func setupView() {
         setupSearchTextField()
-        setupSearchButton()
         setupWatchHistoryViewController()
         setupSearchResultViewController()
     }
     
     private func setupSearchTextField() {
-        searchTextField.layer.cornerRadius = 12
-        
-        let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: searchTextField.frame.height))
-        searchTextField.leftView = leftPaddingView
-        searchTextField.leftViewMode = .always
-        
-        let rightPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 48, height: searchTextField.frame.height))
-        searchTextField.rightView = rightPaddingView
-        searchTextField.rightViewMode = .always
-        searchTextField.returnKeyType = .search
         searchTextField.delegate = self
         searchTextField.becomeFirstResponder()
-    }
-    
-
-    private func setupSearchButton() {
-        searchButton.rx.tap
-            .asDriver()
-            .drive(with: self, onNext: { vc, _ in
-                vc.setSearchResult()
-            }).disposed(by: disposeBag)
     }
     
     private func setupWatchHistoryViewController() {
@@ -135,8 +118,8 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
     // MARK: - Constraints
     
     override func updateViewConstraints() {
-        super.updateViewConstraints()
         configureAppbarViewConstraints()
+        super.updateViewConstraints()
     }
     
     private func configureAppbarViewConstraints() {
@@ -148,8 +131,17 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
     // MARK: - Bind
     
     private func bind() {
+        bindSearchButton()
         bindBackButton()
         bindSearchTextField()
+    }
+    
+    private func bindSearchButton() {
+        searchButton.rx.tap
+            .asDriver()
+            .drive(with: self, onNext: { vc, _ in
+                vc.setSearchResult()
+            }).disposed(by: disposeBag)
     }
     
     private func bindBackButton() {
