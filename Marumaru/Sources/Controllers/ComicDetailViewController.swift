@@ -38,8 +38,13 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     @IBOutlet weak var episodeAmountLabel: UILabel!
     @IBOutlet weak var comicEpisodeTableView: UITableView!
     @IBOutlet weak var bookmarkButton: UIButton!
-    @IBOutlet weak var playFirstEpisodeButton: UIButton!
     
+    @IBOutlet weak var playFirstEpisodeView: UIView!
+    @IBOutlet weak var playFirstEpisodeTitleLabel: UILabel!
+    @IBOutlet weak var playFirstEpisodeThumbnailImageView: UIImageView!
+    @IBOutlet weak var playFirstEpisodeHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var playFirstEpisodeBottomConstraint: NSLayoutConstraint!
+    private let playFirstEpisodeViewHeight: CGFloat = 52
     
     // MARK: - Initializers
     
@@ -110,6 +115,19 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     }
     
     
+    // MARK: - Constraints
+    
+    override func setupConstraints() {
+        setupPlayFirstEpisodeConstraints()
+        super.setupConstraints()
+    }
+    
+    private func setupPlayFirstEpisodeConstraints() {
+        playFirstEpisodeHeightConstraint.constant = playFirstEpisodeViewHeight + view.safeAreaInsets.bottom
+        playFirstEpisodeBottomConstraint.constant = -(playFirstEpisodeViewHeight + view.safeAreaInsets.bottom)
+    }
+    
+    
     // MARK: - Bind
     
     private func bind() {
@@ -124,7 +142,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
         bindRecentWatchingEpisode()
         
         bindBookmarkState()
-        bindPlayFirstEpisodeButton()
+        bindPlayFirstEpisodeView()
     }
     
     private func bindComicInfo() {
@@ -216,7 +234,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
                         cell.showCustomSkeleton()
                     }
                     
-                    vc.playFirstEpisodeButton.isHidden = true
+                    vc.playFirstEpisodeView.isHidden = true
                 } else {
                     vc.view.hideSkeleton()
                     vc.comicEpisodeTableView.isUserInteractionEnabled = true
@@ -225,7 +243,8 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
                     }
                     
                     if vc.viewModel.comicEpisodeAmount != 0 {
-                        vc.playFirstEpisodeButton.isHidden = false
+                        vc.configurePlayFirstEpisodeView()
+                        vc.popupPlayFirstEpisodeView()
                     }
                 }
             })
@@ -286,9 +305,10 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
             .disposed(by: disposeBag)
     }
     
-    private func bindPlayFirstEpisodeButton() {
-        playFirstEpisodeButton.rx.tap
-            .asDriver()
+    private func bindPlayFirstEpisodeView() {
+        playFirstEpisodeView.rx.tapGesture()
+            .when(.recognized)
+            .asDriver { _ in .never() }
             .drive(with: self, onNext: { vc, _ in
                 vc.viewModel.playFirstComic()
             })
@@ -322,6 +342,22 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
         comicStripVC.modalPresentationStyle = .fullScreen
         comicStripVC.delegate = self
         present(comicStripVC, animated: true)
+    }
+    
+    private func configurePlayFirstEpisodeView() {
+        if let firstEpisode = viewModel.firstEpisode {
+            playFirstEpisodeTitleLabel.text = firstEpisode.title
+            let url = MarumaruApiService.shared.getImageURL(firstEpisode.thumbnailImagePath)
+            playFirstEpisodeThumbnailImageView.kf.setImage(with: url, options: [.transition(.fade(0.3)), .forceTransition])
+        }
+    }
+    
+    private func popupPlayFirstEpisodeView() {
+        playFirstEpisodeView.isHidden = false
+        UIView.animate(withDuration: 0.2) {
+            self.playFirstEpisodeBottomConstraint.constant = 0
+            self.view.layoutIfNeeded()
+        }
     }
 }
 

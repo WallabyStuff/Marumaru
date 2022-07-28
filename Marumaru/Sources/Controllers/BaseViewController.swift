@@ -21,11 +21,14 @@ class BaseViewController: UIViewController {
     // MARK: - Properties
     
     var disposeBag = DisposeBag()
+    
+    private var didSetupConstraints = false
+    let baseFrameSizeViewSizeDidChange = BehaviorRelay<CGRect>(value: .zero)
+    
     let regularAppbarHeight = AppbarHeight.regularAppbarHeight.rawValue
     let compactAppbarHeight = AppbarHeight.compactAppbarHeight.rawValue
-    
     var previousBaseFrameSize: CGRect = .zero
-    let baseFrameSizeViewSizeDidChange = BehaviorRelay<CGRect>(value: .zero)
+    
     
     
     // MARK: - Layout subviews
@@ -60,6 +63,21 @@ class BaseViewController: UIViewController {
     }
     
     @objc func viewWillEnterForeground() {
+        // override point
+    }
+    
+    
+    // MARK: - Constraints
+    
+    override func updateViewConstraints() {
+        if didSetupConstraints == false {
+            setupConstraints()
+            didSetupConstraints = true
+        }
+        super.updateViewConstraints()
+    }
+    
+    func setupConstraints() {
         // override point
     }
 }
