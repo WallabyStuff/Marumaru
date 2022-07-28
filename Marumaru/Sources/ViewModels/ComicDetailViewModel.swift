@@ -194,8 +194,12 @@ extension ComicDetailViewModel {
 }
 
 extension ComicDetailViewModel {
-    func playFirstComic() {
-        if let firstEpisode = comicEpisodes.value.last {
+    public var firstEpisode: ComicEpisode? {
+        return comicEpisodes.value.last
+    }
+    
+    public func playFirstComic() {
+        if let firstEpisode = firstEpisode {
             if !firstEpisode.comicSN.isEmpty {
                 presentComicStripVC.accept(firstEpisode)
             }

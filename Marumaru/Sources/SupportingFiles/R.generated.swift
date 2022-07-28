@@ -204,7 +204,7 @@ struct R: Rswift.Validatable {
   }
   #endif
 
-  /// This `R.color` struct is generated, and contains static references to 27 colors.
+  /// This `R.color` struct is generated, and contains static references to 30 colors.
   struct color {
     /// Color `AccentColor`.
     static let accentColor = Rswift.ColorResource(bundle: R.hostingBundle, name: "AccentColor")
@@ -222,6 +222,10 @@ struct R: Rswift.Validatable {
     static let accentTeal = Rswift.ColorResource(bundle: R.hostingBundle, name: "AccentTeal")
     /// Color `AccentYellow`.
     static let accentYellow = Rswift.ColorResource(bundle: R.hostingBundle, name: "AccentYellow")
+    /// Color `BackgroundGray-lighter-static`.
+    static let backgroundGrayLighterStatic = Rswift.ColorResource(bundle: R.hostingBundle, name: "BackgroundGray-lighter-static")
+    /// Color `BackgroundGray-static`.
+    static let backgroundGrayStatic = Rswift.ColorResource(bundle: R.hostingBundle, name: "BackgroundGray-static")
     /// Color `BackgroundGray`.
     static let backgroundGray = Rswift.ColorResource(bundle: R.hostingBundle, name: "BackgroundGray")
     /// Color `BackgroundWhite-light`.
@@ -246,6 +250,8 @@ struct R: Rswift.Validatable {
     static let lineGrayLighter = Rswift.ColorResource(bundle: R.hostingBundle, name: "LineGray-lighter")
     /// Color `LineGray-lightest`.
     static let lineGrayLightest = Rswift.ColorResource(bundle: R.hostingBundle, name: "LineGray-lightest")
+    /// Color `LineGray-static`.
+    static let lineGrayStatic = Rswift.ColorResource(bundle: R.hostingBundle, name: "LineGray-static")
     /// Color `LineGray`.
     static let lineGray = Rswift.ColorResource(bundle: R.hostingBundle, name: "LineGray")
     /// Color `ShadowBlack`.
@@ -339,6 +345,24 @@ struct R: Rswift.Validatable {
     @available(iOS 11.0, *)
     static func backgroundGray(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
       return UIKit.UIColor(resource: R.color.backgroundGray, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "BackgroundGray-lighter-static", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func backgroundGrayLighterStatic(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.backgroundGrayLighterStatic, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "BackgroundGray-static", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func backgroundGrayStatic(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.backgroundGrayStatic, compatibleWith: traitCollection)
     }
     #endif
 
@@ -447,6 +471,15 @@ struct R: Rswift.Validatable {
     @available(iOS 11.0, *)
     static func lineGrayLightest(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
       return UIKit.UIColor(resource: R.color.lineGrayLightest, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "LineGray-static", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func lineGrayStatic(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.lineGrayStatic, compatibleWith: traitCollection)
     }
     #endif
 
@@ -577,6 +610,22 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(watchOS)
+    /// `UIColor(named: "BackgroundGray-lighter-static", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func backgroundGrayLighterStatic(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.backgroundGrayLighterStatic.name)
+    }
+    #endif
+
+    #if os(watchOS)
+    /// `UIColor(named: "BackgroundGray-static", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func backgroundGrayStatic(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.backgroundGrayStatic.name)
+    }
+    #endif
+
+    #if os(watchOS)
     /// `UIColor(named: "BackgroundWhite", bundle: ..., traitCollection: ...)`
     @available(watchOSApplicationExtension 4.0, *)
     static func backgroundWhite(_: Void = ()) -> UIKit.UIColor? {
@@ -669,6 +718,14 @@ struct R: Rswift.Validatable {
     @available(watchOSApplicationExtension 4.0, *)
     static func lineGrayLightest(_: Void = ()) -> UIKit.UIColor? {
       return UIKit.UIColor(named: R.color.lineGrayLightest.name)
+    }
+    #endif
+
+    #if os(watchOS)
+    /// `UIColor(named: "LineGray-static", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func lineGrayStatic(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.lineGrayStatic.name)
     }
     #endif
 
@@ -825,7 +882,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.image` struct is generated, and contains static references to 29 images.
+  /// This `R.image` struct is generated, and contains static references to 30 images.
   struct image {
     /// Image `Logo`.
     static let logo = Rswift.ImageResource(bundle: R.hostingBundle, name: "Logo")
@@ -845,6 +902,8 @@ struct R: Rswift.Validatable {
     static let category = Rswift.ImageResource(bundle: R.hostingBundle, name: "category")
     /// Image `chevron-down`.
     static let chevronDown = Rswift.ImageResource(bundle: R.hostingBundle, name: "chevron-down")
+    /// Image `chevron-right`.
+    static let chevronRight = Rswift.ImageResource(bundle: R.hostingBundle, name: "chevron-right")
     /// Image `chevron-up`.
     static let chevronUp = Rswift.ImageResource(bundle: R.hostingBundle, name: "chevron-up")
     /// Image `close`.
@@ -946,6 +1005,13 @@ struct R: Rswift.Validatable {
     /// `UIImage(named: "chevron-down", bundle: ..., traitCollection: ...)`
     static func chevronDown(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.chevronDown, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "chevron-right", bundle: ..., traitCollection: ...)`
+    static func chevronRight(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.chevronRight, compatibleWith: traitCollection)
     }
     #endif
 
@@ -1858,11 +1924,14 @@ struct _R: Rswift.Validatable {
 
       static func validate() throws {
         if UIKit.UIImage(named: "bookmark", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Image named 'bookmark' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
+        if UIKit.UIImage(named: "chevron-right", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Image named 'chevron-right' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
         if #available(iOS 11.0, tvOS 11.0, *) {
           if UIKit.UIColor(named: "AccentYellow", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'AccentYellow' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
+          if UIKit.UIColor(named: "BackgroundGray-lighter-static", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'BackgroundGray-lighter-static' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
+          if UIKit.UIColor(named: "BackgroundGray-static", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'BackgroundGray-static' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
           if UIKit.UIColor(named: "BackgroundWhite", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'BackgroundWhite' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
           if UIKit.UIColor(named: "BackgroundWhite-lighter", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'BackgroundWhite-lighter' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
-          if UIKit.UIColor(named: "LineGray-lighter", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'LineGray-lighter' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
+          if UIKit.UIColor(named: "LineGray-static", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'LineGray-static' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
           if UIKit.UIColor(named: "ShadowBlack", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'ShadowBlack' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
           if UIKit.UIColor(named: "TextBlack", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'TextBlack' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
           if UIKit.UIColor(named: "TextBlack-light", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Color named 'TextBlack-light' is used in storyboard 'ComicDetail', but couldn't be loaded.") }
