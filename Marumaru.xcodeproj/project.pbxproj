@@ -17,7 +17,6 @@
 		765C8B35261CA2C50056C83B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 765C8B34261CA2C50056C83B /* Assets.xcassets */; };
 		765C8B38261CA2C50056C83B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 765C8B36261CA2C50056C83B /* LaunchScreen.storyboard */; };
 		765C8B43261CA2C50056C83B /* MarumaruAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8B42261CA2C50056C83B /* MarumaruAPITests.swift */; };
-		765C8B4E261CA2C50056C83B /* MarumaruUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8B4D261CA2C50056C83B /* MarumaruUITests.swift */; };
 		765C8C68261F05BD0056C83B /* ComicDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8C67261F05BD0056C83B /* ComicDetailViewController.swift */; };
 		765C8C6D261F16880056C83B /* ComicStripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8C6C261F16880056C83B /* ComicStripViewController.swift */; };
 		765C8C78261F192C0056C83B /* ComicEpisodeThumbnailTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8C77261F192C0056C83B /* ComicEpisodeThumbnailTableCell.swift */; };
@@ -180,8 +179,6 @@
 		765C8B42261CA2C50056C83B /* MarumaruAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarumaruAPITests.swift; sourceTree = "<group>"; };
 		765C8B44261CA2C50056C83B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		765C8B49261CA2C50056C83B /* MarumaruUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MarumaruUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		765C8B4D261CA2C50056C83B /* MarumaruUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarumaruUITests.swift; sourceTree = "<group>"; };
-		765C8B4F261CA2C50056C83B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		765C8C67261F05BD0056C83B /* ComicDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicDetailViewController.swift; sourceTree = "<group>"; };
 		765C8C6C261F16880056C83B /* ComicStripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicStripViewController.swift; sourceTree = "<group>"; };
 		765C8C77261F192C0056C83B /* ComicEpisodeThumbnailTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicEpisodeThumbnailTableCell.swift; sourceTree = "<group>"; };
@@ -353,7 +350,6 @@
 			children = (
 				765C8B27261CA2C30056C83B /* Marumaru */,
 				765C8B41261CA2C50056C83B /* MarumaruTests */,
-				765C8B4C261CA2C50056C83B /* MarumaruUITests */,
 				765C8B26261CA2C30056C83B /* Products */,
 				5A67613C88A4F68AD84818F9 /* Pods */,
 				D42BB1A0B816585A7E4103D6 /* Frameworks */,
@@ -386,15 +382,6 @@
 				765C8B44261CA2C50056C83B /* Info.plist */,
 			);
 			path = MarumaruTests;
-			sourceTree = "<group>";
-		};
-		765C8B4C261CA2C50056C83B /* MarumaruUITests */ = {
-			isa = PBXGroup;
-			children = (
-				765C8B4D261CA2C50056C83B /* MarumaruUITests.swift */,
-				765C8B4F261CA2C50056C83B /* Info.plist */,
-			);
-			path = MarumaruUITests;
 			sourceTree = "<group>";
 		};
 		8E68B71C2882F91B004C678C /* Resources */ = {
@@ -1064,7 +1051,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				765C8B4E261CA2C50056C83B /* MarumaruUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
