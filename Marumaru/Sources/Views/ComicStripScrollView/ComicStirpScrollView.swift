@@ -302,8 +302,6 @@ extension ComicStripScrollView {
         isScrollEnabled = false
         maximumZoomScale = 1
         minimumZoomScale = 1
-        showsVerticalScrollIndicator = false
-        showsHorizontalScrollIndicator = false
     }
     
     func enableScrollView() {
@@ -311,8 +309,6 @@ extension ComicStripScrollView {
         isScrollEnabled = true
         maximumZoomScale = 3
         minimumZoomScale = 1
-        showsVerticalScrollIndicator = true
-        showsHorizontalScrollIndicator = true
     }
 }
 

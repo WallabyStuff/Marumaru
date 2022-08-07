@@ -111,6 +111,8 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
         comicStripScrollView.contentInset = UIEdgeInsets.inset(top: compactAppbarHeight,
                                                                bottom: bottomIndicatorView.frame.height)
         comicStripScrollView.delegate = self
+        comicStripScrollView.showsVerticalScrollIndicator = true
+        comicStripScrollView.showsHorizontalScrollIndicator = false
     }
     
     private func setupBottomIndicatorView() {
