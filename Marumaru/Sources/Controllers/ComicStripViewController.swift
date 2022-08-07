@@ -94,6 +94,7 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
         setupBaseView()
         setupTopSafeAreaView()
         setupSceneScrollView()
+        setupAppBarView()
         setupBottomIndicatorView()
     }
     
@@ -115,9 +116,20 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
         comicStripScrollView.showsHorizontalScrollIndicator = false
     }
     
+    private func setupAppBarView() {
+        appbarView.layer.shadowColor = UIColor.black.cgColor
+        appbarView.layer.shadowOpacity = 0.1
+        appbarView.layer.shadowRadius = 20
+        appbarView.layer.shadowOffset = .zero
+    }
+    
     private func setupBottomIndicatorView() {
         bottomIndicatorView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         bottomIndicatorView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        bottomIndicatorView.layer.shadowColor = UIColor.black.cgColor
+        bottomIndicatorView.layer.shadowOpacity = 0.1
+        bottomIndicatorView.layer.shadowRadius = 20
+        bottomIndicatorView.layer.shadowOffset = .zero
     }
     
     
