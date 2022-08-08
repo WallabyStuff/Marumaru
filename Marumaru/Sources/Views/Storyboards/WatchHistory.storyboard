@@ -67,7 +67,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </collectionView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g2s-KS-biw">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g2s-KS-biw" customClass="NavigationView" customModule="Marumaru" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="428" height="52"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oZI-Rw-8S3">
@@ -119,6 +119,7 @@
                         <outlet property="appbarViewHeightConstraint" destination="dIp-Lp-vxv" id="Ksc-fi-sXi"/>
                         <outlet property="backButton" destination="oZI-Rw-8S3" id="4ac-d2-Ewy"/>
                         <outlet property="clearHistoryButton" destination="Imo-Io-UqQ" id="2uv-nU-aJU"/>
+                        <outlet property="navigationView" destination="g2s-KS-biw" id="Dhm-C9-w6E"/>
                         <outlet property="watchHistoryCollectionView" destination="lxU-sb-vaW" id="OBL-XW-vXN"/>
                     </connections>
                 </viewController>

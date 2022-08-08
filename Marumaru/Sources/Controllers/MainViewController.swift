@@ -30,6 +30,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     
     // MARK: - UI
     
+    @IBOutlet weak var navigationView: NavigationView!
     @IBOutlet weak var appbarViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var mainScrollView: UIScrollView!
     @IBOutlet weak var searchBarView: UIView!
@@ -107,10 +108,15 @@ class MainViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func setupView() {
+        setupNavigationView()
         setupUpdatedComicCollectionView()
         setupWatchHistoryCollectionView()
         setupComicRankTableView()
         setupFloatingPanelView()
+    }
+    
+    private func setupNavigationView() {
+        navigationView.configureScrollEdgeAppearance(mainScrollView)
     }
     
     private func setupUpdatedComicCollectionView() {
