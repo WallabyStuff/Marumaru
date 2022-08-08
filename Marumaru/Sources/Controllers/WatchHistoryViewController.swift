@@ -27,6 +27,7 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
     
     // MARK: - UI
     
+    @IBOutlet weak var navigationView: NavigationView!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var watchHistoryCollectionView: UICollectionView!
     @IBOutlet weak var clearHistoryButton: UIButton!
@@ -75,9 +76,13 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func setupView() {
+        setupNavigationView()
         setupWatchHistoryCollectionView()
-//        setupClearHistoryButton()
         setupFloatingPanelView()
+    }
+    
+    private func setupNavigationView() {
+        navigationView.configureScrollEdgeAppearance(watchHistoryCollectionView)
     }
     
     private func setupWatchHistoryCollectionView() {
@@ -103,11 +108,6 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
                                             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                             withReuseIdentifier: WatchHistoryCollectionReusableView.identifier)
     }
-    
-//    private func setupClearHistoryButton() {
-//        clearHistoryButton.layer.masksToBounds = true
-//        clearHistoryButton.layer.cornerRadius = 8
-//    }
     
     private func setupFloatingPanelView() {
         fpc.layout = ShowComicOptionFloatingPanelLayout()

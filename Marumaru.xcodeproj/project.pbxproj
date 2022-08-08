@@ -44,6 +44,7 @@
 		8E33F40B2858FBA200B6E6EE /* ShowMoreReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E33F4092858FBA200B6E6EE /* ShowMoreReusableView.swift */; };
 		8E33F40C2858FBA200B6E6EE /* ShowMoreReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E33F40A2858FBA200B6E6EE /* ShowMoreReusableView.xib */; };
 		8E33F40E285984CB00B6E6EE /* IndicatorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E33F40D285984CB00B6E6EE /* IndicatorButton.swift */; };
+		8E34F84228A1075B00D97D54 /* NavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E34F84128A1075B00D97D54 /* NavigationView.swift */; };
 		8E3A896627AB9FB00014303D /* TagLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3A896527AB9FB00014303D /* TagLabel.swift */; };
 		8E3C72FB27A983EC00F057DA /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3C72FA27A983EC00F057DA /* MainViewModel.swift */; };
 		8E400FC6284FA61C00F48E95 /* UpdateCycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E400FC5284FA61C00F48E95 /* UpdateCycle.swift */; };
@@ -206,6 +207,7 @@
 		8E33F4092858FBA200B6E6EE /* ShowMoreReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowMoreReusableView.swift; sourceTree = "<group>"; };
 		8E33F40A2858FBA200B6E6EE /* ShowMoreReusableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ShowMoreReusableView.xib; sourceTree = "<group>"; };
 		8E33F40D285984CB00B6E6EE /* IndicatorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorButton.swift; sourceTree = "<group>"; };
+		8E34F84128A1075B00D97D54 /* NavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationView.swift; sourceTree = "<group>"; };
 		8E3A896527AB9FB00014303D /* TagLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagLabel.swift; sourceTree = "<group>"; };
 		8E3C72FA27A983EC00F057DA /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		8E400FC5284FA61C00F48E95 /* UpdateCycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateCycle.swift; sourceTree = "<group>"; };
@@ -476,13 +478,14 @@
 		8ED19AF22882FB0500B75A06 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				8ED19AFA2882FC7A00B75A06 /* ComicStripScrollView */,
+				8E34F84128A1075B00D97D54 /* NavigationView.swift */,
 				8E3A896527AB9FB00014303D /* TagLabel.swift */,
 				8E87CE6127ACEAD0008CD9C9 /* WatchHistoryCollectionReusableView.swift */,
 				8ED56F3327AEFBAA00E78A8A /* ThumbnailPlaceholderView.swift */,
 				8E33F3F128514CF500B6E6EE /* ShowComicOptionFloatinPanelLayout.swift */,
 				8E33F40D285984CB00B6E6EE /* IndicatorButton.swift */,
 				8E4FFE1F2844F0AB00A7ED7B /* LottieAnimationView.swift */,
+				8ED19AFA2882FC7A00B75A06 /* ComicStripScrollView */,
 				8ED19AF32882FB1500B75A06 /* Cells */,
 				8ED19AF52882FB4300B75A06 /* Storyboards */,
 			);
@@ -977,6 +980,7 @@
 				7684F3EC26CB6BBA0012BD8E /* ComicInfo.swift in Sources */,
 				7684F3D226C61B890012BD8E /* ImageCache.swift in Sources */,
 				8E662DEB27AC2FF40048BF39 /* WatchHistoryViewModel.swift in Sources */,
+				8E34F84228A1075B00D97D54 /* NavigationView.swift in Sources */,
 				76F912E926CFDFA100B39BE7 /* ComicEpisode.swift in Sources */,
 				8E82D73F27B25701008230BE /* UIView+Insets.swift in Sources */,
 				8E52CA6A284F5A5C007844E0 /* URL+RawAppendPathComponent.swift in Sources */,

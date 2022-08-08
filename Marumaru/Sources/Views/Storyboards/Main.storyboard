@@ -394,7 +394,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </scrollView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Udz-B5-6fT">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Udz-B5-6fT" customClass="NavigationView" customModule="Marumaru" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="428" height="72"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vHw-eb-i9G">
@@ -464,6 +464,7 @@
                         <outlet property="comicRankHeaderAnimationView" destination="b9s-u7-Enj" id="r6e-2l-QNr"/>
                         <outlet property="comicRankTableView" destination="QoE-Qg-aZ4" id="9ry-8Q-425"/>
                         <outlet property="mainScrollView" destination="IQz-28-dsB" id="P8U-Bf-Ghm"/>
+                        <outlet property="navigationView" destination="Udz-B5-6fT" id="rXX-wh-jGP"/>
                         <outlet property="newComicEpisodeCollectionView" destination="Zal-TW-flL" id="UG5-u7-1fF"/>
                         <outlet property="newComicEpisodeContentsView" destination="VBH-nw-8Kn" id="mQC-DX-j3b"/>
                         <outlet property="newUpdateComicHeaderAnimationView" destination="Ruz-tz-ke5" id="ee4-y7-XLs"/>

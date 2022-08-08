@@ -28,6 +28,7 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
     
     // MARK: - UI
     
+    @IBOutlet weak var navigationView: NavigationView!
     @IBOutlet weak var appbarViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var searchTextField: UITextField!
@@ -80,9 +81,14 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func setupView() {
+        setupNavigationView()
         setupSearchTextField()
         setupWatchHistoryViewController()
         setupSearchResultViewController()
+    }
+    
+    private func setupNavigationView() {
+        navigationView.configureScrollEdgeAppearance()
     }
     
     private func setupSearchTextField() {

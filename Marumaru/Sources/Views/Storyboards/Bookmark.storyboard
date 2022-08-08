@@ -38,7 +38,7 @@
                             <constraint firstItem="Vor-9N-8QM" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="vdk-n7-dcz"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="내가 북마크한 컨텐츠" id="ntl-eD-atw"/>
+                    <navigationItem key="navigationItem" title="내가 북마크한 컨텐츠" id="ntl-eD-atw" customClass="I"/>
                     <connections>
                         <outlet property="bookmarkCollectionView" destination="Vor-9N-8QM" id="O7h-ht-4e2"/>
                     </connections>
