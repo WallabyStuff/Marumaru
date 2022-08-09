@@ -80,6 +80,10 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     
     // MARK: - Setup
     
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
     private func setup() {
         setupData()
         setupView()
