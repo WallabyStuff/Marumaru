@@ -95,6 +95,7 @@ class SplashViewController: BaseViewController, ViewModelInjectable {
     
     private func bind() {
         bindPreProcccesses()
+        bindMessageAlert()
     }
     
     private func bindPreProcccesses() {
@@ -111,6 +112,14 @@ class SplashViewController: BaseViewController, ViewModelInjectable {
             }
         })
         .disposed(by: disposeBag)
+    }
+    
+    private func bindMessageAlert() {
+        viewModel.showMessageAlert
+            .bind(onNext: { [weak self] in
+                self?.showMaintainingServerAlert()
+            })
+            .disposed(by: disposeBag)
     }
     
     
@@ -157,5 +166,25 @@ class SplashViewController: BaseViewController, ViewModelInjectable {
                 completion()
             }
         })
+    }
+    
+    private func showMaintainingServerAlert() {
+        let alert = UIAlertController(title: "앗..",
+                                      message: "서버 점검중인가봄😧\n다음에 봐",
+                                      preferredStyle: .alert)
+        let exitAppAction = UIAlertAction(title: "앱 종료",
+                                    style: .destructive,
+                                    handler: { [weak self] _ in
+            self?.exitApp()
+        })
+        alert.addAction(exitAppAction)
+        self.present(alert, animated: true)
+    }
+    
+    private func exitApp() {
+        UIApplication.shared.perform(#selector(NSXPCConnection.suspend))
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            exit(0)
+        }
     }
 }

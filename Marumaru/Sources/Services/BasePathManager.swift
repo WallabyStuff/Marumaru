@@ -13,6 +13,7 @@ import SwiftSoup
 enum BasePathManagerError: Error {
     case failToGetURL
     case emptyDocuemnt
+    case basePathNotFound
 }
 
 class BasePathManager {
@@ -48,6 +49,8 @@ class BasePathManager {
                                     observer(.completed)
                                 })
                                 .disposed(by: strongSelf.disposeBag)
+                        }, onError: { _, error in
+                            observer(.error(BasePathManagerError.basePathNotFound))
                         })
                         .disposed(by: strongSelf.disposeBag)
                 })

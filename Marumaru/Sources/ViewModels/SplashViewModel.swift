@@ -20,6 +20,7 @@ class SplashViewModel {
     
     public var isFinishStartAnimation = BehaviorRelay<Bool>(value: false)
     public var isFinishPreProccess = BehaviorRelay<Bool>(value: false)
+    public var showMessageAlert = PublishRelay<Void>()
 }
 
 extension SplashViewModel {
@@ -29,6 +30,10 @@ extension SplashViewModel {
             .observe(on: MainScheduler.instance)
             .subscribe(onCompleted: { [weak self] in
                 self?.isFinishPreProccess.accept(true)
+            }, onError: { [weak self] error in
+                if error is BasePathManagerError {
+                    self?.showMessageAlert.accept(())
+                }
             })
             .disposed(by: self.disposeBag)
     }
