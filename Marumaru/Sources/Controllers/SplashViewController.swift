@@ -57,8 +57,7 @@ class SplashViewController: BaseViewController, ViewModelInjectable {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-//        startPreproccesses()
-        presentMainTabbarViewController()
+        startPreproccesses()
     }
     
     
