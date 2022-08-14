@@ -13,7 +13,6 @@ import Toast
 import RxSwift
 import RxCocoa
 import RxGesture
-import SafeAreaBrush
 
 
 protocol ComicStripViewDelegate: AnyObject {
@@ -32,6 +31,13 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     weak var delegate: ComicStripViewDelegate?
     private var isSceneZoomed = false
     private var sceneDoubleTapGestureRecognizer = UITapGestureRecognizer()
+    private var isStatusBarHidden: Bool = false {
+        didSet {
+            UIView.animate(withDuration: 0.2) {
+                self.setNeedsStatusBarAppearanceUpdate()
+            }
+        }
+    }
     
     
     // MARK: - UI
@@ -46,6 +52,9 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     @IBOutlet weak var appbarViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var bottomIndicatorViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var comicStripScrollView: ComicStripScrollView!
+    override var prefersStatusBarHidden: Bool {
+        return isStatusBarHidden
+    }
     
     
     // MARK: - Initializers
@@ -91,21 +100,21 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func setupView() {
+        setupNavigationBar()
         setupBaseView()
-        setupTopSafeAreaView()
         setupSceneScrollView()
         setupAppBarView()
         setupBottomIndicatorView()
+    }
+    
+    private func setupNavigationBar() {
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     private func setupBaseView() {
         let edgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(didSwipeEdgeOfScreen(_:)))
         edgePan.edges = .left
         view.addGestureRecognizer(edgePan)
-    }
-    
-    private func setupTopSafeAreaView() {
-        fillSafeArea(position: .top, blur: .light, gradient: true, insertAt: 2)
     }
     
     private func setupSceneScrollView() {
@@ -258,7 +267,7 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
         comicStripScrollView.rx
             .gesture(sceneTapGestureRocognizer)
             .when(.recognized)
-            .subscribe(with: self, onNext: { vc, _ in
+            .bind(with: self, onNext: { vc, _ in
                 if vc.appbarView.alpha == 0 {
                     vc.showNavigationBar()
                 } else {
@@ -284,7 +293,8 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     
     private func bindSceneScrollView() {
         comicStripScrollView.rx.contentOffset
-            .subscribe(with: self, onNext: { vc, offset in
+            .observe(on: MainScheduler.asyncInstance)
+            .bind(with: self, onNext: { vc, offset in
                 let overPanThreshold: CGFloat = 50
                 // reached the top
                 if offset.y < -(overPanThreshold + overPanThreshold) {
@@ -399,6 +409,7 @@ extension ComicStripViewController {
         if appbarView.alpha == 0 {
             appbarView.startFadeInAnimation(duration: 0.2)
             bottomIndicatorView.startFadeInAnimation(duration: 0.2)
+            isStatusBarHidden = false
         }
     }
     
@@ -406,6 +417,7 @@ extension ComicStripViewController {
         if appbarView.alpha == 1 {
             appbarView.startFadeOutAnimation(duration: 0.2)
             bottomIndicatorView.startFadeOutAnimation(duration: 0.2)
+            isStatusBarHidden = true
         }
     }
 }

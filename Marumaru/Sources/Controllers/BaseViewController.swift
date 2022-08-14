@@ -30,7 +30,6 @@ class BaseViewController: UIViewController {
     var previousBaseFrameSize: CGRect = .zero
     
     
-    
     // MARK: - Layout subviews
     
     override func viewDidLayoutSubviews() {
@@ -81,6 +80,9 @@ class BaseViewController: UIViewController {
         // override point
     }
 }
+
+
+// MARK: - Haptic feedback
 
 extension BaseViewController {
     func makeSelectionFeedback() {
