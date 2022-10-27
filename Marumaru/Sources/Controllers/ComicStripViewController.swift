@@ -358,7 +358,9 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     
     @objc
     private func didSwipeEdgeOfScreen(_ sender: UIScreenEdgePanGestureRecognizer) {
-        dismiss(animated: true)
+        if sender.state == .recognized {
+            dismiss(animated: true)
+        }
     }
 }
 
