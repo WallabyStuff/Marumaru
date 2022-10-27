@@ -21,7 +21,7 @@ class BasePathManager {
     
     // MARK: - Properties
     
-    static var defaultBasePath = "https://marumaru291.com"
+    static var defaultBasePath = "https://marumaru401.com"
     private let testImagePath = "/img/logo2.png"
     private let remoteBasePath = "https://raw.githubusercontent.com/WallabyStuff/Marumaru/develop/Marumaru/Sources/SupportingFiles/basePath.rtf"
     private var disposeBag = DisposeBag()
