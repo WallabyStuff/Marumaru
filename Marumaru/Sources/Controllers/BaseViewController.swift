@@ -101,15 +101,12 @@ extension BaseViewController {
 
 extension BaseViewController {
     private func setNavigationBarStatic() {
-        if #available(iOS 15, *) {
-            let appearance = UINavigationBarAppearance()
-            appearance.configureWithDefaultBackground()
-            appearance.shadowColor = .clear
-            appearance.backgroundColor = R.color.backgroundWhite()!
-            UINavigationBar.appearance().standardAppearance = appearance
-            UINavigationBar.appearance().scrollEdgeAppearance = appearance
-        }
-        
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithDefaultBackground()
+        appearance.shadowColor = .clear
+        appearance.backgroundColor = R.color.backgroundWhite()!
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
         navigationController?.navigationBar.isTranslucent = false
     }
 }

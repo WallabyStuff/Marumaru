@@ -100,21 +100,18 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     }
     
     private func setupView() {
-        setupNavigationBar()
         setupBaseView()
         setupSceneScrollView()
         setupAppBarView()
         setupBottomIndicatorView()
     }
     
-    private func setupNavigationBar() {
-        navigationController?.setNavigationBarHidden(true, animated: false)
-    }
-    
     private func setupBaseView() {
-        let edgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(didSwipeEdgeOfScreen(_:)))
-        edgePan.edges = .left
-        view.addGestureRecognizer(edgePan)
+        if super.navigationController == nil {
+            let edgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(didSwipeEdgeOfScreen(_:)))
+            edgePan.edges = .left
+            view.addGestureRecognizer(edgePan)
+        }
     }
     
     private func setupSceneScrollView() {
