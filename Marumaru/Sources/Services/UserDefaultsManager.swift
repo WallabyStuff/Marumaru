@@ -7,20 +7,8 @@
 
 import Foundation
 
-enum MyUserDefault: String {
-    case basePath
+struct UserDefaultsManager {
     
-    func getValue() -> Any? {
-        switch self {
-        case .basePath:
-            return UserDefaults.standard.string(forKey: self.rawValue) ?? nil
-        }
-    }
-    
-    func setValue(_ value: Any) {
-        switch self {
-        case .basePath:
-            UserDefaults.standard.set(value, forKey: self.rawValue)
-        }
-    }
+  @UserDefault(key: "basePath", defaultValue: "https://marumaru501.com")
+  static var basePath: String
 }
