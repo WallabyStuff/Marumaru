@@ -63,6 +63,7 @@
 		8E41468228439ED00005BCFD /* SearchResultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E41468128439ED00005BCFD /* SearchResultViewModel.swift */; };
 		8E4146842843BBE50005BCFD /* SearchHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4146832843BBE50005BCFD /* SearchHistoryViewModel.swift */; };
 		8E442E8128466B5F009A7E8D /* UILabe+Underline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E442E8028466B5F009A7E8D /* UILabe+Underline.swift */; };
+		8E458773291D4F2A00C1BC1C /* UserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E458772291D4F2A00C1BC1C /* UserDefault.swift */; };
 		8E491A7028756E1400E4D267 /* BasePathManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E491A6F28756E1400E4D267 /* BasePathManager.swift */; };
 		8E491A7D2877FFAC00E4D267 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E491A7C2877FFAC00E4D267 /* UserDefaultsManager.swift */; };
 		8E4FFE202844F0AB00A7ED7B /* LottieAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4FFE1F2844F0AB00A7ED7B /* LottieAnimationView.swift */; };
@@ -224,6 +225,7 @@
 		8E41468128439ED00005BCFD /* SearchResultViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewModel.swift; sourceTree = "<group>"; };
 		8E4146832843BBE50005BCFD /* SearchHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHistoryViewModel.swift; sourceTree = "<group>"; };
 		8E442E8028466B5F009A7E8D /* UILabe+Underline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabe+Underline.swift"; sourceTree = "<group>"; };
+		8E458772291D4F2A00C1BC1C /* UserDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefault.swift; sourceTree = "<group>"; };
 		8E491A6F28756E1400E4D267 /* BasePathManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePathManager.swift; sourceTree = "<group>"; };
 		8E491A7C2877FFAC00E4D267 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		8E4FFE1F2844F0AB00A7ED7B /* LottieAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationView.swift; sourceTree = "<group>"; };
@@ -603,6 +605,7 @@
 				8EF1BF81288BFC85008A8E08 /* UITextField+Padding.swift */,
 				8EF1BF83288BFF3B008A8E08 /* UIView+Border.swift */,
 				8EF1BF85288BFFF3008A8E08 /* UIView+Shadow.swift */,
+				8E458772291D4F2A00C1BC1C /* UserDefault.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -913,7 +916,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$SRCROOT/R.generated.swift",
+				$SRCROOT/R.generated.swift,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -951,6 +954,7 @@
 				8E553E7328461D7700B7F5BC /* DescriptionHeaderReusableView.swift in Sources */,
 				8E3C72FB27A983EC00F057DA /* MainViewModel.swift in Sources */,
 				8E33F40B2858FBA200B6E6EE /* ShowMoreReusableView.swift in Sources */,
+				8E458773291D4F2A00C1BC1C /* UserDefault.swift in Sources */,
 				8EA09F07287AAECC00864211 /* SplashViewModel.swift in Sources */,
 				8ED2466227AAC82B00226F2D /* SearchComicViewModel.swift in Sources */,
 				8E400FC6284FA61C00F48E95 /* UpdateCycle.swift in Sources */,

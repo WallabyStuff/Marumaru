@@ -21,7 +21,7 @@ class BasePathManager {
     
     // MARK: - Properties
     
-    static var defaultBasePath = "https://marumaru401.com"
+    static var defaultBasePath = UserDefaultsManager.basePath
     private let testImagePath = "/img/logo2.png"
     private let remoteBasePath = "https://raw.githubusercontent.com/WallabyStuff/Marumaru/develop/Marumaru/Sources/SupportingFiles/basePath.rtf"
     private var disposeBag = DisposeBag()
@@ -66,13 +66,7 @@ class BasePathManager {
                 return Disposables.create()
             }
             
-            var basePath = Self.defaultBasePath
-            if let localBasePath = MyUserDefault.basePath.getValue() as? String {
-                basePath = localBasePath
-                self.updateBasePath(localBasePath)
-            }
-            
-            if let finalBasePathNumber = self.getBasePathNumber(basePath),
+            if let finalBasePathNumber = self.getBasePathNumber(Self.defaultBasePath),
                let remoteBasePath = self.getRemoteBasePath(),
                let remoteBasePathNumber = self.getBasePathNumber(remoteBasePath) {
                 if finalBasePathNumber < remoteBasePathNumber {
@@ -206,6 +200,6 @@ class BasePathManager {
     
     private func updateBasePath(_ basePath: String) {
         Self.defaultBasePath = basePath
-        MyUserDefault.basePath.setValue(basePath)
+        UserDefaultsManager.basePath = basePath
     }
 }

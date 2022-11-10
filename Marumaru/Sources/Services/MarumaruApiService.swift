@@ -43,7 +43,7 @@ class MarumaruApiService {
     typealias ComicAndEpisodeSN = (comicSN: String, episodeSN: String)
     typealias URLToDoc = (url: URL, doc: Document)
     
-    public var basePath = BasePathManager.defaultBasePath
+    public var basePath = UserDefaultsManager.basePath
     static let searchPath = "/bbs/search.php?url=%2Fbbs%2Fsearch.php&stx="
     static let comicPath = "/bbs/cmoic"
     static let categoryPath = "/bbs/page.php?hid=comicC"
@@ -56,21 +56,10 @@ class MarumaruApiService {
             }
         }
     }
-    
-    private init() {
-        configureBasePath()
-    }
-    
-    private func configureBasePath() {
-        if let basePath = MyUserDefault.basePath.getValue() as? String {
-            self.basePath = basePath
-            print("Log.i The basePath is \(basePath)")
-        }
-    }
 }
 
 
-// MARK: - Docuemtn parsing
+// MARK: - Document parsing
 
 extension MarumaruApiService {
     private func getDocument(_ url: URL?, caching: Bool) -> Single<Document> {
