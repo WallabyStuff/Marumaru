@@ -9,12 +9,12 @@ import UIKit
 import RxSwift
 
 protocol ViewModelInjectable: AnyObject {
-    associatedtype ViewModel: AnyObject
-    
-    var viewModel: ViewModel { get set }
-    
-    init(_ viewModel: ViewModel)
-    
-    init?(_ coder: NSCoder,
-          _ viewModel: ViewModel)
+  associatedtype ViewModel: AnyObject
+  
+  var viewModel: ViewModel { get set }
+  
+  init(_ viewModel: ViewModel)
+  
+  init?(_ coder: NSCoder,
+        _ viewModel: ViewModel)
 }

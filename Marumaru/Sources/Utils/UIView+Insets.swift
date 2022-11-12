@@ -8,17 +8,17 @@
 import UIKit
 
 extension UIButton {
-    func imageEdgeInsets(with inset: CGFloat) {
-        self.imageEdgeInsets = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
-    }
+  func imageEdgeInsets(with inset: CGFloat) {
+    self.imageEdgeInsets = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
+  }
 }
 
 extension UIView {
-    var csSafeAreaInsets: UIEdgeInsets {
-        if #available(iOS 11.0, *) {
-            return self.safeAreaInsets
-        } else {
-            return .zero
-        }
+  var csSafeAreaInsets: UIEdgeInsets {
+    if #available(iOS 11.0, *) {
+      return self.safeAreaInsets
+    } else {
+      return .zero
     }
+  }
 }

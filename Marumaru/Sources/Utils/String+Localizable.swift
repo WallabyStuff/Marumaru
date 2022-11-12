@@ -8,7 +8,7 @@
 import UIKit
 
 extension String {
-    func localized(_ comment: String = "") -> String {
-        return NSLocalizedString(self, comment: comment)
-    }
+  func localized(_ comment: String = "") -> String {
+    return NSLocalizedString(self, comment: comment)
+  }
 }

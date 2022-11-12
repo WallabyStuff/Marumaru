@@ -11,40 +11,40 @@ import RxSwift
 import RxCocoa
 
 class ShowMoreReusableView: UICollectionReusableView {
-
-    
-    // MARK: - Properties
-    
-    static let identifier = R.reuseIdentifier.showMoreReusableView.identifier
-    private var disposeBag = DisposeBag()
-    public var showMoreButtonTapAction: () -> Void = {}
-    
-    
-    // MARK: - UI
-    
-    @IBOutlet weak var showMoreButton: IndicatorButton!
-    
-    
-    // MARK: - LifeCycle
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        bind()
-    }
-    
-    
-    // MARK: - Binds
-    
-    private func bind() {
-        bindShowMoreButton()
-    }
-    
-    private func bindShowMoreButton() {
-        showMoreButton.rx.tap
-            .asDriver()
-            .drive(with: self, onNext: { strongSelf, _ in
-                strongSelf.showMoreButtonTapAction()
-            })
-            .disposed(by: disposeBag)
-    }
+  
+  
+  // MARK: - Properties
+  
+  static let identifier = R.reuseIdentifier.showMoreReusableView.identifier
+  private var disposeBag = DisposeBag()
+  public var showMoreButtonTapAction: () -> Void = {}
+  
+  
+  // MARK: - UI
+  
+  @IBOutlet weak var showMoreButton: IndicatorButton!
+  
+  
+  // MARK: - LifeCycle
+  
+  override func awakeFromNib() {
+    super.awakeFromNib()
+    bind()
+  }
+  
+  
+  // MARK: - Binds
+  
+  private func bind() {
+    bindShowMoreButton()
+  }
+  
+  private func bindShowMoreButton() {
+    showMoreButton.rx.tap
+      .asDriver()
+      .drive(with: self, onNext: { strongSelf, _ in
+        strongSelf.showMoreButtonTapAction()
+      })
+      .disposed(by: disposeBag)
+  }
 }
