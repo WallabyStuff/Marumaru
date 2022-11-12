@@ -8,21 +8,21 @@
 import UIKit
 
 class DescriptionHeaderReusableView: UICollectionReusableView {
-    
-    
-    // MARK: - Properties
-    
-    static let identifier = R.reuseIdentifier.descriptionHeaderReusableView.identifier
-    
-    
-    // MARK: - UI
-    
-    @IBOutlet weak var descriptionLabel: UILabel!
-    
-    
-    // MARK: - LifeCycle
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
+  
+  
+  // MARK: - Properties
+  
+  static let identifier = R.reuseIdentifier.descriptionHeaderReusableView.identifier
+  
+  
+  // MARK: - UI
+  
+  @IBOutlet weak var descriptionLabel: UILabel!
+  
+  
+  // MARK: - LifeCycle
+  
+  override func awakeFromNib() {
+    super.awakeFromNib()
+  }
 }

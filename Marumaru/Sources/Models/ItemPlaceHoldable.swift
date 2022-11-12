@@ -8,7 +8,7 @@
 import UIKit
 
 protocol ItemPlaceHoldable {
-    associatedtype Item
-    static func fakeItems(count: Int) -> [Item]
-    static var fakeItem: Item { get }
+  associatedtype Item
+  static func fakeItems(count: Int) -> [Item]
+  static var fakeItem: Item { get }
 }

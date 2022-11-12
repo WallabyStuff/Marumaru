@@ -11,56 +11,56 @@ import RxSwift
 import RxCocoa
 
 class SearchHistoryViewModel {
-    
-    
-    // MARK: - Properties
-    
-    private var disposeBag = DisposeBag()
-    private let searchHistoryManager = SearchHistoryManager()
-    public var searchHistories = BehaviorRelay<[SearchHistorySection]>(value: [])
-    public var didSelectedHistoryItem = PublishRelay<SearchHistory>()
+  
+  
+  // MARK: - Properties
+  
+  private var disposeBag = DisposeBag()
+  private let searchHistoryManager = SearchHistoryManager()
+  public var searchHistories = BehaviorRelay<[SearchHistorySection]>(value: [])
+  public var didSelectedHistoryItem = PublishRelay<SearchHistory>()
 }
 
 extension SearchHistoryViewModel {
-    public func updateSearchHistory() {
-        searchHistories.accept([])
-        
-        searchHistoryManager.fetchData()
-            .subscribe(with: self, onSuccess: { strongSelf, histories in
-                let reversedHistories: [SearchHistory] = histories.sorted(by: { $0.date > $1.date })
-                let section = SearchHistorySection(items: reversedHistories)
-                strongSelf.searchHistories.accept([section])
-            })
-            .disposed(by: disposeBag)
-    }
+  public func updateSearchHistory() {
+    searchHistories.accept([])
     
-    public func deleteSearchHistoryItem(_ indexPath: IndexPath) {
-        let selectedItem = searchHistories.value[indexPath.section].items[indexPath.row]
-        searchHistoryManager.deleteData(selectedItem)
-            .subscribe(with: self, onCompleted: { strongSelf in
-                var newSections = strongSelf.searchHistories.value
-                newSections[indexPath.section].items.remove(at: indexPath.row)
-                strongSelf.searchHistories.accept(newSections)
-            })
-            .disposed(by: disposeBag)
-    }
-    
-    public func deleteAllSearchHistory() {
-        searchHistoryManager.deleteAll()
-            .subscribe(with: self, onCompleted: { strongSelf in
-                strongSelf.updateSearchHistory()
-            })
-            .disposed(by: disposeBag)
-    }
-    
-    public func selectHistoryItem(_ indexPath: IndexPath) {
-        let selectedItem = searchHistories.value[indexPath.section].items[indexPath.row]
-        didSelectedHistoryItem.accept(selectedItem)
-    }
+    searchHistoryManager.fetchData()
+      .subscribe(with: self, onSuccess: { strongSelf, histories in
+        let reversedHistories: [SearchHistory] = histories.sorted(by: { $0.date > $1.date })
+        let section = SearchHistorySection(items: reversedHistories)
+        strongSelf.searchHistories.accept([section])
+      })
+      .disposed(by: disposeBag)
+  }
+  
+  public func deleteSearchHistoryItem(_ indexPath: IndexPath) {
+    let selectedItem = searchHistories.value[indexPath.section].items[indexPath.row]
+    searchHistoryManager.deleteData(selectedItem)
+      .subscribe(with: self, onCompleted: { strongSelf in
+        var newSections = strongSelf.searchHistories.value
+        newSections[indexPath.section].items.remove(at: indexPath.row)
+        strongSelf.searchHistories.accept(newSections)
+      })
+      .disposed(by: disposeBag)
+  }
+  
+  public func deleteAllSearchHistory() {
+    searchHistoryManager.deleteAll()
+      .subscribe(with: self, onCompleted: { strongSelf in
+        strongSelf.updateSearchHistory()
+      })
+      .disposed(by: disposeBag)
+  }
+  
+  public func selectHistoryItem(_ indexPath: IndexPath) {
+    let selectedItem = searchHistories.value[indexPath.section].items[indexPath.row]
+    didSelectedHistoryItem.accept(selectedItem)
+  }
 }
 
 extension SearchHistoryViewModel {
-    public var isHistoryEmpty: Bool {
-        return searchHistories.value.first?.items.isEmpty ?? true
-    }
+  public var isHistoryEmpty: Bool {
+    return searchHistories.value.first?.items.isEmpty ?? true
+  }
 }

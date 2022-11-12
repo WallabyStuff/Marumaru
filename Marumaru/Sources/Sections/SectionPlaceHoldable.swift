@@ -8,7 +8,7 @@
 import UIKit
 
 protocol SectionPlaceHoldable {
-    associatedtype Section
-    static func fakeSections(numberOfSection: Int, numberOfItem: Int) -> [Section]
-    static func fakeSection(numberOfItem: Int) -> Section
+  associatedtype Section
+  static func fakeSections(numberOfSection: Int, numberOfItem: Int) -> [Section]
+  static func fakeSection(numberOfItem: Int) -> Section
 }

@@ -11,17 +11,17 @@ import RxSwift
 import RxCocoa
 
 class ComicStripScrollViewModel {
-    
-    
-    // MARK: - Properties
-    
-    private var disposeBag = DisposeBag()
-    
-    public var scenes = BehaviorRelay<[ComicStripScene]>(value: [])
+  
+  
+  // MARK: - Properties
+  
+  private var disposeBag = DisposeBag()
+  
+  public var scenes = BehaviorRelay<[ComicStripScene]>(value: [])
 }
 
 extension ComicStripScrollViewModel {
-    public func updateScenes(_ newScenes: [ComicStripScene]) {
-        scenes.accept(newScenes)
-    }
+  public func updateScenes(_ newScenes: [ComicStripScene]) {
+    scenes.accept(newScenes)
+  }
 }
