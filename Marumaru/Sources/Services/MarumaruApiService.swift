@@ -35,60 +35,23 @@ struct ImageResult {
 
 class MarumaruApiService {
   
-  
-  // MARK: - Properties
-  
-  static let shared = MarumaruApiService()
+  // MARK: - Types
   
   typealias ComicAndEpisodeSN = (comicSN: String, episodeSN: String)
-  typealias URLToDoc = (url: URL, doc: Document)
   
+  
+  // MARK: - Constants
+  
+  static let shared = MarumaruApiService()
   public var basePath = UserDefaultsManager.basePath
   static let searchPath = "/bbs/search.php?url=%2Fbbs%2Fsearch.php&stx="
   static let comicPath = "/bbs/cmoic"
   static let categoryPath = "/bbs/page.php?hid=comicC"
   
+  
+  // MARK: - Properties
+  
   private var disposeBag = DisposeBag()
-  private var docuemntCache = [URLToDoc]() {
-    didSet {
-      if docuemntCache.count > 20 {
-        docuemntCache.removeFirst()
-      }
-    }
-  }
-}
-
-
-// MARK: - Document parsing
-
-extension MarumaruApiService {
-  private func getDocument(_ url: URL?, caching: Bool) -> Single<Document> {
-    return Single.create { [weak self] observer in
-      guard let self = self,
-            let url = url else {
-        return Disposables.create()
-      }
-      
-      if caching {
-        if let index = self.docuemntCache.firstIndex(where: {$0.url == url}) {
-          let cache = self.docuemntCache[index]
-          observer(.success(cache.doc))
-          return Disposables.create()
-        }
-      }
-      
-      do {
-        let html = try String(contentsOf: url, encoding: .utf8)
-        let doc = try SwiftSoup.parse(html)
-        observer(.success(doc))
-        self.docuemntCache.append((url, doc))
-      } catch {
-        observer(.failure(MarumaruApiError.failToParse))
-      }
-      
-      return Disposables.create()
-    }
-  }
 }
 
 
@@ -99,7 +62,7 @@ extension MarumaruApiService {
     return Single.create { [weak self] observer in
       guard let self = self else { return Disposables.create() }
       
-      self.getDocument(self.baseURL, caching: false)
+      DocumentProvider.shared.getDocument(self.baseURL)
         .subscribe(onSuccess: { doc in
           do {
             let comics = try self.parseNewComicEpisode(with: doc)
@@ -153,7 +116,7 @@ extension MarumaruApiService {
     return Single.create { [weak self] observer in
       guard let self = self else { return Disposables.create() }
       
-      self.getDocument(self.baseURL, caching: false)
+      DocumentProvider.shared.getDocument(self.baseURL)
         .subscribe(onSuccess: { doc in
           do {
             let episode = try self.parseComicRank(with: doc)
@@ -207,7 +170,7 @@ extension MarumaruApiService {
       guard let self = self else { return Disposables.create() }
       
       let url = self.getSearchURL(title)
-      self.getDocument(url, caching: true)
+      DocumentProvider.shared.getDocument(url)
         .subscribe(onSuccess: { doc in
           do {
             let searchResult = try self.parseSearchResult(with: doc)
@@ -284,7 +247,7 @@ extension MarumaruApiService {
       
       
       let url = self.getComicURL(comicSN)
-      self.getDocument(url, caching: true)
+      DocumentProvider.shared.getDocument(url)
         .subscribe(onSuccess: { document in
           do {
             let episodes = try self.parseEpisodes(with: document)
@@ -367,7 +330,7 @@ extension MarumaruApiService {
       guard let self = self else { return Disposables.create() }
       
       let url = self.getEpisodeURL(comicEpisode.comicSN, comicEpisode.episodeSN)
-      self.getDocument(url, caching: true)
+      DocumentProvider.shared.getDocument(url)
         .subscribe(onSuccess: { doc in
           do {
             let episodes = try self.parseEpisodesInStrip(doc)
@@ -418,7 +381,7 @@ extension MarumaruApiService {
       }
       
       let url = self.getEpisodeURL(comicEpisode.comicSN, comicEpisode.episodeSN)
-      self.getDocument(url, caching: true)
+      DocumentProvider.shared.getDocument(url)
         .subscribe(with: self, onSuccess: { strongSelf, doc in
           do {
             let comicStripScenes = try strongSelf.parseComicScenes(with: doc)
@@ -465,7 +428,7 @@ extension MarumaruApiService {
       }
       
       let url = self.getComicCategoryURL(category)
-      self.getDocument(url, caching: true)
+      DocumentProvider.shared.getDocument(url)
         .subscribe(with: self, onSuccess: { strongSelf, doc in
           do {
             let comics = try strongSelf.parseComicCategory(with: doc)
@@ -489,7 +452,7 @@ extension MarumaruApiService {
       }
       
       let url = self.getComicCategoryURL()
-      self.getDocument(url, caching: true)
+      DocumentProvider.shared.getDocument(url)
         .subscribe(with: self, onSuccess: { strongSelf, doc in
           do {
             let comics = try strongSelf.parseComicCategory(with: doc)
@@ -513,7 +476,7 @@ extension MarumaruApiService {
       }
       
       let url = self.getComicCategoryURL(category, page)
-      self.getDocument(url, caching: true)
+      DocumentProvider.shared.getDocument(url)
         .subscribe(with: self, onSuccess: { strongSelf, doc in
           do {
             let comics = try strongSelf.parseComicCategory(with: doc)
