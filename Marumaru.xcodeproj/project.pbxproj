@@ -116,15 +116,11 @@
 		8ECAB666283911F3008E531D /* ComicDetail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8ECAB665283911F3008E531D /* ComicDetail.storyboard */; };
 		8ED19AE32882FA6F00B75A06 /* rainbow_cat.json in Resources */ = {isa = PBXBuildFile; fileRef = 8ED19AD82882FA6F00B75A06 /* rainbow_cat.json */; };
 		8ED19AE42882FA6F00B75A06 /* eyes_blinking.json in Resources */ = {isa = PBXBuildFile; fileRef = 8ED19AD92882FA6F00B75A06 /* eyes_blinking.json */; };
-		8ED19AE52882FA6F00B75A06 /* sleeping_cat.json in Resources */ = {isa = PBXBuildFile; fileRef = 8ED19ADA2882FA6F00B75A06 /* sleeping_cat.json */; };
-		8ED19AE62882FA6F00B75A06 /* acrobatic_cat.json in Resources */ = {isa = PBXBuildFile; fileRef = 8ED19ADB2882FA6F00B75A06 /* acrobatic_cat.json */; };
 		8ED19AE72882FA6F00B75A06 /* bodybuilder_dancer.json in Resources */ = {isa = PBXBuildFile; fileRef = 8ED19ADC2882FA6F00B75A06 /* bodybuilder_dancer.json */; };
 		8ED19AE82882FA6F00B75A06 /* trophy.json in Resources */ = {isa = PBXBuildFile; fileRef = 8ED19ADD2882FA6F00B75A06 /* trophy.json */; };
 		8ED19AE92882FA6F00B75A06 /* coming_soon.json in Resources */ = {isa = PBXBuildFile; fileRef = 8ED19ADE2882FA6F00B75A06 /* coming_soon.json */; };
 		8ED19AEA2882FA6F00B75A06 /* notification_bell.json in Resources */ = {isa = PBXBuildFile; fileRef = 8ED19ADF2882FA6F00B75A06 /* notification_bell.json */; };
-		8ED19AEB2882FA6F00B75A06 /* bubble_tea_cat.json in Resources */ = {isa = PBXBuildFile; fileRef = 8ED19AE02882FA6F00B75A06 /* bubble_tea_cat.json */; };
 		8ED19AEC2882FA6F00B75A06 /* loading_cat_radial.json in Resources */ = {isa = PBXBuildFile; fileRef = 8ED19AE12882FA6F00B75A06 /* loading_cat_radial.json */; };
-		8ED19AED2882FA6F00B75A06 /* lying_cat.json in Resources */ = {isa = PBXBuildFile; fileRef = 8ED19AE22882FA6F00B75A06 /* lying_cat.json */; };
 		8ED19B02288301D900B75A06 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 8ED19B01288301D900B75A06 /* .swiftlint.yml */; };
 		8ED2466227AAC82B00226F2D /* SearchComicViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED2466127AAC82B00226F2D /* SearchComicViewModel.swift */; };
 		8ED56F3027ADACD000E78A8A /* PopOverComicEpisodeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED56F2F27ADACD000E78A8A /* PopOverComicEpisodeViewModel.swift */; };
@@ -279,15 +275,11 @@
 		8ECAB665283911F3008E531D /* ComicDetail.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ComicDetail.storyboard; sourceTree = "<group>"; };
 		8ED19AD82882FA6F00B75A06 /* rainbow_cat.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rainbow_cat.json; sourceTree = "<group>"; };
 		8ED19AD92882FA6F00B75A06 /* eyes_blinking.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = eyes_blinking.json; sourceTree = "<group>"; };
-		8ED19ADA2882FA6F00B75A06 /* sleeping_cat.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sleeping_cat.json; sourceTree = "<group>"; };
-		8ED19ADB2882FA6F00B75A06 /* acrobatic_cat.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = acrobatic_cat.json; sourceTree = "<group>"; };
 		8ED19ADC2882FA6F00B75A06 /* bodybuilder_dancer.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = bodybuilder_dancer.json; sourceTree = "<group>"; };
 		8ED19ADD2882FA6F00B75A06 /* trophy.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = trophy.json; sourceTree = "<group>"; };
 		8ED19ADE2882FA6F00B75A06 /* coming_soon.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = coming_soon.json; sourceTree = "<group>"; };
 		8ED19ADF2882FA6F00B75A06 /* notification_bell.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = notification_bell.json; sourceTree = "<group>"; };
-		8ED19AE02882FA6F00B75A06 /* bubble_tea_cat.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = bubble_tea_cat.json; sourceTree = "<group>"; };
 		8ED19AE12882FA6F00B75A06 /* loading_cat_radial.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading_cat_radial.json; sourceTree = "<group>"; };
-		8ED19AE22882FA6F00B75A06 /* lying_cat.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lying_cat.json; sourceTree = "<group>"; };
 		8ED19B01288301D900B75A06 /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
 		8ED2466127AAC82B00226F2D /* SearchComicViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchComicViewModel.swift; sourceTree = "<group>"; };
 		8ED56F2F27ADACD000E78A8A /* PopOverComicEpisodeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopOverComicEpisodeViewModel.swift; sourceTree = "<group>"; };
@@ -423,15 +415,11 @@
 			children = (
 				8ED19AD82882FA6F00B75A06 /* rainbow_cat.json */,
 				8ED19AD92882FA6F00B75A06 /* eyes_blinking.json */,
-				8ED19ADA2882FA6F00B75A06 /* sleeping_cat.json */,
-				8ED19ADB2882FA6F00B75A06 /* acrobatic_cat.json */,
 				8ED19ADC2882FA6F00B75A06 /* bodybuilder_dancer.json */,
 				8ED19ADD2882FA6F00B75A06 /* trophy.json */,
 				8ED19ADE2882FA6F00B75A06 /* coming_soon.json */,
 				8ED19ADF2882FA6F00B75A06 /* notification_bell.json */,
-				8ED19AE02882FA6F00B75A06 /* bubble_tea_cat.json */,
 				8ED19AE12882FA6F00B75A06 /* loading_cat_radial.json */,
-				8ED19AE22882FA6F00B75A06 /* lying_cat.json */,
 			);
 			path = LottieAnimations;
 			sourceTree = "<group>";
@@ -763,11 +751,8 @@
 				765C8B35261CA2C50056C83B /* Assets.xcassets in Resources */,
 				8ECAB664283910F3008E531D /* SearchComic.storyboard in Resources */,
 				8E33F40C2858FBA200B6E6EE /* ShowMoreReusableView.xib in Resources */,
-				8ED19AE52882FA6F00B75A06 /* sleeping_cat.json in Resources */,
-				8ED19AED2882FA6F00B75A06 /* lying_cat.json in Resources */,
 				7684F3E226CAA49F0012BD8E /* ComicEpisodeThumbnailCollectionCell.xib in Resources */,
 				8ED19AEA2882FA6F00B75A06 /* notification_bell.json in Resources */,
-				8ED19AEB2882FA6F00B75A06 /* bubble_tea_cat.json in Resources */,
 				8EA6B5B928392BD30019B590 /* PopOverComicEpisode.storyboard in Resources */,
 				8ED19AE92882FA6F00B75A06 /* coming_soon.json in Resources */,
 				7684F3EA26CB5F6A0012BD8E /* ComicEpisodeThumbnailTableCell.xib in Resources */,
@@ -775,7 +760,6 @@
 				8E33F3EC2851432C00B6E6EE /* ShowComicOption.storyboard in Resources */,
 				8EAFD06D283CAA2500FD569F /* SearchResultComicCollectionCell.xib in Resources */,
 				8ED19AE42882FA6F00B75A06 /* eyes_blinking.json in Resources */,
-				8ED19AE62882FA6F00B75A06 /* acrobatic_cat.json in Resources */,
 				8ECAB666283911F3008E531D /* ComicDetail.storyboard in Resources */,
 				8ED19AEC2882FA6F00B75A06 /* loading_cat_radial.json in Resources */,
 				8EBCD0F227AAAB8300BEE157 /* ComicRankTableCell.xib in Resources */,
