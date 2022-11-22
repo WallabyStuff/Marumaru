@@ -29,7 +29,6 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
   
   var viewModel: ViewModel
   weak var delegate: ComicStripViewDelegate?
-  private var isSceneZoomed = false
   private var sceneDoubleTapGestureRecognizer = UITapGestureRecognizer()
   private var isStatusBarHidden: Bool = false {
     didSet {
@@ -42,7 +41,7 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
   
   // MARK: - UI
   
-  @IBOutlet weak var appbarView: UIVisualEffectView!
+  @IBOutlet weak var appBarView: UIVisualEffectView!
   @IBOutlet weak var episodeTitleLabel: UILabel!
   @IBOutlet weak var backButton: UIButton!
   @IBOutlet weak var showEpisodeListButton: UIButton!
@@ -84,7 +83,7 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
   }
   
   override func viewWillEnterForeground() {
-    comicStripScrollView.resumeLoadingScenes()
+//    comicStripScrollView.resumeLoadingScenes()
   }
   
   
@@ -117,16 +116,14 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
   private func setupSceneScrollView() {
     comicStripScrollView.contentInset = UIEdgeInsets.inset(top: compactAppbarHeight,
                                                            bottom: bottomIndicatorView.frame.height)
-    comicStripScrollView.delegate = self
-    comicStripScrollView.showsVerticalScrollIndicator = true
-    comicStripScrollView.showsHorizontalScrollIndicator = false
+    comicStripScrollView.actionDelegate = self
   }
   
   private func setupAppBarView() {
-    appbarView.layer.shadowColor = UIColor.black.cgColor
-    appbarView.layer.shadowOpacity = 0.1
-    appbarView.layer.shadowRadius = 20
-    appbarView.layer.shadowOffset = .zero
+    appBarView.layer.shadowColor = UIColor.black.cgColor
+    appBarView.layer.shadowOpacity = 0.1
+    appBarView.layer.shadowRadius = 20
+    appBarView.layer.shadowOffset = .zero
   }
   
   private func setupBottomIndicatorView() {
@@ -168,9 +165,6 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     bindComicStripScrollView()
     bindComicStripLoadingState()
     bindComicStripFailState()
-    bindSceneSingleTapGesture()
-    bindSceneDoubleTapGesture()
-    bindSceneScrollView()
     bindToastMessage()
     bindRecentWatchingEpisode()
   }
@@ -223,7 +217,7 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
   private func bindComicStripScrollView() {
     viewModel.comicStripScenes
       .subscribe(with: self, onNext: { vc, scenes in
-        vc.comicStripScrollView.setScenes(scenes)
+        vc.comicStripScrollView.configureScenes(data: scenes)
         vc.viewModel.saveToWatchHistory()
       })
       .disposed(by: disposeBag)
@@ -233,12 +227,10 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     viewModel.isLoadingScenes
       .subscribe(with: self, onNext: { vc, isLoading in
         if isLoading {
-          vc.comicStripScrollView.disableScrollView()
-          vc.view.playRandomCatLottie()
+          vc.comicStripScrollView.startLoading()
           vc.disableIndicatorButtons()
         } else {
-          vc.comicStripScrollView.enableScrollView()
-          vc.view.stopLottie()
+          vc.comicStripScrollView.stopLoading()
           vc.enableIndicatorButtons()
         }
       })
@@ -253,62 +245,6 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
         } else {
           vc.view.removeNoticeLabels()
         }
-      })
-      .disposed(by: disposeBag)
-  }
-  
-  private func bindSceneSingleTapGesture() {
-    let sceneTapGestureRocognizer = UITapGestureRecognizer()
-    sceneTapGestureRocognizer.numberOfTapsRequired = 1
-    sceneTapGestureRocognizer.require(toFail: sceneDoubleTapGestureRecognizer)
-    comicStripScrollView.rx
-      .gesture(sceneTapGestureRocognizer)
-      .when(.recognized)
-      .bind(with: self, onNext: { vc, _ in
-        if vc.appbarView.alpha == 0 {
-          vc.showNavigationBar()
-        } else {
-          vc.hideNavigationBar()
-        }
-      })
-      .disposed(by: disposeBag)
-  }
-  
-  private func bindSceneDoubleTapGesture() {
-    sceneDoubleTapGestureRecognizer = UITapGestureRecognizer()
-    sceneDoubleTapGestureRecognizer.numberOfTapsRequired = 2
-    comicStripScrollView.addGestureRecognizer(sceneDoubleTapGestureRecognizer)
-    comicStripScrollView.rx
-      .gesture(sceneDoubleTapGestureRecognizer)
-      .when(.recognized)
-      .subscribe(with: self, onNext: { vc, recognizer in
-        let tapPoint = recognizer.location(in: vc.comicStripScrollView.contentView)
-        vc.zoom(point: tapPoint)
-      })
-      .disposed(by: disposeBag)
-  }
-  
-  private func bindSceneScrollView() {
-    comicStripScrollView.rx.contentOffset
-      .observe(on: MainScheduler.asyncInstance)
-      .bind(with: self, onNext: { vc, offset in
-        let overPanThreshold: CGFloat = 50
-        // reached the top
-        if offset.y < -(overPanThreshold + overPanThreshold) {
-          vc.showNavigationBar()
-        }
-        
-        // reached the bottom
-        if offset.y > vc.comicStripScrollView.contentSize.height - vc.view.frame.height + overPanThreshold + vc.bottomIndicatorView.frame.height {
-          vc.showNavigationBar()
-        }
-      })
-      .disposed(by: disposeBag)
-    
-    comicStripScrollView.rx.panGesture()
-      .when(.began)
-      .subscribe(with: self, onNext: { vc, _ in
-        vc.hideNavigationBar()
       })
       .disposed(by: disposeBag)
   }
@@ -365,29 +301,6 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
 // MARK: - Extensions
 
 extension ComicStripViewController {
-  func zoom(point: CGPoint) {
-    if isSceneZoomed {
-      // zoom out
-      comicStripScrollView.zoom(to: CGRect(x: point.x,
-                                           y: point.y,
-                                           width: self.view.frame.width,
-                                           height: self.view.frame.height),
-                                animated: true)
-      isSceneZoomed = false
-    } else {
-      // zoom in
-      hideNavigationBar()
-      comicStripScrollView.zoom(to: CGRect(x: point.x,
-                                           y: point.y,
-                                           width: self.view.frame.width / 2,
-                                           height: self.view.frame.height / 2),
-                                animated: true)
-      isSceneZoomed = true
-    }
-  }
-}
-
-extension ComicStripViewController {
   private func enableIndicatorButtons() {
     toggleIndicatorButtons(true)
   }
@@ -405,26 +318,19 @@ extension ComicStripViewController {
 
 extension ComicStripViewController {
   private func showNavigationBar() {
-    if appbarView.alpha == 0 {
-      appbarView.startFadeInAnimation(duration: 0.2)
+    if appBarView.alpha == 0 {
+      appBarView.startFadeInAnimation(duration: 0.2)
       bottomIndicatorView.startFadeInAnimation(duration: 0.2)
       isStatusBarHidden = false
     }
   }
   
   private func hideNavigationBar() {
-    if appbarView.alpha == 1 {
-      appbarView.startFadeOutAnimation(duration: 0.2)
+    if appBarView.alpha == 1 {
+      appBarView.startFadeOutAnimation(duration: 0.2)
       bottomIndicatorView.startFadeOutAnimation(duration: 0.2)
       isStatusBarHidden = true
     }
-  }
-}
-
-extension ComicStripViewController: UIScrollViewDelegate {
-  // Set scene scrollview zoomable
-  func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-    return self.comicStripScrollView.contentView
   }
 }
 
@@ -438,5 +344,31 @@ extension UIViewController: UIPopoverPresentationControllerDelegate {
 extension ComicStripViewController: PopOverComicEpisodeViewDelegate {
   func didEpisodeSelected(_ episode: EpisodeItem) {
     viewModel.renderComicStripScenes(episode)
+  }
+}
+
+extension ComicStripViewController: ComicStripScrollViewDelegate {
+  func didReachTop() {
+    showNavigationBar()
+  }
+  
+  func didReachBottom() {
+    showNavigationBar()
+  }
+  
+  func didScrollBegan() {
+    hideNavigationBar()
+  }
+  
+  func didSingleTap() {
+    if appBarView.alpha == 0 {
+      showNavigationBar()
+    } else {
+      hideNavigationBar()
+    }
+  }
+  
+  func didDoubleTap() {
+    hideNavigationBar()
   }
 }

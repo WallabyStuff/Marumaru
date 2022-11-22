@@ -34,8 +34,10 @@
 		76F912E926CFDFA100B39BE7 /* ComicEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F912E826CFDFA000B39BE7 /* ComicEpisode.swift */; };
 		76F912EB26CFFE9700B39BE7 /* ComicStripScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F912EA26CFFE9700B39BE7 /* ComicStripScene.swift */; };
 		8E1A524D29201A460038E945 /* DocumentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1A524C29201A460038E945 /* DocumentProvider.swift */; };
+		8E1A524F292027110038E945 /* ComicStripScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1A524E292027110038E945 /* ComicStripScrollView.swift */; };
 		8E3192CB283A15B900C350F9 /* PopOverComicEpisodeTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E3192C9283A15B900C350F9 /* PopOverComicEpisodeTableCell.xib */; };
 		8E319309283B540900C350F9 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E319308283B540900C350F9 /* BaseViewController.swift */; };
+		8E31FD952928E73900B31D03 /* SceneImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E31FD942928E73900B31D03 /* SceneImageView.swift */; };
 		8E33F3E32850917B00B6E6EE /* CategoryChipCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E33F3E12850917B00B6E6EE /* CategoryChipCollectionCell.swift */; };
 		8E33F3E42850917B00B6E6EE /* CategoryChipCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E33F3E22850917B00B6E6EE /* CategoryChipCollectionCell.xib */; };
 		8E33F3E62850D18900B6E6EE /* UIView+ConvenienceInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E33F3E52850D18900B6E6EE /* UIView+ConvenienceInsets.swift */; };
@@ -98,8 +100,6 @@
 		8E8D381D27ABD56600E82FE2 /* ComicStripViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8D381C27ABD56600E82FE2 /* ComicStripViewModel.swift */; };
 		8E9213412839491B001B33A9 /* ViewModelInjectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9213402839491B001B33A9 /* ViewModelInjectable.swift */; };
 		8E92C02C283F68ED00E0CD82 /* UIView+LottieAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E92C02B283F68ED00E0CD82 /* UIView+LottieAnimation.swift */; };
-		8E961295284936E0009422BE /* ComicStirpScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E961294284936E0009422BE /* ComicStirpScrollView.swift */; };
-		8E96129728493707009422BE /* ComicStripScrollViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E96129628493707009422BE /* ComicStripScrollViewModel.swift */; };
 		8EA09F02287A9EF500864211 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA09F00287A9EF500864211 /* SplashViewController.swift */; };
 		8EA09F07287AAECC00864211 /* SplashViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA09F06287AAECC00864211 /* SplashViewModel.swift */; };
 		8EA09F0C287BDDB000864211 /* SectionPlaceHoldable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA09F0B287BDDB000864211 /* SectionPlaceHoldable.swift */; };
@@ -197,8 +197,10 @@
 		76F912EA26CFFE9700B39BE7 /* ComicStripScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicStripScene.swift; sourceTree = "<group>"; };
 		838EEF51E76D19E3349792B8 /* Pods-MarumaruTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MarumaruTests.release.xcconfig"; path = "Target Support Files/Pods-MarumaruTests/Pods-MarumaruTests.release.xcconfig"; sourceTree = "<group>"; };
 		8E1A524C29201A460038E945 /* DocumentProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentProvider.swift; sourceTree = "<group>"; };
+		8E1A524E292027110038E945 /* ComicStripScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicStripScrollView.swift; sourceTree = "<group>"; };
 		8E3192C9283A15B900C350F9 /* PopOverComicEpisodeTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PopOverComicEpisodeTableCell.xib; sourceTree = "<group>"; };
 		8E319308283B540900C350F9 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		8E31FD942928E73900B31D03 /* SceneImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneImageView.swift; sourceTree = "<group>"; };
 		8E33F3E12850917B00B6E6EE /* CategoryChipCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryChipCollectionCell.swift; sourceTree = "<group>"; };
 		8E33F3E22850917B00B6E6EE /* CategoryChipCollectionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CategoryChipCollectionCell.xib; sourceTree = "<group>"; };
 		8E33F3E52850D18900B6E6EE /* UIView+ConvenienceInsets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+ConvenienceInsets.swift"; sourceTree = "<group>"; };
@@ -261,8 +263,6 @@
 		8E8D381C27ABD56600E82FE2 /* ComicStripViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicStripViewModel.swift; sourceTree = "<group>"; };
 		8E9213402839491B001B33A9 /* ViewModelInjectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelInjectable.swift; sourceTree = "<group>"; };
 		8E92C02B283F68ED00E0CD82 /* UIView+LottieAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+LottieAnimation.swift"; sourceTree = "<group>"; };
-		8E961294284936E0009422BE /* ComicStirpScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicStirpScrollView.swift; sourceTree = "<group>"; };
-		8E96129628493707009422BE /* ComicStripScrollViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicStripScrollViewModel.swift; sourceTree = "<group>"; };
 		8EA09F00287A9EF500864211 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		8EA09F06287AAECC00864211 /* SplashViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewModel.swift; sourceTree = "<group>"; };
 		8EA09F0B287BDDB000864211 /* SectionPlaceHoldable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionPlaceHoldable.swift; sourceTree = "<group>"; };
@@ -626,8 +626,8 @@
 		8ED19AFA2882FC7A00B75A06 /* ComicStripScrollView */ = {
 			isa = PBXGroup;
 			children = (
-				8E961294284936E0009422BE /* ComicStirpScrollView.swift */,
-				8E96129628493707009422BE /* ComicStripScrollViewModel.swift */,
+				8E1A524E292027110038E945 /* ComicStripScrollView.swift */,
+				8E31FD942928E73900B31D03 /* SceneImageView.swift */,
 			);
 			path = ComicStripScrollView;
 			sourceTree = "<group>";
@@ -1022,6 +1022,7 @@
 				7641C3B32646874300A79A79 /* EpisodeItem.swift in Sources */,
 				8E33F3E62850D18900B6E6EE /* UIView+ConvenienceInsets.swift in Sources */,
 				8E491A7D2877FFAC00E4D267 /* UserDefaultsManager.swift in Sources */,
+				8E1A524F292027110038E945 /* ComicStripScrollView.swift in Sources */,
 				76BEEBB02624B64E00642001 /* ComicEpisodeThumbnailCollectionCell.swift in Sources */,
 				8E414670284394DF0005BCFD /* ComingSoonViewController.swift in Sources */,
 				8E8D381D27ABD56600E82FE2 /* ComicStripViewModel.swift in Sources */,
@@ -1036,15 +1037,14 @@
 				8E33F3F228514CF500B6E6EE /* ShowComicOptionFloatinPanelLayout.swift in Sources */,
 				8E414672284397E20005BCFD /* SearchHistory.swift in Sources */,
 				8E41468228439ED00005BCFD /* SearchResultViewModel.swift in Sources */,
-				8E96129728493707009422BE /* ComicStripScrollViewModel.swift in Sources */,
 				8E553E792846305A00B7F5BC /* SingleButtonFooterReusableView.swift in Sources */,
-				8E961295284936E0009422BE /* ComicStirpScrollView.swift in Sources */,
 				8E41465F284380120005BCFD /* String+Localizable.swift in Sources */,
 				7641C3B1264682B900A79A79 /* PopOverComicEpisodeViewController.swift in Sources */,
 				8E33F3E32850917B00B6E6EE /* CategoryChipCollectionCell.swift in Sources */,
 				765C8C6D261F16880056C83B /* ComicStripViewController.swift in Sources */,
 				8EF1BF82288BFC85008A8E08 /* UITextField+Padding.swift in Sources */,
 				8E5C9FD7284D4CAB008FE961 /* BookmarkViewModel.swift in Sources */,
+				8E31FD952928E73900B31D03 /* SceneImageView.swift in Sources */,
 				8E3A896627AB9FB00014303D /* TagLabel.swift in Sources */,
 				8ED56F3227AEFA7F00E78A8A /* UIImage+AverageColor.swift in Sources */,
 				8E4146842843BBE50005BCFD /* SearchHistoryViewModel.swift in Sources */,

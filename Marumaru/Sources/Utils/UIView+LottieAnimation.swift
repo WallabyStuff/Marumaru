@@ -44,19 +44,23 @@ extension UIView {
     static var queue = "com.marumaru.queue"
   }
   
-  func playRandomCatLottie(size: CGSize = .init(width: 120, height: 120)) {
-    playLottie(animation: AnimationType.cat(.allCases.randomElement()!), size: size)
+  func playRandomCatLottie(size: CGSize = .init(width: 120, height: 120), xInset: CGFloat = 0, yInset: CGFloat = 0) {
+    playLottie(
+      animation: AnimationType.cat(.allCases.randomElement()!),
+      size: size,
+      xInset: xInset,
+      yInset: yInset)
   }
   
-  func playLottie(animation: AnimationType, size: CGSize = .init(width: 120, height: 120)) {
+  func playLottie(animation: AnimationType, size: CGSize = .init(width: 120, height: 120), xInset: CGFloat = 0, yInset: CGFloat = 0) {
     let animationView = AnimationView(name: animation.name)
     animationView.loopMode = .loop
     self.addSubview(animationView)
     
     animationView.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
-      animationView.centerXAnchor.constraint(equalTo: centerXAnchor),
-      animationView.centerYAnchor.constraint(equalTo: centerYAnchor),
+      animationView.centerXAnchor.constraint(equalTo: centerXAnchor, constant: xInset),
+      animationView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: yInset),
       animationView.widthAnchor.constraint(equalToConstant: size.width),
       animationView.heightAnchor.constraint(equalToConstant: size.height)
     ])
