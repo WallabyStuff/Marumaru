@@ -22,10 +22,6 @@ enum AnimationType {
   enum CatType: String, CaseIterable {
     case loading_cat_radial
     case rainbow_cat
-    case acrobatic_cat
-    case bubble_tea_cat
-    case lying_cat
-    case sleeping_cat
   }
   
   var name: String {
