@@ -6,11 +6,11 @@ PODS:
   - R.swift (6.1.0):
     - R.swift.Library (~> 5.3.0)
   - R.swift.Library (5.3.0)
-  - Realm (10.32.1):
-    - Realm/Headers (= 10.32.1)
-  - Realm/Headers (10.32.1)
-  - RealmSwift (10.32.1):
-    - Realm (= 10.32.1)
+  - Realm (10.32.3):
+    - Realm/Headers (= 10.32.3)
+  - Realm/Headers (10.32.3)
+  - RealmSwift (10.32.3):
+    - Realm (= 10.32.3)
   - RxCocoa (6.5.0):
     - RxRelay (= 6.5.0)
     - RxSwift (= 6.5.0)
@@ -25,24 +25,24 @@ PODS:
     - RxSwift (= 6.5.0)
   - RxSwift (6.5.0)
   - SkeletonView (1.30.4)
-  - SwiftLint (0.49.1)
+  - SwiftLint (0.50.0)
   - SwiftSoup (2.4.3)
   - Toast (4.0.0)
 
 DEPENDENCIES:
   - FloatingPanel (~> 2.5.5)
-  - Kingfisher
-  - lottie-ios
-  - R.swift
-  - RealmSwift
-  - RxCocoa
-  - RxDataSources
-  - RxGesture
-  - RxSwift
-  - SkeletonView
-  - SwiftLint
-  - SwiftSoup
-  - Toast
+  - Kingfisher (~> 7.4.1)
+  - lottie-ios (~> 3.5.0)
+  - R.swift (~> 6.1.0)
+  - RealmSwift (~> 10.32.1)
+  - RxCocoa (~> 6.5.0)
+  - RxDataSources (~> 5.0.0)
+  - RxGesture (~> 4.0.4)
+  - RxSwift (~> 6.5.0)
+  - SkeletonView (~> 1.30.4)
+  - SwiftLint (~> 0.50.0)
+  - SwiftSoup (~> 2.4.3)
+  - Toast (~> 4.0.0)
 
 SPEC REPOS:
   trunk:
@@ -71,18 +71,18 @@ SPEC CHECKSUMS:
   lottie-ios: c55158d67d0629a260625cc2ded2052b829e3c3e
   R.swift: ec98ff71c4ab2f6fd01dd077e5afd15e63a4834c
   R.swift.Library: 0fc583cb55a99e28901299cc451614cad1161962
-  Realm: fd821b81e5479be497cc5bca2e020f707d8323eb
-  RealmSwift: 8635e4cc524790916d72b0ffa51c1a91f4ec9668
+  Realm: fdf6732924dc5e69e30e0db2c11e869f92b53f3d
+  RealmSwift: 7c181da8fa1c2fe613656a77c198d6a3dc3879a1
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
   RxDataSources: aa47cc1ed6c500fa0dfecac5c979b723542d79cf
   RxGesture: f3efb47ed2d26a8082f7b660d4a59970e275a7f8
   RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
   RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
   SkeletonView: 5a050f6411e697abd4cda0a8d767013399dccd69
-  SwiftLint: 32ee33ded0636d0905ef6911b2b67bbaeeedafa5
+  SwiftLint: 9cbf846727f3312f3ba722f2d7108a162cd050a5
   SwiftSoup: 3384f2e618cfc1b3cbc7852c16692fe8de13fb8f
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
 
-PODFILE CHECKSUM: 0b8e01cd8bd36bf35bbbb05ba4ddfa8e7d022633
+PODFILE CHECKSUM: 13167d0503fb2e4592b0136e46f8a5f38ded4a60
 
 COCOAPODS: 1.11.3
