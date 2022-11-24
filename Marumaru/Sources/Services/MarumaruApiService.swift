@@ -28,11 +28,6 @@ enum MarumaruApiError: Error {
   }
 }
 
-struct ImageResult {
-  var imageCache: ImageCache
-  var animate: Bool
-}
-
 class MarumaruApiService {
   
   // MARK: - Types

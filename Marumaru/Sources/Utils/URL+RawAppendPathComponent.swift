@@ -8,7 +8,7 @@
 import Foundation
 
 extension URL {
-  // Prevent making wrong url path
+  /// Prevents to make wrong url path
   mutating
   func appendRawPathComponent(_ pathComponent: String) {
     var path = self.description

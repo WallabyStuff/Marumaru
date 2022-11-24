@@ -8,7 +8,7 @@
 import UIKit
 
 public extension UIColor {
-  // UIColor -> HexString
+  /// Convert UIColor into Hex value(string)
   func toHexString() -> String {
     var r: CGFloat = 0
     var g: CGFloat = 0
@@ -22,7 +22,7 @@ public extension UIColor {
     return String(format: "#%06x", rgb)
   }
   
-  // HexString -> UIColor
+  /// Convert Hex value(string) into UIColor
   convenience init(hexString: String) {
     let hex = hexString.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
     var int = UInt64()
@@ -41,6 +41,8 @@ public extension UIColor {
     self.init(red: CGFloat(r) / 255, green: CGFloat(g) / 255, blue: CGFloat(b) / 255, alpha: CGFloat(a) / 255)
   }
   
+  /// Returns tile pattern.
+  ///  It can be used as a background color.
   static var tilePatternColor: UIColor {
     let tileImage = R.image.placeholderTile() ?? UIImage()
     let patternBackground = UIColor(patternImage: tileImage)

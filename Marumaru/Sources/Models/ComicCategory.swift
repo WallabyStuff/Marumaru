@@ -19,7 +19,7 @@ enum ComicCategory: CaseIterable {
   case pure
   case harem
   case fantasy
-  case mistery
+  case mystery
   case scary
   case detective
   case horror
@@ -69,7 +69,7 @@ extension ComicCategory {
       return "하렘"
     case .fantasy:
       return "판타지"
-    case .mistery:
+    case .mystery:
       return "미스테리"
     case .scary:
       return "공포"

@@ -17,7 +17,6 @@ protocol ShowComicOptionAlertViewDelegate: AnyObject {
 
 class ShowComicOptionAlertViewController: BaseViewController, ViewModelInjectable {
   
-  
   // MARK: - Properties
   
   static let identifier = R.storyboard.showComicOption.showComicOptionStoryboard.identifier
@@ -80,7 +79,7 @@ class ShowComicOptionAlertViewController: BaseViewController, ViewModelInjectabl
   
   private func bind() {
     bindCloseButton()
-    bindShowComicStirpButton()
+    bindShowComicStripButton()
     bindShowComicDetailButton()
   }
   
@@ -93,7 +92,7 @@ class ShowComicOptionAlertViewController: BaseViewController, ViewModelInjectabl
       .disposed(by: disposeBag)
   }
   
-  private func bindShowComicStirpButton() {
+  private func bindShowComicStripButton() {
     showComicStripButton.rx.tap
       .asDriver()
       .drive(with: self, onNext: { vc, _ in

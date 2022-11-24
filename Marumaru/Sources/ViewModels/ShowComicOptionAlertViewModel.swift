@@ -12,7 +12,6 @@ import RxCocoa
 
 class ShowComicOptionAlertViewModel {
   
-  
   // MARK: - Properties
   
   private var currentEpisode: ComicEpisode

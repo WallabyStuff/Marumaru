@@ -12,8 +12,8 @@ import RxCocoa
 
 class ComicCategoryViewModel {
   
-  
   // MARK: - Properties
+  
   private var disposeBag = DisposeBag()
   
   private var currentPage = 1

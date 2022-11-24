@@ -9,7 +9,6 @@ import UIKit
 
 class ComicThumbnailCollectionCell: UICollectionViewCell {
   
-  
   // MARK: - Properties
   
   static let identifier = R.reuseIdentifier.comicThumbnailCollectionCell.identifier

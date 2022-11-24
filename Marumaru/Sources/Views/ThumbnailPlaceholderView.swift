@@ -18,7 +18,7 @@ class ThumbnailPlaceholderView: UIView {
 }
 
 extension ThumbnailPlaceholderView {
-  func makeThubmailShadow() {
+  func makeThumbnailShadow() {
     self.layer.shadowColor = R.color.shadowBlack()!.cgColor
     self.layer.shadowOffset = CGSize(width: 0, height: 4)
     self.layer.shadowRadius = 12

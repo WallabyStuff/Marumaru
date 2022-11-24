@@ -1,5 +1,5 @@
 //
-//  ShowComicOptionFloatinPanelLayout.swift
+//  ShowComicOptionFloatingPanelLayout.swift
 //  Marumaru
 //
 //  Created by 이승기 on 2022/06/09.

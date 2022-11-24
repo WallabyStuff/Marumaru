@@ -12,7 +12,6 @@ import RxCocoa
 
 class ShowMoreReusableView: UICollectionReusableView {
   
-  
   // MARK: - Properties
   
   static let identifier = R.reuseIdentifier.showMoreReusableView.identifier

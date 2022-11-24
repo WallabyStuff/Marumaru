@@ -15,7 +15,6 @@ protocol SearchResultViewDelegate: AnyObject {
 
 class SearchResultViewController: BaseViewController, ViewModelInjectable {
   
-  
   // MARK: - Properties
   
   static let identifier = R.storyboard.searchResult.searchResultStoryboard.identifier
@@ -26,7 +25,7 @@ class SearchResultViewController: BaseViewController, ViewModelInjectable {
   private var dataSource: DataSource?
   weak var delegate: SearchResultViewDelegate?
   private var searchResultCollectionViewTopInset: CGFloat {
-    return regularAppbarHeight
+    return regularAppBarHeight
   }
   private var actualSearchResultCollectionViewTopInset: CGFloat {
     return searchResultCollectionViewTopInset + view.safeAreaInsets.top

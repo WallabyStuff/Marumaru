@@ -6,6 +6,7 @@
 //
 
 import UIKit
+
 import RxDataSources
 
 struct SearchHistorySection: IdentifiableType {

@@ -16,7 +16,6 @@ protocol PopOverComicEpisodeViewDelegate: AnyObject {
 
 class PopOverComicEpisodeViewController: BaseViewController, ViewModelInjectable {
   
-  
   // MARK: - Properties
   
   static let identifier = R.storyboard.popOverComicEpisode.popOverComicEpisodeStoryboard.identifier

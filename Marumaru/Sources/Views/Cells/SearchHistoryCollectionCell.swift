@@ -10,7 +10,6 @@ import RxSwift
 
 class SearchHistoryCollectionCell: UICollectionViewCell {
   
-  
   // MARK: - Properties
   
   static let identifier = R.reuseIdentifier.searchHistoryCollectionCell.identifier

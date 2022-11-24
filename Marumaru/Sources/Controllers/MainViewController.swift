@@ -7,17 +7,17 @@
 
 import UIKit
 
-import Toast
-import Lottie
 import RxSwift
 import RxCocoa
+
+import Toast
+import Lottie
 import RealmSwift
 import SkeletonView
 import Kingfisher
 import FloatingPanel
 
 class MainViewController: BaseViewController, ViewModelInjectable {
-  
   
   // MARK: - Properties
   
@@ -30,7 +30,7 @@ class MainViewController: BaseViewController, ViewModelInjectable {
   // MARK: - UI
   
   @IBOutlet weak var navigationView: NavigationView!
-  @IBOutlet weak var appbarViewHeightConstraint: NSLayoutConstraint!
+  @IBOutlet weak var appBarViewHeightConstraint: NSLayoutConstraint!
   @IBOutlet weak var mainScrollView: UIScrollView!
   @IBOutlet weak var searchBarView: UIView!
   
@@ -150,12 +150,12 @@ class MainViewController: BaseViewController, ViewModelInjectable {
   // MARK: - Constraints
   
   override func updateViewConstraints() {
-    configureAppbarViewConstraints()
+    configureAppBarViewConstraints()
     super.updateViewConstraints()
   }
   
-  private func configureAppbarViewConstraints() {
-    appbarViewHeightConstraint.constant = view.safeAreaInsets.top + regularAppbarHeight
+  private func configureAppBarViewConstraints() {
+    appBarViewHeightConstraint.constant = view.safeAreaInsets.top + regularAppBarHeight
   }
   
   

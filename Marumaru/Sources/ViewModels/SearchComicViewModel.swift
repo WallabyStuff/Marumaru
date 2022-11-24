@@ -12,7 +12,6 @@ import RxCocoa
 
 class SearchComicViewModel {
   
-  
   // MARK: - Properties
   
   private var disposeBag = DisposeBag()

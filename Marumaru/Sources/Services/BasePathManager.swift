@@ -12,7 +12,7 @@ import SwiftSoup
 
 enum BasePathManagerError: Error {
   case failToGetURL
-  case emptyDocuemnt
+  case emptyDocument
   case basePathNotFound
 }
 
@@ -153,7 +153,7 @@ class BasePathManager {
         self.updateBasePath(remoteBasePath)
         observer(.completed)
       } else {
-        observer(.error(BasePathManagerError.emptyDocuemnt))
+        observer(.error(BasePathManagerError.emptyDocument))
       }
       
       return Disposables.create()

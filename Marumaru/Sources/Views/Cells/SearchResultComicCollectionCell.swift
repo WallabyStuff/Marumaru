@@ -9,7 +9,6 @@ import UIKit
 
 class SearchResultComicCollectionCell: UICollectionViewCell {
   
-  
   // MARK: - Properties
   
   static let identifier = R.reuseIdentifier.searchResultComicCollectionCell.identifier
@@ -101,6 +100,7 @@ class SearchResultComicCollectionCell: UICollectionViewCell {
   private func setupThumbnailImagePlaceholderHolderLabel() {
     thumbnailImagePlaceholderLabel.text = ""
   }
+  
   
   // MARK: - Methods
   
