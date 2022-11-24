@@ -12,7 +12,6 @@ import RxCocoa
 
 class BookmarkViewModel {
   
-  
   // MARK: - Properties
   
   private var disposeBag = DisposeBag()

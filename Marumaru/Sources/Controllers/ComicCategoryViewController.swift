@@ -13,7 +13,6 @@ import RxDataSources
 
 class ComicCategoryViewController: BaseViewController, ViewModelInjectable {
   
-  
   // MARK: - Properties
   
   static let identifier = R.storyboard.comicCategory.comicCategoryStoryboard.identifier

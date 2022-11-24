@@ -226,7 +226,7 @@
                     <size key="freeformSize" width="414" height="896"/>
                     <connections>
                         <outlet property="appBarView" destination="ZjP-lW-yQ7" id="w7f-z0-Jgz"/>
-                        <outlet property="appbarViewHeightConstraint" destination="RNi-eI-Nuh" id="50a-P6-odD"/>
+                        <outlet property="appBarViewHeightConstraint" destination="RNi-eI-Nuh" id="50a-P6-odD"/>
                         <outlet property="backButton" destination="7RQ-n7-d6D" id="vdQ-Fa-vxH"/>
                         <outlet property="bottomIndicatorView" destination="CuR-0J-HJH" id="cda-gG-HDC"/>
                         <outlet property="bottomIndicatorViewHeightConstraint" destination="kj2-7L-daR" id="eGh-R9-Aom"/>

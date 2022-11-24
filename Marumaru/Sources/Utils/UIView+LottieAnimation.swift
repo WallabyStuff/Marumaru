@@ -49,7 +49,7 @@ extension UIView {
   }
   
   func playLottie(animation: AnimationType, size: CGSize = .init(width: 120, height: 120), xInset: CGFloat = 0, yInset: CGFloat = 0) {
-    let animationView = AnimationView(name: animation.name)
+    let animationView = LottieAnimationView(name: animation.name)
     animationView.loopMode = .loop
     self.addSubview(animationView)
     
@@ -67,7 +67,7 @@ extension UIView {
   
   func stopLottie() {
     for element in activeLotties {
-      if let activeLottie = element as? AnimationView {
+      if let activeLottie = element as? LottieAnimationView {
         activeLottie.removeFromSuperview()
       } else {
         continue

@@ -9,7 +9,6 @@ import UIKit
 
 class PopOverComicEpisodeTableCell: UITableViewCell {
   
-  
   // MARK: - Properties
   
   static let identifier = R.reuseIdentifier.popOverComicEpisodeTableCell.identifier

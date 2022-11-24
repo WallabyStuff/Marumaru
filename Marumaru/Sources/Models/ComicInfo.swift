@@ -6,6 +6,7 @@
 //
 
 import UIKit
+
 import RxDataSources
 
 struct ComicInfo {
@@ -29,9 +30,8 @@ extension ComicInfo: Equatable {
   static func == (lhs: ComicInfo, rhs: ComicInfo) -> Bool {
     if lhs.comicSN == rhs.comicSN {
       return true
-    } else {
-      return false
     }
+    return false
   }
 }
 

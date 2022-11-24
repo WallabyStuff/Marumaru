@@ -13,7 +13,6 @@ import RxCocoa
 
 class SearchComicViewController: BaseViewController, ViewModelInjectable {
   
-  
   // MARK: - Properties
   
   static let identifier = R.storyboard.searchComic.searchComicStoryboard.identifier
@@ -29,7 +28,7 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
   // MARK: - UI
   
   @IBOutlet weak var navigationView: NavigationView!
-  @IBOutlet weak var appbarViewHeightConstraint: NSLayoutConstraint!
+  @IBOutlet weak var appBarViewHeightConstraint: NSLayoutConstraint!
   @IBOutlet weak var backButton: UIButton!
   @IBOutlet weak var searchTextField: UITextField!
   @IBOutlet weak var searchButton: UIButton!
@@ -129,7 +128,7 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
   }
   
   private func configureAppbarViewConstraints() {
-    appbarViewHeightConstraint.constant = view.safeAreaInsets.top + regularAppbarHeight
+    appBarViewHeightConstraint.constant = view.safeAreaInsets.top + regularAppBarHeight
   }
   
   

@@ -9,7 +9,6 @@ import UIKit
 
 class CategoryChipCollectionCell: UICollectionViewCell {
   
-  
   // MARK: - Properties
   
   static let identifier = R.reuseIdentifier.categoryChipCollectionCell.identifier

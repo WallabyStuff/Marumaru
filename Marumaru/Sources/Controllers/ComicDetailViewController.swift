@@ -17,7 +17,6 @@ protocol ComicDetailViewDelegate: AnyObject {
 
 class ComicDetailViewController: BaseViewController, ViewModelInjectable {
   
-  
   // MARK: - Properties
   
   static let identifier = R.storyboard.comicDetail.comicDetailStoryboard.identifier
@@ -93,9 +92,9 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
     viewModel.updateComicInfoAndEpisodes()
     viewModel.setBookmarkState()
     
-    // Do not call setInitailComicInfo() in viewDidAppear() with modal style
+    // Do not call set InitialComicInfo() in viewDidAppear() with modal style
     DispatchQueue.main.async { [weak self] in
-      self?.viewModel.setInitailComicInfo()
+      self?.viewModel.setInitialComicInfo()
     }
   }
   
@@ -366,7 +365,7 @@ class ComicDetailViewController: BaseViewController, ViewModelInjectable {
 }
 
 
-// MARK: - Extenstions
+// MARK: - Extensions
 
 extension ComicDetailViewController: ComicStripViewDelegate {
   func didRecentWatchingEpisodeUpdated(_ episodeSN: String) {

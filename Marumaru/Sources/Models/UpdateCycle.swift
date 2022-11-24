@@ -8,15 +8,15 @@
 import UIKit
 
 enum UpdateCycle: String {
-  case weekly = "주간"
-  case biweekly = "격주"
-  case monthly = "월간"
-  case bimonthly = "격월"
-  case singleEpisode = "단편"
-  case book = "단행본"
+  case weekly             = "주간"
+  case biweekly           = "격주"
+  case monthly            = "월간"
+  case bimonthly          = "격월"
+  case singleEpisode      = "단편"
+  case book               = "단행본"
   case monthlyOrIrregular = "격월/비정기"
-  case concluded = "완결"
-  case notClassified = "미분류"
+  case concluded          = "완결"
+  case notClassified      = "미분류"
   case other
 }
 

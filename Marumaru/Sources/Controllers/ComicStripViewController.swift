@@ -21,7 +21,6 @@ protocol ComicStripViewDelegate: AnyObject {
 
 class ComicStripViewController: BaseViewController, ViewModelInjectable {
   
-  
   // MARK: - Properties
   
   static let identifier = R.storyboard.comicStrip.comicStripStroyboard.identifier
@@ -48,7 +47,7 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
   @IBOutlet weak var nextEpisodeButton: UIButton!
   @IBOutlet weak var previousEpisodeButton: UIButton!
   @IBOutlet weak var bottomIndicatorView: UIView!
-  @IBOutlet weak var appbarViewHeightConstraint: NSLayoutConstraint!
+  @IBOutlet weak var appBarViewHeightConstraint: NSLayoutConstraint!
   @IBOutlet weak var bottomIndicatorViewHeightConstraint: NSLayoutConstraint!
   @IBOutlet weak var comicStripScrollView: ComicStripScrollView!
   override var prefersStatusBarHidden: Bool {
@@ -114,7 +113,7 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
   }
   
   private func setupSceneScrollView() {
-    comicStripScrollView.contentInset = UIEdgeInsets.inset(top: compactAppbarHeight,
+    comicStripScrollView.contentInset = UIEdgeInsets.inset(top: compactAppBarHeight,
                                                            bottom: bottomIndicatorView.frame.height)
     comicStripScrollView.actionDelegate = self
   }
@@ -139,17 +138,17 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
   // MARK: - Constraints
   
   override func updateViewConstraints() {
-    configureAppbarViewConstraints()
+    configureAppBarViewConstraints()
     configureBottomIndicatorViewConstraints()
     super.updateViewConstraints()
   }
   
-  private func configureAppbarViewConstraints() {
-    appbarViewHeightConstraint.constant = view.safeAreaInsets.top + compactAppbarHeight
+  private func configureAppBarViewConstraints() {
+    appBarViewHeightConstraint.constant = view.safeAreaInsets.top + compactAppBarHeight
   }
   
   private func configureBottomIndicatorViewConstraints() {
-    bottomIndicatorViewHeightConstraint.constant = view.safeAreaInsets.bottom + compactAppbarHeight
+    bottomIndicatorViewHeightConstraint.constant = view.safeAreaInsets.bottom + compactAppBarHeight
   }
   
   

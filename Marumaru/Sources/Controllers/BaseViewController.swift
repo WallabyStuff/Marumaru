@@ -10,13 +10,12 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-enum AppbarHeight: CGFloat {
-  case regularAppbarHeight = 72
-  case compactAppbarHeight = 52
+enum AppBarHeight: CGFloat {
+  case regularAppBarHeight = 72
+  case compactAppBarHeight = 52
 }
 
 class BaseViewController: UIViewController {
-  
   
   // MARK: - Properties
   
@@ -25,8 +24,8 @@ class BaseViewController: UIViewController {
   private var didSetupConstraints = false
   let baseFrameSizeViewSizeDidChange = BehaviorRelay<CGRect>(value: .zero)
   
-  let regularAppbarHeight = AppbarHeight.regularAppbarHeight.rawValue
-  let compactAppbarHeight = AppbarHeight.compactAppbarHeight.rawValue
+  let regularAppBarHeight = AppBarHeight.regularAppBarHeight.rawValue
+  let compactAppBarHeight = AppBarHeight.compactAppBarHeight.rawValue
   var previousBaseFrameSize: CGRect = .zero
   
   

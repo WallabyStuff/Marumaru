@@ -6,10 +6,13 @@
 //
 
 import UIKit
+
 import RxSwift
 import RxCocoa
 
 class WatchHistoryViewModel {
+  
+  // MARK: - Properties
   
   private var disposeBag = DisposeBag()
   private let watchHistoryManager = WatchHistoryManager()

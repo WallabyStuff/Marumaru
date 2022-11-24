@@ -9,7 +9,6 @@ import UIKit
 
 class BookmarkViewController: BaseViewController, ViewModelInjectable {
   
-  
   // MARK: - Properties
   
   static let identifier = R.storyboard.bookmark.bookmarkStoryboard.identifier
@@ -17,7 +16,7 @@ class BookmarkViewController: BaseViewController, ViewModelInjectable {
   
   var viewModel: BookmarkViewModel
   private let collectionViewSideInset: CGFloat = 12
-  private let collecitonViewTopInset: CGFloat = 24
+  private let collectionViewTopInset: CGFloat = 24
   private let collectionViewBottomInset: CGFloat = 24
   private let cellSpacing: CGFloat = 0
   private let cellLineSpacing: CGFloat = 12
@@ -74,7 +73,7 @@ class BookmarkViewController: BaseViewController, ViewModelInjectable {
   
   private func setupBookmarkCollectionView() {
     registerBookmarkCollectionCell()
-    bookmarkCollectionView.contentInset = .init(top: collecitonViewTopInset,
+    bookmarkCollectionView.contentInset = .init(top: collectionViewTopInset,
                                                 left: collectionViewSideInset,
                                                 bottom: collectionViewBottomInset,
                                                 right: collectionViewSideInset)

@@ -15,7 +15,6 @@ protocol SearchHistoryViewDelegate: AnyObject {
 
 class SearchHistoryViewController: BaseViewController, ViewModelInjectable {
   
-  
   // MARK: - Properties
   
   static let identifier = R.storyboard.searchHistory.searchHistoryStoryboard.identifier
@@ -26,7 +25,7 @@ class SearchHistoryViewController: BaseViewController, ViewModelInjectable {
   weak var delegate: SearchHistoryViewDelegate?
   private var dataSource: DataSource?
   private var searchResultCollectionViewTopInset: CGFloat {
-    return regularAppbarHeight
+    return regularAppBarHeight
   }
   
   

@@ -14,7 +14,6 @@ import FloatingPanel
 
 class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
   
-  
   // MARK: - Properties
   
   static let identifier = R.storyboard.watchHistory.watchHistoryStoryboard.identifier
@@ -31,7 +30,7 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
   @IBOutlet weak var backButton: UIButton!
   @IBOutlet weak var watchHistoryCollectionView: UICollectionView!
   @IBOutlet weak var clearHistoryButton: UIButton!
-  @IBOutlet weak var appbarViewHeightConstraint: NSLayoutConstraint!
+  @IBOutlet weak var appBarViewHeightConstraint: NSLayoutConstraint!
   private var fpc = FloatingPanelController()
   
   
@@ -130,7 +129,7 @@ class WatchHistoryViewController: BaseViewController, ViewModelInjectable {
   
   
   private func configureAppbarViewConstraints() {
-    appbarViewHeightConstraint.constant = view.safeAreaInsets.top + compactAppbarHeight
+    appBarViewHeightConstraint.constant = view.safeAreaInsets.top + compactAppBarHeight
   }
   
   

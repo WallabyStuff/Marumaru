@@ -12,7 +12,6 @@ import RxCocoa
 
 class SplashViewController: BaseViewController, ViewModelInjectable {
   
-  
   // MARK: - Properties
   
   typealias ViewModel = SplashViewModel
@@ -57,7 +56,7 @@ class SplashViewController: BaseViewController, ViewModelInjectable {
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-    startPreproccesses()
+    startPreprocesses()
   }
   
   
@@ -94,20 +93,20 @@ class SplashViewController: BaseViewController, ViewModelInjectable {
   // MARK: - Binds
   
   private func bind() {
-    bindPreProcccesses()
+    bindPreProcesses()
     bindMessageAlert()
   }
   
-  private func bindPreProcccesses() {
+  private func bindPreProcesses() {
     Observable.combineLatest(viewModel.isFinishStartAnimation,
-                             viewModel.isFinishPreProccess,
+                             viewModel.isFinishPreProcess,
                              resultSelector: {
       return ($0 == true) && ($1 == true)
     })
-    .subscribe(onNext: { [weak self] isPreProccessFinished in
-      if isPreProccessFinished {
+    .subscribe(onNext: { [weak self] isPreProcessFinished in
+      if isPreProcessFinished {
         self?.startDecreaseLogoAnimation(completion: { [weak self] in
-          self?.presentMainTabbarViewController()
+          self?.presentMainTabBarViewController()
         })
       }
     })
@@ -125,12 +124,12 @@ class SplashViewController: BaseViewController, ViewModelInjectable {
   
   // MARK: - Methods
   
-  private func startPreproccesses() {
+  private func startPreprocesses() {
     startIncreaseLogoAnimation()
     viewModel.replaceBasePath()
   }
   
-  private func presentMainTabbarViewController() {
+  private func presentMainTabBarViewController() {
     let tabBarController = MainTabBarController()
     let navigationController = UINavigationController(rootViewController: tabBarController)
     navigationController.modalPresentationStyle = .fullScreen

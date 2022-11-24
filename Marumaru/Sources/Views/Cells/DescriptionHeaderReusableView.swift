@@ -9,7 +9,6 @@ import UIKit
 
 class DescriptionHeaderReusableView: UICollectionReusableView {
   
-  
   // MARK: - Properties
   
   static let identifier = R.reuseIdentifier.descriptionHeaderReusableView.identifier

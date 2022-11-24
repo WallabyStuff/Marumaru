@@ -12,14 +12,13 @@ import RxCocoa
 
 class SplashViewModel {
   
-  
   // MARK: - Properties
   
   private var disposeBag = DisposeBag()
   private let basePathManager = BasePathManager()
   
   public var isFinishStartAnimation = BehaviorRelay<Bool>(value: false)
-  public var isFinishPreProccess = BehaviorRelay<Bool>(value: false)
+  public var isFinishPreProcess = BehaviorRelay<Bool>(value: false)
   public var showMessageAlert = PublishRelay<Void>()
 }
 
@@ -29,7 +28,7 @@ extension SplashViewModel {
       .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .background))
       .observe(on: MainScheduler.instance)
       .subscribe(onCompleted: { [weak self] in
-        self?.isFinishPreProccess.accept(true)
+        self?.isFinishPreProcess.accept(true)
       }, onError: { [weak self] error in
         if error is BasePathManagerError {
           self?.showMessageAlert.accept(())

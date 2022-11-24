@@ -6,11 +6,11 @@
 //
 
 import UIKit
+
 import RxSwift
 import RxCocoa
 
 class ComicDetailViewModel {
-  
   
   // MARK: - Properties
   
@@ -74,7 +74,7 @@ extension ComicDetailViewModel {
 }
 
 extension ComicDetailViewModel {
-  public func setInitailComicInfo() {
+  public func setInitialComicInfo() {
     comicInfo.accept(comicInfo.value)
   }
   

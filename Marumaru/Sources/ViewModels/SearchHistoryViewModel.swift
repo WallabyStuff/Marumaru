@@ -12,7 +12,6 @@ import RxCocoa
 
 class SearchHistoryViewModel {
   
-  
   // MARK: - Properties
   
   private var disposeBag = DisposeBag()

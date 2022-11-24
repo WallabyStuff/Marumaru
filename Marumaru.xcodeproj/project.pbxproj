@@ -22,7 +22,6 @@
 		765C8C68261F05BD0056C83B /* ComicDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8C67261F05BD0056C83B /* ComicDetailViewController.swift */; };
 		765C8C6D261F16880056C83B /* ComicStripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8C6C261F16880056C83B /* ComicStripViewController.swift */; };
 		765C8C78261F192C0056C83B /* ComicEpisodeThumbnailTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C8C77261F192C0056C83B /* ComicEpisodeThumbnailTableCell.swift */; };
-		7684F3D226C61B890012BD8E /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7684F3D126C61B890012BD8E /* ImageCache.swift */; };
 		7684F3E226CAA49F0012BD8E /* ComicEpisodeThumbnailCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7684F3E026CAA49F0012BD8E /* ComicEpisodeThumbnailCollectionCell.xib */; };
 		7684F3EA26CB5F6A0012BD8E /* ComicEpisodeThumbnailTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7684F3E826CB5F6A0012BD8E /* ComicEpisodeThumbnailTableCell.xib */; };
 		7684F3EC26CB6BBA0012BD8E /* ComicInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7684F3EB26CB6BBA0012BD8E /* ComicInfo.swift */; };
@@ -69,7 +68,6 @@
 		8E458773291D4F2A00C1BC1C /* UserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E458772291D4F2A00C1BC1C /* UserDefault.swift */; };
 		8E491A7028756E1400E4D267 /* BasePathManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E491A6F28756E1400E4D267 /* BasePathManager.swift */; };
 		8E491A7D2877FFAC00E4D267 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E491A7C2877FFAC00E4D267 /* UserDefaultsManager.swift */; };
-		8E4FFE202844F0AB00A7ED7B /* LottieAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4FFE1F2844F0AB00A7ED7B /* LottieAnimationView.swift */; };
 		8E52CA58284F15A5007844E0 /* ComicCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E52CA57284F15A5007844E0 /* ComicCategoryViewController.swift */; };
 		8E52CA5A284F15B7007844E0 /* ComicCategory.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E52CA59284F15B7007844E0 /* ComicCategory.storyboard */; };
 		8E52CA5D284F2086007844E0 /* ComicThumbnailCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E52CA5B284F2086007844E0 /* ComicThumbnailCollectionCell.swift */; };
@@ -180,7 +178,6 @@
 		765C8C67261F05BD0056C83B /* ComicDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicDetailViewController.swift; sourceTree = "<group>"; };
 		765C8C6C261F16880056C83B /* ComicStripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicStripViewController.swift; sourceTree = "<group>"; };
 		765C8C77261F192C0056C83B /* ComicEpisodeThumbnailTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicEpisodeThumbnailTableCell.swift; sourceTree = "<group>"; };
-		7684F3D126C61B890012BD8E /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		7684F3E026CAA49F0012BD8E /* ComicEpisodeThumbnailCollectionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ComicEpisodeThumbnailCollectionCell.xib; sourceTree = "<group>"; };
 		7684F3E826CB5F6A0012BD8E /* ComicEpisodeThumbnailTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ComicEpisodeThumbnailTableCell.xib; sourceTree = "<group>"; };
 		7684F3EB26CB6BBA0012BD8E /* ComicInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicInfo.swift; sourceTree = "<group>"; };
@@ -228,7 +225,6 @@
 		8E458772291D4F2A00C1BC1C /* UserDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefault.swift; sourceTree = "<group>"; };
 		8E491A6F28756E1400E4D267 /* BasePathManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePathManager.swift; sourceTree = "<group>"; };
 		8E491A7C2877FFAC00E4D267 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
-		8E4FFE1F2844F0AB00A7ED7B /* LottieAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationView.swift; sourceTree = "<group>"; };
 		8E52CA57284F15A5007844E0 /* ComicCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicCategoryViewController.swift; sourceTree = "<group>"; };
 		8E52CA59284F15B7007844E0 /* ComicCategory.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ComicCategory.storyboard; sourceTree = "<group>"; };
 		8E52CA5B284F2086007844E0 /* ComicThumbnailCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicThumbnailCollectionCell.swift; sourceTree = "<group>"; };
@@ -446,7 +442,6 @@
 				76F9129C26CF6FAE00B39BE7 /* WatchHistory.swift */,
 				76F912EA26CFFE9700B39BE7 /* ComicStripScene.swift */,
 				8E414671284397E20005BCFD /* SearchHistory.swift */,
-				7684F3D126C61B890012BD8E /* ImageCache.swift */,
 				7684F3EB26CB6BBA0012BD8E /* ComicInfo.swift */,
 				76F912E826CFDFA000B39BE7 /* ComicEpisode.swift */,
 				7641C3B22646874300A79A79 /* EpisodeItem.swift */,
@@ -477,7 +472,6 @@
 				8ED56F3327AEFBAA00E78A8A /* ThumbnailPlaceholderView.swift */,
 				8E33F3F128514CF500B6E6EE /* ShowComicOptionFloatinPanelLayout.swift */,
 				8E33F40D285984CB00B6E6EE /* IndicatorButton.swift */,
-				8E4FFE1F2844F0AB00A7ED7B /* LottieAnimationView.swift */,
 				8ED19AFA2882FC7A00B75A06 /* ComicStripScrollView */,
 				8ED19AF32882FB1500B75A06 /* Cells */,
 				8ED19AF52882FB4300B75A06 /* Storyboards */,
@@ -970,7 +964,6 @@
 				76F912EB26CFFE9700B39BE7 /* ComicStripScene.swift in Sources */,
 				8EF1BF86288BFFF3008A8E08 /* UIView+Shadow.swift in Sources */,
 				7684F3EC26CB6BBA0012BD8E /* ComicInfo.swift in Sources */,
-				7684F3D226C61B890012BD8E /* ImageCache.swift in Sources */,
 				8E662DEB27AC2FF40048BF39 /* WatchHistoryViewModel.swift in Sources */,
 				8E34F84228A1075B00D97D54 /* NavigationView.swift in Sources */,
 				76F912E926CFDFA100B39BE7 /* ComicEpisode.swift in Sources */,
@@ -993,7 +986,6 @@
 				8E92C02C283F68ED00E0CD82 /* UIView+LottieAnimation.swift in Sources */,
 				765C8B2B261CA2C30056C83B /* SceneDelegate.swift in Sources */,
 				8EF1BF7E288BF8D5008A8E08 /* UIView+CornerRadius.swift in Sources */,
-				8E4FFE202844F0AB00A7ED7B /* LottieAnimationView.swift in Sources */,
 				8EA09F02287A9EF500864211 /* SplashViewController.swift in Sources */,
 				8E83DAD728426DBA00C0A10B /* UICollectionView+ScrollTo.swift in Sources */,
 				8E5C9FD3284D2344008FE961 /* ComicBookmarkManager.swift in Sources */,

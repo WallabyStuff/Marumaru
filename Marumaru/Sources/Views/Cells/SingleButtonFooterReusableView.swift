@@ -10,7 +10,6 @@ import RxSwift
 
 class SingleButtonFooterReusableView: UICollectionReusableView {
   
-  
   // MARK: - Properties
   
   static let identifier = R.reuseIdentifier.singleButtonFooterReusableView.identifier

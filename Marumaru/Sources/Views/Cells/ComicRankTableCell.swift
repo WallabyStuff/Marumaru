@@ -9,7 +9,6 @@ import UIKit
 
 class ComicRankTableCell: UITableViewCell {
   
-  
   // MARK: - Properties
   
   static let identifier = R.reuseIdentifier.comicRankTableCell.identifier
