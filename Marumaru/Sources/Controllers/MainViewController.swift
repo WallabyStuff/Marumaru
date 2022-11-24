@@ -9,7 +9,6 @@ import UIKit
 
 import Toast
 import Lottie
-import CoreData
 import RxSwift
 import RxCocoa
 import RealmSwift
