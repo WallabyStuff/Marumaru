@@ -6,33 +6,34 @@
 //
 
 import Foundation
+
 import RealmSwift
 import RxDataSources
 
 class SearchHistory: Object {
-    
-    @objc dynamic var title: String = ""
-    @objc dynamic var date: Date = Date()
-    
-    convenience init(date: Date = Date(), title: String) {
-        self.init()
-        self.title = title
-        self.date = date
-    }
-    
-    override class func primaryKey() -> String? {
-        return "title"
-    }
+  
+  @objc dynamic var title: String = ""
+  @objc dynamic var date: Date = Date()
+  
+  convenience init(date: Date = Date(), title: String) {
+    self.init()
+    self.title = title
+    self.date = date
+  }
+  
+  override class func primaryKey() -> String? {
+    return "title"
+  }
 }
 
 extension SearchHistory: IdentifiableType {
-    typealias Identity = String
-    
-    var identity: String {
-        if isInvalidated {
-            return UUID().uuidString
-        } else {
-            return title
-        }
+  typealias Identity = String
+  
+  var identity: String {
+    if isInvalidated {
+      return UUID().uuidString
+    } else {
+      return title
     }
+  }
 }

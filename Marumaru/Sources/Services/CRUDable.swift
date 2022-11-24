@@ -10,10 +10,10 @@ import Foundation
 import RxSwift
 
 protocol CRUDable {
-    associatedtype Item: AnyObject
-    
-    func addData(_ item: Item) -> Completable
-    func fetchData() -> Single<[Item]>
-    func deleteData(_ item: Item) -> Completable
-    func deleteAll() -> Completable
+  associatedtype Item: AnyObject
+  
+  func addData(_ item: Item) -> Completable
+  func fetchData() -> Single<[Item]>
+  func deleteData(_ item: Item) -> Completable
+  func deleteAll() -> Completable
 }

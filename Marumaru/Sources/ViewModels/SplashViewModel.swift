@@ -11,29 +11,33 @@ import RxSwift
 import RxCocoa
 
 class SplashViewModel {
-    
-    
-    // MARK: - Properties
-    
-    private var disposeBag = DisposeBag()
-    private let basePathManager = BasePathManager()
-    
-    public var isFinishStartAnimation = BehaviorRelay<Bool>(value: false)
-    public var isFinishPreProccess = BehaviorRelay<Bool>(value: false)
+  
+  // MARK: - Properties
+  
+  private var disposeBag = DisposeBag()
+  private let basePathManager = BasePathManager()
+  
+  public var isFinishStartAnimation = BehaviorRelay<Bool>(value: false)
+  public var isFinishPreProcess = BehaviorRelay<Bool>(value: false)
+  public var showMessageAlert = PublishRelay<Void>()
 }
 
 extension SplashViewModel {
-    public func replaceBasePath() {
-        basePathManager.replaceToValidBasePath()
-            .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .background))
-            .observe(on: MainScheduler.instance)
-            .subscribe(onCompleted: { [weak self] in
-                self?.isFinishPreProccess.accept(true)
-            })
-            .disposed(by: self.disposeBag)
-    }
-    
-    public func finishStartAnimation() {
-        isFinishStartAnimation.accept(true)
-    }
+  public func replaceBasePath() {
+    basePathManager.replaceToValidBasePath()
+      .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .background))
+      .observe(on: MainScheduler.instance)
+      .subscribe(onCompleted: { [weak self] in
+        self?.isFinishPreProcess.accept(true)
+      }, onError: { [weak self] error in
+        if error is BasePathManagerError {
+          self?.showMessageAlert.accept(())
+        }
+      })
+      .disposed(by: self.disposeBag)
+  }
+  
+  public func finishStartAnimation() {
+    isFinishStartAnimation.accept(true)
+  }
 }

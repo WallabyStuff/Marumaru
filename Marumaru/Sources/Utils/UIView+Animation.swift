@@ -8,23 +8,23 @@
 import UIKit
 
 extension UIView {
-    func startFadeInAnimation(duration: Double, _ completion: ((Bool) -> Void)? = nil) {
-        UIView.animate(withDuration: duration,
-                       delay: 0,
-                       options: [.curveEaseIn]) {
-            self.alpha = 1
-        } completion: { bool in
-            completion?(bool)
-        }
+  func startFadeInAnimation(duration: Double, _ completion: ((Bool) -> Void)? = nil) {
+    UIView.animate(withDuration: duration,
+                   delay: 0,
+                   options: [.curveEaseIn]) {
+      self.alpha = 1
+    } completion: { bool in
+      completion?(bool)
     }
-
-    func startFadeOutAnimation(duration: Double, _ completion: ((Bool) -> Void)? = nil) {
-        UIView.animate(withDuration: duration,
-                       delay: 0,
-                       options: [.curveEaseIn]) {
-            self.alpha = 0
-        } completion: { bool in
-            completion?(bool)
-        }
+  }
+  
+  func startFadeOutAnimation(duration: Double, _ completion: ((Bool) -> Void)? = nil) {
+    UIView.animate(withDuration: duration,
+                   delay: 0,
+                   options: [.curveEaseIn]) {
+      self.alpha = 0
+    } completion: { bool in
+      completion?(bool)
     }
+  }
 }

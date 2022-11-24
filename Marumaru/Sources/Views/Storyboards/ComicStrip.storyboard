@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="COa-EI-R6T">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="COa-EI-R6T">
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -18,16 +16,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" maximumZoomScale="3" translatesAutoresizingMaskIntoConstraints="NO" id="2xc-Zd-6va" customClass="ComicStripScrollView" customModule="Marumaru" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nFQ-Qx-lNK" customClass="ComicStripScrollView" customModule="Marumaru" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <inset key="scrollIndicatorInsets" minX="0.0" minY="52" maxX="0.0" maxY="52"/>
-                            </scrollView>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CuR-0J-HJH">
                                 <rect key="frame" x="0.0" y="844" width="414" height="52"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Dz-pa-lqr">
-                                        <rect key="frame" x="246" y="8" width="36" height="36"/>
+                                        <rect key="frame" x="246" y="20" width="36" height="36"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="36" id="TEW-HM-rxO"/>
                                             <constraint firstAttribute="width" constant="36" id="odP-sX-so8"/>
@@ -39,7 +35,7 @@
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3WN-1C-Dfr">
-                                        <rect key="frame" x="302" y="8" width="36" height="36"/>
+                                        <rect key="frame" x="302" y="20" width="36" height="36"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="36" id="Qj2-ef-ESf"/>
                                             <constraint firstAttribute="width" constant="36" id="nPd-DN-Tph"/>
@@ -51,7 +47,7 @@
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zZg-Lg-daj">
-                                        <rect key="frame" x="358" y="8" width="36" height="36"/>
+                                        <rect key="frame" x="358" y="20" width="36" height="36"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="36" id="0E9-YX-bfr"/>
                                             <constraint firstAttribute="width" constant="36" id="sVx-jY-fsp"/>
@@ -198,17 +194,17 @@
                         <color key="backgroundColor" name="BackgroundWhite"/>
                         <constraints>
                             <constraint firstItem="CuR-0J-HJH" firstAttribute="leading" secondItem="qGw-3O-t8n" secondAttribute="leading" id="An9-X7-Yok"/>
-                            <constraint firstItem="2xc-Zd-6va" firstAttribute="trailing" secondItem="tGa-rj-qJI" secondAttribute="trailing" id="CVm-18-5cb"/>
-                            <constraint firstItem="2xc-Zd-6va" firstAttribute="leading" secondItem="tGa-rj-qJI" secondAttribute="leading" id="Fde-rC-7ii"/>
+                            <constraint firstItem="nFQ-Qx-lNK" firstAttribute="top" secondItem="qGw-3O-t8n" secondAttribute="top" id="H4r-qu-Pn5"/>
                             <constraint firstItem="ZjP-lW-yQ7" firstAttribute="leading" secondItem="tGa-rj-qJI" secondAttribute="leading" id="JKc-am-KQv"/>
                             <constraint firstAttribute="bottom" secondItem="CuR-0J-HJH" secondAttribute="bottom" id="M8g-p2-4U4"/>
+                            <constraint firstAttribute="bottom" secondItem="nFQ-Qx-lNK" secondAttribute="bottom" id="SCV-Mn-aIv"/>
                             <constraint firstItem="CuR-0J-HJH" firstAttribute="leading" secondItem="tGa-rj-qJI" secondAttribute="leading" id="TBZ-7b-tBe"/>
                             <constraint firstItem="CuR-0J-HJH" firstAttribute="trailing" secondItem="tGa-rj-qJI" secondAttribute="trailing" id="XoU-3p-rLI"/>
                             <constraint firstItem="ZjP-lW-yQ7" firstAttribute="trailing" secondItem="tGa-rj-qJI" secondAttribute="trailing" id="gLT-eQ-GpB"/>
-                            <constraint firstItem="2xc-Zd-6va" firstAttribute="top" secondItem="qGw-3O-t8n" secondAttribute="top" id="qdZ-1g-wF0"/>
+                            <constraint firstItem="nFQ-Qx-lNK" firstAttribute="trailing" secondItem="tGa-rj-qJI" secondAttribute="trailing" id="i6N-1m-odl"/>
+                            <constraint firstItem="nFQ-Qx-lNK" firstAttribute="leading" secondItem="tGa-rj-qJI" secondAttribute="leading" id="ryD-Lv-P8G"/>
                             <constraint firstItem="ZjP-lW-yQ7" firstAttribute="top" secondItem="qGw-3O-t8n" secondAttribute="top" id="tgj-bm-9ir"/>
                             <constraint firstAttribute="trailing" secondItem="CuR-0J-HJH" secondAttribute="trailing" id="uk8-dK-jEo"/>
-                            <constraint firstAttribute="bottom" secondItem="2xc-Zd-6va" secondAttribute="bottom" id="y6d-Mo-dCA"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
@@ -229,12 +225,12 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="414" height="896"/>
                     <connections>
-                        <outlet property="appbarView" destination="ZjP-lW-yQ7" id="w7f-z0-Jgz"/>
-                        <outlet property="appbarViewHeightConstraint" destination="RNi-eI-Nuh" id="50a-P6-odD"/>
+                        <outlet property="appBarView" destination="ZjP-lW-yQ7" id="w7f-z0-Jgz"/>
+                        <outlet property="appBarViewHeightConstraint" destination="RNi-eI-Nuh" id="50a-P6-odD"/>
                         <outlet property="backButton" destination="7RQ-n7-d6D" id="vdQ-Fa-vxH"/>
                         <outlet property="bottomIndicatorView" destination="CuR-0J-HJH" id="cda-gG-HDC"/>
                         <outlet property="bottomIndicatorViewHeightConstraint" destination="kj2-7L-daR" id="eGh-R9-Aom"/>
-                        <outlet property="comicStripScrollView" destination="2xc-Zd-6va" id="tVB-LK-t2A"/>
+                        <outlet property="comicStripScrollView" destination="nFQ-Qx-lNK" id="Mo7-FC-HZP"/>
                         <outlet property="episodeTitleLabel" destination="zeR-bc-PAv" id="Z6A-4U-j2j"/>
                         <outlet property="nextEpisodeButton" destination="zZg-Lg-daj" id="bPN-3Z-82M"/>
                         <outlet property="previousEpisodeButton" destination="4Dz-pa-lqr" id="uzd-cz-4Yv"/>
@@ -252,6 +248,7 @@
                     <toolbarItems/>
                     <nil key="simulatedTopBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="sDP-yz-bBG">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
