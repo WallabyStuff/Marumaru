@@ -81,10 +81,6 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
     bind()
   }
   
-  override func viewWillEnterForeground() {
-//    comicStripScrollView.resumeLoadingScenes()
-  }
-  
   
   // MARK: - Setups
   
@@ -215,6 +211,7 @@ class ComicStripViewController: BaseViewController, ViewModelInjectable {
   
   private func bindComicStripScrollView() {
     viewModel.comicStripScenes
+      .debug("🚀")
       .subscribe(with: self, onNext: { vc, scenes in
         vc.comicStripScrollView.configureScenes(data: scenes)
         vc.viewModel.saveToWatchHistory()
