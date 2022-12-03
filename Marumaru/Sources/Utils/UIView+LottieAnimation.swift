@@ -67,7 +67,7 @@ extension UIView {
   
   func stopLottie() {
     for element in activeLotties {
-      if let activeLottie = element as? LottieAnimationView {
+      if let activeLottie = element as? AnimationView {
         activeLottie.removeFromSuperview()
       } else {
         continue
