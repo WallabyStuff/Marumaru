@@ -7,7 +7,7 @@ target 'Marumaru' do
 
   # Pods for Marumaru
   pod 'SwiftSoup',     '~> 2.4.3'
-  pod 'lottie-ios',    '~> 3.5.0' 
+  pod 'lottie-ios',    '~> 3.4.4' 
   pod 'RealmSwift',    '~> 10.32.1'
   pod 'Toast',         '~> 4.0.0'
   pod 'SkeletonView',  '~> 1.30.4'

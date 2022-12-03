@@ -2,7 +2,7 @@ PODS:
   - Differentiator (5.0.0)
   - FloatingPanel (2.5.5)
   - Kingfisher (7.4.1)
-  - lottie-ios (3.5.0)
+  - lottie-ios (3.4.4)
   - R.swift (6.1.0):
     - R.swift.Library (~> 5.3.0)
   - R.swift.Library (5.3.0)
@@ -32,7 +32,7 @@ PODS:
 DEPENDENCIES:
   - FloatingPanel (~> 2.5.5)
   - Kingfisher (~> 7.4.1)
-  - lottie-ios (~> 3.5.0)
+  - lottie-ios (~> 3.4.4)
   - R.swift (~> 6.1.0)
   - RealmSwift (~> 10.32.1)
   - RxCocoa (~> 6.5.0)
@@ -68,7 +68,7 @@ SPEC CHECKSUMS:
   Differentiator: e8497ceab83c1b10ca233716d547b9af21b9344d
   FloatingPanel: a27e7827e0f710fa6236fe2596dd1b5484cb4fc1
   Kingfisher: cd762a593a61b2fbecf7645c00f9a801a3ebfc9c
-  lottie-ios: c55158d67d0629a260625cc2ded2052b829e3c3e
+  lottie-ios: 8f97d3271e155c2d688875c29cd3c74908aef5f8
   R.swift: ec98ff71c4ab2f6fd01dd077e5afd15e63a4834c
   R.swift.Library: 0fc583cb55a99e28901299cc451614cad1161962
   Realm: fdf6732924dc5e69e30e0db2c11e869f92b53f3d
@@ -83,6 +83,6 @@ SPEC CHECKSUMS:
   SwiftSoup: 3384f2e618cfc1b3cbc7852c16692fe8de13fb8f
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
 
-PODFILE CHECKSUM: 13167d0503fb2e4592b0136e46f8a5f38ded4a60
+PODFILE CHECKSUM: f4699ebc66c856628262f5e88ae61d9ab70a22c6
 
 COCOAPODS: 1.11.3

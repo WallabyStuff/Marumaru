@@ -109,6 +109,7 @@
 		8EAFD06D283CAA2500FD569F /* SearchResultComicCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EAFD06B283CAA2500FD569F /* SearchResultComicCollectionCell.xib */; };
 		8EBCD0F127AAAB8300BEE157 /* ComicRankTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBCD0EF27AAAB8300BEE157 /* ComicRankTableCell.swift */; };
 		8EBCD0F227AAAB8300BEE157 /* ComicRankTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EBCD0F027AAAB8300BEE157 /* ComicRankTableCell.xib */; };
+		8EC9250C293B281700C25346 /* LottieAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC9250B293B281700C25346 /* LottieAnimationView.swift */; };
 		8ECAB66228390F6B008E531D /* WatchHistory.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8ECAB66128390F6B008E531D /* WatchHistory.storyboard */; };
 		8ECAB664283910F3008E531D /* SearchComic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8ECAB663283910F3008E531D /* SearchComic.storyboard */; };
 		8ECAB666283911F3008E531D /* ComicDetail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8ECAB665283911F3008E531D /* ComicDetail.storyboard */; };
@@ -266,6 +267,7 @@
 		8EAFD06B283CAA2500FD569F /* SearchResultComicCollectionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SearchResultComicCollectionCell.xib; sourceTree = "<group>"; };
 		8EBCD0EF27AAAB8300BEE157 /* ComicRankTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicRankTableCell.swift; sourceTree = "<group>"; };
 		8EBCD0F027AAAB8300BEE157 /* ComicRankTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ComicRankTableCell.xib; sourceTree = "<group>"; };
+		8EC9250B293B281700C25346 /* LottieAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationView.swift; sourceTree = "<group>"; };
 		8ECAB66128390F6B008E531D /* WatchHistory.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = WatchHistory.storyboard; sourceTree = "<group>"; };
 		8ECAB663283910F3008E531D /* SearchComic.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SearchComic.storyboard; sourceTree = "<group>"; };
 		8ECAB665283911F3008E531D /* ComicDetail.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ComicDetail.storyboard; sourceTree = "<group>"; };
@@ -475,6 +477,7 @@
 				8ED19AFA2882FC7A00B75A06 /* ComicStripScrollView */,
 				8ED19AF32882FB1500B75A06 /* Cells */,
 				8ED19AF52882FB4300B75A06 /* Storyboards */,
+				8EC9250B293B281700C25346 /* LottieAnimationView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -963,6 +966,7 @@
 				8E8851A227A9534600126701 /* R.generated.swift in Sources */,
 				76F912EB26CFFE9700B39BE7 /* ComicStripScene.swift in Sources */,
 				8EF1BF86288BFFF3008A8E08 /* UIView+Shadow.swift in Sources */,
+				8EC9250C293B281700C25346 /* LottieAnimationView.swift in Sources */,
 				7684F3EC26CB6BBA0012BD8E /* ComicInfo.swift in Sources */,
 				8E662DEB27AC2FF40048BF39 /* WatchHistoryViewModel.swift in Sources */,
 				8E34F84228A1075B00D97D54 /* NavigationView.swift in Sources */,
