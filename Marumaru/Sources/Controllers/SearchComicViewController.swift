@@ -70,6 +70,7 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(true)
     navigationController?.navigationBar.isHidden = true
+    searchTextField.becomeFirstResponder()
   }
   
   
@@ -92,7 +93,6 @@ class SearchComicViewController: BaseViewController, ViewModelInjectable {
   
   private func setupSearchTextField() {
     searchTextField.delegate = self
-    searchTextField.becomeFirstResponder()
   }
   
   private func setupWatchHistoryViewController() {

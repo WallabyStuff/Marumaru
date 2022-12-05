@@ -194,12 +194,13 @@ class ComicStripScrollView: UIScrollView {
   // MARK: - Methods
   
   public func configureScenes(data: [ComicStripScene]) {
+    clearScene()
+    
     for (index, scene) in data.enumerated() {
       let sceneImageView = SceneImageView()
       
       sceneImageView.reloadButton
-        .rx
-        .tap
+        .rx.tap
         .asDriver()
         .drive(with: self, onNext: { strongSelf, _ in
           strongSelf.loadScene(index)
@@ -236,6 +237,14 @@ class ComicStripScrollView: UIScrollView {
           resultImageView.showReloadButton()
         }
       }
+    }
+  }
+  
+  public func clearScene() {
+    sceneData.removeAll()
+    estimatedHeightConstraints.removeAll()
+    stackView.arrangedSubviews.forEach { subView in
+      subView.removeFromSuperview()
     }
   }
   
