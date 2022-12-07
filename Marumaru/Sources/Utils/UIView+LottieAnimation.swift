@@ -9,79 +9,79 @@ import UIKit
 import Lottie
 
 enum AnimationType {
-    case general(GeneralType)
-    case cat(CatType)
-    
-    enum GeneralType: String, CaseIterable {
-        case coming_soon
-        case eyes_blinking
-        case fire_burning
-        case trophy
+  case general(GeneralType)
+  case cat(CatType)
+  
+  enum GeneralType: String, CaseIterable {
+    case coming_soon
+    case eyes_blinking
+    case fire_burning
+    case trophy
+  }
+  
+  enum CatType: String, CaseIterable {
+    case loading_cat_radial
+    case rainbow_cat
+  }
+  
+  var name: String {
+    switch self {
+    case .general(let generalType):
+      return generalType.rawValue
+    case .cat(let catType):
+      return catType.rawValue
     }
-    
-    enum CatType: String, CaseIterable {
-        case loading_cat_radial
-        case rainbow_cat
-        case acrobatic_cat
-        case bubble_tea_cat
-        case lying_cat
-        case sleeping_cat
-    }
-    
-    var name: String {
-        switch self {
-        case .general(let generalType):
-            return generalType.rawValue
-        case .cat(let catType):
-            return catType.rawValue
-        }
-    }
+  }
 }
 
 extension UIView {
-    private struct LottieAnimationKeys {
-        static var lottie = "com.marumaru.lottie"
-        static var queue = "com.marumaru.queue"
-    }
+  private struct LottieAnimationKeys {
+    static var lottie = "com.marumaru.lottie"
+    static var queue = "com.marumaru.queue"
+  }
+  
+  func playRandomCatLottie(size: CGSize = .init(width: 120, height: 120), xInset: CGFloat = 0, yInset: CGFloat = 0) {
+    playLottie(
+      animation: AnimationType.cat(.allCases.randomElement()!),
+      size: size,
+      xInset: xInset,
+      yInset: yInset)
+  }
+  
+  func playLottie(animation: AnimationType, size: CGSize = .init(width: 120, height: 120), xInset: CGFloat = 0, yInset: CGFloat = 0) {
+    let animationView = AnimationView(name: animation.name)
+    animationView.loopMode = .loop
+    self.addSubview(animationView)
     
-    func playRandomCatLottie(size: CGSize = .init(width: 120, height: 120)) {
-        playLottie(animation: AnimationType.cat(.allCases.randomElement()!), size: size)
-    }
+    animationView.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([
+      animationView.centerXAnchor.constraint(equalTo: centerXAnchor, constant: xInset),
+      animationView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: yInset),
+      animationView.widthAnchor.constraint(equalToConstant: size.width),
+      animationView.heightAnchor.constraint(equalToConstant: size.height)
+    ])
     
-    func playLottie(animation: AnimationType, size: CGSize = .init(width: 120, height: 120)) {
-        let animationView = AnimationView(name: animation.name)
-        animationView.loopMode = .loop
-        self.addSubview(animationView)
-        
-        animationView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            animationView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            animationView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            animationView.widthAnchor.constraint(equalToConstant: size.width),
-            animationView.heightAnchor.constraint(equalToConstant: size.height)
-        ])
-        
-        animationView.play()
-        activeLotties.add(animationView)
+    animationView.play()
+    activeLotties.add(animationView)
+  }
+  
+  func stopLottie() {
+    for element in activeLotties {
+      if let activeLottie = element as? AnimationView {
+        activeLottie.removeFromSuperview()
+      } else {
+        continue
+      }
     }
-    
-    func stopLottie() {
-        for element in activeLotties {
-            if let activeLottie = element as? AnimationView {
-                activeLottie.removeFromSuperview()
-            } else {
-                continue
-            }
-        }
+  }
+  
+  private var activeLotties: NSMutableArray {
+    if let activeLotties = objc_getAssociatedObject(self, &LottieAnimationKeys.lottie) as? NSMutableArray {
+      return activeLotties
+    } else {
+      let activeLotties = NSMutableArray()
+      objc_setAssociatedObject(self, &LottieAnimationKeys.lottie, activeLotties, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+      return activeLotties
     }
-    
-    private var activeLotties: NSMutableArray {
-        if let activeLotties = objc_getAssociatedObject(self, &LottieAnimationKeys.lottie) as? NSMutableArray {
-            return activeLotties
-        } else {
-            let activeLotties = NSMutableArray()
-            objc_setAssociatedObject(self, &LottieAnimationKeys.lottie, activeLotties, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-            return activeLotties
-        }
-    }
+  }
 }

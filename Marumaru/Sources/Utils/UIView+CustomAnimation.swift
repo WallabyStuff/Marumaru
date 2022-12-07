@@ -8,10 +8,10 @@
 import SkeletonView
 
 extension UIView {
-    func showCustomSkeleton() {
-        let animation = SkeletonAnimationBuilder().makeSlidingAnimation(withDirection: .topLeftBottomRight)
-        let gradient = SkeletonGradient(baseColor: R.color.backgroundWhiteLight()!,
-                                        secondaryColor: R.color.backgroundGray()!)
-        showAnimatedGradientSkeleton(usingGradient: gradient, animation: animation)
-    }
+  func showCustomSkeleton() {
+    let animation = SkeletonAnimationBuilder().makeSlidingAnimation(withDirection: .topLeftBottomRight)
+    let gradient = SkeletonGradient(baseColor: R.color.backgroundWhiteLight()!,
+                                    secondaryColor: R.color.backgroundGray()!)
+    showAnimatedGradientSkeleton(usingGradient: gradient, animation: animation)
+  }
 }

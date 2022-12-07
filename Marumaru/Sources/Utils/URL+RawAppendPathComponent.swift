@@ -8,11 +8,11 @@
 import Foundation
 
 extension URL {
-    // Prevent making wrong url path
-    mutating
-    func appendRawPathComponent(_ pathComponent: String) {
-        var path = self.description
-        path = "\(path)\(pathComponent)"
-        self = URL(string: path) ?? self
-    }
+  /// Prevents to make wrong url path
+  mutating
+  func appendRawPathComponent(_ pathComponent: String) {
+    var path = self.description
+    path = "\(path)\(pathComponent)"
+    self = URL(string: path) ?? self
+  }
 }

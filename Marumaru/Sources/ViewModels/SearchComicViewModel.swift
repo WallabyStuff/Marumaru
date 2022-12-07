@@ -11,19 +11,18 @@ import RxSwift
 import RxCocoa
 
 class SearchComicViewModel {
-    
-    
-    // MARK: - Properties
-    
-    private var disposeBag = DisposeBag()
-    private var searchHistoryManager = SearchHistoryManager()
+  
+  // MARK: - Properties
+  
+  private var disposeBag = DisposeBag()
+  private var searchHistoryManager = SearchHistoryManager()
 }
 
 extension SearchComicViewModel {
-    public func addSearchHistory(_ title: String) {
-        let searchHistory = SearchHistory(title: title)
-        searchHistoryManager.addData(searchHistory)
-            .subscribe()
-            .dispose()
-    }
+  public func addSearchHistory(_ title: String) {
+    let searchHistory = SearchHistory(title: title)
+    searchHistoryManager.addData(searchHistory)
+      .subscribe()
+      .dispose()
+  }
 }

@@ -2,16 +2,17 @@
 //  LottieAnimationView.swift
 //  Marumaru
 //
-//  Created by 이승기 on 2022/05/30.
+//  Created by 이승기 on 2022/12/03.
 //
 
 import UIKit
+
 import Lottie
 
 class LottieAnimationView: UIView {
     
-    
     // MARK: - Properties
+  
     private var _animationName: String = ""
     public var animationView = AnimationView()
     private var _insets: CGFloat = 0

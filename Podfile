@@ -6,21 +6,24 @@ target 'Marumaru' do
   use_frameworks!
 
   # Pods for Marumaru
-  pod 'SwiftSoup'
-  pod 'SwiftLint'
-  pod 'lottie-ios'
-  pod 'RealmSwift'
-  pod 'RxSwift'
-  pod 'RxCocoa'
-  pod 'RxGesture'
-  pod 'R.swift'
-  pod 'Toast'
-  pod 'RxDataSources'
-  pod 'SkeletonView'
-  pod 'Kingfisher'
-  pod 'FloatingPanel'
-  pod 'SafeAreaBrush'
-  
+  pod 'SwiftSoup',     '~> 2.4.3'
+  pod 'lottie-ios',    '~> 3.4.4' 
+  pod 'RealmSwift',    '~> 10.32.1'
+  pod 'Toast',         '~> 4.0.0'
+  pod 'SkeletonView',  '~> 1.30.4'
+  pod 'Kingfisher',    '~> 7.4.1'
+  pod 'FloatingPanel', '~> 2.5.5'
+
+  # Rx
+  pod 'RxSwift',       '~> 6.5.0'
+  pod 'RxCocoa',       '~> 6.5.0'
+  pod 'RxDataSources', '~> 5.0.0'
+  pod 'RxGesture',     '~> 4.0.4'
+
+  # Conventions
+  pod 'SwiftLint',     '~> 0.50.0'
+  pod 'R.swift',       '~> 6.1.0'
+ 
   target 'MarumaruTests' do
     inherit! :search_paths
     # Pods for testing

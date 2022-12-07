@@ -8,26 +8,26 @@
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-
+  
+  
+  // MARK: - Properties
+  
+  var window: UIWindow?
+  
+  
+  // MARK: - LifeCycle
+  
+  func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+    guard let windowScene = (scene as? UIWindowScene) else { return }
     
-    // MARK: - Properties
-    
-    var window: UIWindow?
-    
-    
-    // MARK: - LifeCycle
-    
-    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        guard let windowScene = (scene as? UIWindowScene) else { return }
-        
-        window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = splashViewController()
-        window?.makeKeyAndVisible()
-    }
-    
-    private func splashViewController() -> SplashViewController {
-        let viewModel = SplashViewModel()
-        let viewController = SplashViewController(viewModel)
-        return viewController
-    }
+    window = UIWindow(windowScene: windowScene)
+    window?.rootViewController = splashViewController()
+    window?.makeKeyAndVisible()
+  }
+  
+  private func splashViewController() -> SplashViewController {
+    let viewModel = SplashViewModel()
+    let viewController = SplashViewController(viewModel)
+    return viewController
+  }
 }

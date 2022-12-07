@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="L0Y-9U-2JT">
-    <device id="retina6_0" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="L0Y-9U-2JT">
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -20,7 +18,7 @@
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y2K-m9-81V">
                                 <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                             </containerView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="spF-uh-SFI">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="spF-uh-SFI" customClass="NavigationView" customModule="Marumaru" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="390" height="72"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="만화 제목으로 검색해보세요!" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="f6V-W2-Udq">
@@ -31,7 +29,18 @@
                                         </constraints>
                                         <color key="textColor" name="TextBlack"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" returnKeyType="search"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="12"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="leftPadding">
+                                                <real key="value" value="16"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="rightPadding">
+                                                <real key="value" value="48"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z8L-cW-kYr">
                                         <rect key="frame" x="334" y="26" width="20" height="20"/>
@@ -84,9 +93,10 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <size key="freeformSize" width="390" height="844"/>
                     <connections>
-                        <outlet property="appbarViewHeightConstraint" destination="iMY-ad-EJI" id="iem-h0-8Qi"/>
+                        <outlet property="appBarViewHeightConstraint" destination="iMY-ad-EJI" id="iem-h0-8Qi"/>
                         <outlet property="backButton" destination="KY9-xo-3ee" id="aGk-eC-gOR"/>
                         <outlet property="mainContainerView" destination="y2K-m9-81V" id="Zgj-3W-wd9"/>
+                        <outlet property="navigationView" destination="spF-uh-SFI" id="x8K-4j-SzG"/>
                         <outlet property="searchButton" destination="z8L-cW-kYr" id="Bm1-Ry-PGE"/>
                         <outlet property="searchTextField" destination="f6V-W2-Udq" id="hiV-Ud-cS7"/>
                     </connections>

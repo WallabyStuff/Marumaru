@@ -8,6 +8,6 @@
 import UIKit
 
 struct EpisodeItem {
-    var title: String
-    var episodeSN: String
+  var title: String
+  var episodeSN: String
 }

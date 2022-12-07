@@ -8,6 +8,6 @@
 import UIKit
 
 struct ComicStripScene {
-    var sceneImage: UIImage?
-    var imagePath: String
+  var sceneImage: UIImage?
+  var imagePath: String
 }
