@@ -11,6 +11,7 @@ disabled_rules:
 - syntactic_sugar
 - vertical_whitespace
 - implicit_getter
+- orphaned_doc_comment
 
 excluded:
 - Carthage

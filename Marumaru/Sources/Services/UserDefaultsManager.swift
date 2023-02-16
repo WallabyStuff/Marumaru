@@ -9,6 +9,6 @@ import Foundation
 
 struct UserDefaultsManager {
     
-  @UserDefault(key: "basePath", defaultValue: "https://marumaru521.com")
+  @UserDefault(key: "basePath", defaultValue: "https://marumaru643.com")
   static var basePath: String
 }
