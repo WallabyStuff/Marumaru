@@ -24,7 +24,7 @@ class SplashViewModel {
 
 extension SplashViewModel {
   public func replaceBasePath() {
-    basePathManager.replaceToValidBasePath()
+    basePathManager.replaceWithValidBasePath()
       .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .background))
       .observe(on: MainScheduler.instance)
       .subscribe(onCompleted: { [weak self] in

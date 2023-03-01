@@ -5,8 +5,6 @@
 //  Created by 이승기 on 2022/07/06.
 //
 
-import Foundation
-
 import RxSwift
 import SwiftSoup
 
@@ -18,41 +16,26 @@ enum BasePathManagerError: Error {
 
 class BasePathManager {
   
-  
   // MARK: - Properties
   
-  static var defaultBasePath = UserDefaultsManager.basePath
-  private let testImagePath = "/img/logo2.png"
-  private let remoteBasePath = "https://raw.githubusercontent.com/WallabyStuff/Marumaru/develop/Marumaru/Sources/SupportingFiles/basePath.rtf"
+  private var localBasePath = UserDefaultsManager.basePath
+  static let TEST_IMAGE_PATH = "/img/logo2.png"
+  static let REMOTE_BASE_PATH = "https://raw.githubusercontent.com/WallabyStuff/Marumaru/develop/Marumaru/Sources/SupportingFiles/basePath.rtf"
+  static let MAX_RETRY_COUNT = 256
+  
   private var disposeBag = DisposeBag()
-  private let maxRetryCount = 512
   
   
   // MARK: - Methods
   
-  public func replaceToValidBasePath() -> Completable {
+  public func replaceWithValidBasePath() -> Completable {
     Completable.create { [weak self] observer in
-      guard let self = self else {
-        return Disposables.create()
-      }
+      guard let self = self else { return Disposables.create() }
       
-      self.compareAndReplaceWithRemoteBasePath()
-        .subscribe(with: self, onCompleted: { strongSelf in
-          strongSelf.checkIsBasePathValid()
-            .retry(strongSelf.maxRetryCount)
-            .subscribe(with: strongSelf, onCompleted: { strongSelf in
-              // This is a necessary proccess to check wheter legacy basePath is available or not.
-              // Cuz new basePath and legacy basePath are both valid when basePath just updated.
-              strongSelf.increaseBasePathNumber()
-              strongSelf.checkIsBasePathValid()
-                .subscribe(onDisposed: {
-                  observer(.completed)
-                })
-                .disposed(by: strongSelf.disposeBag)
-            }, onError: { _, error in
-              observer(.error(BasePathManagerError.basePathNotFound))
-            })
-            .disposed(by: strongSelf.disposeBag)
+      self.startBasePathUpdatingProcess()
+        .andThen(self.startFinalBasePathValidationCheck())
+        .subscribe(onDisposed: {
+          observer(.completed)
         })
         .disposed(by: self.disposeBag)
       
@@ -60,52 +43,72 @@ class BasePathManager {
     }
   }
   
-  private func compareAndReplaceWithRemoteBasePath() -> Completable {
+  private func startBasePathUpdatingProcess() -> Completable {
     return Completable.create { [weak self] observer in
-      guard let self = self else {
-        return Disposables.create()
-      }
+      guard let self = self else { return Disposables.create() }
       
-      if let finalBasePathNumber = self.getBasePathNumber(Self.defaultBasePath),
-         let remoteBasePath = self.getRemoteBasePath(),
-         let remoteBasePathNumber = self.getBasePathNumber(remoteBasePath) {
-        if finalBasePathNumber < remoteBasePathNumber {
-          // BasePath is replaced with remote basePath
-          self.replaceWithRemoteBasePath()
-            .subscribe(onCompleted: {
-              observer(.completed)
-            }, onError: { error in
-              observer(.error(error))
-            })
-            .disposed(by: self.disposeBag)
-        } else {
-          // BasePath is not replaced
+      self.compareAndReplaceWithRemoteBasePath()
+      
+      self.checkBasePathValidationAndUpdate()
+        .retry(Self.MAX_RETRY_COUNT)
+        .subscribe(onCompleted: {
           observer(.completed)
-        }
-      } else {
-        observer(.error(BasePathManagerError.failToGetURL))
-      }
+        }, onError: { error in
+          observer(.error(error))
+        })
+        .disposed(by: self.disposeBag)
       
       return Disposables.create()
     }
   }
   
-  private func checkIsBasePathValid() -> Completable {
+  /// This is a necessary process to check whether legacy basePath is available or not.
+  /// Cuz new basePath and legacy basePath are both valid when basePath just updated.
+  private func startFinalBasePathValidationCheck() -> Completable {
     return Completable.create { [weak self] observer in
-      guard let self = self else {
-        return Disposables.create()
-      }
+      guard let self = self else { return Disposables.create() }
       
-      let basePath = Self.defaultBasePath
-      let testImagePath = basePath.appending(self.testImagePath)
+      self.increaseBasePathNumber()
+      self.checkBasePathValidationAndUpdate()
+        .subscribe(onCompleted: {
+          observer(.completed)
+        }, onError: { error in
+          observer(.error(error))
+        })
+        .disposed(by: self.disposeBag)
       
+      return Disposables.create()
+    }
+  }
+  
+  private func compareAndReplaceWithRemoteBasePath() {
+    guard let remoteBasePath = self.fetchRemoteBasePath(),
+          let remoteBasePathNumber = self.getBasePathNumber(remoteBasePath),
+          let localBasePathNumber = self.getBasePathNumber(self.localBasePath) else {
+      return
+    }
+    
+    /// Compare remote base path number with local base path number and replace with it
+    if remoteBasePathNumber < localBasePathNumber {
+      /// Update base path with remote base path
+      self.updateBasePath(remoteBasePath)
+    }
+  }
+  
+  private func checkBasePathValidationAndUpdate() -> Completable {
+    return Completable.create { [weak self] observer in
+      guard let self = self else { return Disposables.create() }
+      
+      let testImagePath = self.localBasePath.appending(Self.TEST_IMAGE_PATH)
       if let url = URL(string: testImagePath) {
         do {
+          /// Base path is available
           let data = try Data(contentsOf: url)
-          self.updateBasePath(basePath)
+          self.updateBasePath(self.localBasePath)
           observer(.completed)
-          print("Log.i ✅ The basePath is valid - \(testImagePath) \(data)")
+          print("Log.i ✅ The basePath is valid - \(testImagePath), \(data)")
         } catch {
+          /// Base path in not available
           self.increaseBasePathNumber()
           observer(.error(error))
           print("Log.i ❌ The basePath is invalid - \(testImagePath)")
@@ -121,19 +124,18 @@ class BasePathManager {
   
   private func increaseBasePathNumber() {
     do {
-      let basePath = Self.defaultBasePath
       let pattern = "[0-9]{3}"
       let expression = try NSRegularExpression(pattern: pattern)
-      let match = expression.firstMatch(in: basePath, range: basePath.fullRange)
+      let match = expression.firstMatch(in: localBasePath, range: localBasePath.fullRange)
       
       if let nsRange = match?.range,
-         let range = Range(nsRange, in: basePath) {
-        guard let pathNumber = Int(basePath[range]) else {
+         let range = Range(nsRange, in: localBasePath) {
+        guard let pathNumber = Int(localBasePath[range]) else {
           return
         }
         
         let newBasePath = "https://marumaru\(pathNumber + 1).com"
-        Self.defaultBasePath = newBasePath
+        self.localBasePath = newBasePath
       } else {
         return
       }
@@ -143,26 +145,9 @@ class BasePathManager {
     }
   }
   
-  private func replaceWithRemoteBasePath() -> Completable {
-    return Completable.create { [weak self] observer in
-      guard let self = self else {
-        return Disposables.create()
-      }
-      
-      if let remoteBasePath = self.getRemoteBasePath() {
-        self.updateBasePath(remoteBasePath)
-        observer(.completed)
-      } else {
-        observer(.error(BasePathManagerError.emptyDocument))
-      }
-      
-      return Disposables.create()
-    }
-  }
-  
-  private func getRemoteBasePath() -> String? {
+  private func fetchRemoteBasePath() -> String? {
     do {
-      if let url = URL(string: self.remoteBasePath) {
+      if let url = URL(string: Self.REMOTE_BASE_PATH) {
         let html = try String(contentsOf: url, encoding: .utf8)
         let doc = try SwiftSoup.parse(html)
         let basePath = try doc.text()
@@ -199,7 +184,7 @@ class BasePathManager {
   }
   
   private func updateBasePath(_ basePath: String) {
-    Self.defaultBasePath = basePath
+    localBasePath = basePath
     UserDefaultsManager.basePath = basePath
   }
 }
