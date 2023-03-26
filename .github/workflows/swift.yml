@@ -35,5 +35,5 @@ jobs:
     
     -name: Install pods
     runs: |
-      cd ..
-      pod install
+      pwd
+      cd NoGaDa/
