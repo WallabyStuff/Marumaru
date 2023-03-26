@@ -1,0 +1,40 @@
+name: deploy
+
+on:
+  push:
+    branches: [ develop/* ]
+
+jobs:
+  deploy:
+    runs-on: macos-latest
+    env:
+      XC_WORKSPACE: ${{ 'Marumaru.xcworkspace' }}
+      XC_SCHEME: ${{ 'Marumaru' }}
+      XC_ARCHIVE: ${{ 'Marumaru.xcarchive' }}
+
+      # Certificate (Private Key)
+      ENCRYPTED_CERT_FILE_PATH: ${{ '.github/secrets/AppleIdPrivateKey.p12.gpg' }}
+      DECRYPTED_CERT_FILE_PATH: ${{ '.github/secrets/AppleIdPrivateKey.p12' }}
+      CERT_ENCRYPTION_KEY: ${{ secrets.GPG_CERTIFICATION_PASSWORD }}
+      
+      # Provisioning
+      ENCRYPTED_PROVISION_FILE_PATH: ${{ '.github/secrets/Marumaru_GithubActions.mobileprovision.gpg' }}
+      DECRYPTED_PROVISION_FILE_PATH: ${{ '.github/secrets/Marumaru_GithubActions.mobileprovision' }}
+      PROVISIONING_ENCRYPTION_KEY: ${{ secrets.GPG_PROVISION_PASSWORD }}
+
+      # Certification export key
+      CERT_EXPORT_KEY: ${{ secrets.CERTIFICATION_PASSWORD }}
+      
+      KEYCHAIN: ${{ 'marumaru.keychain' }}
+  steps:
+    - name: Select latest Xcode
+      run: "sudo xcode-select -s /Application/Xcode.app"
+    - name: Checkout project
+      uses: actions/checkout@v2
+    - name: Configure Keychain
+      run: |
+        security create-keychain -p "" "$KEYCHAIN"
+        security list-keychains -s "$KEYCHAIN"
+        security default-keychain -s "$KEYCHAIN"
+        security unlock-keychain -p "" "$KEYCHAIN"
+        security set-keychain-settings
