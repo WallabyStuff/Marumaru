@@ -26,15 +26,14 @@ jobs:
       CERT_EXPORT_KEY: ${{ secrets.CERTIFICATION_PASSWORD }}
       
       KEYCHAIN: ${{ 'marumaru.keychain' }}
+  
   steps:
-    - name: Select latest Xcode
-      run: "sudo xcode-select -s /Application/Xcode.app"
-    - name: Checkout project
-      uses: actions/checkout@v2
-    - name: Configure Keychain
-      run: |
-        security create-keychain -p "" "$KEYCHAIN"
-        security list-keychains -s "$KEYCHAIN"
-        security default-keychain -s "$KEYCHAIN"
-        security unlock-keychain -p "" "$KEYCHAIN"
-        security set-keychain-settings
+    -name: Set up Xcode
+    uses: actions/setup-xcode@v2
+    with:
+      xcode-version: '14.2'
+    
+    -name: Install pods
+    runs: |
+      cd ..
+      pod install
